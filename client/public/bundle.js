@@ -21690,6 +21690,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Landing_jsx__ = __webpack_require__(236);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Signup_jsx__ = __webpack_require__(234);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Login_jsx__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_Dash_jsx__ = __webpack_require__(237);
 
 
 
@@ -21697,9 +21698,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
+const dummyData = [{
+  username: "Edmund Louie",
+  ranking: "Bronze 5"
+}, {
+  username: "Barton Young",
+  ranking: "Silver 4"
+}, {
+  username: "Taegyu Leem",
+  ranking: "Wood 8"
+}, {
+  username: "Brendan Mok",
+  ranking: "Plastic 10"
+}];
 class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      users: dummyData
+    };
   }
 
   render() {
@@ -21708,7 +21727,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
       { history: __WEBPACK_IMPORTED_MODULE_2_react_router__["b" /* hashHistory */] },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/', component: __WEBPACK_IMPORTED_MODULE_3__components_Landing_jsx__["a" /* default */] }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/signup', component: __WEBPACK_IMPORTED_MODULE_4__components_Signup_jsx__["a" /* default */] }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/login', component: __WEBPACK_IMPORTED_MODULE_5__components_Login_jsx__["a" /* default */] })
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/login', component: __WEBPACK_IMPORTED_MODULE_5__components_Login_jsx__["a" /* default */] }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/dash', component: () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6__components_Dash_jsx__["a" /* default */], { userInfo: this.state.users }) })
     );
   }
 }
@@ -26569,13 +26589,13 @@ class Signup extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           null,
           "Password"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", required: true, ref: "password" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", required: true, ref: "password" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,
           "Confirm Password"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", required: true, ref: "confirmPassword" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", required: true, ref: "confirmPassword" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,
@@ -26669,6 +26689,29 @@ const Landing = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElemen
 );
 
 /* harmony default export */ __webpack_exports__["a"] = Landing;
+
+/***/ }),
+/* 237 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+const Dash = ({ userInfo }) => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+  'div',
+  null,
+  userInfo.map((user, i) => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'p',
+    null,
+    user.username + ' is ' + user.ranking
+  ))
+);
+
+/* harmony default export */ __webpack_exports__["a"] = Dash;
+// <p>{user.username}</p>
+// <p>{'Rank: ' + user.ranking}</p>
 
 /***/ })
 /******/ ]);
