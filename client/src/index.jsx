@@ -1,5 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
+import {Router, Route, hashHistory} from 'react-router';
+import Home from './components/Home.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -8,10 +10,9 @@ class App extends React.Component {
 
   render() {
     return(
-      <div>
-        <h1>GAUNTLET BITCHES</h1>
-        <h2>Gauntletssss</h2>
-      </div>
+      <Router history={hashHistory}>
+        <Route path="/" component={Home} />
+      </Router>
     );
   }
 }
