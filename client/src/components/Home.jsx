@@ -8,3 +8,5 @@ const Home = () => (
     <a href='#'>Logout</a>
   </div>
 );
+
+export default Home;

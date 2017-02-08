@@ -21702,7 +21702,7 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       __WEBPACK_IMPORTED_MODULE_2_react_router__["a" /* Router */],
       { history: __WEBPACK_IMPORTED_MODULE_2_react_router__["b" /* hashHistory */] },
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/login', component: __WEBPACK_IMPORTED_MODULE_3__components_Home_jsx__["default"] })
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router__["c" /* Route */], { path: '/', component: __WEBPACK_IMPORTED_MODULE_3__components_Home_jsx__["a" /* default */] })
     );
   }
 }
@@ -21736,6 +21736,8 @@ const Home = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
     'Logout'
   )
 );
+
+/* harmony default export */ __webpack_exports__["a"] = Home;
 
 /***/ }),
 /* 179 */
