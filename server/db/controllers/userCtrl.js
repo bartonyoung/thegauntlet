@@ -5,21 +5,22 @@ const bcrypt = require('promised-bcrypt');
 
 module.exports = {
   signup: function(req, res) {
+    console.log('inside user signup controller')
     let user = req.body;
     let username = user.username;
     let password = user.password;
-  
-    db.select().from('users').where('users.username','=',username)
+
+    db.select().from('users').where({username: username})
       .then(rows =>{
-        if(rows.length){
+        if (rows.length) {
           console.log(req.session);
-          res.send("username is alreadt exist");
-        }else{ 
+          res.send("username already exists");
+        } else {
           bcrypt.hash(password)
             .then(hash => {
-              db('users').insert({username:username,password:hash})
+              db('users').insert({username: username, password: hash })
                 .then(rows => {
-                  req.session.displayName = username; 
+                  req.session.displayName = username;
                   req.session.save(() => {
                     console.log(req.session);
                     res.send('Welcome');
@@ -30,10 +31,10 @@ module.exports = {
                 });
             })
           }
-        });  
+        });
   },
 
-  signin: function(req, res) {
+  login: function(req, res) {
     let user = req.body;
     let username = user.username;
     let password = user.password;
@@ -50,7 +51,7 @@ module.exports = {
                   res.send('Welcome');
                 })
               }else{
-                res.send('Please, check Username or Password');      
+                res.send('Please, check Username or Password');
               }
             });
         }else{

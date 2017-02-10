@@ -24,6 +24,7 @@ const dummyData = [
     ranking: "Plastic 10"
   }
 ];
+
 class App extends React.Component {
   constructor(props) {
     super(props);

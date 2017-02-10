@@ -6,8 +6,6 @@ const Dash = ({userInfo}) => (
     <p>{user.username + ' is ' + user.ranking}</p>
     )}
   </div>
-)
+);
 
 export default Dash;
-    // <p>{user.username}</p>
-    // <p>{'Rank: ' + user.ranking}</p>

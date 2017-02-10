@@ -4,7 +4,7 @@ const s3Controller = require('../db/controllers/s3Ctrl.js');
 const challengeController = require('../db/controllers/challengeCtrl.js');
 
 routes.post('/signup', userControllers.signup);
-routes.post('/signin', userControllers.signin);
+routes.post('/login', userControllers.login);
 routes.get('/logout', userControllers.logout);
 routes.post('/userUpload', s3Controller);
 routes.get('/allChallenges', challengeController.getAll);
