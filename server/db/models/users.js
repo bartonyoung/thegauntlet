@@ -1,4 +1,4 @@
-/*const knex = require('../index.js');
+const knex = require('../index.js');
 
 module.exports = knex.schema.createTableIfNotExists('users', function(user) {
   user.increments();
@@ -9,4 +9,3 @@ module.exports = knex.schema.createTableIfNotExists('users', function(user) {
   console.log('user table created');
 });
 
-*/

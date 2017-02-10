@@ -1,8 +1,8 @@
 const getId = (state) => {
   return state.users.reduce((maxId, user) => {
-    return Math.max(user.id, maxId)
+    return Math.max(user.id, maxId);
   }, -1) + 1;
-}
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -16,6 +16,6 @@ const reducer = (state, action) => {
     default:
       return state;
   }
-}
+};
 
-export default reducer
+export default reducer;

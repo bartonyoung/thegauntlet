@@ -3,7 +3,7 @@ import React from 'react';
 const Landing = () => (
   <div className="landing">
     <div className='username'>
-      <h3>Gauntlet</h3>
+      <h3>h</h3>
       {/*Move this form*/}
       <form encType="multipart/form-data" action="/api/challenge" method="post">
         <input type="text" name="title" placeholder="title"/>
