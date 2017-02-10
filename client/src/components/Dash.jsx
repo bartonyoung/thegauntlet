@@ -10,6 +10,3 @@ const Dash = ({challenges, handleSubmitChallenge, dispatch, handleLogout}) => (
 );
 
 export default Dash;
-  // {userInfo.map((user, i) =>
-  //   <p>{user.username + ' is ' + user.ranking}</p>
-  //   )}
