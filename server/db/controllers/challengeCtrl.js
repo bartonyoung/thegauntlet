@@ -57,7 +57,8 @@ module.exports = {
     .orWhere({id: req.query.parent_id})
     .then(data =>{
       res.json(data);
-    }).catch(err => {
+    })
+    .catch((err) => {
       if (err) { console.error(err); }
     });
   },
