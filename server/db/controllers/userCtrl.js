@@ -22,7 +22,8 @@ module.exports = {
                 .then(rows => {
                   req.session.displayName = username;
                   req.session.save(() => {
-                    console.log(req.session);
+                    console.log("username works!", req.session);
+                    // res.redirect('/#/dash');
                     res.send('Welcome');
                   })
                 })
