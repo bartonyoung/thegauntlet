@@ -11,4 +11,3 @@ const Dash = ({challenges, handleSubmitChallenge, dispatch, handleLogout}) => (
 );
 
 export default Dash;
-
