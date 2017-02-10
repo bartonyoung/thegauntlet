@@ -21,11 +21,20 @@ module.exports = {
                 .then(rows => {
                   req.session.displayName = username;
                   req.session.save(() => {
+<<<<<<< 593d166f3e028b90583487763069f959fbd86883
                    //console.log('username works!', req.session);
                     res.sendStatus(201);
                   });
                 })    
                 .catch(function(err) {
+=======
+                    console.log("username works!", req.session);
+                    // res.redirect('/#/dash');
+                    res.send('Welcome');
+                  });
+                })
+                .catch((err) => {
+>>>>>>> lints code
                   console.error(err);
                 });
             });
@@ -58,13 +67,13 @@ module.exports = {
           res.send('Please, check Username or Password');
         }
       });
-  },
+  }, 
 
-  logout: function(req, res) {
+  logout(req, res) {
     console.log(req.session);
     delete req.session.displayName;
     console.log('============================');
     console.log(req.session);
     res.send('Good bye');
-  }
+  },
 };
