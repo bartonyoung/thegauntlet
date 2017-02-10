@@ -1,11 +1,11 @@
 const knex = require('../index.js');
 
-module.exports = knex.schema.createTableIfNotExists('users', function(user) {
+module.exports = knex.schema.createTableIfNotExists('users', (user) => {
   user.increments();
   user.string('username');
   user.string('password');
   user.string('location');
-}).then(function() {
+}).then(() => {
   console.log('user table created');
 });
 
