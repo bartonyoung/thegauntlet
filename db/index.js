@@ -7,7 +7,7 @@ const knex = require('knex')({
     password: '',
     database: 'thegauntlet'
   },
-  useNullAsDefault: true
+  useNullAsDefault: false
 });
 
 module.exports = knex;
