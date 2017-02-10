@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/webpack --watch & nodemon --ignore 'client/**/*' server.js & clear"
+    "start": "./node_modules/.bin/webpack --watch & nodemon --ignore 'client/**/*' ./server/server.js & clear"
   },
   "repository": {
     "type": "git",
