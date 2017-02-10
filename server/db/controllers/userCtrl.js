@@ -39,7 +39,7 @@ module.exports = {
     let user = req.body;
     let username = user.username;
     let password = user.password;
-    //console.log(req.body);
+    console.log('inside user login controller');
     db.select().from('users').where('users.username','=',username)
       .then(rows =>{
         if(rows.length){
