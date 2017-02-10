@@ -4,11 +4,14 @@ const db = require('../index.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
-    db('challenges').insert(challenge).then(data => { 
-      res.sendStatus(201);
-    }).catch(err => {
-      if (err) { console.error(err); }
-    }); 
+    db.select('id').from('users').where({username: 'Scott'}).then(userData => { //TODO:Change to req.session.username
+      challenge.user_id = userData[0].id;
+      db('challenges').insert(challenge).then(data => { 
+        res.sendStatus(201);
+      }).catch(err => {
+        if (err) { console.error(err); }
+      }); 
+    });
   },
   
   getAll: (req, res) =>{
@@ -17,7 +20,7 @@ module.exports = {
       res.json(data);
     });
   },
-
+  
   getOne: (req, res) => {
     const title = req.params;
     console.log(req.params);
