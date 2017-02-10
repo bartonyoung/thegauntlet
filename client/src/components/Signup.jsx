@@ -7,13 +7,13 @@ class Signup extends React.Component {
       <div className="container-signup">
         <form type="submit">
           <p>Username</p>
-          <input type="text" required ref="username" />
+          <input type="text" required name="username" />
           <p>Email</p>
-          <input type="email" required ref="email" />
+          <input type="email" required name="email" />
           <p>Password</p>
-          <input type="password" required ref="password" />
+          <input type="password" required name="password" />
           <p>Confirm Password</p>
-          <input type="password" required ref="confirmPassword" />
+          <input type="password" required name="confirmPassword" />
           <p>
             <input type="submit" value="Join Gauntlet!" />
           </p>

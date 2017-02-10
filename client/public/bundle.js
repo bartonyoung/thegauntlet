@@ -12016,13 +12016,14 @@ const Landing = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElemen
 
 class Login extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
 
+  //console.log(this.refs.username.value);
   render() {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       "div",
       { className: "container-login" },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         "form",
-        { type: "submit" },
+        { action: "/api/signin", method: "post" },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,
@@ -12070,25 +12071,25 @@ class Signup extends __WEBPACK_IMPORTED_MODULE_0_react___default.a.Component {
           null,
           "Username"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", required: true, ref: "username" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", required: true, name: "username" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,
           "Email"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "email", required: true, ref: "email" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "email", required: true, name: "email" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,
           "Password"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", required: true, ref: "password" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", required: true, name: "password" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,
           "Confirm Password"
         ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", required: true, ref: "confirmPassword" }),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", required: true, name: "confirmPassword" }),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "p",
           null,

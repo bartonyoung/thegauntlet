@@ -1,4 +1,4 @@
-const knex = require('../index.js');
+/*const knex = require('../index.js');
 
 module.exports = knex.schema.createTableIfNotExists('challenges', function(challenge) {
   challenge.increments();
@@ -13,3 +13,4 @@ module.exports = knex.schema.createTableIfNotExists('challenges', function(chall
   console.log('challenge table created');
 });
 
+*/
