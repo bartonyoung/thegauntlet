@@ -11974,12 +11974,15 @@ const Landing = () => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElemen
     ),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'form',
-      { encType: 'multipart/form-data', action: '/api/userUpload', method: 'post' },
+      { encType: 'multipart/form-data', action: '/api/challenge', method: 'post' },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', name: 'title', placeholder: 'title' }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', name: 'description', placeholder: 'description' }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', name: 'category', placeholder: 'category' }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'file', name: 'video' }),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'button',
         null,
-        'Upload'
+        'Submit'
       )
     )
   ),
