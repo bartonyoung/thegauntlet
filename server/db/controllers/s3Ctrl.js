@@ -5,12 +5,10 @@ var s3fsImpl = new S3FS('thegauntletbucket420', {
   secretAccessKey: process.env.secretKeyId //key here
 });
 
-module.exports = function(req, res) {
-  var file = req.files.video;
-  console.log(req.files.video.path);
+module.exports = function(file, res) {
   var stream = fs.createReadStream(file.path);
   return s3fsImpl.writeFile(file.originalFilename, stream).then(function() {
     fs.unlink(file.path, function(err) {});
-    res.end('Something happned IDK');
+    res.sendStatus(201);
   });
 };

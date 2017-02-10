@@ -1,14 +1,17 @@
 const challenges = require('../models/challenges.js');
 const db = require('../index.js');
+const s3 = require('./s3Ctrl.js');
 
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
+    console.log(req.body);
     db.select('id').from('users').where({username: 'Scott'}).then(userData => { //TODO:Change to req.session.username
       challenge.user_id = userData[0].id;
+      challenge.filename = req.files.video.originalFilename;
       db('challenges').insert(challenge).then(data => { 
-        res.sendStatus(201);
-      }).catch(err => {
+        s3(req.files.video, res);
+      }).catch(err => { 
         if (err) { console.error(err); }
       }); 
     });
