@@ -12,39 +12,40 @@ var config = {
     filename: 'bundle.js'
   },
 
-  module:{
-    loaders:[
+  module: {
+    loaders: [
       {
-        test : /\.jsx?/,
+        test: /\.jsx?/,
         include: APP_DIR,
-        loader : 'babel-loader',
+        loader: 'babel-loader',
         query:
-          {
-            presets:['react']
-          }
+        {
+          presets: ['react']
+        }
       },
       {
-        test : /\.css?/,
+        test: /\.css?/,
         include: APP_DIR,
-        loader : 'style-loader!css-loader'
+        loader: 'style-loader!css-loader'
       }
     ]
   },
 
-  plugins:[
+  plugins: [
     new BrowserSyncPlugin({
-      host:'localhost',
-      port:'3000',
-      proxy:'http://localhost:8000/'
+      host: 'localhost',
+      port: '3000',
+      proxy: 'http://localhost:8000/'
     },
 
-    {
-      reload:true
-    }
+      {
+        reload: true
+      }
 
     )
   ]
 
-}
+};
 
-  module.exports = config;
+module.exports = config;
+   
