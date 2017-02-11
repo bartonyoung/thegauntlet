@@ -27,6 +27,8 @@ class Signup extends React.Component {
         }  
       });
     } else {
+      this.refs.password.value = '';
+      this.refs.confirmPassword.value = '';
       window.location.href = '#/signup';
       alert('Password does not match...');
     }
