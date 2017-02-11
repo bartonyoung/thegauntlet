@@ -6,15 +6,16 @@ const getId = (state) => {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'ADD_USER':
-      return Object.assign({}, state, {
-        users: [{
-          user: action.addUser,
-          id: getId(state)
-        }, ...state.users]
-      })
-    default:
-      return state;
+  case 'ADD_USER':
+    return Object.assign({}, state, {
+      users: [{
+        user: action.addUser,
+        id: getId(state)
+      }, ...state.users]
+    });
+          
+  default:
+    return state;
   }
 };
 
