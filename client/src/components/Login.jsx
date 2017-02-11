@@ -6,20 +6,21 @@ class Login extends React.Component {
   handleLogin(e) {
     e.preventDefault();
     let login = {
-      user: this.refs.username.value,
+      username: this.refs.username.value,
       password: this.refs.password.value
     };
 
-    $.post('/login', login)
-    .done(data =>
+    $.post('/api/login', login)
+    .done(data => {
       console.log("logged into...THE GAUNTLET")
-    );
+      window.location.href = '#/dash';
+    });
   }
 
   render() {
     return (
       <div className="container-login">
-        <form action="/api/signin" method="post">
+        <form type="submit" onSubmit={this.handleLogin.bind(this)}>
           <p>Username</p>
           <input type="text" required ref="username" />
           <p>Password</p>

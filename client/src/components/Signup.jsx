@@ -11,9 +11,10 @@ class Signup extends React.Component {
     };
 
     $.post('/api/signup', signup)
-    .done(data =>
+    .done(data => {
       console.log("signed into...THE GAUNTLET")
-    );
+      window.location.href = '#/dash';
+    });
   }
 
   render() {
