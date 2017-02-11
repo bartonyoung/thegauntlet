@@ -7,14 +7,29 @@ class Signup extends React.Component {
     e.preventDefault();
     let signup = {
       username: this.refs.username.value,
-      password: this.refs.password.value
+      password: this.refs.password.value,
     };
+    let confirmPassword = this.refs.confirmPassword.value;
 
-    $.post('/api/signup', signup)
-    .done(data => {
-      console.log("signed into...THE GAUNTLET")
-      window.location.href = '#/dash';
-    });
+    console.log(signup);
+    if (signup.password === confirmPassword) {
+      $.post('/api/signup', signup)
+      .done(data => {
+        if (!data) {
+          alert('username is already exsist');
+          this.refs.username.value = '';
+          this.refs.password.value = '';
+          this.refs.email.value = '';
+          this.refs.confirmPassword.value = '';
+          window.location.href = '#/signup';
+        } else {
+          window.location.href = '#/dash';
+        }  
+      });
+    } else {
+      window.location.href = '#/signup';
+      alert('Password does not match...');
+    }
   }
 
   render() {
@@ -28,7 +43,7 @@ class Signup extends React.Component {
           <p>Password</p>
           <input type="password" required ref="password" />
           <p>Confirm Password</p>
-          <input type="password" required ref="confirmPassword" />
+          <input type="password" ref="confirmPassword" />
           <p>
             <input type="submit" value="Join Gauntlet!" />
           </p>

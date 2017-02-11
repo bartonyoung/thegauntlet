@@ -5,7 +5,7 @@ const bcrypt = require('promised-bcrypt');
 
 module.exports = {
   signup: function(req, res) {
-    console.log('inside user signup controller')
+    console.log('inside user signup controller');
     let user = req.body;
     let username = user.username;
     let password = user.password;
@@ -13,8 +13,7 @@ module.exports = {
     db.select().from('users').where({username: username})
       .then(rows =>{
         if (rows.length) {
-          console.log(req.session);
-          res.send("username already exists");
+          res.send(false);
         } else {
           bcrypt.hash(password)
             .then(hash => {
@@ -22,17 +21,16 @@ module.exports = {
                 .then(rows => {
                   req.session.displayName = username;
                   req.session.save(() => {
-                    console.log("username works!", req.session);
-                    // res.redirect('/#/dash');
-                    res.send('Welcome');
-                  })
-                })
+                   //console.log('username works!', req.session);
+                    res.sendStatus(201);
+                  });
+                })    
                 .catch(function(err) {
                   console.error(err);
                 });
-            })
-          }
-        });
+            });
+        }
+      });
   },
 
   login: function(req, res) {
@@ -40,22 +38,22 @@ module.exports = {
     let username = user.username;
     let password = user.password;
     console.log('inside user login controller');
-    db.select().from('users').where('users.username','=',username)
+    db.select().from('users').where('users.username', '=', username)
       .then(rows =>{
-        if(rows.length){
-          bcrypt.compare(password,rows[0].password)
+        if (rows.length) {
+          bcrypt.compare(password, rows[0].password)
             .then(pass => {
-              if(pass) {
+              if (pass) {
                 req.session.displayName = username;
                 req.session.save(() => {
-                  console.log(req.session);
+                 // console.log(req.session);
                   res.send('Welcome');
-                })
-              }else{
+                });
+              } else {
                 res.send('Please, check Username or Password');
               }
             });
-        }else{
+        } else {
           console.log(req.session);
           res.send('Please, check Username or Password');
         }
@@ -65,7 +63,7 @@ module.exports = {
   logout: function(req, res) {
     console.log(req.session);
     delete req.session.displayName;
-    console.log("============================")
+    console.log('============================');
     console.log(req.session);
     res.send('Good bye');
   }
