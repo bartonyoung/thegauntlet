@@ -7,10 +7,11 @@ module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
     console.log(req.session.displayName);
+    console.log(req.body);
     db.select('id')
     .from('users')
-    .where({username: 'Scott'})
-    .then(userData => { //TODO:Change to req.session.username
+    .where({username: req.session.displayName})
+    .then(userData => {
       challenge.user_id = userData[0].id;
       challenge.upvotes = 0;
       challenge.views = 0;
