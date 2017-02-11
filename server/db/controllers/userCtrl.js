@@ -62,7 +62,9 @@ module.exports = {
   logout: function(req, res) {
     let temp = req.session.displayName;
     res.send('Good bye  ' + temp);
-    delete req.session.displayName;
+    console.log(req.session);
+    req.session.destroy();
+    console.log(req.session);
   }
 };
 
