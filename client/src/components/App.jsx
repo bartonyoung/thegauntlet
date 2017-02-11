@@ -5,6 +5,7 @@ import Landing from './Landing.jsx';
 import Signup from './Signup.jsx';
 import Login from './Login.jsx';
 import Dash from './Dash.jsx';
+import $ from 'jquery';
 
 const dummyData = ['Barton', 'Edmund', 'Taegyu', 'Brendan'];
 
@@ -28,6 +29,13 @@ class App extends React.Component {
     });
   }
 
+  handleLogout() {
+    $.get('/api/logout')
+    .done(data => {
+      console.log(data);
+    });
+  }
+
   render() {
     return (
       <Router history={hashHistory}>
@@ -35,7 +43,7 @@ class App extends React.Component {
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
         <Route path='/dash' component={() => (
-          <Dash handleSubmitChallenge={this.handleSubmitChallenge} users={this.state.users}/>
+          <Dash handleSubmitChallenge={this.handleSubmitChallenge} handleLogout={this.handleLogout.bind(this)} users={this.state.users}/>
         )} />
       </Router>
     );
