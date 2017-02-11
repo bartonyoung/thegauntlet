@@ -1,5 +1,6 @@
 import React from 'react';
 import ChallengeTable from './ChallengeTable.jsx';
+import {Jumbotron, Col, Row, Button, Grid} from 'react-bootstrap';
 
 const Dash = ({challenges, handleSubmitChallenge, dispatch, handleLogout}) => (
   <div>
@@ -10,3 +11,4 @@ const Dash = ({challenges, handleSubmitChallenge, dispatch, handleLogout}) => (
 );
 
 export default Dash;
+
