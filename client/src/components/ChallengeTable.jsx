@@ -11,30 +11,11 @@ class ChallengeTable extends React.Component {
     console.log('actions', actions)
   }
 
-  submitChallenge(e) {
-    console.log("the video:");
-    e.preventDefault();
-    let newChallenge = {
-      title: this.refs.title.value,
-      description: this.refs.description.value,
-      category: this.refs.category.value
-    };
-    // $.ajax({
-    //   url: '/api/challenge',
-    //   type: 'POST',
-    //   data: newChallenge,
-    //   contentType: false,
-    //   processData: false,
-    //   success: function(data) {
-    //     console.log('successfully posted');
-    //   }
-    // });
-  }
-
   componentDidMount() {
+    let outer = this;
     $.get('/api/allChallenges').done(data => {
       data.forEach(function(challenge) {
-        this.props.dispatch(actions.addChallenge(challenge));
+        outer.props.dispatch(actions.addChallenge(challenge));
       });
     });
   }

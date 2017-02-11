@@ -7,20 +7,13 @@ class Challenge extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    // get request
-
-    // this.setState = {
-    //   challenges: new get requet
-    // }
-  }
-
   render() {
     return (
       <ul>
         {
           this.props.challenges.map((challenge, i) => {
-            return <li key={i}>{challenge.title + ' ' + challenge.description + ' ' + challenge.category}</li>
+            console.log(challenge)
+            return <li key={challenge.id}><a href="#/challenge">{challenge.title + ' ' + challenge.description + ' ' + challenge.category}</a></li>
           })
         }
       </ul>

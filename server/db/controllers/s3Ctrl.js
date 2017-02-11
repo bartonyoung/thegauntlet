@@ -10,6 +10,6 @@ module.exports = function(file, res) {
   var stream = fs.createReadStream(file.path);
   return s3fsImpl.writeFile(file.originalFilename, stream).then(function() {
     fs.unlink(file.path, function(err) {});
-    res.sendStatus(201);
+    res.redirect('/#/dash');
   });
 };

@@ -17,7 +17,8 @@ module.exports = {
       challenge.views = 0;
       challenge.filename = req.files.video.originalFilename;
       db('challenges').insert(challenge).then(data => {
-        s3(req.files.video, res);
+        //s3(req.files.video, res);
+        res.redirect('/#/dash');
       }).catch(err => {
         if (err) { console.error(err); }
       });
@@ -25,7 +26,7 @@ module.exports = {
   },
 
   getAll: (req, res) =>{
-    db.select().from('challenges').then(data =>{
+    db.select('*').from('challenges').then(data =>{
       console.log("inside get all", data);
       res.json(data);
     });
