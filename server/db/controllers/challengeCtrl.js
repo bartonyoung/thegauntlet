@@ -1,4 +1,5 @@
 const challenges = require('../models/challenges.js');
+const votes = require('../models/votes.js');
 const db = require('../index.js');
 const s3 = require('./s3Ctrl.js');
 
@@ -12,6 +13,7 @@ module.exports = {
     .then(userData => { //TODO:Change to req.session.username
       challenge.user_id = userData[0].id;
       challenge.upvotes = 0;
+      challenge.views = 0;
       challenge.filename = req.files.video.originalFilename;
       db('challenges').insert(challenge).then(data => { 
         s3(req.files.video, res);
@@ -46,14 +48,36 @@ module.exports = {
     .innerJoin('challenges', 'users.id', 'challenges.user_id')
     .where({username: name})
     .then((data) => {
-      res.json(data); //data is an array of all challenges he responded to
+      res.json(data); //data is an array of all challenges that user responded to
     });
   },
 
-  upvote: (req, res) => { //FIX_ME: can be upvoted to oblivion
-    db.from('challenges').where({id: req.body.challenge_id}).then(data => {
-      db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: data[0].upvotes + 1}).then(() => {
-        res.sendStatus(201);
+  upvote: (req, res) => { //CHECK: Should fix upvote spam but needs to be tested
+    let vote = req.body; //req.body should have challenge_id and vote = 1
+    db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      db.select().from('votes').where({user_id: userData[0].id}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
+        if (exists.length) {
+          console.log('Sorry you already upvoted this challenge!');
+          res.sendStatus(404);
+        } else {
+          vote.user_id = userData[0].id;
+          db('votes').insert(vote).then( () => {
+            db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
+              db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
+                console.log('successfully upvoted!');
+                res.sendStatus(201);
+              });
+            });
+          });
+        }
+      });
+    });
+  },
+
+  viewed: (req, res) => {
+    db.select('views').from('challenges').where({id: req.body.challenge_id}).then(challengeData => {
+      db.select().from('challenges').where({id: req.body.challenge_id}).update({views: challengeData[0].views + 1}).then( () => {
+        console.log('view count updated!');
       });
     });
   }
