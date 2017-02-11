@@ -4,7 +4,7 @@ const db = require('../index.js');
 module.exports = {
   addOne: (req, res) => {
     let comment = req.body; //NOTE: req.body contains comment & that challenge's primary id
-    db.select('id').from('users').where({username: 'Scott'}).then( (userData) =>{ //TODO: change Scott to req.session.displayName
+    db.select('id').from('users').where({username: req.session.displayName}).then( (userData) =>{ //TODO: change Scott to req.session.displayName
       comment.user_id = userData[0].id;
       db('comments').insert(comment).then(() => {
         res.sendStatus(201);
