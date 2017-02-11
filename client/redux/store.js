@@ -7,7 +7,7 @@ let finalCreateStore = compose(
 )(createStore)
 
 const configureStore = (initialState = { users: [] }) => {
-  return finalCreateStore(reducer, initialState)
+  return finalCreateStore(reducer, initialState);
 }
 
 export default configureStore
