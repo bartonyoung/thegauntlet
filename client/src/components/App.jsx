@@ -6,32 +6,26 @@ import Signup from './Signup.jsx';
 import Login from './Login.jsx';
 import Dash from './Dash.jsx';
 
-const dummyData = [
-  {
-    username: "Edmund Louie",
-    ranking: "Bronze 5"
-  },
-  {
-    username: "Barton Young",
-    ranking: "Silver 4"
-  },
-  {
-    username: "Taegyu Leem",
-    ranking: "Wood 8"
-  },
-  {
-    username: "Brendan Mok",
-    ranking: "Plastic 10"
-  }
-];
+const dummyData = ['Barton', 'Edmund', 'Taegyu', 'Brendan'];
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      users: dummyData
-    }
+      users: []
+    };
+
+    this.handleSubmitChallenge = this.handleSubmitChallenge.bind(this);
+  }
+
+  handleSubmitChallenge(challenge) {
+    let newChallenge = this.state.users;
+    console.log('newChallenge:', newChallenge);
+    newChallenge.push(challenge);
+    this.setState({
+      users: newChallenge
+    });
   }
 
   render() {
@@ -41,7 +35,7 @@ class App extends React.Component {
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
         <Route path='/dash' component={() => (
-          <Dash userInfo={this.state.users} />
+          <Dash handleSubmitChallenge={this.handleSubmitChallenge} users={this.state.users}/>
         )} />
       </Router>
     );
