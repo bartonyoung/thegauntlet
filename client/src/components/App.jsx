@@ -1,6 +1,6 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, hashHistory} from 'react-router';
+import { render } from 'react-dom';
+import { Router, Route, hashHistory } from 'react-router';
 import Landing from './Landing.jsx';
 import Signup from './Signup.jsx';
 import Login from './Login.jsx';
@@ -29,7 +29,7 @@ class App extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <Router history={hashHistory}>
         <Route path="/" component={Landing} />
         <Route path="/signup" component={Signup} />
@@ -42,4 +42,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default App;

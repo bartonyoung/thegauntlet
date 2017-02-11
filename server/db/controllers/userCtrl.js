@@ -58,13 +58,13 @@ module.exports = {
           res.send('Please, check Username or Password');
         }
       });
-  },
+  }, 
 
-  logout: function(req, res) {
+  logout(req, res) {
     console.log(req.session);
     delete req.session.displayName;
     console.log('============================');
     console.log(req.session);
     res.send('Good bye');
-  }
+  },
 };

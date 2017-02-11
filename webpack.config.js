@@ -42,9 +42,9 @@ var config = {
         reload: true
       }
 
-    )
+   )
   ]
 
-};
-
+};     
 module.exports = config;
+
