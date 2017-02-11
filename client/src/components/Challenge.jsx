@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { connect } from 'react-redux';
 class Challenge extends React.Component {
   constructor(props) {
     super(props);
@@ -7,12 +7,13 @@ class Challenge extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>{this.props.users[0]}</h1>
-        <h1>{this.props.users[1]}</h1>
-        <h1>{this.props.users[2]}</h1>
-        <h1>{this.props.users[3]}</h1>
-      </div>
+      <ul>
+        {
+          this.props.challenges.map((challenge, i) => {
+            return <li key={i}>{challenge.title + ' ' + challenge.description + ' ' + challenge.category}</li>
+          })
+        }
+      </ul>
     );
   }
 };
@@ -23,3 +24,7 @@ export default Challenge;
         // {this.props.users.map((user, i) => {
         //   <h3>{user.username}</h3>
         // })}
+        // <h1>{this.props.challenges[0]}</h1>
+        // <h1>{this.props.challenges[1]}</h1>
+        // <h1>{this.props.challenges[2]}</h1>
+        // <h1>{this.props.challenges[3]}</h1>

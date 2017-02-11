@@ -1,21 +1,18 @@
-const getId = (state) => {
-  return state.users.reduce((maxId, user) => {
-    return Math.max(user.id, maxId);
-  }, -1) + 1;
-};
+// const getId = (state) => {
+//   return state.challenges.reduce((maxId, challenge) => {
+//     return Math.max(challenge.id, maxId);
+//   }, -1) + 1;
+// };
 
 const reducer = (state, action) => {
+  console.log('paylod:', action.payload)
   switch (action.type) {
-  case 'ADD_USER':
-    return Object.assign({}, state, {
-      users: [{
-        user: action.addUser,
-        id: getId(state)
-      }, ...state.users]
-    });
-          
-  default:
-    return state;
+    case 'ADD_CHALLENGE':
+      return Object.assign({}, state, {
+        challenges: [action.payload, ...state.challenges]
+      })
+    default:
+      return state;
   }
 };
 

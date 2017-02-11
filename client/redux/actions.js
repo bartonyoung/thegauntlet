@@ -1,10 +1,21 @@
 let actions = {
-  addUser: function (user) {
+  addChallenge: function(challenge) {
+    return {
+      type: 'ADD_CHALLENGE',
+      payload: {
+        title: challenge.title,
+        description: challenge.description,
+        category: challenge.category
+      }
+    };
+  },
+
+  addUser: function(user) {
     return {
       type: 'ADD_USER',
-      user: user
-    }
+      payload: user
+    };
   }
-}
+};
 
-export default actions
+export default actions;
