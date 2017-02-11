@@ -15,21 +15,21 @@ module.exports = {
       challenge.upvotes = 0;
       challenge.views = 0;
       challenge.filename = req.files.video.originalFilename;
-      db('challenges').insert(challenge).then(data => { 
+      db('challenges').insert(challenge).then(data => {
         s3(req.files.video, res);
-      }).catch(err => { 
+      }).catch(err => {
         if (err) { console.error(err); }
-      }); 
+      });
     });
   },
-  
+
   getAll: (req, res) =>{
     db.select().from('challenges').then(data =>{
-      console.log(data);
+      console.log("inside get all", data);
       res.json(data);
     });
   },
-  
+
   getOne: (req, res) => {
     db.select()
     .from('challenges')
@@ -81,4 +81,4 @@ module.exports = {
       });
     });
   }
-};      
+};

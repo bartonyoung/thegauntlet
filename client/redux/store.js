@@ -6,7 +6,7 @@ let finalCreateStore = compose(
   applyMiddleware(logger())
 )(createStore)
 
-const configureStore = (initialState = { users: [] }) => {
+const configureStore = (initialState = { challenges: [] }) => {
   return finalCreateStore(reducer, initialState);
 }
 

@@ -6,27 +6,11 @@ import Signup from './Signup.jsx';
 import Login from './Login.jsx';
 import Dash from './Dash.jsx';
 import $ from 'jquery';
-
-const dummyData = ['Barton', 'Edmund', 'Taegyu', 'Brendan'];
+import { connect } from 'react-redux';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      users: []
-    };
-
-    this.handleSubmitChallenge = this.handleSubmitChallenge.bind(this);
-  }
-
-  handleSubmitChallenge(challenge) {
-    let newChallenge = this.state.users;
-    console.log('newChallenge:', newChallenge);
-    newChallenge.push(challenge);
-    this.setState({
-      users: newChallenge
-    });
   }
 
   handleLogout() {
@@ -43,11 +27,16 @@ class App extends React.Component {
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
         <Route path='/dash' component={() => (
-          <Dash handleSubmitChallenge={this.handleSubmitChallenge} handleLogout={this.handleLogout.bind(this)} users={this.state.users}/>
+          <Dash handleSubmitChallenge={this.handleSubmitChallenge} handleLogout={this.handleLogout.bind(this)} challenges={this.props.challenges} dispatch={this.props.dispatch}/>
         )} />
       </Router>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps)(App);
+

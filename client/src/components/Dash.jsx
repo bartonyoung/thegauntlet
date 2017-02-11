@@ -1,10 +1,10 @@
 import React from 'react';
 import ChallengeTable from './ChallengeTable.jsx';
 
-const Dash = ({users, handleSubmitChallenge, handleLogout}) => (
+const Dash = ({challenges, handleSubmitChallenge, dispatch}) => (
   <div>
     <a href="#" onClick={handleLogout}>logout</a>
-    <ChallengeTable handleSubmitChallenge={handleSubmitChallenge} users={users}/>
+    <ChallengeTable handleSubmitChallenge={handleSubmitChallenge} dispatch={dispatch} challenges={challenges}/>
   </div>
 );
 
