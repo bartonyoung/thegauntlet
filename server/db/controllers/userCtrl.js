@@ -5,7 +5,6 @@ const bcrypt = require('promised-bcrypt');
 
 module.exports = {
   signup: function(req, res) {
-    console.log('inside user signup controller');
     let user = req.body;
     let username = user.username;
     let password = user.password;
@@ -46,25 +45,24 @@ module.exports = {
               if (pass) {
                 req.session.displayName = username;
                 req.session.save(() => {
-                 // console.log(req.session);
-                  res.send('Welcome');
+                  //console.log(req.session);
+                  res.send(true);
                 });
               } else {
-                res.send('Please, check Username or Password');
+                res.send(false);
               }
             });
         } else {
-          console.log(req.session);
+          //console.log(req.session);
           res.send('Please, check Username or Password');
         }
       });
   }, 
 
-  logout(req, res) {
-    console.log(req.session);
+  logout: function(req, res) {
+    let temp = req.session.displayName;
+    res.send('Good bye  ' + temp);
     delete req.session.displayName;
-    console.log('============================');
-    console.log(req.session);
-    res.send('Good bye');
-  },
+  }
 };
+
