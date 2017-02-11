@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 class Landing extends React.Component {
 
+
   // componenetDidMount() {
   //   $.ajax({
   //     method: 'GET',

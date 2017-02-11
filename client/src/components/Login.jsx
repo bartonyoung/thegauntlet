@@ -12,9 +12,13 @@ class Login extends React.Component {
 
     $.post('/api/login', login)
     .done(data => {
-      console.log("logged into...THE GAUNTLET")
-      window.location.href = '#/dash';
-    });
+      if (data) {
+        window.location.href = '#/dash';  
+      } else {
+        alert('Please, check Username or Password');  
+        window.location.href = '#/login';
+      }
+    }); 
   }
 
   render() {
