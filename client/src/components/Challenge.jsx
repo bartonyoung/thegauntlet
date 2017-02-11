@@ -1,8 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import actions from '../../redux/actions.js';
+
 class Challenge extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    // get request
+
+    // this.setState = {
+    //   challenges: new get requet
+    // }
   }
 
   render() {

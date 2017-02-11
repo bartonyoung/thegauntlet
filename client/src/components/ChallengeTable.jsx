@@ -2,6 +2,7 @@ import React from 'react';
 import Challenge from './Challenge.jsx';
 import path from 'path';
 import actions from '../../redux/actions.js';
+import $ from 'jquery';
 
 class ChallengeTable extends React.Component {
   constructor(props) {
@@ -11,29 +12,42 @@ class ChallengeTable extends React.Component {
   }
 
   submitChallenge(e) {
-    console.log(this.props)
+    console.log("the video:");
     e.preventDefault();
-    console.log(this.refs.title.value);
     let newChallenge = {
       title: this.refs.title.value,
       description: this.refs.description.value,
       category: this.refs.category.value
-    }
+    };
+    // $.ajax({
+    //   url: '/api/challenge',
+    //   type: 'POST',
+    //   data: newChallenge,
+    //   contentType: false,
+    //   processData: false,
+    //   success: function(data) {
+    //     console.log('successfully posted');
+    //   }
+    // });
+  }
 
-
-    this.props.dispatch(actions.addChallenge(newChallenge));
-    // this.props.handleSubmitChallenge(this.refs.challengeName.value);
+  componentDidMount() {
+    $.get('/api/allChallenges').done(data => {
+      data.forEach(function(challenge) {
+        this.props.dispatch(actions.addChallenge(challenge));
+      });
+    });
   }
 
   render() {
     return (
       <div>
-        <form onSubmit={this.submitChallenge.bind(this)}>
-          <input type="text" placeholder="Name your challenge" required ref="title"/>
-          <input type="text" placeholder="Description" required ref="description"/>
-          <input type="text" placeholder="category" required ref="category"/>
-          <input type="file" placeholder="video" />
-          <input type="submit" value="Submit a challenge"/>
+        <form encType="multipart/form-data" action="/api/challenge" method="post">
+          <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+          <input type="text" placeholder="Description" required ref="description" name="description"/>
+          <input type="text" placeholder="category" required ref="category" name="category"/>
+          <input type="file" placeholder="video" required ref="video" name="video"/>
+          <button>Submit</button>
         </form>
         <Challenge challenges={this.props.challenges} />
       </div>

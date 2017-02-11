@@ -11,16 +11,6 @@ import { connect } from 'react-redux';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    console.log('app props:', this.props);
-    this.handleSubmitChallenge = this.handleSubmitChallenge.bind(this);
-  }
-
-  handleSubmitChallenge(challenge) {
-    let newChallenge = this.state.challenges;
-    newChallenge.push(challenge);
-    this.setState({
-      challenges: newChallenge
-    });
   }
 
   handleLogout() {

@@ -5,7 +5,6 @@
 // };
 
 const reducer = (state, action) => {
-  console.log('paylod:', action.payload)
   switch (action.type) {
     case 'ADD_CHALLENGE':
       return Object.assign({}, state, {
