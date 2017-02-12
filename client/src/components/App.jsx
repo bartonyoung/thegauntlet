@@ -17,9 +17,10 @@ class App extends React.Component {
   handleLogout() {
     $.get('/api/logout')
     .done(data => {
-      console.log(data);
+      window.sessionStorage.removeItem('key');
     });
   }
+
 
   render() {
     return (

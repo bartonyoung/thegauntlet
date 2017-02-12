@@ -13,9 +13,10 @@ class Login extends React.Component {
     $.post('/api/login', login)
     .done(data => {
       if (data) {
+        window.sessionStorage.setItem('key', 'What\'s up ' + data + ' !');  
         window.location.href = '#/dash';  
       } else {
-        alert('Please, check Username or Password');  
+        alert('Please, check Username or Password');
         window.location.href = '#/login';
       }
     }); 
@@ -38,4 +39,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login
+export default Login;

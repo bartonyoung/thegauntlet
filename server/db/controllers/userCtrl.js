@@ -8,7 +8,6 @@ module.exports = {
     let user = req.body;
     let username = user.username;
     let password = user.password;
-
     db.select().from('users').where({username: username})
       .then(rows =>{
         if (rows.length) {
@@ -21,7 +20,7 @@ module.exports = {
                   req.session.displayName = username;
                   req.session.save(() => {
                    //console.log('username works!', req.session);
-                    res.sendStatus(201);
+                    res.send(req.session.displayName);
                   });
                 })    
                 .catch(function(err) {
@@ -36,7 +35,6 @@ module.exports = {
     let user = req.body;
     let username = user.username;
     let password = user.password;
-    console.log('inside user login controller');
     db.select().from('users').where('users.username', '=', username)
       .then(rows =>{
         if (rows.length) {
@@ -45,15 +43,13 @@ module.exports = {
               if (pass) {
                 req.session.displayName = username;
                 req.session.save(() => {
-                  //console.log(req.session);
-                  res.send(true);
+                  res.send(req.session.displayName);
                 });
               } else {
                 res.send(false);
               }
             });
         } else {
-          //console.log(req.session);
           res.send('Please, check Username or Password');
         }
       });
@@ -61,10 +57,8 @@ module.exports = {
 
   logout: function(req, res) {
     let temp = req.session.displayName;
-    res.send('Good bye  ' + temp);
-    console.log(req.session);
     req.session.destroy();
-    console.log(req.session);
+    res.send('Good bye  ' + temp);
   }
 };
 

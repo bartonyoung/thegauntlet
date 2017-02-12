@@ -7,8 +7,6 @@ import $ from 'jquery';
 class ChallengeTable extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
-    console.log('actions', actions)
   }
 
   componentDidMount() {
