@@ -6,9 +6,7 @@ const s3 = require('./s3Ctrl.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
-    console.log(req.session.displayName);
-    console.log(req.body);
-    db.select('id')
+    db.select('id') 
     .from('users')
     .where({username: req.session.displayName})
     .then(userData => {
@@ -26,8 +24,7 @@ module.exports = {
   },
 
   getAll: (req, res) =>{
-    db.select('*').from('challenges').then(data =>{
-      console.log("inside get all", data);
+    db.select().from('challenges').then(data =>{
       res.json(data);
     });
   },
@@ -59,14 +56,12 @@ module.exports = {
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
       db.select().from('votes').where({user_id: userData[0].id}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
         if (exists.length) {
-          console.log('Sorry you already upvoted this challenge!');
           res.sendStatus(404);
         } else {
           vote.user_id = userData[0].id;
           db('votes').insert(vote).then( () => {
             db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
               db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
-                console.log('successfully upvoted!');
                 res.sendStatus(201);
               });
             });
@@ -79,7 +74,6 @@ module.exports = {
   viewed: (req, res) => {
     db.select('views').from('challenges').where({id: req.body.challenge_id}).then(challengeData => {
       db.select().from('challenges').where({id: req.body.challenge_id}).update({views: challengeData[0].views + 1}).then( () => {
-        console.log('view count updated!');
       });
     });
   }

@@ -3,6 +3,7 @@ import ChallengeTable from './ChallengeTable.jsx';
 
 const Dash = ({challenges, handleSubmitChallenge, dispatch, handleLogout}) => (
   <div>
+    <h1>{window.sessionStorage.getItem('key')}</h1>
     <a href="#" onClick={handleLogout}>logout</a>
     <ChallengeTable handleSubmitChallenge={handleSubmitChallenge} dispatch={dispatch} challenges={challenges}/>
   </div>

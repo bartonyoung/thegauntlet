@@ -10,8 +10,6 @@ class Signup extends React.Component {
       password: this.refs.password.value,
     };
     let confirmPassword = this.refs.confirmPassword.value;
-
-    console.log(signup);
     if (signup.password === confirmPassword) {
       $.post('/api/signup', signup)
       .done(data => {
@@ -23,6 +21,7 @@ class Signup extends React.Component {
           this.refs.confirmPassword.value = '';
           window.location.href = '#/signup';
         } else {
+          window.sessionStorage.setItem('key', 'What\'s up ' + data + ' !');
           window.location.href = '#/dash';
         }  
       });
