@@ -2,17 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 
-class Challenge extends React.Component {
+class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    // get request
-
-    // this.setState = {
-    //   challenges: new get requet
-    // }
   }
 
   render() {
@@ -20,15 +12,15 @@ class Challenge extends React.Component {
       <ul>
         {
           this.props.challenges.map((challenge, i) => {
-            return <li key={i}>{challenge.title + ' ' + challenge.description + ' ' + challenge.category}</li>
+            return <li key={challenge.id}><a href="#/challenge">{challenge.title + ' ' + challenge.description + ' ' + challenge.category}</a></li>;
           })
         }
       </ul>
     );
   }
-};
+}
 
-export default Challenge;
+export default ChallengeList;
 
 
         // {this.props.users.map((user, i) => {

@@ -5,6 +5,7 @@ import Landing from './Landing.jsx';
 import Signup from './Signup.jsx';
 import Login from './Login.jsx';
 import Dash from './Dash.jsx';
+import ChallengeView from './ChallengeView.jsx';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 
@@ -29,6 +30,7 @@ class App extends React.Component {
         <Route path='/dash' component={() => (
           <Dash handleSubmitChallenge={this.handleSubmitChallenge} handleLogout={this.handleLogout.bind(this)} challenges={this.props.challenges} dispatch={this.props.dispatch}/>
         )} />
+        <Route path='/challenge' component={ChallengeView} />
       </Router>
     );
   }
