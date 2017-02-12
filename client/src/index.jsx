@@ -4,24 +4,24 @@ import App from './components/App.jsx';
 import configureStore from '../redux/store';
 import { Provider } from 'react-redux';
 
-let initialState = {
-  challenges: [
-                {
-                  title: 'pushups',
-                  description: 'pushup challenge breh',
-                  category: 'fitness',
-                  filename: '...'
-                },
-                {
-                  title: 'coding',
-                  description: 'master all the algorithms bruh',
-                  category: 'programming',
-                  filename: 'git --rebase -f'
-                }
-              ]
-};
+// let initialState = {
+//   challenges: [
+//                 {
+//                   title: 'pushups',
+//                   description: 'pushup challenge breh',
+//                   category: 'fitness',
+//                   filename: '...'
+//                 },
+//                 {
+//                   title: 'coding',
+//                   description: 'master all the algorithms bruh',
+//                   category: 'programming',
+//                   filename: 'git --rebase -f'
+//                 }
+//               ]
+// };
 
-let store = configureStore(initialState);
+let store = configureStore();
 
 render(
   <Provider store={store}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Challenge from './Challenge.jsx';
+import ChallengeList from './ChallengeList.jsx';
 import path from 'path';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
@@ -14,9 +14,7 @@ class ChallengeTable extends React.Component {
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges').done(data => {
-      data.forEach(function(challenge) {
-        outer.props.dispatch(actions.addChallenge(challenge));
-      });
+      outer.props.dispatch(actions.addChallenge(data));
     });
   }
 
@@ -30,7 +28,7 @@ class ChallengeTable extends React.Component {
           <input type="file" placeholder="video" required ref="video" name="video"/>
           <button>Submit</button>
         </form>
-        <Challenge challenges={this.props.challenges} />
+        <ChallengeList challenges={this.props.challenges} />
       </div>
     );
   }
