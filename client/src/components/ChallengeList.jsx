@@ -11,27 +11,19 @@ class ChallengeList extends React.Component {
   }
 
   onChallengeClick(challenge) {
-    console.log('clicked here', challenge)
-    window.localStorage.setItem('title', challenge.title);
-    window.localStorage.setItem('id', challenge.id);
-    window.localStorage.setItem('description', challenge.description);
-    window.localStorage.setItem('category', challenge.category);
+    console.log('clicked here', challenge);
+    window.sessionStorage.setItem('title', challenge.title);
+    window.sessionStorage.setItem('id', challenge.id);
+    window.sessionStorage.setItem('description', challenge.description);
+    window.sessionStorage.setItem('category', challenge.category);
 
-    console.log('window.localStorage', window.localStorage)
+    console.log('window.sessionStorage', window.sessionStorage);
     return (
       <ChallengeComponent challenge={challenge} />
     );
-    window.location.href = "/#/challenge";
+    window.location.href = '/#/challenge';
   }
 
-        // <ChallengeView
-        //   key={i}
-        //   id={challenge.id}
-        //   title={challenge.title}
-        //   description={challenge.description}
-        //   category={challenge.category}
-        //   onChallengeClick={this.onChallengeClick}
-        // />
   render() {
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       return <div onClick={() => this.onChallengeClick(challenge)}>
@@ -39,7 +31,7 @@ class ChallengeList extends React.Component {
         {challenge.title}
       </a>
       </div>;
-      })
+    });
 
     return <div>{mappedChallenges}</div>;
   }

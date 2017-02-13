@@ -6,6 +6,7 @@ const s3 = require('./s3Ctrl.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
+    console.log(req.body);
     db.select('id') 
     .from('users')
     .where({username: req.session.displayName})
@@ -13,14 +14,19 @@ module.exports = {
       challenge.user_id = userData[0].id;
       challenge.upvotes = 0;
       challenge.views = 0;
-      challenge.filename = req.files.video.originalFilename;
       db('challenges').insert(challenge).then(data => {
         //s3(req.files.video, res);
-        res.redirect('/#/dash');
+        // res.redirect('/#/dash');
+        res.sendStatus(201);
       }).catch(err => {
         if (err) { console.error(err); }
       });
     });
+  },
+
+  s3: (req, res) => {
+    console.log(req.files);
+    res.json(req.files.video.originalFilename);
   },
 
   getAll: (req, res) =>{
