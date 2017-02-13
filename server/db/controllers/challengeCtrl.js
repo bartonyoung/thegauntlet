@@ -6,6 +6,8 @@ const s3 = require('./s3Ctrl.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
+    console.log(req.body);
+    console.log(req.files);
     db.select('id') 
     .from('users')
     .where({username: req.session.displayName})
