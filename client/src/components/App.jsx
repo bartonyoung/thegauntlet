@@ -8,6 +8,7 @@ import Dash from './Dash.jsx';
 import ChallengeView from './ChallengeView.jsx';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import ChallengeComponent from './ChallengeComponent.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -29,9 +30,9 @@ class App extends React.Component {
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
         <Route path='/dash' component={() => (
-          <Dash handleSubmitChallenge={this.handleSubmitChallenge} handleLogout={this.handleLogout.bind(this)} challenges={this.props.challenges} dispatch={this.props.dispatch}/>
+          <Dash handleLogout={this.handleLogout.bind(this)} dispatch={this.props.dispatch} />
         )} />
-        <Route path='/challenge' component={ChallengeView} />
+        <Route path='/challenge' component={ChallengeComponent} />
       </Router>
     );
   }
