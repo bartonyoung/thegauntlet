@@ -10,6 +10,7 @@ routes.get('/logout', userControllers.logout);
 routes.post('/userUpload', s3Controller);
 routes.get('/allChallenges', challengeController.getAll);
 routes.post('/challenge', challengeController.addOne);
+routes.post('/s3', challengeController.s3);
 routes.get('/challenge/:id', challengeController.getOne);
 routes.post('/comments', commentController.addOne);
 routes.get('/comments', commentController.getAll);

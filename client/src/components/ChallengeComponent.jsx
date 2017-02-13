@@ -6,23 +6,23 @@ class ChallengeComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log("inside challenge component", window.localStorage)
+    // console.log('inside challenge component', window.localStorage);
   }
 
 
   componentDidMount() {
     $.get('/api/allChallenges').done(data => {
       console.log('data');
-    })
+    });
   }
 
   render() {
 
-    return(
+    return (
       <div>
-        <h1>{"Challenge Title: " + window.localStorage.title}</h1>
-        <h4>{"Description: " + window.localStorage.description}</h4>
-        {"Upload your response: "}
+        <h1>{'Challenge Title: ' + window.sessionStorage.getItem('title')}</h1>
+        <h4>{'Description: ' + window.sessionStorage.getItem('description')}</h4>
+        {'Upload your response: '}
         <form id="challenge" encType="multipart/form-data" action="/api/challenge" method="post">
           <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
           <input type="text" placeholder="Description" required ref="description" name="description"/>
@@ -34,6 +34,6 @@ class ChallengeComponent extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default ChallengeComponent;
