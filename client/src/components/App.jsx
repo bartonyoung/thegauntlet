@@ -5,7 +5,6 @@ import Landing from './Landing.jsx';
 import Signup from './Signup.jsx';
 import Login from './Login.jsx';
 import Dash from './Dash.jsx';
-import ChallengeView from './ChallengeView.jsx';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import ChallengeComponent from './ChallengeComponent.jsx';

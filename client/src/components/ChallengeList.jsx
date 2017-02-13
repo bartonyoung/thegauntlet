@@ -1,5 +1,4 @@
 import React from 'react';
-import ChallengeView from './ChallengeView.jsx';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
