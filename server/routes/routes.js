@@ -16,4 +16,6 @@ routes.post('/comments', commentController.addOne);
 routes.get('/comments', commentController.getAll);
 routes.post('/upvote', challengeController.upvote);
 routes.post('/viewed', challengeController.viewed);
+routes.post('/response', challengeController.addOneResponse);
+routes.get('/response', challengeController.getAll);
 module.exports = routes;
