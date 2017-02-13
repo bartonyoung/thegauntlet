@@ -1,32 +1,52 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
+import ChallengeComponent from './ChallengeComponent.jsx';
 
 class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
+
+    this.onChallengeClick = this.onChallengeClick.bind(this);
   }
 
-  render() {
+  onChallengeClick(challenge) {
+    console.log('clicked here', challenge)
+    window.localStorage.setItem('title', challenge.title);
+    window.localStorage.setItem('id', challenge.id);
+    window.localStorage.setItem('description', challenge.description);
+    window.localStorage.setItem('category', challenge.category);
+
+    console.log('window.localStorage', window.localStorage)
     return (
-      <ul>
-        {
-          this.props.challenges.map((challenge, i) => {
-            return <li key={challenge.id}><a href="#/challenge">{challenge.title + ' ' + challenge.description + ' ' + challenge.category}</a></li>;
-          })
-        }
-      </ul>
+      <ChallengeComponent challenge={challenge} />
     );
+    window.location.href = "/#/challenge";
+  }
+
+        // <ChallengeView
+        //   key={i}
+        //   id={challenge.id}
+        //   title={challenge.title}
+        //   description={challenge.description}
+        //   category={challenge.category}
+        //   onChallengeClick={this.onChallengeClick}
+        // />
+  render() {
+    let mappedChallenges = this.props.challenges.map((challenge, i) => {
+      return <div onClick={() => this.onChallengeClick(challenge)}>
+        <a href='/#/challenge'>
+        {challenge.title}
+      </a>
+      </div>;
+      })
+
+    return <div>{mappedChallenges}</div>;
   }
 }
 
-export default ChallengeList;
+const mapStateToProps = (state) => {
+  return state;
+};
 
-
-        // {this.props.users.map((user, i) => {
-        //   <h3>{user.username}</h3>
-        // })}
-        // <h1>{this.props.challenges[0]}</h1>
-        // <h1>{this.props.challenges[1]}</h1>
-        // <h1>{this.props.challenges[2]}</h1>
-        // <h1>{this.props.challenges[3]}</h1>
+export default connect(mapStateToProps)(ChallengeList);

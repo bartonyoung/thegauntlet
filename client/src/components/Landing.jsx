@@ -3,16 +3,6 @@ import $ from 'jquery';
 
 class Landing extends React.Component {
 
-
-  // componenetDidMount() {
-  //   $.ajax({
-  //     method: 'GET',
-  //     url: '/api/allChallenges'
-  //   }).then((data) => {
-
-  //   });
-  // }
-
   render() {
     return (
       <div className="landing">
