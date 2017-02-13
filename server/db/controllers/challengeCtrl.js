@@ -30,11 +30,7 @@ module.exports = {
     .where({username: req.session.displayName})
     .then(userData => {
       console.log('challenge', challenge)
-      console.log('userData', userData)       <form id="challenge" encType="multipart/form-data" action="/api/response" method="post">
-          <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
-          <input type="text" placeholder="Description" required ref="description" name="description"/>
-          <input type="text" placeholder="category" required ref="category" name="category"/>
-          <input type="file" placeh
+      console.log('userData', userData)
       challenge.user_id = userData[0].id;
       challenge.upvotes = 0;
       challenge.views = 0;
