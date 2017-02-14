@@ -3,11 +3,7 @@ import ChallengeList from './ChallengeList.jsx';
 import path from 'path';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
-<<<<<<< HEAD
-=======
-import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 import { connect } from 'react-redux';
->>>>>>> Refactor to show updated state on each post
 
 class ChallengeTable extends React.Component {
   constructor(props) {
