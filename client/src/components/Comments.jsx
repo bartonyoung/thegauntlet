@@ -9,10 +9,9 @@ class Comments extends React.Component {
   render() {
     console.log("inside comments component", this.props.comments);
     let mappedComments = this.props.comments.map((comment, i) => {
-      console.log('comment', typeof comment.id)
-      console.log(typeof window.sessionStorage.id)
+
       if (comment.id === parseInt(window.sessionStorage.id)) {
-        console.log('in here')
+
         return (
           <div>
             {comment.username + ': ' + comment.comment}
