@@ -17,7 +17,15 @@ let actions = {
     return {
       type: 'ADD_COMMENT',
       payload: comment
-    }
+    };
+  },
+
+  upVote: function(index) {
+    console.log('THIS IS THE PAY LOAD', index);
+    return {
+      type: 'UPVOTE',
+      payload: index
+    };
   }
 };
 
