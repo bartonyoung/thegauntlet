@@ -10,7 +10,7 @@ const MySQLStore = require('express-mysql-session')(session);
 const app = express();
 
 const multipartyMiddleware = multiparty();
-
+// using session middleware
 app.use(require('express-session')({
   key: 'session',
   secret: 'SUPER SECRET SECRET',
