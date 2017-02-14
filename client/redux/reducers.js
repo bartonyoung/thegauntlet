@@ -15,7 +15,7 @@ const reducer = (state, action) => {
         responses: action.payload
       })
     default:
-      return state;
+      return state
   }
 };
 

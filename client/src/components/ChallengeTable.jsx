@@ -8,6 +8,8 @@ import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 class ChallengeTable extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -17,10 +19,11 @@ class ChallengeTable extends React.Component {
   getAllChallenges() {
     let outer = this;
     $.get('/api/allChallenges').done(data => {
+      data = data.reverse();
       outer.props.dispatch(actions.addChallenge(data));
     });
-  } 
-  
+  }
+
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#file'));
@@ -44,7 +47,8 @@ class ChallengeTable extends React.Component {
           success: function(data) {
             outer.refs.title.value = '';
             outer.refs.description.value = '';
-            outer.refs.category.value = ''; 
+            outer.refs.category.value = '';
+            outer.refs.video.value = '';
             outer.getAllChallenges();
             return data;
           }
@@ -65,7 +69,7 @@ class ChallengeTable extends React.Component {
         <form ref="file" id="file">
           <input type="file" placeholder="video" required ref="video" name="video"/>
         </form>
-        <button onClick={this.handleSubmit.bind(this)}>Submit</button>
+        <button onClick={this.handleSubmit}>Submit</button>
         <ChallengeList dispatch={this.props.dispatch}/>
       </div>
     );

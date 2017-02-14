@@ -13,10 +13,9 @@ module.exports = {
       challenge.user_id = userData[0].id;
       challenge.upvotes = 0;
       challenge.views = 0;
-      challenge.filename = req.files.video.originalFilename;
       db('challenges').insert(challenge).then(data => {
         //s3(req.files.video, res);
-        res.redirect('/#/dash');
+        res.sendStatus(201);
       }).catch(err => {
         if (err) { console.error(err); }
       });
@@ -31,17 +30,23 @@ module.exports = {
     .then(userData => {
       console.log('challenge', challenge)
       console.log('userData', userData)
+      challenge.parent_id = challenge.parent_id;
       challenge.user_id = userData[0].id;
       challenge.upvotes = 0;
       challenge.views = 0;
-      challenge.filename = req.files.video.originalFilename;
       db('challenges').insert(challenge).then(data => {
         //s3(req.files.video, res);
-        res.redirect('/#/challenge');
+        res.sendStatus(201);
       }).catch(err => {
         if (err) { console.error(err); }
       });
     });
+  },
+
+  s3: (req, res) => {
+    console.log("req.files:", req.files);
+    console.log("req.body:", req.body);
+    res.json(req.files.video.originalFilename);
   },
 
   getAll: (req, res) =>{
@@ -51,6 +56,8 @@ module.exports = {
   },
 
   getOne: (req, res) => {
+    console.log("req.query:", req.query);
+    console.log('req.body:', req.body);
     db.select()
     .from('challenges')
     .where({parent_id: req.query.parent_id})
