@@ -11,8 +11,6 @@ const app = express();
 
 const multipartyMiddleware = multiparty();
 
-const app = express();
-
 app.use(require('express-session')({
   key: 'session',
   secret: 'SUPER SECRET SECRET',
