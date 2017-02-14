@@ -8,10 +8,10 @@ class Landing extends React.Component {
     return (
       <div>
       <link rel="stylesheet" href="../styles/landing.css"></link>
-      <Nav bsStyle="pills">
+      {/*<Nav bsStyle="pills">
         <NavItem href='#/signup' className="pull-right">SignUp</NavItem>
         <NavItem href='#/login' className="pull-right">Login</NavItem>
-      </Nav>
+      </Nav>*/}
       <Jumbotron> 
         <h1>Welcome to The Gauntlet!</h1>
         <p>The Gauntlet is a place to test yourself against others!</p>
