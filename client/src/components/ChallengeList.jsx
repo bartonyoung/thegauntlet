@@ -6,12 +6,11 @@ import ChallengeComponent from './ChallengeComponent.jsx';
 class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
-
     this.onChallengeClick = this.onChallengeClick.bind(this);
+    this.upVoteClick = this.upVoteClick.bind(this);
   }
 
   onChallengeClick(challenge) {
-    console.log('clicked here', challenge);
     window.sessionStorage.setItem('title', challenge.title);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
@@ -26,15 +25,19 @@ class ChallengeList extends React.Component {
     window.location.href = '/#/challenge';
   }
 
+  upVoteClick(index) {
+    this.props.dispatch(actions.upVote(index));
+  }
+
   render() {
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      return <div onClick={() => this.onChallengeClick(challenge)}>
-        <h1><a href='/#/challenge'>{challenge.title}</a></h1>
+      return <div>
+        <h1 onClick={() => this.onChallengeClick(challenge)}><a href='/#/challenge'>{challenge.title}</a></h1>
         <video width="320" height="240" controls>
-          <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>
+          {/*<source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>*/}
         </video><br/>
-        {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
-
+        {' Views: ' + challenge.views + 'index: ' + i}
+        <a onClick={()=> this.upVoteClick(i)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
       </div>;
     });
 
