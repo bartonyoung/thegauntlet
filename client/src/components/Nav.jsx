@@ -11,20 +11,15 @@ class NavBar extends React.Component {
     if (this.props.auth) {
       if (window.location.hash !== '#/dash') {
         return <Nav bsStyle="pills">
-                  <h4>Show World what you got {window.sessionStorage.getItem('key')}!</h4>
                   <button onClick={this.props.handleLogout}>Log out</button>
+                  <h4>Show World what you got {window.sessionStorage.getItem('key')}!</h4>
                 </Nav>;
       } else {
         return <Nav bsStyle="pills">
-                  <h4>HI! {window.sessionStorage.getItem('key')}</h4>  
                   <button onClick={this.props.handleLogout}>Log out</button>
+                  <h4>HI! {window.sessionStorage.getItem('key')}</h4>  
                 </Nav>;
       } 
-    } else {
-      return <Nav bsStyle="pills">
-               <a href="/#/signup"><button>Signup</button></a>
-               <a href="/#/login"><button>Login</button></a>
-             </Nav>;
     }
   }
   render() {
