@@ -6,7 +6,7 @@ const Dash = ({challenges, handleSubmitChallenge, dispatch, handleLogout}) => (
   <div>
      <Nav bsStyle="pills"> 
      <h1>{window.sessionStorage.getItem('key')}</h1>
-        <a href="#"><Button onClick={this.handleLogout} className="pull-right">Logout</Button></a>
+        <Button onClick={handleLogout} className="pull-right">Logout</Button>
       </Nav> 
     <ChallengeTable id="enterChallenge" handleSubmitChallenge={handleSubmitChallenge} dispatch={dispatch} challenges={challenges}/>
   </div>
