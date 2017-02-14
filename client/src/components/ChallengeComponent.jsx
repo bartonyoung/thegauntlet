@@ -90,14 +90,24 @@ class ChallengeComponent extends React.Component {
   }
 
   render() {
-
+    let checkFile = (type, response) => {
+      const fileType = {
+        'mp4': 'THIS IS A VIDEO!'
+      };
+      if (fileType[type]) {
+        return (<video width="320" height="240" controls>
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
+        </video>);  
+      } else {
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} width="320" height="240" />;
+      }
+    };
     return (
       <div>
+
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
-         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
-        <video width="320" height="240" controls>
-          <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + window.sessionStorage.filename} type="video/mp4"/>
-        </video>
+        <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
+        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}
         <h4>{'Description: ' + window.sessionStorage.description}</h4>
         <form onSubmit={this.commentSubmit}>
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
