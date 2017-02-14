@@ -5,6 +5,7 @@ import actions from '../../redux/actions.js';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 
+
 class ChallengeTable extends React.Component {
   constructor(props) {
     super(props);

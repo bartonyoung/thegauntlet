@@ -12,9 +12,9 @@ class Login extends React.Component {
       username: this.refs.username.value,
       password: this.refs.password.value
     };
-
     $.post('/api/login', login)
     .done(data => {
+      console.log(data);
       if (data) {
         window.sessionStorage.setItem('key', data);
         this.props.handleAuth(()=> {
