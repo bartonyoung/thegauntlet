@@ -3,24 +3,17 @@ import ChallengeList from './ChallengeList.jsx';
 import path from 'path';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
+<<<<<<< HEAD
+=======
+import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
+import { connect } from 'react-redux';
+>>>>>>> Refactor to show updated state on each post
 
 class ChallengeTable extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    this.getAllChallenges();
-  }
-
-  getAllChallenges() {
-    let outer = this;
-    $.get('/api/allChallenges').done(data => {
-      data = data.reverse();
-      outer.props.dispatch(actions.addChallenge(data));
-    });
   }
 
   handleSubmit() {
@@ -33,7 +26,6 @@ class ChallengeTable extends React.Component {
       processData: false,  // tell jQuery not to process the data
       contentType: false,   // tell jQuery not to set contentType
       success: function(resp) {
-        console.log(resp);
         $.ajax({
           url: '/api/challenge',
           type: 'POST',
@@ -44,15 +36,14 @@ class ChallengeTable extends React.Component {
             filename: resp
           },
           success: function(data) {
+            data = data.reverse();
+            outer.props.dispatch(actions.addChallenge(data));
             outer.refs.title.value = '';
             outer.refs.description.value = '';
             outer.refs.category.value = '';
             outer.refs.video.value = '';
-            outer.getAllChallenges();
-            return data;
           }
         });
-        return;
       }
     });
   }
@@ -75,4 +66,8 @@ class ChallengeTable extends React.Component {
   }
 }
 
-export default ChallengeTable;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps)(ChallengeTable);
