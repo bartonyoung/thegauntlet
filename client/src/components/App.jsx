@@ -16,7 +16,7 @@ class App extends React.Component {
     super(props);
     
     this.state = {
-      auth: window.sessionStorage.getItem('key')
+      auth: window.sessionStorage.getItem('key'),
     };
   }
 
@@ -36,11 +36,14 @@ class App extends React.Component {
       auth: window.sessionStorage.getItem('key')
     }, cb);
   }
+  handleDisply() {
+    this.setState({
+    });
+  }
 
   render() {
     return (
       <div>
-        <NavBar auth={this.state.auth} handleLogout={this.handleLogout.bind(this)}/>
       <Router history={hashHistory}>
         <Route path="/" component={Landing} />
         <Route path="/signup" component={() => {
@@ -48,17 +51,19 @@ class App extends React.Component {
         }} />
         
         <Route path="/login" component={() => { 
-          return <Login handleAuth={this.handleAuth.bind(this)}/>; 
+          return <Login handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />; 
         }} /> 
         
         <Route path='/dash' component={() => {
           if (this.state.auth) {
-            return <Dash dispatch={this.props.dispatch} />;
+            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} handleDisply={this.handleDisply.bind(this)} />;
           } else {
-            return <Landing/>;
+            return <Landing />;
           }
         }} />
-        <Route path='/challenge' component={ChallengeComponent} />
+        <Route path='/challenge' component={() =>{
+          return <ChallengeComponent handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+        }} />
       </Router>
       </div>
     );
