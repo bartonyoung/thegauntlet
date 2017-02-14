@@ -13,13 +13,6 @@ class ChallengeComponent extends React.Component {
 
   componentDidMount() {
     let outer = this;
-    // $.get('/api/response', {
-    //   parent_id: window.sessionStorage.getItem('id')
-    // }).done(data => {
-    //   console.log('data', data)
-    //   outer.props.dispatch(actions.addResponse(data));
-
-    // })
     $.ajax({
       url: '/api/response',
       type: 'GET',
@@ -43,7 +36,6 @@ class ChallengeComponent extends React.Component {
       processData: false,  // tell jQuery not to process the data
       contentType: false,   // tell jQuery not to set contentType
       success: function(resp) {
-        console.log("resp", resp);
         $.ajax({
           url: '/api/response',
           type: 'POST',
