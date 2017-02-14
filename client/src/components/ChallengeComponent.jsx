@@ -77,13 +77,13 @@ class ChallengeComponent extends React.Component {
   }
 
   renderComments() {
-    console.log('rendering')
+    console.log('rendering');
     let outer = this;
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
       outer.newComments = data;
-      console.log("newComments:", outer.newComments)
+      console.log('newComments:', outer.newComments);
     });
   }
 
@@ -91,17 +91,18 @@ class ChallengeComponent extends React.Component {
 
     return (
       <div>
-        <h1>{"Challenge Title: " + window.sessionStorage.title}</h1>
+        <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
         <video width="320" height="240" controls>
-          <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + window.sessionStorage.filename} type="video/mp4"/>
+          <source /*src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + window.sessionStorage.filename}*/ type="video/mp4"/>
         </video>
-        <h4>{"Description: " + window.sessionStorage.description}</h4>
+        <h4>{'Description: ' + window.sessionStorage.description}</h4>
+        <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
         <form onSubmit={this.commentSubmit}>
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <input type="submit"/>
         </form>
         <Comments newComments={this.newComments}/>
-        {"Upload your response: "}
+        {'Upload your response: '}
         <form id="challenge">
           <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
           <input type="text" placeholder="Description" required ref="description" name="description"/>
