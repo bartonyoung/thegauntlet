@@ -18,15 +18,13 @@ class Dash extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <div>
-        <h1>{window.sessionStorage.getItem('key')}</h1>
-        <a href="#" onClick={this.props.handleLogout}>logout</a>
         <ChallengeTable dispatch={this.props.dispatch} />
       </div>
     );
   }
-};
+}
 
 export default Dash;
 
