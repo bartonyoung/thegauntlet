@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
+import $ from 'jquery';
 
 class ChallengeList extends React.Component {
   constructor(props) {
@@ -25,8 +26,18 @@ class ChallengeList extends React.Component {
     window.location.href = '/#/challenge';
   }
 
-  upVoteClick(index) {
-    this.props.dispatch(actions.upVote(index));
+  upVoteClick(index, id) {
+    const outer = this;
+    $.post('/api/upvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(()=> {
+      $.get('/api/allChallenges/')
+        .then((data)=> {
+          data = data.reverse();
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    });
   }
 
   render() {
@@ -36,8 +47,8 @@ class ChallengeList extends React.Component {
         <video width="320" height="240" controls>
           {/*<source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>*/}
         </video><br/>
-        {' Views: ' + challenge.views + 'index: ' + i}
-        <a onClick={()=> this.upVoteClick(i)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
+        {' Views: ' + challenge.views}
+        <a onClick={()=> this.upVoteClick(i, challenge.id)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
       </div>;
     });
 
