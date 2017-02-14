@@ -38,7 +38,9 @@ class ChallengeList extends React.Component {
       </div>;
     });
 
-    return <div>{mappedChallenges}</div>;
+    return <div>
+            {mappedChallenges}
+           </div>;
   }
 }
 
