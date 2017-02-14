@@ -19,14 +19,6 @@ let actions = {
       payload: comment
     };
   },
-
-  upVote: function(index) {
-    console.log('THIS IS THE PAY LOAD', index);
-    return {
-      type: 'UPVOTE',
-      payload: index
-    };
-  }
 };
 
 export default actions;
