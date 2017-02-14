@@ -15,7 +15,6 @@ module.exports = {
   },
 
   getAll: (req, res) => {
-    console.log('inside getAll', req.query.challenge_id);
     db.select('comments.comment', 'users.username').from('challenges')
     .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
     .where('challenges.id', '=', 'req.query.challenge_id') //TODO: change 1 to req.query.challenge_id <<< get request using params
