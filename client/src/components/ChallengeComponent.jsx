@@ -94,8 +94,7 @@ class ChallengeComponent extends React.Component {
     return (
       <div>
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
-
-        <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
+         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
         <video width="320" height="240" controls>
           <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + window.sessionStorage.filename} type="video/mp4"/>
         </video>

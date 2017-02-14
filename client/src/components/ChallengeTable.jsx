@@ -4,6 +4,8 @@ import path from 'path';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import NavBar from './Nav.jsx';
+
 
 class ChallengeTable extends React.Component {
   constructor(props) {
