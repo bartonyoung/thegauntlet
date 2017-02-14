@@ -18,6 +18,7 @@ class App extends React.Component {
     $.get('/api/logout')
     .done(data => {
       window.sessionStorage.removeItem('key');
+      window.location.href = '#/';
     });
   }
 
