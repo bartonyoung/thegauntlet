@@ -51,7 +51,7 @@ module.exports = {
               }
             });
         } else {
-          res.send('Please, check Username or Password');
+          res.send(false);
         }
       });
   }, 
