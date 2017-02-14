@@ -26,7 +26,7 @@ class Signup extends React.Component {
           this.props.handleAuth(() => {
             window.location.href = '#/dash';
           });
-        }  
+        }
       });
     } else {
       this.refs.password.value = '';

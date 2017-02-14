@@ -8,16 +8,17 @@ module.exports = {
       comment.user_id = userData[0].id;
       db('comments').insert(comment).then(() => {
         db.select().from('comments').then(data => {
-          res.json(data[data.length - 1]);
-        });
+          res.json(data.slice(data.length - 1));
+        })
       });
     });
   },
 
   getAll: (req, res) => {
-    db.select('comments.comment', 'users.username').from('challenges')
+    console.log('inside getAll', req.query.challenge_id)
+    db.select('comments.comment', 'users.username', 'comments.id', 'challenges.id').from('challenges')
     .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
-    .where('challenges.id', '=', 'req.query.challenge_id') //TODO: change 1 to req.query.challenge_id <<< get request using params
+    .where('challenges.id', '=', req.query.challenge_id) //TODO: change 1 to req.query.challenge_id <<< get request using params
     .innerJoin('users', 'users.id', 'comments.user_id')
     .then( (data) => {
       console.log('comment data', data);

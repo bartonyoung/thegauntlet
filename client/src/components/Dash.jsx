@@ -4,6 +4,7 @@ import {Jumbotron, Col, Row, Button, Grid, Nav, NavItem} from 'react-bootstrap';
 import actions from '../../redux/actions';
 import NavBar from './Nav.jsx';
 import $ from 'jquery';
+import { connect } from 'react-redux';
 
 class Dash extends React.Component {
   constructor(props) {
@@ -28,5 +29,9 @@ class Dash extends React.Component {
   }
 }
 
-export default Dash;
+const mapStateToProps = (state) => {
+  return state;
+}
+
+export default connect(mapStateToProps)(Dash);
 

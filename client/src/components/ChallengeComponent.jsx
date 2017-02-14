@@ -13,7 +13,6 @@ class ChallengeComponent extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.commentSubmit = this.commentSubmit.bind(this);
-    let newComments = '';
   }
 
   componentDidMount() {
@@ -28,6 +27,14 @@ class ChallengeComponent extends React.Component {
         data = data.reverse();
         outer.props.dispatch(actions.addResponse(data));
       }
+    });
+    $.get('/api/comments', {
+      challenge_id: window.sessionStorage.getItem('id')
+    }).done(data => {
+      console.log('get on componentDidMount', data)
+      data.forEach(comment => {
+          outer.props.dispatch(actions.addComment(data));
+      });
     });
   }
 
@@ -71,11 +78,15 @@ class ChallengeComponent extends React.Component {
       challenge_id: window.sessionStorage.id
     };
 
-    $.post('/api/comments', comments).done(data => {
-      this.props.dispatch(actions.addComment(data));
-      outer.renderComments();
-      outer.refs.comment.value = '';
+    $.post('/api/comments', comments).then(() => {
+      $.get('/api/comments', {
+        challenge_id: window.sessionStorage.getItem('id')
+      }).then(data => {
+        outer.props.dispatch(actions.addComment(data));
+        outer.refs.comment.value = '';
+      });
     });
+
   }
 
   renderComments() {
@@ -89,6 +100,7 @@ class ChallengeComponent extends React.Component {
     });
   }
 
+
   render() {
     let checkFile = (type, response) => {
       const fileType = {
@@ -97,13 +109,14 @@ class ChallengeComponent extends React.Component {
       if (fileType[type]) {
         return (<video width="320" height="240" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
-        </video>);  
+        </video>);
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} width="320" height="240" />;
       }
     };
     return (
       <div>
+
 
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
@@ -113,7 +126,7 @@ class ChallengeComponent extends React.Component {
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <input type="submit"/>
         </form>
-        <Comments newComments={this.newComments}/>
+        <Comments />
         {'Upload your response: '}
         <form id="challenge">
           <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
