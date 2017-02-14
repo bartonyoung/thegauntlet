@@ -21,7 +21,6 @@ class Response extends React.Component {
           outer.props.dispatch(actions.addResponse(data));
         });
     });
-    // console.log('RESPONSE Upvote FIRED');
   }
 
   render() {
