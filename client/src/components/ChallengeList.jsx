@@ -31,7 +31,7 @@ class ChallengeList extends React.Component {
       return <div onClick={() => this.onChallengeClick(challenge)}>
         <h1><a href='/#/challenge'>{challenge.title}</a></h1>
         <video width="320" height="240" controls>
-          <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>
+          {/*<source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>*/}
         </video><br/>
         {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
 
