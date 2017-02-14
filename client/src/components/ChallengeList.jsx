@@ -26,7 +26,7 @@ class ChallengeList extends React.Component {
     window.location.href = '/#/challenge';
   }
 
-  upVoteClick(index, id) {
+  upVoteClick(id) {
     const outer = this;
     $.post('/api/upvote', {
       vote: 1,
@@ -48,7 +48,7 @@ class ChallengeList extends React.Component {
           {/*<source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>*/}
         </video><br/>
         {' Views: ' + challenge.views}
-        <a onClick={()=> this.upVoteClick(i, challenge.id)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
+        <a onClick={()=> this.upVoteClick(challenge.id)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
       </div>;
     });
 
