@@ -14,7 +14,6 @@ class Login extends React.Component {
     };
     $.post('/api/login', login)
     .done(data => {
-      console.log(data);
       if (data) {
         window.sessionStorage.setItem('key', data);
         this.props.handleAuth(()=> {
