@@ -1,10 +1,28 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const Response = () => (
-  <div>
-    <h3>{"Response Title: Response"}</h3>
-    <h6>{"Description: To this challenge"}</h6>
-  </div>
-);
+class Response extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-export default Response;
+  render() {
+    let mappedResponses = this.props.responses.map((response, i) => {
+      if (i > 0) {
+        return (
+          <div>
+            <h4>{'Response title: ' + response.title}</h4>
+            <h6>{'Description: ' + response.description}</h6>
+          </div>
+        );
+      }
+    });
+    return <div>{mappedResponses}</div>
+  }
+}
+
+const mapStateToProps = (state) => {
+  return state;
+}
+
+export default connect(mapStateToProps)(Response);

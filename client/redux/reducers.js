@@ -10,8 +10,12 @@ const reducer = (state, action) => {
       return Object.assign({}, state, {
         challenges: action.payload
       })
+    case 'ADD_RESPONSE':
+      return Object.assign({}, state, {
+        responses: action.payload
+      })
     default:
-      return state;
+      return state
   }
 };
 
