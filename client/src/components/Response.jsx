@@ -1,9 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import actions from '../../redux/actions.js';
+import $ from 'jquery';
 
 class Response extends React.Component {
   constructor(props) {
     super(props);
+    this.upVoteClick = this.upVoteClick.bind(this);
+  }
+
+  upVoteClick(id) { 
+    const outer = this;
+    $.post('/api/upvote', { 
+      vote: 1,
+      challenge_id: id
+    }).then(()=> {   
+      $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
+        .then((data)=> {
+          data = data.reverse();
+          outer.props.dispatch(actions.addResponse(data));
+        });
+    });
+    // console.log('RESPONSE Upvote FIRED');
   }
 
   render() {
@@ -17,7 +35,7 @@ class Response extends React.Component {
               <source /*src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + response.filename}*/ type="video/mp4"/>
             </video>
             <p>{`Views : ${response.views}`}</p>
-            <a href="#">{`Upvotes : ${response.upvotes}`}</a>
+            <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
           </div>
         );
       }
