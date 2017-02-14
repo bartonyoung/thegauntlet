@@ -14,7 +14,10 @@ module.exports = {
       challenge.upvotes = 0;
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
-        res.sendStatus(201);
+        db.select().from('challenges').then(data => {
+          res.json(data);
+        });
+        // res.sendStatus(201);
       }).catch(err => {
         if (err) { console.error(err); }
       });
