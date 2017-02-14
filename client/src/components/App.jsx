@@ -9,6 +9,7 @@ import NavBar from './Nav.jsx';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import ChallengeComponent from './ChallengeComponent.jsx';
+import actions from '../../redux/actions';
 
 class App extends React.Component {
   constructor(props) {

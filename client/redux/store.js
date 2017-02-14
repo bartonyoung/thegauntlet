@@ -7,7 +7,7 @@ let finalCreateStore = compose(
 )(createStore);
 
 
-const configureStore = (initialState = { challenges: [], responses: [] }) => {
+const configureStore = (initialState = { challenges: [], responses: [], comments: [] }) => {
   return finalCreateStore(reducer, initialState);
 };
 

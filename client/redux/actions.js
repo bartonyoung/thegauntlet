@@ -11,6 +11,13 @@ let actions = {
       type: 'ADD_RESPONSE',
       payload: response
     };
+  },
+
+  addComment: function(comment) {
+    return {
+      type: 'ADD_COMMENT',
+      payload: comment
+    }
   }
 };
 

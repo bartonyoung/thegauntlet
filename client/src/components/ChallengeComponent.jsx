@@ -3,12 +3,15 @@ import Response from './Response.jsx';
 import actions from '../../redux/actions';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+import Comments from './Comments.jsx';
 
 class ChallengeComponent extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.commentSubmit = this.commentSubmit.bind(this);
+    let newComments = '';
   }
 
   componentDidMount() {
@@ -52,11 +55,35 @@ class ChallengeComponent extends React.Component {
             outer.refs.category.value = '';
             outer.refs.video.value = '';
             outer.componentDidMount();
-            return data;
           }
         });
-        return;
       }
+    });
+  }
+
+  commentSubmit(e) {
+    e.preventDefault();
+    let outer = this;
+    let comments = {
+      comment: this.refs.comment.value,
+      challenge_id: window.sessionStorage.id
+    };
+
+    $.post('/api/comments', comments).done(data => {
+      this.props.dispatch(actions.addComment(data));
+      outer.renderComments();
+      outer.refs.comment.value = '';
+    });
+  }
+
+  renderComments() {
+    console.log('rendering')
+    let outer = this;
+    $.get('/api/comments', {
+      challenge_id: window.sessionStorage.getItem('id')
+    }).done(data => {
+      outer.newComments = data;
+      console.log("newComments:", outer.newComments)
     });
   }
 
@@ -65,7 +92,15 @@ class ChallengeComponent extends React.Component {
     return (
       <div>
         <h1>{"Challenge Title: " + window.sessionStorage.title}</h1>
+        <video width="320" height="240" controls>
+          <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + window.sessionStorage.filename} type="video/mp4"/>
+        </video>
         <h4>{"Description: " + window.sessionStorage.description}</h4>
+        <form onSubmit={this.commentSubmit}>
+          <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
+          <input type="submit"/>
+        </form>
+        <Comments newComments={this.newComments}/>
         {"Upload your response: "}
         <form id="challenge">
           <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
@@ -76,6 +111,7 @@ class ChallengeComponent extends React.Component {
           <input type="file" placeholder="video" required ref="video" name="video"/>
         </form>
           <button onClick={this.handleSubmit}>Submit</button>
+
         <Response />
       </div>
     );
@@ -84,6 +120,6 @@ class ChallengeComponent extends React.Component {
 
 const mapStateToProps = (state) => {
   return state;
-}
+};
 
 export default connect(mapStateToProps)(ChallengeComponent);
