@@ -2,6 +2,9 @@ import React from 'react';
 import $ from 'jquery';
 
 class Login extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
   handleLogin(e) {
     e.preventDefault();
@@ -14,7 +17,8 @@ class Login extends React.Component {
     .done(data => {
       if (data) {
         window.sessionStorage.setItem('key', 'You are logged in as ' + data + ' !');  
-        window.location.href = '#/dash';  
+        window.location.href = '#/dash';
+        this.props.handleAuth();
       } else {
         alert('Please, check Username or Password');
         window.location.href = '#/login';

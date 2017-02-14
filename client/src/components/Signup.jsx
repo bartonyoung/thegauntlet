@@ -24,6 +24,7 @@ class Signup extends React.Component {
         } else {
           window.sessionStorage.setItem('key', 'What\'s up ' + data + ' !');
           window.location.href = '#/dash';
+          this.props.handleAuth();
         }  
       });
     } else {
