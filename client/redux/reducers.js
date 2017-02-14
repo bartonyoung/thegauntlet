@@ -13,14 +13,6 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       comments: [action.payload, ...state.comments] 
     });
-  case 'UPVOTE':
-    let newChallenges = state.challenges.slice();
-    // console.log('BEFORE', newChallenges[action.payload].upvotes);
-    newChallenges[action.payload].upvotes = newChallenges[action.payload].upvotes + 1;  
-    // console.log('AFTER', newChallenges[action.payload].upvotes);
-    return Object.assign({}, state, {
-      challenges: newChallenges   
-    });    
   default: 
     return state;
   }
