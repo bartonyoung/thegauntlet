@@ -14,7 +14,7 @@ import actions from '../../redux/actions';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       auth: window.sessionStorage.getItem('key'),
     };
@@ -30,13 +30,18 @@ class App extends React.Component {
       });
     });
   }
-  
+<<<<<<< HEAD
+
   handleAuth(cb) {
     this.setState({
       auth: window.sessionStorage.getItem('key')
     }, cb);
   }
   handleDisply() {
+=======
+
+  handleAuth() {
+>>>>>>> Bug fix
     this.setState({
     });
   }
@@ -49,11 +54,9 @@ class App extends React.Component {
         <Route path="/signup" component={() => {
           return <Signup handleAuth={this.handleAuth.bind(this)} />;
         }} />
-        
-        <Route path="/login" component={() => { 
-          return <Login handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />; 
-        }} /> 
-        
+        <Route path="/login" component={() => {
+          return <Login handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+        }} />
         <Route path='/dash' component={() => {
           if (this.state.auth) {
             return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} handleDisply={this.handleDisply.bind(this)} />;
