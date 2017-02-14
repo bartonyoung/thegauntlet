@@ -2,6 +2,7 @@ import React from 'react';
 import ChallengeTable from './ChallengeTable.jsx';
 import {Jumbotron, Col, Row, Button, Grid, Nav, NavItem} from 'react-bootstrap';
 import actions from '../../redux/actions';
+import NavBar from './Nav.jsx';
 import $ from 'jquery';
 
 class Dash extends React.Component {
@@ -20,6 +21,7 @@ class Dash extends React.Component {
   render() {
     return (
       <div>
+        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
         <ChallengeTable dispatch={this.props.dispatch} />
       </div>
     );
