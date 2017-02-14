@@ -20,7 +20,7 @@ var config = {
         loader: 'babel-loader',
         query:
         {
-          presets: ['react']
+          presets: ['react'] 
         }
       },
       {
@@ -39,12 +39,12 @@ var config = {
     },
 
       {
-        reload: true
+        reload: true 
       }
 
-   )
+   ) 
   ]
 
-};     
-module.exports = config;
+};
 
+module.exports = config;      

@@ -5,6 +5,7 @@ const bcrypt = require('promised-bcrypt');
 
 module.exports = {
   signup: function(req, res) {
+    console.log('inside user signup controller');
     let user = req.body;
     let username = user.username;
     let password = user.password;

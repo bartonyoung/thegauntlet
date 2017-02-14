@@ -1,4 +1,5 @@
 node_modules/
+client/public/bundle.js
 bower_components/
 *.log
 

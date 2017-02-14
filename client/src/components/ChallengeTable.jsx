@@ -3,7 +3,6 @@ import ChallengeList from './ChallengeList.jsx';
 import path from 'path';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
-import DropzoneS3Uploader from 'react-dropzone-s3-uploader';
 
 class ChallengeTable extends React.Component {
   constructor(props) {

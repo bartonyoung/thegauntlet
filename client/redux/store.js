@@ -4,10 +4,11 @@ import logger from 'redux-logger';
 
 let finalCreateStore = compose(
   applyMiddleware(logger())
-)(createStore)
+)(createStore);
+
 
 const configureStore = (initialState = { challenges: [], responses: [] }) => {
   return finalCreateStore(reducer, initialState);
-}
+};
 
-export default configureStore
+export default configureStore;

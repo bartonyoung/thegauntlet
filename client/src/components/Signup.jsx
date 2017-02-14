@@ -10,11 +10,12 @@ class Signup extends React.Component {
       password: this.refs.password.value,
     };
     let confirmPassword = this.refs.confirmPassword.value;
+
     if (signup.password === confirmPassword) {
       $.post('/api/signup', signup)
       .done(data => {
         if (!data) {
-          alert('username is already exsist');
+          alert('username already exists!');
           this.refs.username.value = '';
           this.refs.password.value = '';
           this.refs.email.value = '';

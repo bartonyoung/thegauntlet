@@ -13,7 +13,7 @@ class Login extends React.Component {
     $.post('/api/login', login)
     .done(data => {
       if (data) {
-        window.sessionStorage.setItem('key', 'What\'s up ' + data + ' !');  
+        window.sessionStorage.setItem('key', 'You are logged in as ' + data + ' !');  
         window.location.href = '#/dash';  
       } else {
         alert('Please, check Username or Password');
