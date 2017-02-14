@@ -26,6 +26,7 @@ class ChallengeList extends React.Component {
     window.location.href = '/#/challenge';
   }
 
+          // <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -35,7 +36,7 @@ class ChallengeList extends React.Component {
       if (fileType[type]) {
         return (<video width="320" height="240" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
-        </video>);  
+        </video>);
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} width="320" height="240" />;
       }

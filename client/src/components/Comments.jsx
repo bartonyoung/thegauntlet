@@ -4,15 +4,21 @@ import { connect } from 'react-redux';
 class Comments extends React.Component {
   constructor(props) {
     super(props);
-    console.log('comments props', this.props);
   }
 
   render() {
-    console.log("comments", this.props)
-    let mappedComments = this.props.comments.forEach((comment, i) => {
-      return <div>
-        {comment}
-      </div>;
+    console.log("inside comments component", this.props.comments);
+    let mappedComments = this.props.comments.map((comment, i) => {
+      console.log('comment', typeof comment.id)
+      console.log(typeof window.sessionStorage.id)
+      if (comment.id === parseInt(window.sessionStorage.id)) {
+        console.log('in here')
+        return (
+          <div>
+            {comment.username + ': ' + comment.comment}
+          </div>
+        );
+      }
     });
 
     return <div>{mappedComments}</div>;

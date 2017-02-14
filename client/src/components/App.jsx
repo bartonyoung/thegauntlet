@@ -30,20 +30,12 @@ class App extends React.Component {
       });
     });
   }
-<<<<<<< HEAD
+
 
   handleAuth(cb) {
     this.setState({
       auth: window.sessionStorage.getItem('key')
     }, cb);
-  }
-  handleDisply() {
-=======
-
-  handleAuth() {
->>>>>>> Bug fix
-    this.setState({
-    });
   }
 
   render() {

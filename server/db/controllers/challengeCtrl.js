@@ -48,7 +48,7 @@ module.exports = {
   },
 
   getAll: (req, res) =>{
-    db.select().from('challenges').then(data =>{
+    db.select().from('challenges').where({parent_id: null}).then(data =>{
       res.json(data);
     });
   },
