@@ -12,20 +12,22 @@ class Response extends React.Component {
         return (
           <div>
             <h4>{'Response title: ' + response.title}</h4>
+            <p>{'Description: ' + response.description}</p>
             <video width="320" height="240" controls>
-              <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + response.filename} type="video/mp4"/>
+              <source /*src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + response.filename}*/ type="video/mp4"/>
             </video>
-            <h6>{'Description: ' + response.description}</h6>
+            <p>{`Views : ${response.views}`}</p>
+            <a href="#">{`Upvotes : ${response.upvotes}`}</a>
           </div>
         );
       }
     });
-    return <div>{mappedResponses}</div>
+    return <div>{mappedResponses}</div>;
   }
 }
 
 const mapStateToProps = (state) => {
   return state;
-}
+};
 
 export default connect(mapStateToProps)(Response);
