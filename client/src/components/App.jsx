@@ -16,7 +16,7 @@ class App extends React.Component {
     super(props);
     
     this.state = {
-      auth: false
+      auth: window.sessionStorage.getItem('key')
     };
   }
 
@@ -26,15 +26,15 @@ class App extends React.Component {
       window.sessionStorage.removeItem('key');
       window.location.href = '#/';
       this.setState({
-        auth: false
+        auth: window.sessionStorage.getItem('key')
       });
     });
   }
   
-  handleAuth() {
+  handleAuth(cb) {
     this.setState({
-      auth: true
-    });
+      auth: window.sessionStorage.getItem('key')
+    }, cb);
   }
 
   render() {
