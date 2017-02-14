@@ -27,12 +27,23 @@ class ChallengeList extends React.Component {
   }
 
   render() {
+    let checkFile = (type, challenge) => {
+      const fileType = {
+        'mp4': 'THIS IS A VIDEO!'
+      };
+      console.log(fileType[type]);
+      if (fileType[type]) {
+        return (<video width="320" height="240" controls>
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
+        </video>);  
+      } else {
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} width="320" height="240" />;
+      }
+    };
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       return <div onClick={() => this.onChallengeClick(challenge)}>
         <h1><a href='/#/challenge'>{challenge.title}</a></h1>
-        <video width="320" height="240" controls>
-          {/*<source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>*/}
-        </video><br/>
+        {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
         {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
 
       </div>;
