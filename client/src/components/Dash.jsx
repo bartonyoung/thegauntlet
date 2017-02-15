@@ -12,6 +12,7 @@ class Dash extends React.Component {
   }
 
   componentDidMount() {
+    console.log('dash mount')
     let outer = this;
     $.get('/api/allChallenges').done(data => {
       data = data.reverse();
@@ -22,7 +23,7 @@ class Dash extends React.Component {
   render() {
     return (
       <div>
-        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
+        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <ChallengeTable dispatch={this.props.dispatch} />
       </div>
     );
