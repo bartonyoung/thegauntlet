@@ -55,6 +55,8 @@ class ChallengeList extends React.Component {
         return <img width="320" height="240" />;
       }
     };
+        // <a href='/#/profile'>{challenge.}
+        // <a href='/#/challenge'>{challenge.title}</a>
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       console.log(challenge)
       return <div onClick={() => this.onChallengeClick(challenge)}>
