@@ -18,4 +18,5 @@ routes.post('/upvote', challengeController.upvote);
 routes.post('/viewed', challengeController.viewed);
 routes.post('/response', challengeController.addOneResponse);
 routes.get('/response', challengeController.getOne);
+// routes.get('/profile/:username', userControllers.getUser);
 module.exports = routes;
