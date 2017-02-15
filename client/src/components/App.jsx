@@ -24,6 +24,14 @@ class App extends React.Component {
     this.editProfile = this.editProfile.bind(this);
   }
 
+  componentDidMount() {
+    let outer = this;
+
+    $.get('/api/profile').done(data => {
+      outer.props.dispatch(actions.addUser(data));
+    });
+  }
+
   handleLogout() {
     $.get('/api/logout')
     .done(data => {
@@ -42,12 +50,7 @@ class App extends React.Component {
   }
 
   editProfile() {
-    let outer = this;
-    $.get('/api/profile').done(data => {
-      console.log('userdata', data)
-      outer.props.dispatch(actions.addUser(data));
-      window.location.href = '#/profile';
-    });
+    window.location.href = '#/profile';
   }
 
   render() {

@@ -15,7 +15,6 @@ module.exports = {
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-          console.log('addone', data)
           res.json(data);
         });
         // res.sendStatus(201);
@@ -48,20 +47,17 @@ module.exports = {
     res.json(req.files.video.originalFilename); //delete on deploy
   },
 
-  getAll: (req, res) =>{
+  getAll: (req, res) => {
     db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challenges.user_id', 'users.id').then(data => {
-      console.log('data', data);
       res.json(data);
-    })
-    // db.select().from('challenges').where({parent_id: null}).then(data =>{
-    //   db.select('users.id', 'users.username').from('users').innerJoin('challenges').then(data => {
-    //     console.log('data', data)
-    //   })
-      // console.log('data', data)
-      // res.json(data);
-    // });
-
+    });
   },
+
+  // getAllChallengesFromUser: (req, res) => {
+  //   db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challennges.user_id', 'users.id').where('username', '=', req.body.username).then(data => {
+  //     res.json(data);
+  //   })
+  // },
 
   getOne: (req, res) => {
     db.select()
