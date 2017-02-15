@@ -6,8 +6,11 @@ class Signup extends React.Component {
   handleSignup(e) {
     e.preventDefault();
     let signup = {
+      firstname: this.refs.firstname.value,
+      lastname: this.refs.lastname.value,
       username: this.refs.username.value,
       password: this.refs.password.value,
+      email: this.refs.email.value
     };
     let confirmPassword = this.refs.confirmPassword.value;
 
@@ -17,9 +20,6 @@ class Signup extends React.Component {
         if (!data) {
           alert('username already exists!');
           this.refs.username.value = '';
-          this.refs.password.value = '';
-          this.refs.email.value = '';
-          this.refs.confirmPassword.value = '';
           window.location.href = '#/signup';
         } else {
           window.sessionStorage.setItem('key', data);
@@ -40,14 +40,18 @@ class Signup extends React.Component {
     return (
       <div className="container-signup">
         <form type="submit" onSubmit={this.handleSignup.bind(this)}>
+          <p>Firstname</p>
+            <input type="text" required ref="firstname" />
+          <p>Lastname</p>
+            <input type="text" required ref="lastname" />
           <p>Username</p>
-          <input type="text" required ref="username" />
+            <input type="text" required ref="username" />
           <p>Email</p>
-          <input type="email" required ref="email" />
+            <input type="email" required ref="email" />
           <p>Password</p>
-          <input type="password" required ref="password" />
+            <input type="password" required ref="password" />
           <p>Confirm Password</p>
-          <input type="password" ref="confirmPassword" />
+            <input type="password" ref="confirmPassword" />
           <p>
             <input type="submit" value="Join Gauntlet!" />
           </p>

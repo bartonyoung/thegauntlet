@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
 import $ from 'jquery';
+import { Link } from 'react-router';
 
 class ChallengeList extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class ChallengeList extends React.Component {
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
-
+    $.get('/api/challenge/' + challenge.id)
     return (
       <ChallengeComponent challenge={challenge} />
     );
@@ -51,15 +52,18 @@ class ChallengeList extends React.Component {
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} width="320" height="240" />;
+        return <img width="320" height="240" />;
       }
     };
+        // <a href='/#/profile'>{challenge.}
+        // <a href='/#/challenge'>{challenge.title}</a>
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      return <div>
-        <h1 onClick={() => this.onChallengeClick(challenge)}><a href='/#/challenge'>{challenge.title}</a></h1>
+      console.log(challenge)
+      return <div onClick={() => this.onChallengeClick(challenge)}>
+        <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
         {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-        {' Views: ' + challenge.views}
-        <a onClick={()=> this.upVoteClick(challenge.id)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
+        <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
+        {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
       </div>;
     });
 

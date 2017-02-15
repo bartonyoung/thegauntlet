@@ -9,6 +9,9 @@ module.exports = {
     let user = req.body;
     let username = user.username;
     let password = user.password;
+    let firstname = user.firstname;
+    let lastname = user.lastname;
+    let email = user.email;
     db.select().from('users').where({username: username})
       .then(rows =>{
         if (rows.length) {
@@ -16,20 +19,32 @@ module.exports = {
         } else {
           bcrypt.hash(password)
             .then(hash => {
-              db('users').insert({username: username, password: hash })
+              db('users').insert({
+                firstname: firstname,
+                lastname: lastname,
+                email: email,
+                username: username,
+                password: hash,
+              })
                 .then(rows => {
                   req.session.displayName = username;
-                  req.session.save(() => {
-                   //console.log('username works!', req.session);
+                  req.session.save((data) => {
                     res.send(req.session.displayName);
                   });
-                })    
+                })
                 .catch(function(err) {
                   console.error(err);
                 });
             });
         }
       });
+  },
+
+  getUser: function(req, res) {
+    let username = req.session.displayName;
+    db.select('users.firstname', 'users.lastname', 'users.email', 'users.profilepic').from('users').where('username', '=', username).then(data => {
+      res.json(data);
+    });
   },
 
   login: function(req, res) {
@@ -54,7 +69,7 @@ module.exports = {
           res.send(false);
         }
       });
-  }, 
+  },
 
   logout: function(req, res) {
     let temp = req.session.displayName;
