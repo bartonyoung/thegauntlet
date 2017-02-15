@@ -48,10 +48,10 @@ class ChallengeList extends React.Component {
       console.log(fileType[type]);
       if (fileType[type]) {
         return (<video width="320" height="240" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} width="320" height="240" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
       }
     };
     let mappedChallenges = this.props.challenges.map((challenge, i) => {

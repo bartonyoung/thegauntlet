@@ -1,8 +1,8 @@
 
 var fs = require('fs');
 var S3FS = require('s3fs');
-var s3fsImpl = new S3FS('thegauntletbucket420', {
-  accessKeyId: process.env.accessKeyId, //key here
+var s3fsImpl = new S3FS('thegauntletbucket421', {
+  accessKeyId: process.env.accessKeyID, //key here
   secretAccessKey: process.env.secretAccessKey //key here
 });
 
