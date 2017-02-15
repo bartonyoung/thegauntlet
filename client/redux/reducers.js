@@ -11,7 +11,7 @@ const reducer = (state, action) => {
     });
   case 'ADD_COMMENT':
     return Object.assign({}, state, {
-      comments: [action.payload, ...state.comments] 
+      comments: action.payload
     });
   default: 
     return state;
