@@ -12,7 +12,6 @@ class Login extends React.Component {
       username: this.refs.username.value,
       password: this.refs.password.value
     };
-
     $.post('/api/login', login)
     .done(data => {
       if (data) {

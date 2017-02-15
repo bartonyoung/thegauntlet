@@ -22,10 +22,11 @@ class Signup extends React.Component {
           this.refs.confirmPassword.value = '';
           window.location.href = '#/signup';
         } else {
-          window.sessionStorage.setItem('key', 'What\'s up ' + data + ' !');
-          window.location.href = '#/dash';
-          this.props.handleAuth();
-        }  
+          window.sessionStorage.setItem('key', data);
+          this.props.handleAuth(() => {
+            window.location.href = '#/dash';
+          });
+        }
       });
     } else {
       this.refs.password.value = '';

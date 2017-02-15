@@ -14,7 +14,7 @@ import actions from '../../redux/actions';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       auth: window.sessionStorage.getItem('key')
     };
@@ -30,7 +30,7 @@ class App extends React.Component {
       });
     });
   }
-  
+
   handleAuth(cb) {
     this.setState({
       auth: window.sessionStorage.getItem('key')
@@ -40,25 +40,24 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <NavBar auth={this.state.auth} handleLogout={this.handleLogout.bind(this)}/>
       <Router history={hashHistory}>
         <Route path="/" component={Landing} />
         <Route path="/signup" component={() => {
           return <Signup handleAuth={this.handleAuth.bind(this)} />;
         }} />
-        
-        <Route path="/login" component={() => { 
-          return <Login handleAuth={this.handleAuth.bind(this)}/>; 
-        }} /> 
-        
+        <Route path="/login" component={() => {
+          return <Login handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+        }} />
         <Route path='/dash' component={() => {
           if (this.state.auth) {
-            return <Dash dispatch={this.props.dispatch} />;
+            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
           } else {
-            return <Landing/>;
+            return <Landing />;
           }
         }} />
-        <Route path='/challenge' component={ChallengeComponent} />
+        <Route path='/challenge' component={() =>{
+          return <ChallengeComponent handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+        }} />
       </Router>
       </div>
     );

@@ -43,12 +43,12 @@ module.exports = {
   },
 
   s3: (req, res) => {
-    //s3(req.files.video, res);
+//     s3(req.files.video, res);
     res.json(req.files.video.originalFilename); //delete on deploy
   },
 
   getAll: (req, res) =>{
-    db.select().from('challenges').then(data =>{
+    db.select().from('challenges').where({parent_id: null}).then(data =>{
       res.json(data);
     });
   },
