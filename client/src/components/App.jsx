@@ -10,6 +10,7 @@ import $ from 'jquery';
 import { connect } from 'react-redux';
 import ChallengeComponent from './ChallengeComponent.jsx';
 import actions from '../../redux/actions';
+import Profile from './Profile.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class App extends React.Component {
     }, cb);
   }
 
+
   render() {
     return (
       <div>
@@ -51,13 +53,16 @@ class App extends React.Component {
         }} />
         <Route path='/dash' component={() => {
           if (this.state.auth) {
-            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} handleDisply={this.handleDisply.bind(this)} />;
+            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
           } else {
             return <Landing />;
           }
         }} />
         <Route path='/challenge' component={() =>{
           return <ChallengeComponent handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+        }} />
+        <Route path='/profile/:username' component={() => {
+          return <Profile dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
         }} />
       </Router>
       </div>

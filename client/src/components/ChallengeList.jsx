@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
+import { Link } from 'react-router';
 
 class ChallengeList extends React.Component {
   constructor(props) {
@@ -26,7 +27,8 @@ class ChallengeList extends React.Component {
     window.location.href = '/#/challenge';
   }
 
-          // <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>
+  // src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename}
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -38,15 +40,18 @@ class ChallengeList extends React.Component {
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} width="320" height="240" />;
+        return <img width="320" height="240" />;
       }
     };
+        // <a href='/#/profile'>{challenge.}
+        // <a href='/#/challenge'>{challenge.title}</a>
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
+      console.log(challenge)
       return <div onClick={() => this.onChallengeClick(challenge)}>
-        <h1><a href='/#/challenge'>{challenge.title}</a></h1>
+        <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
         {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+        <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
         {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
-
       </div>;
     });
 

@@ -48,9 +48,18 @@ module.exports = {
   },
 
   getAll: (req, res) =>{
-    db.select().from('challenges').where({parent_id: null}).then(data =>{
+    db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challenges.user_id', 'users.id').then(data => {
+      console.log('data', data);
       res.json(data);
-    });
+    })
+    // db.select().from('challenges').where({parent_id: null}).then(data =>{
+    //   db.select('users.id', 'users.username').from('users').innerJoin('challenges').then(data => {
+    //     console.log('data', data)
+    //   })
+      // console.log('data', data)
+      // res.json(data);
+    // });
+
   },
 
   getOne: (req, res) => {
