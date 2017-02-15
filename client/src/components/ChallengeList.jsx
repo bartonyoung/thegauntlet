@@ -17,7 +17,7 @@ class ChallengeList extends React.Component {
 
   onChallengeClick(challenge) {
     window.sessionStorage.setItem('title', challenge.title);
-    console.log("inside challenge click", challenge.id)
+    console.log('inside challenge click', challenge.id);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
     window.sessionStorage.setItem('category', challenge.category);
@@ -69,7 +69,7 @@ class ChallengeList extends React.Component {
       };
       if (fileType[type]) {
         return (<video width="320" height="240" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
         </video>);
       } else {
         return <img width="320" height="240" />;
@@ -81,12 +81,13 @@ class ChallengeList extends React.Component {
         return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
       } else {
         return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
       }
     };
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
-        console.log('inside mappedChallenges', challenge)
+        console.log('inside mappedChallenges', challenge);
         return <div onClick={() => this.onChallengeClick(challenge)}>
           <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
           {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
