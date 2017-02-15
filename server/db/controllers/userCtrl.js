@@ -29,7 +29,6 @@ module.exports = {
                 .then(rows => {
                   req.session.displayName = username;
                   req.session.save((data) => {
-
                     res.send(req.session.displayName);
                   });
                 })
@@ -39,6 +38,13 @@ module.exports = {
             });
         }
       });
+  },
+
+  getUser: function(req, res) {
+    let username = req.session.displayName;
+    db.select().from('users').where('username', '=', username).then(data => {
+      res.json(data);
+    });
   },
 
   login: function(req, res) {

@@ -19,6 +19,9 @@ class App extends React.Component {
     this.state = {
       auth: window.sessionStorage.getItem('key')
     };
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleAuth = this.handleAuth.bind(this);
+    this.editProfile = this.editProfile.bind(this);
   }
 
   handleLogout() {
@@ -38,6 +41,11 @@ class App extends React.Component {
     }, cb);
   }
 
+  editProfile() {
+    $.get('/api/profile').done(data => {
+      console.log('userdata', data)
+    });
+  }
 
   render() {
     return (
@@ -52,16 +60,16 @@ class App extends React.Component {
         }} />
         <Route path='/dash' component={() => {
           if (this.state.auth) {
-            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout} editProfile={this.editProfile}/>;
           } else {
             return <Landing />;
           }
         }} />
         <Route path='/challenge' component={() =>{
-          return <ChallengeComponent handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+          return <ChallengeComponent handleAuth={this.handleAuth} auth={this.state.auth} handleLogout={this.handleLogout} editProfile={this.editProfile} />;
         }} />
         <Route path='/profile/:username' component={() => {
-          return <Profile dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
+          return <Profile dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout} />;
         }} />
       </Router>
       </div>
