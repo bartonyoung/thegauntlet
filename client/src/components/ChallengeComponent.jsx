@@ -31,9 +31,9 @@ class ChallengeComponent extends React.Component {
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
-      console.log('get on componentDidMount', data)
+      console.log('get on componentDidMount', data);
       data.forEach(comment => {
-          outer.props.dispatch(actions.addComment(data));
+        outer.props.dispatch(actions.addComment(data));
       });
     });
   }
@@ -120,13 +120,17 @@ class ChallengeComponent extends React.Component {
 
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
-        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}
         <h4>{'Description: ' + window.sessionStorage.description}</h4>
+        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}
+        <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
+
         <form onSubmit={this.commentSubmit}>
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <input type="submit"/>
         </form>
+
         <Comments />
+
         {'Upload your response: '}
         <form id="challenge">
           <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>

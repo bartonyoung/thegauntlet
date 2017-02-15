@@ -17,8 +17,8 @@ let actions = {
     return {
       type: 'ADD_COMMENT',
       payload: comment
-    }
-  }
+    };
+  },
 };
 
 export default actions;

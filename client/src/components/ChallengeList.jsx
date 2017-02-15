@@ -2,16 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
+import $ from 'jquery';
 
 class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
-
     this.onChallengeClick = this.onChallengeClick.bind(this);
+    this.upVoteClick = this.upVoteClick.bind(this);
   }
 
   onChallengeClick(challenge) {
-    console.log('clicked here', challenge);
     window.sessionStorage.setItem('title', challenge.title);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
@@ -26,7 +26,20 @@ class ChallengeList extends React.Component {
     window.location.href = '/#/challenge';
   }
 
-          // <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + challenge.filename} type="video/mp4"/>
+  upVoteClick(id) {
+    const outer = this;
+    $.post('/api/upvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(()=> {
+      $.get('/api/allChallenges/')
+        .then((data)=> {
+          data = data.reverse();
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    });
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -42,11 +55,11 @@ class ChallengeList extends React.Component {
       }
     };
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      return <div onClick={() => this.onChallengeClick(challenge)}>
-        <h1><a href='/#/challenge'>{challenge.title}</a></h1>
+      return <div>
+        <h1 onClick={() => this.onChallengeClick(challenge)}><a href='/#/challenge'>{challenge.title}</a></h1>
         {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-        {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
-
+        {' Views: ' + challenge.views}
+        <a onClick={()=> this.upVoteClick(challenge.id)}>{'Upvote'}</a><p>{`${challenge.upvotes}`}</p>
       </div>;
     });
 
