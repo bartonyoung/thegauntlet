@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import Comments from './Comments.jsx';
 import NavBar from './Nav.jsx';
-import css from '../styles/comments.css';
 
 
 class ChallengeComponent extends React.Component {
@@ -130,7 +129,7 @@ class ChallengeComponent extends React.Component {
           <input type="submit"/>
         </form>
 
-        <Comments id="commentsContainer" />
+        <Comments />
 
         {'Upload your response: '}
         <form id="challenge">
