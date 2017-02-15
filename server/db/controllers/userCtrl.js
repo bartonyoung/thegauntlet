@@ -25,6 +25,7 @@ module.exports = {
                 email: email,
                 username: username,
                 password: hash,
+                followers: 0
               })
                 .then(rows => {
                   req.session.displayName = username;

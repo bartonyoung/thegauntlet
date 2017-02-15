@@ -12,11 +12,14 @@ class Dash extends React.Component {
   }
 
   componentDidMount() {
-    console.log('dash mount')
     let outer = this;
     $.get('/api/allChallenges').done(data => {
       data = data.reverse();
       outer.props.dispatch(actions.addChallenge(data));
+    });
+
+    $.get('/api/getLeaders').then(leaders => {
+      outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
     });
   }
 

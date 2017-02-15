@@ -10,6 +10,8 @@ class ChallengeList extends React.Component {
     super(props);
     this.onChallengeClick = this.onChallengeClick.bind(this);
     this.upVoteClick = this.upVoteClick.bind(this);
+    this.followTheLeader = this.followTheLeader.bind(this);
+    this.unFollow = this.unFollow.bind(this);
   }
 
   onChallengeClick(challenge) {
@@ -20,7 +22,7 @@ class ChallengeList extends React.Component {
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
-    $.get('/api/challenge/' + challenge.id)
+    $.get('/api/challenge/' + challenge.id);
     return (
       <ChallengeComponent challenge={challenge} />
     );
@@ -41,12 +43,33 @@ class ChallengeList extends React.Component {
     });
   }
 
+  followTheLeader(leaderId) {
+    const outer = this;
+    $.post('/api/follower', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });  
+    });
+  }
+
+  unFollow (leaderId) {
+    const outer = this;
+    $.post('/api/unFollow', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });   
+    });
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
       };
-      console.log(fileType[type]);
       if (fileType[type]) {
         return (<video width="320" height="240" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + challenge.filename} type="video/mp4"/>*/}
@@ -55,21 +78,27 @@ class ChallengeList extends React.Component {
         return <img width="320" height="240" />;
       }
     };
-        // <a href='/#/profile'>{challenge.}
-        // <a href='/#/challenge'>{challenge.title}</a>
+
+    let whichButton = (leaderId) => {
+      if (this.props.leaders.includes(leaderId)) {
+        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
+      } else {
+        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
+      }   
+    }; 
+
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      console.log(challenge)
+      console.log(challenge);
       return <div onClick={() => this.onChallengeClick(challenge)}>
         <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
         {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
         <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
+        {whichButton(challenge.user_id)}
         {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
       </div>;
     });
 
-    return <div>
-            {mappedChallenges}
-           </div>;
+    return <div>{mappedChallenges}</div>;
   }
 }
 

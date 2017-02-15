@@ -19,6 +19,13 @@ let actions = {
       payload: comment
     };
   },
+
+  getLeaders: function(leaders) {
+    return {
+      type: 'GET_LEADERS',
+      payload: leaders
+    };
+  }
 };
 
 export default actions;
