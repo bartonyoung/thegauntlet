@@ -14,7 +14,8 @@ module.exports = {
       challenge.upvotes = 0;
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
-        db.select().from('challenges').then(data => {
+        db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').then(data => {
+          console.log('addone', data)
           res.json(data);
         });
         // res.sendStatus(201);

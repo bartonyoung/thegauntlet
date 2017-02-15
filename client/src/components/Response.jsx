@@ -9,12 +9,12 @@ class Response extends React.Component {
     this.upVoteClick = this.upVoteClick.bind(this);
   }
 
-  upVoteClick(id) { 
+  upVoteClick(id) {
     const outer = this;
-    $.post('/api/upvote', { 
+    $.post('/api/upvote', {
       vote: 1,
       challenge_id: id
-    }).then(()=> {   
+    }).then(()=> {
       $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
         .then((data)=> {
           data = data.reverse();

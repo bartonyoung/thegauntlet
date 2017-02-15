@@ -14,6 +14,7 @@ class Dash extends React.Component {
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges').done(data => {
+      console.log('all challenges', data)
       data = data.reverse();
       outer.props.dispatch(actions.addChallenge(data));
     });
