@@ -20,7 +20,7 @@ class ChallengeList extends React.Component {
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
-
+    $.get('/api/challenge/' + challenge.id)
     return (
       <ChallengeComponent challenge={challenge} />
     );
