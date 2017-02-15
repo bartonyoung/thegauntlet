@@ -51,7 +51,7 @@ class App extends React.Component {
         }} />
         <Route path='/dash' component={() => {
           if (this.state.auth) {
-            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} handleDisply={this.handleDisply.bind(this)} />;
+            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
           } else {
             return <Landing />;
           }
