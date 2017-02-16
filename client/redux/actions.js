@@ -25,6 +25,13 @@ let actions = {
       type: 'GET_LEADERS',
       payload: leaders
     };
+  },
+
+  addUser: function(user) {
+    return {
+      type: 'ADD_USER',
+      payload: user
+    };
   }
 };
 
