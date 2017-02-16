@@ -15,14 +15,6 @@ class ChallengeList extends React.Component {
     this.unFollow = this.unFollow.bind(this);
   }
 
-  componentDidMount() {
-    let outer = this;
-    $.get('/api/allChallenges').done(challenge => {
-      console.log('challengelist get challenge', challenge)
-      outer.props.dispatch(actions.addChallenge(challenge));
-    });
-  }
-
   onChallengeClick(challenge) {
     window.sessionStorage.setItem('title', challenge.title);
     console.log("inside challenge click", challenge.id)

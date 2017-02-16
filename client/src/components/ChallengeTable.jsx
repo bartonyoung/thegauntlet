@@ -36,6 +36,10 @@ class ChallengeTable extends React.Component {
           success: function(data) {
             data = data.reverse();
             outer.props.dispatch(actions.addChallenge(data));
+            $.get('/api/allChallenges').done(challenge => {
+              console.log('challengelist get challenge', challenge)
+            outer.props.dispatch(actions.addChallenge(challenge));
+            });
             outer.refs.title.value = '';
             outer.refs.description.value = '';
             outer.refs.category.value = '';
