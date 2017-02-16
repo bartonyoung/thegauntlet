@@ -17,11 +17,7 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       leaders: action.payload
     });
-  case 'ADD_USER':
-    return Object.assign({}, state, {
-      user: action.payload
-    })
-  default:
+  default: 
     return state;
   }
 };

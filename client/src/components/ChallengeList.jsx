@@ -8,7 +8,6 @@ import { Link } from 'react-router';
 class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
-
     this.onChallengeClick = this.onChallengeClick.bind(this);
     this.upVoteClick = this.upVoteClick.bind(this);
     this.followTheLeader = this.followTheLeader.bind(this);
@@ -17,13 +16,17 @@ class ChallengeList extends React.Component {
 
   onChallengeClick(challenge) {
     window.sessionStorage.setItem('title', challenge.title);
-    console.log("inside challenge click", challenge.id)
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
     window.sessionStorage.setItem('category', challenge.category);
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
+    $.get('/api/challenge/' + challenge.id);
+    return (
+      <ChallengeComponent challenge={challenge} />
+    );
+    window.location.href = '/#/challenge';
   }
 
   upVoteClick(id) {
@@ -47,7 +50,7 @@ class ChallengeList extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
+      });  
     });
   }
 
@@ -58,7 +61,7 @@ class ChallengeList extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
+      });   
     });
   }
 
@@ -81,19 +84,18 @@ class ChallengeList extends React.Component {
         return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
       } else {
         return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
-      }
-    };
+      }   
+    }; 
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      if (!challenge.parent_id) {
-        console.log('inside mappedChallenges', challenge)
-        return <div onClick={() => this.onChallengeClick(challenge)}>
-          <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
-          {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-          <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
-          {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
-        </div>;
-      }
+      console.log(challenge);
+      return <div onClick={() => this.onChallengeClick(challenge)}>
+        <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
+        {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+        <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
+        {whichButton(challenge.user_id)}
+        {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+      </div>;
     });
 
     return <div>{mappedChallenges}</div>;

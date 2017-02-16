@@ -16,11 +16,13 @@ class Comments extends React.Component {
   }
   autoscroll () {
     let node = document.getElementById('comments');
-    $('#comments').scrollTop(node.scrollHeight);
+    $('#comments').scrollTop(node.scrollHeight); 
   }
   render() {
     let mappedComments = this.props.comments.map((comment, i) => {
+
       if (comment.id === parseInt(window.sessionStorage.id)) {
+        
         return (
           <div>
             {comment.username + ': ' + comment.comment}
