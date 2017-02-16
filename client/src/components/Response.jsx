@@ -24,6 +24,7 @@ class Response extends React.Component {
   }
 
               // <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + response.filename} type="video/mp4"/>
+              // src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename}
   render() {
     let checkFile = (type, response) => {
       const fileType = {
@@ -35,6 +36,7 @@ class Response extends React.Component {
         </video>);
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
+        return <img width="320" height="240" />;
       }
     };
     let mappedResponses = this.props.responses.map((response, i) => {

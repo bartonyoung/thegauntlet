@@ -13,6 +13,10 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       comments: action.payload
     });
+  case 'GET_LEADERS':
+    return Object.assign({}, state, {
+      leaders: action.payload
+    });
   default: 
     return state;
   }

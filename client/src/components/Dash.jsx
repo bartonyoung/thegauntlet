@@ -17,12 +17,16 @@ class Dash extends React.Component {
       data = data.reverse();
       outer.props.dispatch(actions.addChallenge(data));
     });
+
+    $.get('/api/getLeaders').then(leaders => {
+      outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+    });
   }
 
   render() {
     return (
       <div>
-        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
+        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <ChallengeTable dispatch={this.props.dispatch} />
       </div>
     );
@@ -31,7 +35,7 @@ class Dash extends React.Component {
 
 const mapStateToProps = (state) => {
   return state;
-}
+};
 
 export default connect(mapStateToProps)(Dash);
 

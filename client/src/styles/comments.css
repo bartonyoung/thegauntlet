@@ -1,0 +1,5 @@
+#comments {
+  float: right;
+  border: 1px solid red;
+  overflow-y: auto;
+}  
