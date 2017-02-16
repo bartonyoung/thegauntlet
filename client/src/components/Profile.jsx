@@ -16,6 +16,37 @@ class Profile extends React.Component {
     });
   }
 
+  numFollowers () {
+    if (this.props.user) {
+      return this.props.user.map((userInfo, i) => {
+        return <span key={i}>{userInfo.followers}</span>;
+      });
+    }
+  }
+
+  followTheLeader(leaderId) {
+    const outer = this;
+    $.post('/api/follower', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
+  }
+
+  unFollow (leaderId) {
+    const outer = this;
+    $.post('/api/unFollow', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
+  }
+
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -31,23 +62,34 @@ class Profile extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map(challenge => {
-      console.log(this.props)
+      console.log(this.props);
       if (challenge.username === this.props.user[0].username) {
         return (
           <div>
-            <h4>{challenge.title}</h4>
-            <p>{challenge.description}</p>
+            <div className="challenge title">{challenge.title}</div>
+            <div className="challenge description">{challenge.description}</div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}
           </div>
         );
       }
     });
 
-    return(
-      <div>
+    let whichButton = (leaderId) => {
+      if (this.props.leaders.includes(leaderId)) {
+        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
+      } else {
+        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
+      }
+    };  
+
+    return (
+      <div width={screen.width}>
         <div className='profilePicture container'>
-          <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
+          <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
+          Followers: {this.numFollowers()} <br />
+          {/* Follow Button here */}
         </div>
+        <hr />
         <div>
           Your challenges:
           {mappedChallenges}
@@ -65,6 +107,6 @@ class Profile extends React.Component {
 
 const mapStateToProps = (state) => {
   return state;
-}
+};
 
 export default connect(mapStateToProps)(Profile);
