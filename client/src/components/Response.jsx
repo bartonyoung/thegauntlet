@@ -10,13 +10,11 @@ class Response extends React.Component {
   }
 
   componentDidMount() {
-    console.log('response mounted');
     let outer = this;
     $.get('/api/response', {
       parent_id: window.sessionStorage.getItem('id')
     }).done(data => {
       let responseArr = [];
-      console.log('data', data.reverse());
       data.forEach(response => {
         if (response.parent_id) {
           responseArr.push(response);
