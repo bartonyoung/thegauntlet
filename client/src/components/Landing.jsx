@@ -17,37 +17,51 @@ class Landing extends React.Component {
     });
   }
 
-  handleVideos() {
-    let newest = this.props.challenges.splice(0, 3); 
-    return newest.filter(challenge => {
-      let extention = challenge.filename.slice(-3);
-      if (extention === 'mp4') {
-        return challenge;
+  handleGallery(type) {
+    let challenges = this.props.challenges;
+    let gallery = []; 
+    let counter = 1;
+    
+    for (let i = 0; i < challenges.length; i++) {
+      if (counter === 4) {
+        console.log(i);
+        break;
       }
-    }).map(challenge =>{
-      return <div className="col-md-4">
-               <h4>{challenge.title}</h4>
-                 <video width="320" height="240" controls>
-                  <source src="movie.mp4" type="video/mp4"></source>
-                 </video>
-             </div>;
-    });
-  }    
+      if (challenges[i]) {
+        let extension = challenges[i].filename.slice(-3);
+        if (type === 'videos') {
+          if (extension === 'mp4') {
+            gallery.push(challenges[i]);
+            counter++;
+          }
+        } else {
+          if (extension !== 'mp4') {
+            gallery.push(challenges[i]);
+            counter++;
+          }
+        }  
+      }     
+    }
 
-  handlePhotos() {
-    let newest = this.props.challenges.splice(0, 3); 
-    return newest.filter(challenge => {
-      let extention = challenge.filename.slice(-3);
-      if (extention !== 'mp4') {
-        return challenge;
-      }
-    }).map(challenge =>{
-      return <div className="col-md-4">
-               <h4>{challenge.title}</h4>
-                 <img src="http://cdn.ttgtmedia.com/ITKE/uploads/blogs.dir/58/files/2015/02/challenge-yourself.png" width="300" height="200" alt=""/>
-             </div>;
-    });
-  }
+    if (type === 'videos') {
+      return gallery.map(challenge =>{
+        return <div className="col-md-4">
+                <h4>{challenge.title}</h4>
+                  <video width="320" height="240" controls>
+                    <source src="movie.mp4" type="video/mp4"></source>
+                  </video>
+              </div>;
+      });
+    } else {
+      return gallery.map(challenge =>{
+        return <div className="col-md-4">
+                <h4>{challenge.title}</h4>
+                  <img src="http://cdn.ttgtmedia.com/ITKE/uploads/blogs.dir/58/files/2015/02/challenge-yourself.png" width="300" height="200" alt=""/>
+              </div>;
+      });
+    } 
+ 
+  }    
 
   render() {
     return (
@@ -73,13 +87,13 @@ class Landing extends React.Component {
             <div className="text-center gallery">
               <h3>Challenges</h3>  
                 <div className='row'>  
-                  {this.handleVideos()}
+                  {this.handleGallery('videos')}
                 </div>
             </div>
             <div className="text-center gallery">
               <h3>Most Recent Photos</h3>
                 <div className='row'>
-                  {this.handlePhotos()} 
+                  {this.handleGallery()} 
                 </div>
             </div>    
         </div>
