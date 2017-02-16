@@ -1,6 +1,6 @@
 import React from 'react';
 import ChallengeTable from './ChallengeTable.jsx';
-import {Jumbotron, Col, Row, Button, Grid, Nav, NavItem} from 'react-bootstrap';
+import SideNav from './SideNav.jsx';
 import actions from '../../redux/actions';
 import NavBar from './Nav.jsx';
 import $ from 'jquery';
@@ -25,10 +25,16 @@ class Dash extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <ChallengeTable dispatch={this.props.dispatch} />
+        <div className="row">
+          <div className="col col-md-2">
+            <SideNav />
+          </div>  
+            <ChallengeTable dispatch={this.props.dispatch} />
+        </div>
       </div>
+      
     );
   }
 }
