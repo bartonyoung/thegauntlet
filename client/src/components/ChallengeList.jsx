@@ -30,6 +30,7 @@ class ChallengeList extends React.Component {
   }
 
   upVoteClick(id) {
+    console.log('upvote fired for challenge', id);
     const outer = this;
     $.post('/api/upvote', {
       vote: 1,
@@ -73,7 +74,7 @@ class ChallengeList extends React.Component {
       if (fileType[type]) {
         return (
           <div>
-            <video width="320" height="240" controls>
+            <video width="320" height="240" controls className="center-block">
             {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
             </video>
           </div>
@@ -82,7 +83,7 @@ class ChallengeList extends React.Component {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
         return (
           <div>
-            <img width="320" height="240" />
+            <img width="320" height="240" className="center-block"/>
           </div>  
         );
       }
@@ -90,21 +91,35 @@ class ChallengeList extends React.Component {
 
     let whichButton = (leaderId) => {
       if (this.props.leaders.includes(leaderId)) {
-        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
+        return (
+          <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>
+          </button>
+        );
       } else {
-        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
+        return (
+          <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
+      <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+          </button>
+        );
       }   
     }; 
 
+          // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       console.log(challenge);
       return (
         <div className="col col-md-6">
-          <h4 onClick={() => this.onChallengeClick(challenge)}><Link to={'/challenge'}>{challenge.title}</Link></h4>
+          <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
           {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-          <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
-          {whichButton(challenge.user_id)}
-          {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+          <div>
+            <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+            {whichButton(challenge.user_id)}
+            
+        <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
+          <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
+        </button>
+          </div>  
         </div>
       );
     });
@@ -118,3 +133,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeList);
+
+ 
