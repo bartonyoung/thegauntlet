@@ -71,13 +71,20 @@ class ChallengeList extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video width="320" height="240" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
-        </video>);
+        return (
+          <div className="container">
+            <video width="320" height="240" controls>
+            {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
+            </video>
+          </div>
+        );
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
-        return <img width="320" height="240" />;
-
+        return (
+          <div className="container">
+            <img width="320" height="240" />
+          </div>  
+        );
       }
     };
 
@@ -91,13 +98,15 @@ class ChallengeList extends React.Component {
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       console.log(challenge);
-      return <div onClick={() => this.onChallengeClick(challenge)}>
-        <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
-        {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-        <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
-        {whichButton(challenge.user_id)}
-        {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
-      </div>;
+      return (
+        <div className="col col-md-6">
+          <h4 onClick={() => this.onChallengeClick(challenge)}><Link to={'/challenge'}>{challenge.title}</Link></h4>
+          {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+          <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
+          {whichButton(challenge.user_id)}
+          {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+        </div>
+      );
     });
 
     return <div>{mappedChallenges}</div>;
