@@ -115,16 +115,14 @@ class ChallengeComponent extends React.Component {
       };
       if (fileType[type]) {
         return (<video width="320" height="240" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} width="320" height="240" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
       }
     };
     return (
-      <div>
-
-
+      <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
         <h4>{'Description: ' + window.sessionStorage.description}</h4>
@@ -140,7 +138,7 @@ class ChallengeComponent extends React.Component {
 
         {'Upload your response: '}
         <form id="challenge">
-          <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+          <input type="text" placeholder="Name your response" required ref="title" name="title"/>
           <input type="text" placeholder="Description" required ref="description" name="description"/>
           <input type="text" placeholder="category" required ref="category" name="category"/>
         </form>

@@ -3,14 +3,11 @@ import $ from 'jquery';
 import css from '../styles/landing.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
-//import {Jumbotron, Col, Row, Nav, Button, Grid, NavItem, Container} from 'react-bootstrap';
 
 class Landing extends React.Component {
-  constructor(props) {
+  constructor(props) { 
     super(props);
-
   }
-
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges')
@@ -55,14 +52,13 @@ class Landing extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='row container'>
-          <nav>
-            <ul className="list-inline">
-              <li><a href="/#/signup">Signup</a></li>
-              <li><a href="/#/login">Login</a></li>
-            </ul>
-          </nav>
-        </div>  
+         <nav className="nav navbar navbar-fixed">
+            <div className="container-fluid">
+              
+            <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
+            <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
+            </div>
+          </nav>  
           <div className="jumbotron container text-center">
             <div className='row'>
               <div className="col-md-12">
@@ -90,6 +86,7 @@ class Landing extends React.Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return state;
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-import {Jumbotron, Col, Row, Button, Grid, Nav, NavItem} from 'react-bootstrap';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -9,24 +8,21 @@ class NavBar extends React.Component {
 
   handleNav() {
     if (this.props.auth) {
-      if (window.location.hash !== '#/dash') {
-        return <Nav bsStyle="pills">
-                  <button onClick={this.props.handleLogout}>Log out</button>
-                  <button onClick={this.props.editProfile}>Edit profile</button>
-                  <h4>Show World what you got {window.sessionStorage.getItem('key')}!</h4>
-                </Nav>;
-      } else {
-        return <Nav bsStyle="pills">
-                  <button onClick={this.props.handleLogout}>Log out</button>
-                  <button onClick={this.props.editProfile}>Edit profile</button>
-                  <h4>HI! {window.sessionStorage.getItem('key')}</h4>
-                </Nav>;
-      }
+      return (
+          <nav className="nav navbar navbar-fixed">
+            <div className="container-fluid">
+              <button className="btn btn-large btn-default" onClick={this.props.handleLogout}>Log out</button>
+              <button className="btn btn-large btn-default" onClick={this.props.editProfile}>Edit profile</button>
+              <a className="btn btn-large btn-default" href="/#/dash">Dashboard</a>
+              <h5 className="navbar-text navbar-right">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
+            </div>
+          </nav>
+      );       
     }
   }
   render() {
     return (
-      <div className="">
+      <div>
        {this.handleNav()}
       </div>
     );
