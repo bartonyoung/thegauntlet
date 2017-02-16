@@ -11,11 +11,14 @@ class Landing extends React.Component {
   render() {
     return (
       <div>
-        <div className="navbar">
-          <a href="/#/signup"><button onClick={this.props.handleDisplay}>Signup</button></a>
-          <a href="/#/login"><button onClick={this.props.handleDisplay}>Login</button></a>
-        </div> 
-      <div className="jumbotron">
+         <nav className="nav navbar navbar-fixed">
+            <div className="container-fluid">
+              
+            <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
+            <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
+            </div>
+          </nav>
+      <div className="jumbotron text-center">
         <h1>Welcome to The Gauntlet!</h1>
         <p>The Gauntlet is a place to test yourself against others!</p>
         <p>Add your own challenge and watch others respond, or one-up another challenger</p>
