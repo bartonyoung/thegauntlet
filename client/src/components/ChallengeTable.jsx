@@ -48,16 +48,25 @@ class ChallengeTable extends React.Component {
   render() {
     return (
       <div>
-        <form id="challenge">
-          <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
-          <input type="text" placeholder="Description" required ref="description" name="description"/>
-          <input type="text" placeholder="category" required ref="category" name="category"/>
-        </form>
-        <form ref="file" id="file">
-          <input type="file" placeholder="video" required ref="video" name="video"/>
-        </form>
-        <button onClick={this.handleSubmit}>Submit</button>
-        <ChallengeList dispatch={this.props.dispatch}/>
+        <div className="col col-md-8">
+          <div className="container-fluid">
+            <div className="row">
+              <ChallengeList dispatch={this.props.dispatch}/>
+            </div>  
+          </div>  
+        </div>
+        <div className="col col-md-2">
+          <form id="challenge">
+            <label>Add your challenge!</label>
+            <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+            <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
+            <input className="form-control" type="text" placeholder="Category" required ref="category" name="category"/>
+          </form>
+          <form ref="file" id="file">
+            <input type="file" placeholder="video or image" required ref="video" name="video"/>
+          </form>
+          <button onClick={this.handleSubmit} className="btn btn-default">Submit</button>
+        </div>  
       </div>
     );
   }
