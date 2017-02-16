@@ -90,7 +90,7 @@ class ChallengeList extends React.Component {
       if (this.props.leaders.includes(leaderId)) {
         return (
           <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>
+            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
           </button>
         );
       } else {
