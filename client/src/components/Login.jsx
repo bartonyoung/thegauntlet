@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import css from '../styles/landing.css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -28,8 +29,8 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="container-login">
-        <form type="submit" onSubmit={this.handleLogin.bind(this)}>
+      <div className="container-login text-center">
+        <form id="auth" type="submit" onSubmit={this.handleLogin.bind(this)}>
           <p>Username</p>
           <input type="text" required ref="username" />
           <p>Password</p>
