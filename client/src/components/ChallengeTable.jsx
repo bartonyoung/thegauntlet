@@ -63,7 +63,7 @@ class ChallengeTable extends React.Component {
             <input className="form-control" type="text" placeholder="Category" required ref="category" name="category"/>
           </form>
           <form ref="file" id="file">
-            <input type="file" placeholder="video or image" required ref="video" name="video"/>
+            <input style={{width: '100%'}} type="file" placeholder="video or image" required ref="video" name="video"/>
           </form>
           <button onClick={this.handleSubmit} className="btn btn-default">Submit</button>
         </div>  
