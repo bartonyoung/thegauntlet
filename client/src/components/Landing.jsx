@@ -5,11 +5,7 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 
 class Landing extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
-
+ 
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges')
