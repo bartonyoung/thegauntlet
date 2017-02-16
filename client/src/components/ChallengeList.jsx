@@ -8,10 +8,19 @@ import { Link } from 'react-router';
 class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
+
     this.onChallengeClick = this.onChallengeClick.bind(this);
     this.upVoteClick = this.upVoteClick.bind(this);
     this.followTheLeader = this.followTheLeader.bind(this);
     this.unFollow = this.unFollow.bind(this);
+  }
+
+  componentDidMount() {
+    let outer = this;
+    $.get('/api/allChallenges').done(challenge => {
+      console.log('challengelist get challenge', challenge)
+      outer.props.dispatch(actions.addChallenge(challenge));
+    });
   }
 
   onChallengeClick(challenge) {

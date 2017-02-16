@@ -32,7 +32,6 @@ class ChallengeTable extends React.Component {
             description: outer.refs.description.value,
             category: outer.refs.category.value,
             filename: resp
-
           },
           success: function(data) {
             data = data.reverse();
