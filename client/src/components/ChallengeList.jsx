@@ -16,17 +16,21 @@ class ChallengeList extends React.Component {
 
   onChallengeClick(challenge) {
     window.sessionStorage.setItem('title', challenge.title);
+    console.log("inside challenge click", challenge.id)
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
     window.sessionStorage.setItem('category', challenge.category);
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
+<<<<<<< HEAD
     $.get('/api/challenge/' + challenge.id);
     return (
       <ChallengeComponent challenge={challenge} />
     );
     window.location.href = '/#/challenge';
+=======
+>>>>>>> Render correct challenge specific responses and correct challenges
   }
 
   upVoteClick(id) {
@@ -88,6 +92,7 @@ class ChallengeList extends React.Component {
     }; 
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
+<<<<<<< HEAD
       console.log(challenge);
       return <div onClick={() => this.onChallengeClick(challenge)}>
         <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
@@ -96,6 +101,17 @@ class ChallengeList extends React.Component {
         {whichButton(challenge.user_id)}
         {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
       </div>;
+=======
+      if (!challenge.parent_id) {
+        console.log('inside mappedChallenges', challenge)
+        return <div onClick={() => this.onChallengeClick(challenge)}>
+          <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
+          {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+          <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
+          {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+        </div>;
+      }
+>>>>>>> Render correct challenge specific responses and correct challenges
     });
 
     return <div>{mappedChallenges}</div>;

@@ -8,21 +8,56 @@ class Profile extends React.Component {
 
   componentDidMount() {
     let outer = this;
-    $.get('/api/allChallenges')
-    .done(data => {
-      data.forEach(function(challenge) {
-        if (challenge.username === outer.props.username) {
-          console.log('matched');
-          outer.props.dispatch(actions.addChallenge(challenge));
-        }
-      });
+    $.get('/api/profile').done(data => {
+      outer.props.dispatch(actions.addUser(data));
+    });
+    $.get('/api/allChallenges').done(data => {
+      outer.props.dispatch(actions.addChallenge(data));
     });
   }
 
   render() {
+    let checkFile = (type, challenge) => {
+      const fileType = {
+        'mp4': 'THIS IS A VIDEO!'
+      };
+      if (fileType[type]) {
+        return (<video width="320" height="240" controls>
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
+        </video>);
+      } else {
+        return <img width="320" height="240" />;
+      }
+    };
+
+    let mappedChallenges = this.props.challenges.map(challenge => {
+      console.log(this.props)
+      if (challenge.username === this.props.user[0].username) {
+        return (
+          <div>
+            <h4>{challenge.title}</h4>
+            <p>{challenge.description}</p>
+            {checkFile(challenge.filename.split('.').pop(), challenge)}
+          </div>
+        );
+      }
+    });
+
     return(
-      <div className='profilePicture container'>
-        <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
+      <div>
+        <div className='profilePicture container'>
+          <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
+        </div>
+        <div>
+          Your challenges:
+          {mappedChallenges}
+        </div>
+        <div>
+          Your responses:
+        </div>
+        <div>
+
+        </div>
       </div>
     );
   }
