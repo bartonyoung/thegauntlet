@@ -23,14 +23,6 @@ class ChallengeList extends React.Component {
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
-<<<<<<< HEAD
-    $.get('/api/challenge/' + challenge.id);
-    return (
-      <ChallengeComponent challenge={challenge} />
-    );
-    window.location.href = '/#/challenge';
-=======
->>>>>>> Render correct challenge specific responses and correct challenges
   }
 
   upVoteClick(id) {
@@ -54,7 +46,7 @@ class ChallengeList extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });  
+      });
     });
   }
 
@@ -65,7 +57,7 @@ class ChallengeList extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });   
+      });
     });
   }
 
@@ -88,20 +80,10 @@ class ChallengeList extends React.Component {
         return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
       } else {
         return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
-      }   
-    }; 
+      }
+    };
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-<<<<<<< HEAD
-      console.log(challenge);
-      return <div onClick={() => this.onChallengeClick(challenge)}>
-        <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
-        {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-        <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
-        {whichButton(challenge.user_id)}
-        {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
-      </div>;
-=======
       if (!challenge.parent_id) {
         console.log('inside mappedChallenges', challenge)
         return <div onClick={() => this.onChallengeClick(challenge)}>
@@ -111,7 +93,6 @@ class ChallengeList extends React.Component {
           {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
         </div>;
       }
->>>>>>> Render correct challenge specific responses and correct challenges
     });
 
     return <div>{mappedChallenges}</div>;
