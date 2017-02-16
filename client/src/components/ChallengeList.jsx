@@ -91,6 +91,7 @@ class ChallengeList extends React.Component {
           <h1><Link to={'/challenge'}>{challenge.title}</Link></h1>
           {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
           <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link><br/>
+          {whichButton(challenge.user_id)}
           {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
         </div>;
       }
