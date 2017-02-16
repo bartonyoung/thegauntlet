@@ -38,7 +38,6 @@ class ChallengeComponent extends React.Component {
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
-      console.log('get on componentDidMount', data);
       data.forEach(comment => {
         outer.props.dispatch(actions.addComment(data));
       });
@@ -66,7 +65,6 @@ class ChallengeComponent extends React.Component {
             parent_id: window.sessionStorage.getItem('id')
           },
           success: function(data) {
-            console.log('post response', data);
             outer.props.dispatch(actions.addResponse(data));
             outer.refs.title.value = '';
             outer.refs.description.value = '';
@@ -90,7 +88,6 @@ class ChallengeComponent extends React.Component {
       $.get('/api/comments', {
         challenge_id: window.sessionStorage.getItem('id')
       }).then(data => {
-        console.log('get comment', data);
         outer.props.dispatch(actions.addComment(data));
         outer.refs.comment.value = '';
       });
@@ -105,7 +102,6 @@ class ChallengeComponent extends React.Component {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
       outer.newComments = data;
-      console.log('newComments:', outer.newComments);
     });
   }
 
@@ -120,7 +116,7 @@ class ChallengeComponent extends React.Component {
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucke  t421/' + response.filename} width="320" height="240" />;
         return <img className="parent" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };

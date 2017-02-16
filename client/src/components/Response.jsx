@@ -55,7 +55,7 @@ class Response extends React.Component {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
     });
-  }      
+  }
 
   unFollow (leaderId) {
     const outer = this;
@@ -98,9 +98,9 @@ class Response extends React.Component {
             <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>
         );
-      }   
-    };    
-    
+      }
+    };
+
     let mappedResponses = this.props.responses.reverse().map((response, i) => {
       for (var i = 0; i < this.props.challenges.length; i++) {
         if (response.parent_id === parseInt(window.sessionStorage.id)) {

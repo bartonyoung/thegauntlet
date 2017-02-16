@@ -62,7 +62,6 @@ class Profile extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map(challenge => {
-      console.log(this.props);
       if (challenge.username === this.props.user[0].username) {
         return (
           <div>
@@ -80,7 +79,7 @@ class Profile extends React.Component {
       } else {
         return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
       }
-    };  
+    };
 
     return (
       <div width={screen.width}>
