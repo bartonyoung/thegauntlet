@@ -8,6 +8,7 @@ import { Link } from 'react-router';
 class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
+
     this.onChallengeClick = this.onChallengeClick.bind(this);
     this.upVoteClick = this.upVoteClick.bind(this);
     this.followTheLeader = this.followTheLeader.bind(this);
@@ -16,17 +17,13 @@ class ChallengeList extends React.Component {
 
   onChallengeClick(challenge) {
     window.sessionStorage.setItem('title', challenge.title);
+    console.log('inside challenge click', challenge.id);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
     window.sessionStorage.setItem('category', challenge.category);
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
-    $.get('/api/challenge/' + challenge.id);
-    return (
-      <ChallengeComponent challenge={challenge} />
-    );
-    window.location.href = '/#/challenge';
   }
 
   upVoteClick(id) {
@@ -51,7 +48,7 @@ class ChallengeList extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });  
+      });
     });
   }
 
@@ -62,7 +59,7 @@ class ChallengeList extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });   
+      });
     });
   }
 
@@ -98,30 +95,32 @@ class ChallengeList extends React.Component {
         );
       } else {
         return (
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
           <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
-      <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>
         );
       }   
     }; 
-
-          // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+     // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      console.log(challenge);
-      return (
-        <div className="col col-md-6">
-          <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
-          {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-          <div>
-            <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link>
-            {whichButton(challenge.user_id)}
-            
-        <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
-          <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
-        </button>
-          </div>  
-        </div>
-      );
+      if (!challenge.parent_id) {
+        return (
+          <div className="col col-md-6">
+            <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+            {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+            <div>
+              <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              {whichButton(challenge.user_id)}
+              
+          <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
+            <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
+          </button>
+            </div>  
+          </div>
+        );
+        
+      }
     });
 
     return <div>{mappedChallenges}</div>;

@@ -24,8 +24,13 @@ class ChallengeComponent extends React.Component {
         parent_id: window.sessionStorage.getItem('id')
       },
       success: function(data) {
-        data = data.reverse();
-        outer.props.dispatch(actions.addResponse(data));
+        let responseArr = [];
+        data.forEach(response => {
+          if (response.parent_id) {
+            responseArr.push(response);
+          }
+        });
+        outer.props.dispatch(actions.addResponse(responseArr));
       }
     });
     $.get('/api/comments', {
@@ -59,11 +64,12 @@ class ChallengeComponent extends React.Component {
             parent_id: window.sessionStorage.getItem('id')
           },
           success: function(data) {
+            console.log('post response', data)
+            outer.props.dispatch(actions.addResponse(data));
             outer.refs.title.value = '';
             outer.refs.description.value = '';
             outer.refs.category.value = '';
             outer.refs.video.value = '';
-            outer.componentDidMount();
           }
         });
       }
@@ -82,6 +88,7 @@ class ChallengeComponent extends React.Component {
       $.get('/api/comments', {
         challenge_id: window.sessionStorage.getItem('id')
       }).then(data => {
+        console.log('get comment', data)
         outer.props.dispatch(actions.addComment(data));
         outer.refs.comment.value = '';
       });

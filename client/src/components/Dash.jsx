@@ -21,6 +21,10 @@ class Dash extends React.Component {
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
     });
+
+    $.get('/api/profile').done(data => {
+      outer.props.dispatch(actions.addUser(data));
+    });
   }
 
   render() {
@@ -42,6 +46,7 @@ class Dash extends React.Component {
 const mapStateToProps = (state) => {
   return state;
 };
+
 
 export default connect(mapStateToProps)(Dash);
 

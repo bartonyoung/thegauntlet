@@ -19,7 +19,7 @@
 1. [Contributing](#contributing)
 
 ## Usage
-
+Cool
 > Some usage instructions
 
 ## Requirements

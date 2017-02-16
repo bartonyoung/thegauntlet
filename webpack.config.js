@@ -6,6 +6,7 @@ var BUILD_DIR = path.resolve(__dirname, 'client/public');
 var APP_DIR = path.resolve(__dirname, 'client/src');
 
 var config = {
+  devtool: '#inline-source-map',
   entry: APP_DIR + '/index.jsx',
   output: {
     path: BUILD_DIR,
@@ -20,7 +21,7 @@ var config = {
         loader: 'babel-loader',
         query:
         {
-          presets: ['react'] 
+          presets: ['react']
         }
       },
       {
@@ -39,12 +40,12 @@ var config = {
     },
 
       {
-        reload: true 
+        reload: true
       }
 
-   ) 
+   )
   ]
 
 };
 
-module.exports = config;      
+module.exports = config;

@@ -9,12 +9,36 @@ class Response extends React.Component {
     this.upVoteClick = this.upVoteClick.bind(this);
   }
 
-  upVoteClick(id) { 
+  componentDidMount() {
+    console.log('response mounted');
+    let outer = this;
+    $.get('/api/response', {
+      parent_id: window.sessionStorage.getItem('id')
+    }).done(data => {
+      let responseArr = [];
+      console.log('data', data.reverse());
+      data.forEach(response => {
+        if (response.parent_id) {
+          responseArr.push(response);
+        }
+      });
+      outer.props.dispatch(actions.addResponse(responseArr));
+    });
+    $.get('/api/allChallenges').done(data => {
+      data.forEach(challenge => {
+        if (!challenge.parent_id) {
+          outer.props.dispatch(actions.addChallenge(data));
+        }
+      });
+    });
+  }
+
+  upVoteClick(id) {
     const outer = this;
-    $.post('/api/upvote', { 
+    $.post('/api/upvote', {
       vote: 1,
       challenge_id: id
-    }).then(()=> {   
+    }).then(()=> {
       $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
         .then((data)=> {
           data = data.reverse();
@@ -23,8 +47,6 @@ class Response extends React.Component {
     });
   }
 
-              // <source src={"https://s3-us-west-1.amazonaws.com/thegauntletbucket420/" + response.filename} type="video/mp4"/>
-              // src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename}
   render() {
     let checkFile = (type, response) => {
       const fileType = {
@@ -35,24 +57,28 @@ class Response extends React.Component {
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
         return <img width="320" height="240" />;
+
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
       }
     };
-    let mappedResponses = this.props.responses.map((response, i) => {
-      console.log(response.filename.split('.').pop());
-      if (i !== this.props.responses.length - 1) {
-        return (
-          <div>
-            <h4>{'Response title: ' + response.title}</h4>
-            <p>{'Description: ' + response.description}</p>
-            {checkFile(response.filename.split('.').pop(), response)}
-            <p>{`Views : ${response.views}`}</p>
-            <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
-          </div>
-        );
+    console.log('response props', this.props);
+    let mappedResponses = this.props.responses.reverse().map((response, i) => {
+      for (var i = 0; i < this.props.challenges.length; i++) {
+        if (response.parent_id === parseInt(window.sessionStorage.id)) {
+          return (
+            <div>
+              <h4>{'Response title: ' + response.title}</h4>
+              <p>{'Description: ' + response.description}</p>
+              {checkFile(response.filename.split('.').pop(), response)}
+              <p>{`Views : ${response.views}`}</p>
+              <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+            </div>
+          );
+        }
       }
     });
+
     return <div>{mappedResponses}</div>;
   }
 }
