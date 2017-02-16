@@ -72,7 +72,7 @@ class ChallengeList extends React.Component {
       };
       if (fileType[type]) {
         return (
-          <div className="container">
+          <div>
             <video width="320" height="240" controls>
             {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
             </video>
@@ -81,7 +81,7 @@ class ChallengeList extends React.Component {
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
         return (
-          <div className="container">
+          <div>
             <img width="320" height="240" />
           </div>  
         );
