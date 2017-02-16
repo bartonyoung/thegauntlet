@@ -115,9 +115,7 @@ class ChallengeComponent extends React.Component {
       }
     };
     return (
-      <div>
-
-
+      <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
         <h4>{'Description: ' + window.sessionStorage.description}</h4>
@@ -133,7 +131,7 @@ class ChallengeComponent extends React.Component {
 
         {'Upload your response: '}
         <form id="challenge">
-          <input type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+          <input type="text" placeholder="Name your response" required ref="title" name="title"/>
           <input type="text" placeholder="Description" required ref="description" name="description"/>
           <input type="text" placeholder="category" required ref="category" name="category"/>
         </form>
