@@ -8,9 +8,6 @@ class Profile extends React.Component {
 
   componentDidMount() {
     let outer = this;
-    $.get('/api/profile').done(data => {
-      outer.props.dispatch(actions.addUser(data));
-    });
     $.get('/api/allChallenges').done(data => {
       outer.props.dispatch(actions.addChallenge(data));
     });
@@ -81,26 +78,45 @@ class Profile extends React.Component {
       }
     };
 
-    return (
-      <div width={screen.width}>
-        <div className='profilePicture container'>
-          <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
-          Followers: {this.numFollowers()} <br />
-          {/* Follow Button here */}
-        </div>
-        <hr />
+    if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
+      return (
         <div>
-          Your challenges:
-          {mappedChallenges}
-        </div>
-        <div>
-          Your responses:
-        </div>
-        <div>
+          <div className='profilePicture container'>
+            <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
+            Followers: {this.numFollowers()} <br />
+          </div>
+          <div>
+            Your challenges:
+            {mappedChallenges}
+          </div>
+          <div>
+            Your responses:
+          </div>
+          <div>
 
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+       return (
+        <div>
+          <div className='profilePicture container'>
+            <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
+            Followers: {this.numFollowers()} <br />
+          </div>
+          <div>
+            {this.props.user[0].username + '\'s challenges:'}
+            {mappedChallenges}
+          </div>
+          <div>
+            {this.props.user[0].username + '\'s responses:'}
+          </div>
+          <div>
+
+          </div>
+        </div>
+      );
+    }
   }
 }
 

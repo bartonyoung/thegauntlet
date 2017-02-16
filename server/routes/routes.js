@@ -20,8 +20,8 @@ routes.post('/viewed', challengeController.viewed);
 routes.post('/response', challengeController.addOneResponse);
 routes.get('/response', challengeController.getOne);
 routes.get('/profile', userControllers.getUser);
+routes.get('/profile/:username', userControllers.getUser);
 routes.post('/follower', followerController.follow);
 routes.get('/getLeaders', followerController.getLeaders);
 routes.post('/unFollow', followerController.unFollow);
-
 module.exports = routes;
