@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 
 class Landing extends React.Component {
- 
+  constructor(props) { 
+    super(props);
+  }
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges')
@@ -45,10 +47,6 @@ class Landing extends React.Component {
                  <img src="http://cdn.ttgtmedia.com/ITKE/uploads/blogs.dir/58/files/2015/02/challenge-yourself.png" width="300" height="200" alt=""/>
              </div>;
     });
-  }
-
-  constructor(props) { 
-    super(props);
   }
 
   render() {
