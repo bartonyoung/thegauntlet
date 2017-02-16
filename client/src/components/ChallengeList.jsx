@@ -17,7 +17,6 @@ class ChallengeList extends React.Component {
 
   onChallengeClick(challenge) {
     window.sessionStorage.setItem('title', challenge.title);
-    console.log('inside challenge click', challenge.id);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
     window.sessionStorage.setItem('category', challenge.category);
@@ -27,7 +26,6 @@ class ChallengeList extends React.Component {
   }
 
   upVoteClick(id) {
-    console.log('upvote fired for challenge', id);
     const outer = this;
     $.post('/api/upvote', {
       vote: 1,
