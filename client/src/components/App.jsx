@@ -42,7 +42,9 @@ class App extends React.Component {
   }
 
   editProfile() {
-    window.location.href = '#/profile';
+    $.get('/api/profile').done(data => {
+      console.log('userdata', data)
+    });
   }
 
   render() {
@@ -65,9 +67,6 @@ class App extends React.Component {
         }} />
         <Route path='/challenge' component={() =>{
           return <ChallengeComponent handleAuth={this.handleAuth} auth={this.state.auth} handleLogout={this.handleLogout} editProfile={this.editProfile} />;
-        }} />
-        <Route path='/profile' component={() => {
-          return <Profile dispatch={this.props.dispatch} handleLogout={this.handleLogout} />
         }} />
         <Route path='/profile/:username' component={() => {
           return <Profile dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout} />;

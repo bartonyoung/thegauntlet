@@ -10,7 +10,7 @@ class Landing extends React.Component {
         <Nav bsStyle="pills">
           <a href="/#/signup"><button onClick={this.props.handleDisplay}>Signup</button></a>
           <a href="/#/login"><button onClick={this.props.handleDisplay}>Login</button></a>
-        </Nav>
+        </Nav> 
       <Jumbotron>
         <h1>Welcome to The Gauntlet!</h1>
         <p>The Gauntlet is a place to test yourself against others!</p>
