@@ -83,7 +83,6 @@ class ChallengeComponent extends React.Component {
       comment: this.refs.comment.value,
       challenge_id: window.sessionStorage.id
     };
-
     $.post('/api/comments', comments).then(() => {
       $.get('/api/comments', {
         challenge_id: window.sessionStorage.getItem('id')
@@ -92,7 +91,6 @@ class ChallengeComponent extends React.Component {
         outer.refs.comment.value = '';
       });
     });
-
   }
 
   renderComments() {
@@ -124,7 +122,7 @@ class ChallengeComponent extends React.Component {
       <div className="container-fluid">
         <center><h4 className="title">The Gauntlet</h4></center>
         <hr />
-        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
+        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <hr />
         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
         <h4>{'Description: ' + window.sessionStorage.description}</h4>
@@ -135,9 +133,7 @@ class ChallengeComponent extends React.Component {
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <input type="submit"/>
         </form>
-
         <Comments />
-
         {'Upload your response: '}
         <form id="challenge">
           <input type="text" placeholder="Name your response" required ref="title" name="title"/>

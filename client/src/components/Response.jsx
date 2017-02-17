@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
 import css from '../styles/response.css';
+import { Link } from 'react-router';
+
 
 class Response extends React.Component {
   constructor(props) {
@@ -44,6 +46,9 @@ class Response extends React.Component {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
     });
+
+  onUsernameClick(username) {
+    window.sessionStorage.setItem('username', username);
   }
 
   render() {
@@ -84,9 +89,10 @@ class Response extends React.Component {
         return (
           <div>
             <h4>{'Response title: ' + response.title}</h4>
-            <p>{'Description: ' + response.description}</p>
-            {checkFile(response.filename.split('.').pop(), response)}
-            <p>{`Views : ${response.views}`}</p>
+            <h5>{'Description: ' + response.description}</h5>
+            {checkFile(response.filename.split('.').pop(), response)}<br/>
+            <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
+            <h5>{`Views : ${response.views}`}</h5>
             {whichButton(response.user_id)}
             <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
           </div>

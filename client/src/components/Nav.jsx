@@ -5,6 +5,7 @@ import css from '../styles/nav.css';
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
+    console.log('nav props', this.props)
   }
 
   handleNav() {
@@ -13,12 +14,12 @@ class NavBar extends React.Component {
           <nav className="nav navbar navbar-fixed">
             <div className="container-fluid">
               <button className="btn btn-large btn-default navbar-right" onClick={this.props.handleLogout}>Log out</button>
-              <button className="btn btn-large btn-default navbar-right" onClick={this.props.editProfile}>Edit profile</button>
+              <button className="btn btn-large btn-default navbar-right" onClick={() => this.props.editProfile()}>Edit profile</button>
               <a className="btn btn-large btn-default navbar-right" href="/#/dash">Dashboard</a>
               <h5 className="navbar-text navbar-left">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
             </div>
           </nav>
-      );       
+      );
     }
   }
   render() {
