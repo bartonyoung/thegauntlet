@@ -5,6 +5,7 @@ import actions from '../../redux/actions';
 import NavBar from './Nav.jsx';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import css from '../styles/dash.css';
 
 class Dash extends React.Component {
   constructor(props) {
@@ -30,7 +31,10 @@ class Dash extends React.Component {
   render() {
     return (
       <div className="container-fluid">
+        <center><h4 className="title">The Gauntlet</h4></center>
+        <hr />
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
+        <hr />
         <div className="row">
           <div className="col col-md-2">
             <SideNav />

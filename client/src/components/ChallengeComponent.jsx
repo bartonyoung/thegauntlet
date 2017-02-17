@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import Comments from './Comments.jsx';
 import NavBar from './Nav.jsx';
+import css from '../styles/nav.css';
+import moreCSS from '../styles/challengeComponent.css';
 
 
 class ChallengeComponent extends React.Component {
@@ -64,7 +66,7 @@ class ChallengeComponent extends React.Component {
             parent_id: window.sessionStorage.getItem('id')
           },
           success: function(data) {
-            console.log('post response', data)
+            console.log('post response', data);
             outer.props.dispatch(actions.addResponse(data));
             outer.refs.title.value = '';
             outer.refs.description.value = '';
@@ -88,7 +90,7 @@ class ChallengeComponent extends React.Component {
       $.get('/api/comments', {
         challenge_id: window.sessionStorage.getItem('id')
       }).then(data => {
-        console.log('get comment', data)
+        console.log('get comment', data);
         outer.props.dispatch(actions.addComment(data));
         outer.refs.comment.value = '';
       });
@@ -114,16 +116,20 @@ class ChallengeComponent extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video width="320" height="240" controls>
+        return (<video className="parent" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
+        return <img className="parent" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
     return (
       <div className="container-fluid">
+        <center><h4 className="title">The Gauntlet</h4></center>
+        <hr />
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} handleDisply={this.props.handleDisply}/>
+        <hr />
         <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
         <h4>{'Description: ' + window.sessionStorage.description}</h4>
         {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}

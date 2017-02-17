@@ -1,0 +1,11 @@
+.response {
+  height: 400px;
+  width: 100%;
+  border: 1px solid black;
+}
+
+.response.container {
+  width: 40%;
+  margin: 0px;
+  border: none;
+}

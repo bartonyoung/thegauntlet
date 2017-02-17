@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
+import css from '../styles/response.css';
 
 class Response extends React.Component {
   constructor(props) {
@@ -73,11 +74,11 @@ class Response extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video width="320" height="240" controls>
+        return (<video className="response" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        return <img width="320" height="240" />;
+        return <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
 
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
       }
@@ -117,7 +118,7 @@ class Response extends React.Component {
       }
     });
 
-    return <div>{mappedResponses}</div>;
+    return <div className="response container">{mappedResponses}</div>;
   }
 }
 
