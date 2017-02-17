@@ -4,6 +4,7 @@ import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
 import $ from 'jquery';
 import { Link } from 'react-router';
+import css from '../styles/challengeList.css';
 
 class ChallengeList extends React.Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class ChallengeList extends React.Component {
       if (fileType[type]) {
         return (
           <div>
-            <video width="320" height="240" controls className="center-block">
+            <video controls className="center-block">
             {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
             </video>
           </div>
@@ -78,7 +79,7 @@ class ChallengeList extends React.Component {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
         return (
           <div>
-            <img width="320" height="240" className="center-block"/>
+            <img className="center-block" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
           </div>  
         );
       }
@@ -87,14 +88,14 @@ class ChallengeList extends React.Component {
     let whichButton = (leaderId) => {
       if (this.props.leaders.includes(leaderId)) {
         return (
-          <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
+          <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
             <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
           </button>
         );
       } else {
         return (
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
-          <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
+          <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
             <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>
         );
@@ -121,7 +122,7 @@ class ChallengeList extends React.Component {
       }
     });
 
-    return <div>{mappedChallenges}</div>;
+    return <div className="media">{mappedChallenges}</div>;
   }
 }
 

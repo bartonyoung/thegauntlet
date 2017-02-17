@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import css from '../styles/nav.css';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -11,10 +12,10 @@ class NavBar extends React.Component {
       return (
           <nav className="nav navbar navbar-fixed">
             <div className="container-fluid">
-              <button className="btn btn-large btn-default" onClick={this.props.handleLogout}>Log out</button>
-              <button className="btn btn-large btn-default" onClick={this.props.editProfile}>Edit profile</button>
-              <a className="btn btn-large btn-default" href="/#/dash">Dashboard</a>
-              <h5 className="navbar-text navbar-right">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
+              <button className="btn btn-large btn-default navbar-right" onClick={this.props.handleLogout}>Log out</button>
+              <button className="btn btn-large btn-default navbar-right" onClick={this.props.editProfile}>Edit profile</button>
+              <a className="btn btn-large btn-default navbar-right" href="/#/dash">Dashboard</a>
+              <h5 className="navbar-text navbar-left">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
             </div>
           </nav>
       );       
