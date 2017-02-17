@@ -24,7 +24,16 @@ const reducer = (state, action) => {
   case 'SET_CATEGORY':
     return Object.assign({}, state, {
       currentCategory: action.payload
-    });  
+    }); 
+  case 'SET_VIEW':
+    return Object.assign({}, state, {
+      profileView: action.payload
+    });
+  case 'GET_FOLLOWERS':
+    return Object.assign({}, state, {
+      followers: action.payload
+    });
+  
   default:
     return state;
   }

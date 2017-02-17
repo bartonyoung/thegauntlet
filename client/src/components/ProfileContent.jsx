@@ -8,6 +8,14 @@ class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount () {
+    this.props.dispatch(actions.setProfileView('all'));
+  }
+  componentDidUpdate (prevProps, prevState) {
+    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      this.followers();
+    }
+  }
 
   numFollowers () {
     if (this.props.user) {
@@ -36,6 +44,18 @@ class ProfileContent extends React.Component {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
+    });
+  }
+
+  changeProfileView(view) {
+    this.props.dispatch(actions.setProfileView(view));
+  }
+
+  followers() {
+    const outer = this;
+    $.get('/api/listFollowers', {username: this.props.user[0].username}).then(data => {
+      console.log(data);
+      outer.props.dispatch(actions.setFollowers(data));
     });
   }
 
@@ -85,47 +105,66 @@ class ProfileContent extends React.Component {
       }
     };
 
-    if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
-      return (
-        <div width={screen.width}>
-          <div className='profilePicture container'>
-            <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
-            Followers: {this.numFollowers()} <br />
-          </div><br/>
+    let myView = () => {
+      if (this.props.profileView === 'all' && window.sessionStorage.getItem('key') === this.props.user[0].username) {
+        return (
           <div>
-            Your challenges:
-            {mappedChallenges}
+            <div>
+              Your challenges:
+              {mappedChallenges}
+            </div>
+            <div>
+              Your responses:
+              {mappedResponses}
+            </div>
           </div>
+        );
+      } else if (this.props.profileView === 'all') {
+        return (
           <div>
-            Your responses:
-            {mappedResponses}
+            <div>
+              {this.props.user[0].username + '\'s challenges:'}
+              {mappedChallenges}
+            </div>
+            <div>
+              {this.props.user[0].username + '\'s responses:'}
+              {mappedResponses}
+            </div>
           </div>
+        );  
+      } else if (this.props.profileView === 'followers') {
+        return (
           <div>
+            Followers:
+            {this.props.followers.map((follower, i) => {
+              return <div key={i}>{i + 1}.   {follower.username}</div>;
+            })}
+          </div>
+        );
+      } else {
+        return <div>In development...</div>;
+      }
 
-          </div>
-        </div>
-      );
-    } else {
-      return (
-         <div width={screen.width}>
-          <div className='profilePicture container'>
-            <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
-            Followers: {this.numFollowers()} <br />
-          </div><br/>
-          <div>
-            {this.props.user[0].username + '\'s challenges:'}
-            {mappedChallenges}
-          </div>
-          <div>
-            {this.props.user[0].username + '\'s responses:'}
-            {mappedResponses}
-          </div>
-          <div>
+    };
 
-          </div>
+    return (
+      <div width={screen.width}>
+        <div className='profilePicture container'>
+          <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
+          Username: {this.props.user[0].username} <br />
+          Firstname: {this.props.user[0].firstname} <br />
+          Lastname: {this.props.user[0].lastname} <br />
+          Email: {this.props.user[0].email} <br />
+          Followers: {this.numFollowers()} <br />
+        </div><br/>
+        <div>
+          <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
+          <button onClick={() => this.changeProfileView('followers')}>Followers</button>
+          <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
         </div>
-      );
-    }
+        {myView()}
+      </div>
+    );
   }
 }
 
