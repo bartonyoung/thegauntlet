@@ -51,19 +51,35 @@ class ChallengeTable extends React.Component {
   render() {
     return (
       <div>
-        <div className="col col-md-8">
+        <div className="col col-md-8 col-lg-8">
           <div className="container-fluid">
             <div className="row">
               <ChallengeList dispatch={this.props.dispatch}/>
             </div>  
           </div>  
         </div>
-        <div className="col col-md-2">
+        <div className="col col-md-2 col-lg-2">
           <form id="challenge">
-            <label>Add your challenge!</label>
-            <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
-            <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
-            <input className="form-control" type="text" placeholder="Category" required ref="category" name="category"/>
+            <h4>Add your challenge!</h4>
+            <div class="form-group">
+              <label>Challenge Name</label>
+              <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+            </div>
+            <div class="form-group">
+              <label>Challenge Description</label>
+              <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
+            </div>
+            <div class="form-group">
+              <label>Category</label><br/>
+              <select class="form-control" required ref="category">
+                <option>Charity</option>
+                <option>Gaming</option>
+                <option>Fitness</option>
+                <option>Funny</option>
+                <option>Music</option>
+                <option>Sports</option>
+              </select>
+            </div>
           </form>
           <form ref="file" id="file">
             <input style={{width: '100%'}} type="file" placeholder="video or image" required ref="video" name="video"/>
