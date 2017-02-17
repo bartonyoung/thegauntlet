@@ -10,6 +10,7 @@ class SideNav extends React.Component {
  
   onSideBarClick(category) {
     const outer = this;
+    this.props.dispatch(actions.setCurrentCategory(category));
     $.get('/api/allchallenges')
       .then(data=>{
         if (category === 'all') {
@@ -34,12 +35,12 @@ class SideNav extends React.Component {
       <div className="list-group side-nav">
         <button onClick={()=>{ this.onSideBarClick('all'); }} type="button" className="list-group-item">All Challenges</button>
         <button onClick={()=>{ this.onSideBarClick('popular'); }} type="button" className="list-group-item">Most Popular</button>
-        <button onClick={()=>{ this.onSideBarClick('recent'); }} type="button" className="list-group-item">Recent</button>
-        <button onClick={()=>{ this.onSideBarClick('sports'); }} type="button" className="list-group-item">Sports</button>
-        <button onClick={()=>{ this.onSideBarClick('charity'); }} type="button" className="list-group-item">Charity</button>
-        <button onClick={()=>{ this.onSideBarClick('fitness'); }} type="button" className="list-group-item">Fitness</button>
-        <button onClick={()=>{ this.onSideBarClick('music'); }} type="button" className="list-group-item">Music</button>
-        <button onClick={()=>{ this.onSideBarClick('gaming'); }} type="button" className="list-group-item">Gaming</button>
+        <button onClick={()=>{ this.onSideBarClick('Recent'); }} type="button" className="list-group-item">Recent</button>
+        <button onClick={()=>{ this.onSideBarClick('Sports'); }} type="button" className="list-group-item">Sports</button>
+        <button onClick={()=>{ this.onSideBarClick('Charity'); }} type="button" className="list-group-item">Charity</button>
+        <button onClick={()=>{ this.onSideBarClick('Fitness'); }} type="button" className="list-group-item">Fitness</button>
+        <button onClick={()=>{ this.onSideBarClick('Music'); }} type="button" className="list-group-item">Music</button>
+        <button onClick={()=>{ this.onSideBarClick('Gaming'); }} type="button" className="list-group-item">Gaming</button>
       </div>
     );
   }
