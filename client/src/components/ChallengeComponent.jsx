@@ -15,6 +15,13 @@ class ChallengeComponent extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.commentSubmit = this.commentSubmit.bind(this);
+    this.editChallenge = this.editChallenge.bind(this);
+    this.saveChallenge = this.saveChallenge.bind(this);
+    this.deleteChallenge = this.deleteChallenge.bind(this);
+
+    this.state = {
+      isEditing: false
+    };
   }
 
   componentDidMount() {
@@ -102,8 +109,59 @@ class ChallengeComponent extends React.Component {
     });
   }
 
+  saveChallenge(e) {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+
+    $.ajax({
+      url: '/api/challenge' + window.sessionStorage.id,
+      type: 'PUT',
+      data: {
+        title: this.refs.title.value,
+        description: this.refs.description.value
+      },
+      success: function(data) {
+        console.log('result of put', data);
+      }
+    });
+  }
+
+  deleteChallenge() {
+
+  }
+
+  editChallenge() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+  }
 
   render() {
+    let taskButtons = () => {
+      if (!this.state.isEditing) {
+        return (
+          <button className="btn btn-large btn-default edit" onClick={() => {this.editChallenge()}}>
+            {'Edit'}
+          </button>
+        );
+      }
+
+      return (
+        <div>
+          <div className="editor">
+            <form id="editform">
+              <input type="text" placeholder="Edit title" ref="title"/><br/>
+              <input type="text" placeholder="Edit description" ref="description"/>
+            </form>
+            <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
+              {'Save'}
+            </button>
+          </div>
+        </div>
+      );
+    };
+
     let checkFile = (type, response) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
@@ -117,17 +175,19 @@ class ChallengeComponent extends React.Component {
         return <img className="parent" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
+
     return (
       <div className="container-fluid">
         <center><h4 className="title">The Gauntlet</h4></center>
         <hr />
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <hr />
-        <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
-        <h4>{'Description: ' + window.sessionStorage.description}</h4>
+        <h1>{window.sessionStorage.title}</h1>
+        <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+        {taskButtons()}
         {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}
+        <h4>{window.sessionStorage.description}</h4>
         <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
-
         <form onSubmit={this.commentSubmit}>
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <input type="submit"/>

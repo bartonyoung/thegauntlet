@@ -13,6 +13,7 @@ routes.get('/allChallenges', challengeController.getAll);
 routes.post('/challenge', challengeController.addOne);
 routes.post('/s3', challengeController.s3);
 routes.get('/challenge/:id', challengeController.getOne);
+routes.put('/challenge/:id', challengeController.updateOne);
 routes.post('/comments', commentController.addOne);
 routes.get('/comments', commentController.getAll);
 routes.post('/upvote', challengeController.upvote);

@@ -13,3 +13,17 @@ video {
 .media {
   width: 100%;
 }
+
+.edit {
+  float: right;
+  display: inline;
+}
+
+.delete {
+  float: right;
+}
+
+.editor {
+  float: right;
+  margin-top: 20px;
+}

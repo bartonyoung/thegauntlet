@@ -79,6 +79,14 @@ class ChallengeList extends React.Component {
     });
   }
 
+  editChallenge(challenge) {
+    this.props.challenges.forEach(chall => {
+      if (chall.title === challenge.title) {
+
+      }
+    });
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -123,7 +131,9 @@ class ChallengeList extends React.Component {
       if (!challenge.parent_id) {
         return (
           <div className="col col-md-6">
+          <div>
             <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+            </div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
               <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
