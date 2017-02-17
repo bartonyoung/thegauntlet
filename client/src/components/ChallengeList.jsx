@@ -48,11 +48,11 @@ class ChallengeList extends React.Component {
             b.upvotes - a.upvotes
           );
           } else {
-            data = data.filter(challenge => 
+            data = data.filter(challenge =>
             challenge.category === outer.props.currentCategory
           );
           }
-          outer.props.dispatch(actions.addChallenge(data));         
+          outer.props.dispatch(actions.addChallenge(data));
         });
     });
   }
@@ -126,12 +126,11 @@ class ChallengeList extends React.Component {
             <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
-              <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
               {whichButton(challenge.user_id)}
-
-          <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
-            <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
-          </button>
+              <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
+                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
+              </button>
             </div>
           </div>
         );
@@ -139,7 +138,7 @@ class ChallengeList extends React.Component {
     });
 
     if (!mappedChallenges.length) {
-      return ( 
+      return (
         <div>
           <h3>Sorry, currently there are no challenges in this category...</h3>
         </div>

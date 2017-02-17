@@ -7,7 +7,7 @@ class SideNav extends React.Component {
     super(props);
     this.onSideBarClick = this.onSideBarClick.bind(this);
   }
- 
+
   onSideBarClick(category) {
     const outer = this;
     this.props.dispatch(actions.setCurrentCategory(category));
@@ -16,13 +16,13 @@ class SideNav extends React.Component {
         if (category === 'all') {
           data = data.reverse();
         } else if (category === 'recent') {
-          data.length < 6 ? data = data : data = data.slice(-5).reverse();
+          data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
         } else if (category === 'popular') {
           data = data.sort((a, b) =>
             b.upvotes - a.upvotes
           );
         } else {
-          data = data.filter(challenge => 
+          data = data.filter(challenge =>
             challenge.category === category
           );
         }
