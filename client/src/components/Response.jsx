@@ -10,6 +10,7 @@ class Response extends React.Component {
   constructor(props) {
     super(props);
     this.upVoteClick = this.upVoteClick.bind(this);
+    this.onUsernameClick = this.onUsernameClick.bind(this);
   }
 
   upVoteClick(id) {
@@ -46,6 +47,7 @@ class Response extends React.Component {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
     });
+  }
 
   onUsernameClick(username) {
     window.sessionStorage.setItem('username', username);
