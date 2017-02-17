@@ -94,7 +94,6 @@ class ChallengeComponent extends React.Component {
   }
 
   renderComments() {
-    console.log('rendering');
     let outer = this;
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
