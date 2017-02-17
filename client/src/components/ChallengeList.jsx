@@ -17,6 +17,7 @@ class ChallengeList extends React.Component {
   }
 
   onChallengeClick(challenge) {
+    let outer = this;
     window.sessionStorage.setItem('title', challenge.title);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
@@ -24,6 +25,10 @@ class ChallengeList extends React.Component {
     window.sessionStorage.setItem('filename', challenge.filename);
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
+    window.sessionStorage.setItem('username', challenge.username);
+    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+    });
   }
 
   upVoteClick(id) {
@@ -80,7 +85,7 @@ class ChallengeList extends React.Component {
         return (
           <div>
             <img className="center-block" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
-          </div>  
+          </div>
         );
       }
     };
@@ -99,8 +104,8 @@ class ChallengeList extends React.Component {
             <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>
         );
-      }   
-    }; 
+      }
+    };
      // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
@@ -111,14 +116,13 @@ class ChallengeList extends React.Component {
             <div>
               <Link to={`/profile/${challenge.username}`}>{challenge.username}</Link>
               {whichButton(challenge.user_id)}
-              
+
           <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
           </button>
-            </div>  
+            </div>
           </div>
         );
-        
       }
     });
 
@@ -132,4 +136,3 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(ChallengeList);
 
- 

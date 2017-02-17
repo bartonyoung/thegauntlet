@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 class ChallengeTable extends React.Component {
   constructor(props) {
     super(props);
-
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -23,7 +22,6 @@ class ChallengeTable extends React.Component {
       processData: false,  // tell jQuery not to process the data
       contentType: false,   // tell jQuery not to set contentType
       success: function(resp) {
-        console.log('window.sessionstorage', window.sessionStorage.id)
         $.ajax({
           url: '/api/challenge',
           type: 'POST',
@@ -37,9 +35,8 @@ class ChallengeTable extends React.Component {
             data = data.reverse();
             outer.props.dispatch(actions.addChallenge(data));
             $.get('/api/allChallenges').done(challenge => {
-              console.log('challengelist get challenge', challenge)
               challenge = challenge.reverse();
-            outer.props.dispatch(actions.addChallenge(challenge));
+              outer.props.dispatch(actions.addChallenge(challenge));
             });
             outer.refs.title.value = '';
             outer.refs.description.value = '';

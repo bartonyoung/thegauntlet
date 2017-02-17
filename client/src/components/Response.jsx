@@ -3,33 +3,14 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import $ from 'jquery';
 import css from '../styles/response.css';
+import { Link } from 'react-router';
+
 
 class Response extends React.Component {
   constructor(props) {
     super(props);
     this.upVoteClick = this.upVoteClick.bind(this);
-  }
-
-  componentDidMount() {
-    let outer = this;
-    $.get('/api/response', {
-      parent_id: window.sessionStorage.getItem('id')
-    }).done(data => {
-      let responseArr = [];
-      data.forEach(response => {
-        if (response.parent_id) {
-          responseArr.push(response);
-        }
-      });
-      outer.props.dispatch(actions.addResponse(responseArr));
-    });
-    $.get('/api/allChallenges').done(data => {
-      data.forEach(challenge => {
-        if (!challenge.parent_id) {
-          outer.props.dispatch(actions.addChallenge(data));
-        }
-      });
-    });
+    this.onUsernameClick = this.onUsernameClick.bind(this);
   }
 
   upVoteClick(id) {
@@ -55,7 +36,7 @@ class Response extends React.Component {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
     });
-  }      
+  }
 
   unFollow (leaderId) {
     const outer = this;
@@ -66,6 +47,10 @@ class Response extends React.Component {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
     });
+  }
+
+  onUsernameClick(username) {
+    window.sessionStorage.setItem('username', username);
   }
 
   render() {
@@ -98,23 +83,22 @@ class Response extends React.Component {
             <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>
         );
-      }   
-    };    
-    
-    let mappedResponses = this.props.responses.reverse().map((response, i) => {
-      for (var i = 0; i < this.props.challenges.length; i++) {
-        if (response.parent_id === parseInt(window.sessionStorage.id)) {
-          return (
-            <div>
-              <h4>{'Response title: ' + response.title}</h4>
-              <p>{'Description: ' + response.description}</p>
-              {checkFile(response.filename.split('.').pop(), response)}
-              <p>{`Views : ${response.views}`}</p>
-              {whichButton(response.user_id)}
-              <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
-            </div>
-          );
-        }
+      }
+    };
+
+    let mappedResponses = this.props.responses.map((response, i) => {
+      if (response.parent_id === parseInt(window.sessionStorage.id)) {
+        return (
+          <div>
+            <h4>{'Response title: ' + response.title}</h4>
+            <h5>{'Description: ' + response.description}</h5>
+            {checkFile(response.filename.split('.').pop(), response)}<br/>
+            <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
+            <h5>{`Views : ${response.views}`}</h5>
+            {whichButton(response.user_id)}
+            <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+          </div>
+        );
       }
     });
 
