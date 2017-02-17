@@ -20,7 +20,11 @@ const reducer = (state, action) => {
   case 'ADD_USER':
     return Object.assign({}, state, {
       user: action.payload
-    })
+    });
+  case 'SET_CATEGORY':
+    return Object.assign({}, state, {
+      currentCategory: action.payload
+    });  
   default:
     return state;
   }
