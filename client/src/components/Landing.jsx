@@ -7,6 +7,9 @@ import actions from '../../redux/actions';
 class Landing extends React.Component {
   constructor(props) { 
     super(props);
+    this.state = {
+      auth: this.props.auth
+    };
   }
   componentDidMount() {
     let outer = this;
@@ -24,7 +27,6 @@ class Landing extends React.Component {
     
     for (let i = 0; i < challenges.length; i++) {
       if (counter === 4) {
-        console.log(i);
         break;
       }
       if (challenges[i]) {
@@ -61,17 +63,28 @@ class Landing extends React.Component {
       });
     } 
  
-  }    
+  } 
+  handleNav() {
+    if (this.state.auth) {
+      return <div className="container-fluid">
+              <a href="" className="btn" onClick={this.props.handleLogout}>Log out</a>
+              <a href="/#/dash" className="btn">Main Page</a>
+            </div>;
+    } else {
+      return <div className="container-fluid">
+              <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
+              <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
+              <a href="/#/dash" className="btn">Dashboard</a>
+            </div>;
+    }
+  }
+     
 
   render() {
     return (
       <div className='container'>
          <nav className="nav navbar navbar-fixed">
-            <div className="container-fluid">
-              
-            <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
-            <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
-            </div>
+           {this.handleNav()}
           </nav>  
           <div className="jumbotron container text-center">
             <div className='row'>
@@ -84,13 +97,13 @@ class Landing extends React.Component {
               </div>
             </div>  
           </div>
-            <div className="text-center gallery">
+            <div className="text-center container gallery">
               <h3>Challenges</h3>  
                 <div className='row'>  
                   {this.handleGallery('videos')}
                 </div>
             </div>
-            <div className="text-center gallery">
+            <div className="text-center container gallery">
               <h3>Most Recent Photos</h3>
                 <div className='row'>
                   {this.handleGallery()} 
