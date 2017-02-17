@@ -28,9 +28,10 @@ class App extends React.Component {
     $.get('/api/logout')
     .done(data => {
       window.sessionStorage.removeItem('key');
-      window.location.href = '#/';
+
+      window.location.href = '/';
       this.setState({
-        auth: window.sessionStorage.getItem('key')
+        auth: null
       });
     });
   }
@@ -50,7 +51,9 @@ class App extends React.Component {
     return (
       <div>
       <Router history={hashHistory}>
-        <Route path="/" component={Landing} />
+        <Route path="/" component={() => {
+          return <Landing auth={this.state.auth} handleLogout={this.handleLogout} />;
+        }} />
         <Route path="/signup" component={() => {
           return <Signup handleAuth={this.handleAuth.bind(this)} />;
         }} />
@@ -58,11 +61,7 @@ class App extends React.Component {
           return <Login handleAuth={this.handleAuth.bind(this)} auth={this.state.auth} handleLogout={this.handleLogout.bind(this)} />;
         }} />
         <Route path='/dash' component={() => {
-          if (this.state.auth) {
-            return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout} editProfile={this.editProfile}/>;
-          } else {
-            return <Landing />;
-          }
+          return <Dash dispatch={this.props.dispatch} auth={this.state.auth} handleLogout={this.handleLogout} editProfile={this.editProfile}/>;
         }} />
         <Route path='/challenge' component={() =>{
           return <ChallengeComponent handleAuth={this.handleAuth} auth={this.state.auth} handleLogout={this.handleLogout} editProfile={this.editProfile} />;
