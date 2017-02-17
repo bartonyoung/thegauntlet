@@ -35,7 +35,7 @@ class SideNav extends React.Component {
       <div className="list-group side-nav">
         <button onClick={()=>{ this.onSideBarClick('all'); }} type="button" className="list-group-item">All Challenges</button>
         <button onClick={()=>{ this.onSideBarClick('popular'); }} type="button" className="list-group-item">Most Popular</button>
-        <button onClick={()=>{ this.onSideBarClick('Recent'); }} type="button" className="list-group-item">Recent</button>
+        <button onClick={()=>{ this.onSideBarClick('recent'); }} type="button" className="list-group-item">Recent</button>
         <button onClick={()=>{ this.onSideBarClick('Sports'); }} type="button" className="list-group-item">Sports</button>
         <button onClick={()=>{ this.onSideBarClick('Charity'); }} type="button" className="list-group-item">Charity</button>
         <button onClick={()=>{ this.onSideBarClick('Fitness'); }} type="button" className="list-group-item">Fitness</button>
