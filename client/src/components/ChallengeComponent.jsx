@@ -6,6 +6,7 @@ import $ from 'jquery';
 import Comments from './Comments.jsx';
 import NavBar from './Nav.jsx';
 import css from '../styles/nav.css';
+import moreCSS from '../styles/challengeComponent.css';
 
 
 class ChallengeComponent extends React.Component {
@@ -115,11 +116,12 @@ class ChallengeComponent extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video width="320" height="240" controls>
+        return (<video className="parent" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
+        return <img className="parent" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
     return (
