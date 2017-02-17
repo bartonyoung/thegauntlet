@@ -39,6 +39,20 @@ let actions = {
       type: 'SET_CATEGORY',
       payload: category   
     };
+  },
+
+  setProfileView: function(view) {
+    return {
+      type: 'SET_VIEW',
+      payload: view,
+    };
+  },
+
+  setFollowers: function(followers) {
+    return {
+      type: 'GET_FOLLOWERS',
+      payload: followers,
+    };
   }
 };
 
