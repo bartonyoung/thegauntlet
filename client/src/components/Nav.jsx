@@ -5,7 +5,7 @@ import css from '../styles/nav.css';
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
-    console.log('nav props', this.props)
+    console.log('nav props', this.props);
   }
 
   handleNav() {
@@ -19,7 +19,16 @@ class NavBar extends React.Component {
               <h5 className="navbar-text navbar-left">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
             </div>
           </nav>
-      );
+      );       
+    } else {
+      return (
+          <nav className="nav navbar navbar-fixed">
+            <div className="container-fluid">
+              <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
+              <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
+            </div>
+          </nav>
+      ); 
     }
   }
   render() {
