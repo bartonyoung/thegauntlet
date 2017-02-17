@@ -32,6 +32,13 @@ let actions = {
       type: 'ADD_USER',
       payload: user
     };
+  },
+
+  setCurrentCategory: function(category) {
+    return {
+      type: 'SET_CATEGORY',
+      payload: category   
+    };
   }
 };
 
