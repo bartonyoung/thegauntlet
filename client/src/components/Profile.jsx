@@ -28,37 +28,6 @@ class Profile extends React.Component {
     });
   }
 
-  numFollowers () {
-    if (this.props.user) {
-      return this.props.user.map((userInfo, i) => {
-        return <span key={i}>{userInfo.followers}</span>;
-      });
-    }
-  }
-
-  followTheLeader(leaderId) {
-    const outer = this;
-    $.post('/api/follower', {
-      leader_id: leaderId
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
-    });
-  }
-
-  unFollow (leaderId) {
-    const outer = this;
-    $.post('/api/unFollow', {
-      leader_id: leaderId
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
-    });
-  }
-
-
   render() {
     if (this.props.user) {
       return (

@@ -17,7 +17,7 @@ module.exports = {
 
   getAll: (req, res) => {
     console.log('inside getAll', typeof req.query.challenge_id)
-    db.select('comments.comment', 'users.username', 'comments.id', 'challenges.id').from('challenges')
+    db.select('comments.comment', 'users.username', 'challenges.id').from('challenges')
     .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
     .where('challenges.id', '=', req.query.challenge_id)
     .innerJoin('users', 'users.id', 'comments.user_id')

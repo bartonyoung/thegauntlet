@@ -1,9 +1,42 @@
 import React from 'react';
+import $ from 'jquery';
+import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
+import actions from '../../redux/actions';
 
 class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  numFollowers () {
+    if (this.props.user) {
+      return this.props.user.map((userInfo, i) => {
+        return <span key={i}>{userInfo.followers}</span>;
+      });
+    }
+  }
+
+  followTheLeader(leaderId) {
+    const outer = this;
+    $.post('/api/follower', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
+  }
+
+  unFollow (leaderId) {
+    const outer = this;
+    $.post('/api/unFollow', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
   }
 
   render() {
@@ -44,12 +77,21 @@ class ProfileContent extends React.Component {
       }
     });
 
+    let whichButton = (leaderId) => {
+      if (this.props.leaders.includes(leaderId)) {
+        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
+      } else {
+        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
+      }
+    };
+
     if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
       return (
-        <div>
+        <div width={screen.width}>
           <div className='profilePicture container'>
-            <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
-          </div>
+            <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
+            Followers: {this.numFollowers()} <br />
+          </div><br/>
           <div>
             Your challenges:
             {mappedChallenges}
@@ -65,10 +107,11 @@ class ProfileContent extends React.Component {
       );
     } else {
       return (
-        <div>
+         <div width={screen.width}>
           <div className='profilePicture container'>
-            <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
-          </div>
+            <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
+            Followers: {this.numFollowers()} <br />
+          </div><br/>
           <div>
             {this.props.user[0].username + '\'s challenges:'}
             {mappedChallenges}
