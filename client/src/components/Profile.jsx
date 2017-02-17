@@ -3,6 +3,7 @@ import $ from 'jquery';
 import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
+import ProfileContent from './ProfileContent.jsx';
 
 class Profile extends React.Component {
 
@@ -10,6 +11,20 @@ class Profile extends React.Component {
     let outer = this;
     $.get('/api/allChallenges').done(data => {
       outer.props.dispatch(actions.addChallenge(data));
+    });
+    $.get('/api/response', {
+      parent_id: window.sessionStorage.getItem('id')
+    }).done(data => {
+      let responseArr = [];
+      data.forEach(response => {
+        if (response.parent_id) {
+          responseArr.push(response);
+        }
+      });
+      outer.props.dispatch(actions.addResponse(responseArr));
+    });
+    $.get('/api/profile/' + window.sessionStorage.username).done(data => {
+      outer.props.dispatch(actions.addUser(data));
     });
   }
 
@@ -45,77 +60,12 @@ class Profile extends React.Component {
 
 
   render() {
-    let checkFile = (type, challenge) => {
-      const fileType = {
-        'mp4': 'THIS IS A VIDEO!'
-      };
-      if (fileType[type]) {
-        return (<video width="320" height="240" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
-        </video>);
-      } else {
-        return <img width="320" height="240" />;
-      }
-    };
-
-    let mappedChallenges = this.props.challenges.map(challenge => {
-      if (challenge.username === this.props.user[0].username) {
-        return (
-          <div>
-            <div className="challenge title">{challenge.title}</div>
-            <div className="challenge description">{challenge.description}</div>
-            {checkFile(challenge.filename.split('.').pop(), challenge)}
-          </div>
-        );
-      }
-    });
-
-    let whichButton = (leaderId) => {
-      if (this.props.leaders.includes(leaderId)) {
-        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
-      } else {
-        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
-      }
-    };
-
-    if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
+    if (this.props.user) {
       return (
-        <div>
-          <div className='profilePicture container'>
-            <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
-            Followers: {this.numFollowers()} <br />
-          </div>
-          <div>
-            Your challenges:
-            {mappedChallenges}
-          </div>
-          <div>
-            Your responses:
-          </div>
-          <div>
-
-          </div>
-        </div>
+        <ProfileContent />
       );
     } else {
-       return (
-        <div>
-          <div className='profilePicture container'>
-            <p className='profilePicture text'>This is a placeholder for the profile picture editor</p>
-            Followers: {this.numFollowers()} <br />
-          </div>
-          <div>
-            {this.props.user[0].username + '\'s challenges:'}
-            {mappedChallenges}
-          </div>
-          <div>
-            {this.props.user[0].username + '\'s responses:'}
-          </div>
-          <div>
-
-          </div>
-        </div>
-      );
+      return <div></div>;
     }
   }
 }

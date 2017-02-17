@@ -32,7 +32,7 @@ class ChallengeComponent extends React.Component {
             responseArr.push(response);
           }
         });
-        outer.props.dispatch(actions.addResponse(responseArr));
+        outer.props.dispatch(actions.addResponse(responseArr.reverse()));
       }
     });
     $.get('/api/comments', {

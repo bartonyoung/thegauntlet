@@ -18,7 +18,7 @@ routes.get('/comments', commentController.getAll);
 routes.post('/upvote', challengeController.upvote);
 routes.post('/viewed', challengeController.viewed);
 routes.post('/response', challengeController.addOneResponse);
-routes.get('/response', challengeController.getOne);
+routes.get('/response', challengeController.getAllResponses);
 routes.get('/profile', userControllers.getUser);
 routes.get('/profile/:username', userControllers.getUser);
 routes.post('/follower', followerController.follow);

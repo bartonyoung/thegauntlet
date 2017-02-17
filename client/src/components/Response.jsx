@@ -10,28 +10,6 @@ class Response extends React.Component {
     this.upVoteClick = this.upVoteClick.bind(this);
   }
 
-  componentDidMount() {
-    let outer = this;
-    $.get('/api/response', {
-      parent_id: window.sessionStorage.getItem('id')
-    }).done(data => {
-      let responseArr = [];
-      data.forEach(response => {
-        if (response.parent_id) {
-          responseArr.push(response);
-        }
-      });
-      outer.props.dispatch(actions.addResponse(responseArr));
-    });
-    $.get('/api/allChallenges').done(data => {
-      data.forEach(challenge => {
-        if (!challenge.parent_id) {
-          outer.props.dispatch(actions.addChallenge(data));
-        }
-      });
-    });
-  }
-
   upVoteClick(id) {
     const outer = this;
     $.post('/api/upvote', {
@@ -101,20 +79,18 @@ class Response extends React.Component {
       }
     };
 
-    let mappedResponses = this.props.responses.reverse().map((response, i) => {
-      for (var i = 0; i < this.props.challenges.length; i++) {
-        if (response.parent_id === parseInt(window.sessionStorage.id)) {
-          return (
-            <div>
-              <h4>{'Response title: ' + response.title}</h4>
-              <p>{'Description: ' + response.description}</p>
-              {checkFile(response.filename.split('.').pop(), response)}
-              <p>{`Views : ${response.views}`}</p>
-              {whichButton(response.user_id)}
-              <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
-            </div>
-          );
-        }
+    let mappedResponses = this.props.responses.map((response, i) => {
+      if (response.parent_id === parseInt(window.sessionStorage.id)) {
+        return (
+          <div>
+            <h4>{'Response title: ' + response.title}</h4>
+            <p>{'Description: ' + response.description}</p>
+            {checkFile(response.filename.split('.').pop(), response)}
+            <p>{`Views : ${response.views}`}</p>
+            {whichButton(response.user_id)}
+            <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+          </div>
+        );
       }
     });
 
