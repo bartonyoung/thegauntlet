@@ -39,8 +39,20 @@ class ChallengeList extends React.Component {
     }).then(()=> {
       $.get('/api/allChallenges/')
         .then((data)=> {
-          data = data.reverse();
-          outer.props.dispatch(actions.addChallenge(data));
+          if (outer.props.currentCategory === 'all') {
+            data = data.reverse();
+          } else if (outer.props.currentCategory === 'recent') {
+            data.length < 6 ? data = data : data = data.slice(-5).reverse();
+          } else if (outer.props.currentCategory === 'popular') {
+            data = data.sort((a, b) =>
+            b.upvotes - a.upvotes
+          );
+          } else {
+            data = data.filter(challenge => 
+            challenge.category === outer.props.currentCategory
+          );
+          }
+          outer.props.dispatch(actions.addChallenge(data));         
         });
     });
   }
@@ -129,7 +141,7 @@ class ChallengeList extends React.Component {
     if (!mappedChallenges.length) {
       return ( 
         <div>
-          <h3>Sorry, there currently no challenges in this category...</h3>
+          <h3>Sorry, currently there are no challenges in this category...</h3>
         </div>
       );
     } else {
