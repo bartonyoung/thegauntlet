@@ -126,7 +126,15 @@ class ChallengeList extends React.Component {
       }
     });
 
-    return <div className="media">{mappedChallenges}</div>;
+    if (!mappedChallenges.length) {
+      return ( 
+        <div>
+          <h3>Sorry, there currently no challenges in this category...</h3>
+        </div>
+      );
+    } else {
+      return <div className="media">{mappedChallenges}</div>;
+    }
   }
 }
 
