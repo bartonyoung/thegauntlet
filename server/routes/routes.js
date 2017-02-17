@@ -24,4 +24,5 @@ routes.get('/profile/:username', userControllers.getUser);
 routes.post('/follower', followerController.follow);
 routes.get('/getLeaders', followerController.getLeaders);
 routes.post('/unFollow', followerController.unFollow);
+routes.get('/listFollowers', followerController.getListOfFollowers);
 module.exports = routes;
