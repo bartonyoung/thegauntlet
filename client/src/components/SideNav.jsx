@@ -14,7 +14,7 @@ class SideNav extends React.Component {
     $.get('/api/allchallenges')
       .then(data=>{
         if (category === 'all') {
-          data = data;
+          data = data.reverse();
         } else if (category === 'recent') {
           data.length < 6 ? data = data : data = data.slice(-5).reverse();
         } else if (category === 'popular') {
