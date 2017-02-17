@@ -136,8 +136,8 @@ class ProfileContent extends React.Component {
         return (
           <div>
             Followers:
-            {this.props.followers.map(follower => {
-              return <div>{follower.username}</div>;
+            {this.props.followers.map((follower, i) => {
+              return <div key={i}>{i + 1}.   {follower.username}</div>;
             })}
           </div>
         );
