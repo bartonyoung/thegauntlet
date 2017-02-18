@@ -29,6 +29,14 @@ class ChallengeList extends React.Component {
       window.sessionStorage.setItem('upvotes', challenge.upvotes);
       window.sessionStorage.setItem('views', challenge.views);
       window.sessionStorage.setItem('username', challenge.username);
+      window.sessionStorage.removeItem('respTitle');
+      window.sessionStorage.removeItem('respId');
+      window.sessionStorage.removeItem('respDescription');
+      window.sessionStorage.removeItem('respCategory');
+      window.sessionStorage.removeItem('respFilename');
+      window.sessionStorage.removeItem('respUpvotes');
+      window.sessionStorage.removeItem('respViews');
+      window.sessionStorage.removeItem('respUsername');
       $.get('/api/profile/' + window.sessionStorage.username).done(user => {
         outer.props.dispatch(actions.addUser(user));
       });
@@ -37,7 +45,7 @@ class ChallengeList extends React.Component {
         outer.props.dispatch(actions.addUser(user));
       }).then(() => {
         outer.props.dispatch(actions.setCurrentCategory('profile'));
-      }); 
+      });
     }
   }
 
@@ -157,16 +165,16 @@ class ChallengeList extends React.Component {
         return (
           <button className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
-          </button>  
+          </button>
         );
       } else {
         return (
           <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
             <span className="glyphicon glyphicon-heart"></span>
-          </button> 
+          </button>
         );
       }
-    };     
+    };
 
      // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
@@ -214,11 +222,11 @@ class ChallengeList extends React.Component {
                                <td> #{index + 1}</td>
                                <td><a onClick={() => this.onChallengeClick(rank.username)}>{rank.username}</a></td>
                                <td>{rank.upvotes}</td>
-                             </tr>;   
+                             </tr>;
                     }
                   })}
                 </tbody>
-              </table> 
+              </table>
             </div>;
     } else if (!mappedChallenges.length) {
       return (

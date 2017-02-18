@@ -3,18 +3,20 @@ import $ from 'jquery';
 import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
+import { Link } from 'react-router';
 
 class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
   }
+
   componentDidMount () {
     const outer = this;
     this.props.dispatch(actions.setProfileView('all'));
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
-    });      
+    });
   }
 
   numFollowers () {
@@ -58,6 +60,26 @@ class ProfileContent extends React.Component {
     $.get('/api/listFollowers', {username: this.props.user[0].username}).then(data => {
       outer.props.dispatch(actions.setFollowers(data));
     });
+  }
+
+  onNotificationClick(challenge, response) {
+    window.sessionStorage.setItem('title', challenge.title);
+    window.sessionStorage.setItem('id', challenge.id);
+    window.sessionStorage.setItem('description', challenge.description);
+    window.sessionStorage.setItem('category', challenge.category);
+    window.sessionStorage.setItem('filename', challenge.filename);
+    window.sessionStorage.setItem('upvotes', challenge.upvotes);
+    window.sessionStorage.setItem('views', challenge.views);
+    window.sessionStorage.setItem('username', challenge.username);
+    window.sessionStorage.setItem('respTitle', response.title);
+    window.sessionStorage.setItem('respId', response.parent_id);
+    window.sessionStorage.setItem('respDescription', response.description);
+    window.sessionStorage.setItem('respCategory', response.category);
+    window.sessionStorage.setItem('respFilename', response.filename);
+    window.sessionStorage.setItem('respUpvotes', response.upvotes);
+    window.sessionStorage.setItem('respViews', response.views);
+    window.sessionStorage.setItem('respUsername', response.username);
+    window.sessionStorage.setItem('respUserId', response.user_id);
   }
 
   render() {
@@ -137,7 +159,7 @@ class ProfileContent extends React.Component {
               {mappedResponses}
             </div>
           </div>
-        );  
+        );
       } else if (this.props.profileView === 'followers') {
         return (
           <div>
@@ -148,11 +170,40 @@ class ProfileContent extends React.Component {
             })}
           </div>
         );
-      } else {
-        return <div>In development...</div>;
+      } else if (this.props.profileView === 'mailbox') {
+        let mappedArray = [];
+        let mappedNotifications;
+        this.props.challenges.forEach(challenge => {
+          if (challenge.username === window.sessionStorage.username) {
+            mappedNotifications = this.props.responses.map(response => {
+              if (response.parent_id === challenge.id) {
+                console.log('inside mapping')
+                return (
+                  <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to ' + challenge.title}</Link></h4></div>
+                );
+              }
+            });
+            mappedArray.push(mappedNotifications.reverse());
+          }
+        });
+
+        return mappedArray;
       }
 
     };
+
+    let renderMailbox = () => {
+      if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
+        return (
+          <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+        );
+      } else {
+        return (
+          <div></div>
+        );
+      }
+    }
+
     if (this.props.user.length) {
       let target = this.props.user[0].username;
       return (
@@ -165,14 +216,14 @@ class ProfileContent extends React.Component {
             Email: {this.props.user[0].email} <br />
             Rank# {this.props.ranks.map((rank, index)=>{
               return {username: rank.username, rank: index + 1};
-            }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (  
+            }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
               {this.props.user[0].upvotes}) <br />
             Followers: {this.numFollowers()} <br />
           </div><br/>
           <div>
             <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
             <button onClick={() => this.changeProfileView('followers')}>Followers</button>
-            <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+            {renderMailbox()}
           </div>
           {myView()}
         </div>

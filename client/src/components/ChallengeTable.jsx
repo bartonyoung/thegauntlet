@@ -54,9 +54,9 @@ class ChallengeTable extends React.Component {
         <div className="col col-md-8 col-lg-8">
           <div className="container-fluid">
             <div className="row">
-              <ChallengeList/>
-            </div>  
-          </div>  
+              <ChallengeList />
+            </div>
+          </div>
         </div>
         <div className="col col-md-2 col-lg-2">
           <form id="challenge">
@@ -85,7 +85,7 @@ class ChallengeTable extends React.Component {
             <input style={{width: '100%'}} type="file" placeholder="video or image" required ref="video" name="video"/>
           </form>
           <button onClick={this.handleSubmit} className="btn btn-default">Submit</button>
-        </div>  
+        </div>
       </div>
     );
   }

@@ -23,7 +23,7 @@ class Response extends React.Component {
     $.post('/api/upvote', {
       vote: 1,
       challenge_id: id
-    }).then(()=> {
+    }).then(() => {
       $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
         .then((data)=> {
           data = data.reverse();
@@ -55,26 +55,26 @@ class Response extends React.Component {
   }
 
   addToFavorites(challengeId) {
-    const outer = this; 
+    const outer = this;
     $.post('/api/favorite', {
       challenge_id: challengeId
-    }).then(() => { 
-      $.get('/api/favorite').then( favorites => { 
-        outer.props.dispatch(actions.setFavorites(favorites)); 
+    }).then(() => {
+      $.get('/api/favorite').then( favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
       });
     });
-  } 
+  }
 
-  removeFromFavorites(challengeId) { 
+  removeFromFavorites(challengeId) {
     const outer = this;
-    $.post('/api/unFavorite', { 
+    $.post('/api/unFavorite', {
       challenge_id: challengeId
-    }).then(() => {  
-      $.get('/api/favorite').then(favorites => { 
-        outer.props.dispatch(actions.setFavorites(favorites));  
+    }).then(() => {
+      $.get('/api/favorite').then(favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
       });
     });
-  }   
+  }
 
   onUsernameClick(username) {
     window.sessionStorage.setItem('username', username);
@@ -148,18 +148,18 @@ class Response extends React.Component {
       }
     };
 
-    let checkFile = (type, response) => {
+    let checkFile = (type, responseFilename) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
         return (<video className="response" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} type="video/mp4"/>*/}
         </video>);
       } else {
         return <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
 
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} width="320" height="240" />;
       }
     };
 
@@ -180,37 +180,54 @@ class Response extends React.Component {
       }
     };
 
-    let whichFavoriteIcon = (challengeId) => {
+     let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
         return (
           <button className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
-          </button>  
+          </button>
         );
-      } else { 
-        return (  
+      } else {
+        return (
           <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
             <span className="glyphicon glyphicon-heart"></span>
-          </button> 
+          </button>
         );
       }
     };
 
     let mappedResponses = this.props.responses.map((response, i) => {
       if (response.parent_id === parseInt(window.sessionStorage.id)) {
-        return (
-          <div>
-            <h4>{'Response title: ' + response.title}</h4>
-            <h5>{'Description: ' + response.description}</h5>
-            {taskButtons()}
-            {checkFile(response.filename.split('.').pop(), response)}<br/>
-            <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
-            <h5>{`Views : ${response.views}`}</h5>
-            {whichButton(response.user_id)}
-            {whichFavoriteIcon(response.id)}
-            <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
-          </div>
-        );
+        if (this.props.profileView === 'all' && !window.sessionStorage.respTitle) {
+          console.log('responses')
+          return (
+            <div>
+              <h4>{'Response title: ' + response.title}</h4>
+              <h5>{'Description: ' + response.description}</h5>
+              {taskButtons()}
+              {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
+              <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
+              <h5>{`Views : ${response.views}`}</h5>
+              {whichButton(response.user_id)}
+              <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+            </div>
+          );
+        } else if (i === 0) {
+          console.log('mailbox response', window.sessionStorage.respTitle, response.title)
+          return (
+            <div>
+              <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
+              <h5>{'Description: ' + window.sessionStorage.respDescription}</h5>
+              {taskButtons()}
+              {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
+              <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
+              <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
+              {whichButton(window.sessionStorage.respUser_id)}
+              {whichFavoriteIcon(window.sessionStorage.respUserid)}
+              <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
+            </div>
+          );
+        }
       }
     });
 
