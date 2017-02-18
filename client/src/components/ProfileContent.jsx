@@ -54,7 +54,6 @@ class ProfileContent extends React.Component {
   followers() {
     const outer = this;
     $.get('/api/listFollowers', {username: this.props.user[0].username}).then(data => {
-      console.log(data);
       outer.props.dispatch(actions.setFollowers(data));
     });
   }
@@ -155,6 +154,7 @@ class ProfileContent extends React.Component {
           Firstname: {this.props.user[0].firstname} <br />
           Lastname: {this.props.user[0].lastname} <br />
           Email: {this.props.user[0].email} <br />
+          Upvotes:{this.props.user[0].upvotes} <br />
           Followers: {this.numFollowers()} <br />
         </div><br/>
         <div>
