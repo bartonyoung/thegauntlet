@@ -163,21 +163,23 @@ class ProfileContent extends React.Component {
           </div>
         );
       } else if (this.props.profileView === 'mailbox') {
+        let mappedArray = [];
         let mappedNotifications;
         this.props.challenges.forEach(challenge => {
           if (challenge.username === window.sessionStorage.username) {
             mappedNotifications = this.props.responses.map(response => {
               if (response.parent_id === challenge.id) {
-
+                console.log('inside mapping')
                 return (
                   <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to your challenge'}</Link></h4></div>
                 );
               }
             });
+            mappedArray.push(mappedNotifications.reverse());
           }
         });
 
-        return mappedNotifications;
+        return mappedArray;
       }
 
     };
