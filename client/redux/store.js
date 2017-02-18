@@ -7,8 +7,14 @@ let finalCreateStore = compose(
   applyMiddleware(logger(), thunk)
 )(createStore);
 
-
-const configureStore = (initialState = { challenges: [], responses: [], comments: [], ranks: [], leaders: [], followers: [], currentCategory: 'all', profileView: 'all'}) => {
+const configureStore = (initialState = { 
+  challenges: [], 
+  responses: [], 
+  comments: [], 
+  leaders: [], 
+  currentCategory: 'all',
+  favorites: []
+}) => {
   return finalCreateStore(reducer, initialState);
 };
 
