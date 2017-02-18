@@ -1,5 +1,6 @@
 .jumbotron {
-  background-image:;
+  margin-top: 65px;
+  min-height: 70vh;
   color: black;
   height: 300px;
   background-repeat:no-repeat;
