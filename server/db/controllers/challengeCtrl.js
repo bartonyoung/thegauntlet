@@ -86,6 +86,13 @@ module.exports = {
     });
   },
 
+  deleteOne: (req, res) => {
+    const id = req.params.id;
+    db.from('challenges').where({id: id}).del().then((data) => {
+      res.json(data);
+    });
+  },
+
   getSomeonesSubmissions: (req, res) => {
     let name = req.query.username || req.session.displayName;
     db.from('users')

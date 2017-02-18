@@ -130,7 +130,14 @@ class ChallengeComponent extends React.Component {
   }
 
   deleteChallenge() {
-
+    $.ajax({
+      url: '/api/challenge/' + window.sessionStorage.id,
+      type: 'DELETE',
+      success: function(data) {
+        window.location.href = "/#/dash";
+        alert('Successfully deleted!');
+      }
+    });
   }
 
   editChallenge() {
@@ -164,8 +171,8 @@ class ChallengeComponent extends React.Component {
           <div>
             <div className="editor">
               <form id="editform" onSubmit={() => {this.saveChallenge()}}>
-                <input type="text" placeholder="Edit title" ref="title"/><br/>
-                <input type="text" placeholder="Edit description" ref="description"/>
+                <input type="text" placeholder="Edit title" required ref="title"/><br/>
+                <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
                 {'Save'}

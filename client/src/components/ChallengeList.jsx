@@ -79,14 +79,6 @@ class ChallengeList extends React.Component {
     });
   }
 
-  editChallenge(challenge) {
-    this.props.challenges.forEach(chall => {
-      if (chall.title === challenge.title) {
-
-      }
-    });
-  }
-
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -126,7 +118,7 @@ class ChallengeList extends React.Component {
         );
       }
     };
-     // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (
@@ -136,7 +128,7 @@ class ChallengeList extends React.Component {
             </div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
-              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              <h4><Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link></h4>
               {whichButton(challenge.user_id)}
               <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
                 <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
