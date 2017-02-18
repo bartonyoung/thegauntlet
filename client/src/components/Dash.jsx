@@ -26,7 +26,6 @@ class Dash extends React.Component {
     $.get('/api/profile').done(data => {
       outer.props.dispatch(actions.addUser(data));
     });
-
     $.get('/api/ranks').then((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData)); 
     }).then(() => {
@@ -35,23 +34,24 @@ class Dash extends React.Component {
           outer.props.dispatch(actions.addChallenge(data));
         });
     }); 
+    $.get('/api/favorite').done(data => {
+      outer.props.dispatch(actions.setFavorites(data));
+    });
   }
 
   render() {
     return (
-      <div className="container-fluid">
-        <center><h4 className="title">The Gauntlet</h4></center>
-        <hr />
+      <div>
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <hr />
-        <div className="row">
-          <div className="col col-md-2">
-            <SideNav />
-          </div>  
-            <ChallengeTable dispatch={this.props.dispatch} />
+        <div className="container main-content">
+          <div className="row">
+            <div className="col col-md-2">
+              <SideNav />
+            </div>  
+              <ChallengeTable dispatch={this.props.dispatch} />
+          </div>
         </div>
       </div>
-      
     );
   }
 }

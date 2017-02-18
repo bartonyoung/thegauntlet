@@ -54,7 +54,7 @@ class ChallengeTable extends React.Component {
         <div className="col col-md-8 col-lg-8">
           <div className="container-fluid">
             <div className="row">
-              <ChallengeList dispatch={this.props.dispatch}/>
+              <ChallengeList/>
             </div>  
           </div>  
         </div>

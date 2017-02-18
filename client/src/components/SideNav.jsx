@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import actions from '../../redux/actions.js';
+import css from '../styles/sideNav.css';
 
 class SideNav extends React.Component {
   constructor(props) {

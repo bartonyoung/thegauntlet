@@ -27,6 +27,13 @@ let actions = {
     };
   },
 
+  setFavorites: function(favorites) {
+    return {
+      type: 'SET_FAVORITES',
+      payload: favorites
+    };
+  },
+
   addUser: function(user) {
     return {
       type: 'ADD_USER',

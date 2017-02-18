@@ -9,12 +9,12 @@ class ProfileContent extends React.Component {
     super(props);
   }
   componentDidMount () {
+    const outer = this;
     this.props.dispatch(actions.setProfileView('all'));
-  }
-  componentDidUpdate (prevProps, prevState) {
-    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-      this.followers();
-    }
+    $.get('/api/getLeaders').then(leaders => {
+      outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      outer.followers();
+    });      
   }
 
   numFollowers () {
@@ -32,6 +32,7 @@ class ProfileContent extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
       });
     });
   }
@@ -43,6 +44,7 @@ class ProfileContent extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
       });
     });
   }
@@ -101,6 +103,7 @@ class ProfileContent extends React.Component {
     });
 
     let whichButton = (leaderId) => {
+      let outer = this;
       if (this.props.leaders.includes(leaderId)) {
         return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
       } else {
@@ -141,6 +144,7 @@ class ProfileContent extends React.Component {
             Followers:
             {this.props.followers.map((follower, i) => {
               return <div key={i}>{i + 1}.{follower.username}</div>;
+
             })}
           </div>
         );

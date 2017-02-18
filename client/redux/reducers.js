@@ -36,6 +36,10 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       ranks: action.payload
     });
+  case 'SET_FAVORITES':
+    return Object.assign({}, state, {
+      favorites: action.payload
+    });    
   default:
     return state;
   }
