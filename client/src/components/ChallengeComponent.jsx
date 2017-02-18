@@ -7,7 +7,7 @@ import Comments from './Comments.jsx';
 import NavBar from './Nav.jsx';
 import css from '../styles/nav.css';
 import moreCSS from '../styles/challengeComponent.css';
-
+import { Link } from 'react-router';
 
 class ChallengeComponent extends React.Component {
   constructor(props) {
@@ -110,19 +110,21 @@ class ChallengeComponent extends React.Component {
   }
 
   saveChallenge(e) {
+    let outer = this;
     this.setState({
       isEditing: !this.state.isEditing
     });
 
     $.ajax({
-      url: '/api/challenge' + window.sessionStorage.id,
+      url: '/api/challenge/' + window.sessionStorage.id,
       type: 'PUT',
       data: {
         title: this.refs.title.value,
         description: this.refs.description.value
       },
       success: function(data) {
-        console.log('result of put', data);
+        window.location.href = "/#/dash";
+        alert('Successfully edited!');
       }
     });
   }
@@ -137,29 +139,42 @@ class ChallengeComponent extends React.Component {
     });
   }
 
+  onChallengeClick(challenge) {
+    let outer = this;
+    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+    });
+  }
+
   render() {
     let taskButtons = () => {
-      if (!this.state.isEditing) {
+      if (window.sessionStorage.getItem('key') === window.sessionStorage.username) {
+        if (!this.state.isEditing) {
+          return (
+            <div>
+              <button className="btn btn-large btn-default edit" onClick={() => {this.editChallenge()}}>
+                {'Edit'}
+              </button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+            </div>
+          );
+        }
+
         return (
-          <button className="btn btn-large btn-default edit" onClick={() => {this.editChallenge()}}>
-            {'Edit'}
-          </button>
+          <div>
+            <div className="editor">
+              <form id="editform" onSubmit={() => {this.saveChallenge()}}>
+                <input type="text" placeholder="Edit title" ref="title"/><br/>
+                <input type="text" placeholder="Edit description" ref="description"/>
+              </form>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
+                {'Save'}
+              </button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+            </div>
+          </div>
         );
       }
-
-      return (
-        <div>
-          <div className="editor">
-            <form id="editform">
-              <input type="text" placeholder="Edit title" ref="title"/><br/>
-              <input type="text" placeholder="Edit description" ref="description"/>
-            </form>
-            <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
-              {'Save'}
-            </button>
-          </div>
-        </div>
-      );
     };
 
     let checkFile = (type, response) => {
@@ -183,9 +198,9 @@ class ChallengeComponent extends React.Component {
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <hr />
         <h1>{window.sessionStorage.title}</h1>
-        <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
         {taskButtons()}
-        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}
+        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
+        <h3><Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`}>{window.sessionStorage.username}</Link></h3>
         <h4>{window.sessionStorage.description}</h4>
         <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
         <form onSubmit={this.commentSubmit}>

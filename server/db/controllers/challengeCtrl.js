@@ -73,6 +73,19 @@ module.exports = {
     });
   },
 
+  updateOne: (req, res) => {
+    console.log('req.body', req.body);
+    console.log('inside update challenge', req.params)
+    const title = req.body.title;
+    const description = req.body.description;
+    const id = req.params.id;
+    db.from('challenges').where({id: id}).update({title: title, description: description}).then(() => {
+      db.select().from('challenges').where({id: id}).then(data => {
+        res.json(data);
+      });
+    });
+  },
+
   getSomeonesSubmissions: (req, res) => {
     let name = req.query.username || req.session.displayName;
     db.from('users')

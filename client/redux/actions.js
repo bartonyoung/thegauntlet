@@ -37,7 +37,7 @@ let actions = {
   setCurrentCategory: function(category) {
     return {
       type: 'SET_CATEGORY',
-      payload: category   
+      payload: category
     };
   },
 
