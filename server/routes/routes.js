@@ -27,4 +27,5 @@ routes.get('/getLeaders', followerController.getLeaders);
 routes.post('/unFollow', followerController.unFollow);
 routes.get('/listFollowers', followerController.getListOfFollowers);
 routes.delete('/challenge/:id', challengeController.deleteOne);
+routes.delete('/response/:id', challengeController.deleteOneResponse);
 module.exports = routes;

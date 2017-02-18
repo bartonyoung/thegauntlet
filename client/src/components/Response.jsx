@@ -9,8 +9,13 @@ import { Link } from 'react-router';
 class Response extends React.Component {
   constructor(props) {
     super(props);
+
     this.upVoteClick = this.upVoteClick.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
+
+     this.state = {
+      isEditing: false
+    };
   }
 
   upVoteClick(id) {
@@ -53,7 +58,74 @@ class Response extends React.Component {
     window.sessionStorage.setItem('username', username);
   }
 
+  saveChallenge(e) {
+    let outer = this;
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+
+    $.ajax({
+      url: '/api/challenge/' + window.sessionStorage.id,
+      type: 'PUT',
+      data: {
+        title: this.refs.title.value,
+        description: this.refs.description.value
+      },
+      success: function(data) {
+        window.location.href = "/#/dash";
+        alert('Successfully edited!');
+      }
+    });
+  }
+
+  deleteResponse() {
+    $.ajax({
+      url: '/api/response/' + window.sessionStorage.id,
+      type: 'DELETE',
+      success: function(data) {
+        window.location.href = "/#/dash";
+        alert('Successfully deleted!');
+      }
+    });
+  }
+
+  editChallenge() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+  }
+
   render() {
+    let taskButtons = () => {
+      if (window.sessionStorage.getItem('key') === window.sessionStorage.username) {
+        if (!this.state.isEditing) {
+          return (
+            <div>
+              <button className="btn btn-large btn-default edit" onClick={() => {this.editResponse()}}>
+                {'Edit'}
+              </button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse()}>Delete</button>
+            </div>
+          );
+        }
+
+        return (
+          <div>
+            <div className="editor">
+              <form id="editform" onSubmit={() => {this.saveChallenge()}}>
+                <input type="text" placeholder="Edit title" required ref="title"/><br/>
+                <input type="text" placeholder="Edit description" required ref="description"/>
+              </form>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
+                {'Save'}
+              </button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+            </div>
+          </div>
+        );
+      }
+    };
+
     let checkFile = (type, response) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
@@ -92,6 +164,7 @@ class Response extends React.Component {
           <div>
             <h4>{'Response title: ' + response.title}</h4>
             <h5>{'Description: ' + response.description}</h5>
+            {taskButtons()}
             {checkFile(response.filename.split('.').pop(), response)}<br/>
             <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
             <h5>{`Views : ${response.views}`}</h5>
