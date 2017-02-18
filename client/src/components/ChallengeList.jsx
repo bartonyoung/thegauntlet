@@ -145,13 +145,7 @@ class ChallengeList extends React.Component {
       }
     });
 
-    if (!mappedChallenges.length) {
-      return (
-        <div>
-          <h3>Sorry, currently there are no challenges in this category...</h3>
-        </div>
-      );
-    } else if (this.props.currentCategory === 'LeaderBoard') {
+    if (this.props.currentCategory === 'LeaderBoard') {
       return <div className="col-md-12">
               <h1 className="text-center">Rank Top 10</h1>
               <table className="table">
@@ -175,6 +169,13 @@ class ChallengeList extends React.Component {
                 </tbody>
               </table> 
             </div>;
+    } 
+    if (!mappedChallenges.length) {
+      return (
+        <div>
+          <h3>Sorry, currently there are no challenges in this category...</h3>
+        </div>
+      );
     } else {
       return <div className="media">{mappedChallenges}</div>;
     }
