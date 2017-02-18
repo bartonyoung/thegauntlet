@@ -53,6 +53,12 @@ let actions = {
       type: 'GET_FOLLOWERS',
       payload: followers,
     };
+  },
+  getRanks: function(ranks) {
+    return {
+      type: 'GET_RANKS',
+      payload: ranks,
+    };
   }
 };
 
