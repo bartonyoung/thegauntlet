@@ -17,6 +17,7 @@ routes.post('/unFollow', followerController.unFollow);
 routes.post('/response', challengeController.addOneResponse);
 routes.post('/follower', followerController.follow);
 routes.post('/favorite', challengeController.favorite);
+routes.post('/unFavorite', challengeController.favorite);
 
 routes.get('/logout', userControllers.logout);
 routes.get('/allChallenges', challengeController.getAll);
@@ -27,10 +28,10 @@ routes.get('/profile/:username', userControllers.getUser);
 routes.get('/profile', userControllers.getUser);
 routes.get('/getLeaders', followerController.getLeaders);
 routes.get('/listFollowers', followerController.getListOfFollowers);
-routes.put('/response/:id', challengeController.updateOneResponse);
 routes.get('/ranks', userControllers.getAllUsers);
 routes.get('/favorite', challengeController.getFavorites);
 
+routes.put('/response/:id', challengeController.updateOneResponse);
 routes.put('/challenge/:id', challengeController.updateOne);
 
 routes.delete('/challenge/:id', challengeController.deleteOne);
