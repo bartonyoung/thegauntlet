@@ -159,7 +159,8 @@ class Response extends React.Component {
     };
 
     let isNotification = () => {
-      console.log('mailbox')
+      console.log('mailbox');
+      console.log(window.sessionStorage.respTitle, window.sessionStorage.respDescription)
       return (
         <div>
           <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
@@ -176,7 +177,8 @@ class Response extends React.Component {
 
     let mappedResponses = this.props.responses.map((response, i) => {
       if (response.parent_id === parseInt(window.sessionStorage.id)) {
-        if (this.state.profileView === 'mailbox') {
+        if (window.sessionStorage.respTitle !== response.title) {
+          console.log(window.sessionStorage.respTitle, response.title)
           isNotification();
         } else {
           console.log('responses')

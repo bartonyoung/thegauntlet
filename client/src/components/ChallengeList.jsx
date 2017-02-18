@@ -26,6 +26,14 @@ class ChallengeList extends React.Component {
     window.sessionStorage.setItem('upvotes', challenge.upvotes);
     window.sessionStorage.setItem('views', challenge.views);
     window.sessionStorage.setItem('username', challenge.username);
+    window.sessionStorage.removeItem('respTitle');
+    window.sessionStorage.removeItem('respId');
+    window.sessionStorage.removeItem('respDescription');
+    window.sessionStorage.removeItem('respCategory');
+    window.sessionStorage.removeItem('respFilename');
+    window.sessionStorage.removeItem('respUpvotes');
+    window.sessionStorage.removeItem('respViews');
+    window.sessionStorage.removeItem('respUsername');
     $.get('/api/profile/' + window.sessionStorage.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
     });
