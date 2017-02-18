@@ -76,6 +76,14 @@ module.exports = {
     let temp = req.session.displayName;
     req.session.destroy();
     res.send('Good bye  ' + temp);
+  },
+
+  getAllUsers: function(req, res) {
+    let username = req.params.username || req.session.displayName;
+    db.select( 'users.username', 'users.upvotes').from('users').then(data => {
+      data = data.sort((a, b)=> b.upvotes - a.upvotes);
+      res.json(data);
+    });
   }
 };
 
