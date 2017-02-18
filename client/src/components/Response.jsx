@@ -65,7 +65,7 @@ class Response extends React.Component {
     });
 
     $.ajax({
-      url: '/api/challenge/' + window.sessionStorage.id,
+      url: '/api/response/' + window.sessionStorage.id,
       type: 'PUT',
       data: {
         title: this.refs.title.value,
@@ -89,7 +89,7 @@ class Response extends React.Component {
     });
   }
 
-  editChallenge() {
+  editResponse() {
     this.setState({
       isEditing: !this.state.isEditing
     });
@@ -119,7 +119,7 @@ class Response extends React.Component {
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
                 {'Save'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse()}>Delete</button>
             </div>
           </div>
         );

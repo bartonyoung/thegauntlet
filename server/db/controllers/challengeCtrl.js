@@ -86,6 +86,17 @@ module.exports = {
     });
   },
 
+  updateOneResponse: (req, res) => {
+    const title = req.body.title;
+    const description = req.body.description;
+    const id = req.params.id;
+    db.from('challenges').where({parent_id: id}).update({title: title, description: description}).then(() => {
+      db.select().from('challenges').where({parent_id: id}).then(data => {
+        res.json(data);
+      });
+    });
+  },
+
   deleteOne: (req, res) => {
     const id = req.params.id;
     db.from('challenges').where({id: id}).del().then((data) => {
