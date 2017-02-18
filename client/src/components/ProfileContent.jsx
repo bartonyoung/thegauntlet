@@ -3,6 +3,7 @@ import $ from 'jquery';
 import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
+import { Link } from 'react-router';
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -56,9 +57,27 @@ class ProfileContent extends React.Component {
   followers() {
     const outer = this;
     $.get('/api/listFollowers', {username: this.props.user[0].username}).then(data => {
-      console.log(data);
       outer.props.dispatch(actions.setFollowers(data));
     });
+  }
+
+  onNotificationClick(challenge, response) {
+    window.sessionStorage.setItem('title', challenge.title);
+    window.sessionStorage.setItem('id', challenge.id);
+    window.sessionStorage.setItem('description', challenge.description);
+    window.sessionStorage.setItem('category', challenge.category);
+    window.sessionStorage.setItem('filename', challenge.filename);
+    window.sessionStorage.setItem('upvotes', challenge.upvotes);
+    window.sessionStorage.setItem('views', challenge.views);
+    window.sessionStorage.setItem('username', challenge.username);
+    window.sessionStorage.setItem('respTitle', response.title);
+    window.sessionStorage.setItem('respId', response.parent_id);
+    window.sessionStorage.setItem('respDescription', response.description);
+    window.sessionStorage.setItem('respCategory', response.category);
+    window.sessionStorage.setItem('respFilename', response.filename);
+    window.sessionStorage.setItem('respUpvotes', response.upvotes);
+    window.sessionStorage.setItem('respViews', response.views);
+    window.sessionStorage.setItem('respUsername', response.username);
   }
 
   render() {
@@ -143,8 +162,22 @@ class ProfileContent extends React.Component {
             })}
           </div>
         );
-      } else {
-        return <div>In development...</div>;
+      } else if (this.props.profileView === 'mailbox') {
+        let mappedNotifications;
+        this.props.challenges.forEach(challenge => {
+          if (challenge.username === window.sessionStorage.username) {
+            mappedNotifications = this.props.responses.map(response => {
+              if (response.parent_id === challenge.id) {
+
+                return (
+                  <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to your challenge'}</Link></h4></div>
+                );
+              }
+            });
+          }
+        });
+
+        return mappedNotifications;
       }
 
     };

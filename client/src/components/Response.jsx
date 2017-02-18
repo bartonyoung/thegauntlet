@@ -126,18 +126,18 @@ class Response extends React.Component {
       }
     };
 
-    let checkFile = (type, response) => {
+    let checkFile = (type, responseFilename) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
         return (<video className="response" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} type="video/mp4"/>*/}
         </video>);
       } else {
         return <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
 
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} width="320" height="240" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} width="320" height="240" />;
       }
     };
 
@@ -158,20 +158,41 @@ class Response extends React.Component {
       }
     };
 
+    let isNotification = () => {
+      console.log('mailbox')
+      return (
+        <div>
+          <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
+          <h5>{'Description: ' + window.sessionStorage.respDescription}</h5>
+          {taskButtons()}
+          {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
+          <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
+          <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
+          {whichButton(window.sessionStorage.respUser_id)}
+          <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
+        </div>
+      );
+    }
+
     let mappedResponses = this.props.responses.map((response, i) => {
       if (response.parent_id === parseInt(window.sessionStorage.id)) {
-        return (
-          <div>
-            <h4>{'Response title: ' + response.title}</h4>
-            <h5>{'Description: ' + response.description}</h5>
-            {taskButtons()}
-            {checkFile(response.filename.split('.').pop(), response)}<br/>
-            <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
-            <h5>{`Views : ${response.views}`}</h5>
-            {whichButton(response.user_id)}
-            <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
-          </div>
-        );
+        if (this.state.profileView === 'mailbox') {
+          isNotification();
+        } else {
+          console.log('responses')
+          return (
+            <div>
+              <h4>{'Response title: ' + response.title}</h4>
+              <h5>{'Description: ' + response.description}</h5>
+              {taskButtons()}
+              {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
+              <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
+              <h5>{`Views : ${response.views}`}</h5>
+              {whichButton(response.user_id)}
+              <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+            </div>
+          );
+        }
       }
     });
 
