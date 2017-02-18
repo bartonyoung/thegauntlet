@@ -17,7 +17,6 @@ module.exports = {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
           res.json(data);
         });
-        // res.sendStatus(201);
       }).catch(err => {
         if (err) { console.error(err); }
       });
@@ -45,8 +44,8 @@ module.exports = {
   },
 
   s3: (req, res) => {
-//     s3(req.files.video, res);
-    res.json(req.files.video.originalFilename); //delete on deploy
+    //s3(req.files.video, res);
+    res.json(req.files.video.originalFilename);
   },
 
   getAll: (req, res) => {
@@ -60,13 +59,9 @@ module.exports = {
       res.json(data);
     });
   },
-  // getAllChallengesFromUser: (req, res) => {
-  //   db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challennges.user_id', 'users.id').where('username', '=', req.body.username).then(data => {
-  //     res.json(data);
-  //   })
-  // },
 
   getOne: (req, res) => {
+    console.log('inside get one')
     db.select()
     .from('challenges')
     .where({parent_id: req.query.parent_id})
@@ -76,6 +71,44 @@ module.exports = {
     })
     .catch((err) => {
       if (err) { console.error(err); }
+    });
+  },
+
+  updateOne: (req, res) => {
+    console.log('req.body', req.body);
+    console.log('inside update challenge', req.params)
+    const title = req.body.title;
+    const description = req.body.description;
+    const id = req.params.id;
+    db.from('challenges').where({id: id}).update({title: title, description: description}).then(() => {
+      db.select().from('challenges').where({id: id}).then(data => {
+        res.json(data);
+      });
+    });
+  },
+
+  updateOneResponse: (req, res) => {
+    const title = req.body.title;
+    const description = req.body.description;
+    const id = req.params.id;
+    db.from('challenges').where({parent_id: id}).update({title: title, description: description}).then(() => {
+      db.select().from('challenges').where({parent_id: id}).then(data => {
+        res.json(data);
+      });
+    });
+  },
+
+  deleteOne: (req, res) => {
+    const id = req.params.id;
+    db.from('challenges').where({id: id}).del().then((data) => {
+      res.json(data);
+    });
+  },
+
+  deleteOneResponse: (req, res) => {
+    const id = req.params.id;
+    db.from('challenges').where({parent_id: id}).del().then((data) => {
+      res.json(data);
     });
   },
 

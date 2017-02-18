@@ -7,7 +7,7 @@ import Comments from './Comments.jsx';
 import NavBar from './Nav.jsx';
 import css from '../styles/nav.css';
 import moreCSS from '../styles/challengeComponent.css';
-
+import { Link } from 'react-router';
 
 class ChallengeComponent extends React.Component {
   constructor(props) {
@@ -15,6 +15,13 @@ class ChallengeComponent extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.commentSubmit = this.commentSubmit.bind(this);
+    this.editChallenge = this.editChallenge.bind(this);
+    this.saveChallenge = this.saveChallenge.bind(this);
+    this.deleteChallenge = this.deleteChallenge.bind(this);
+
+    this.state = {
+      isEditing: false
+    };
   }
 
   componentDidMount() {
@@ -102,8 +109,81 @@ class ChallengeComponent extends React.Component {
     });
   }
 
+  saveChallenge(e) {
+    let outer = this;
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+
+    $.ajax({
+      url: '/api/challenge/' + window.sessionStorage.id,
+      type: 'PUT',
+      data: {
+        title: this.refs.title.value,
+        description: this.refs.description.value
+      },
+      success: function(data) {
+        window.location.href = "/#/dash";
+        alert('Successfully edited!');
+      }
+    });
+  }
+
+  deleteChallenge() {
+    $.ajax({
+      url: '/api/challenge/' + window.sessionStorage.id,
+      type: 'DELETE',
+      success: function(data) {
+        window.location.href = "/#/dash";
+        alert('Successfully deleted!');
+      }
+    });
+  }
+
+  editChallenge() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+  }
+
+  onChallengeClick(challenge) {
+    let outer = this;
+    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+    });
+  }
 
   render() {
+    let taskButtons = () => {
+      if (window.sessionStorage.getItem('key') === window.sessionStorage.username) {
+        if (!this.state.isEditing) {
+          return (
+            <div>
+              <button className="btn btn-large btn-default edit" onClick={() => {this.editChallenge()}}>
+                {'Edit'}
+              </button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+            </div>
+          );
+        }
+
+        return (
+          <div>
+            <div className="editor">
+              <form id="editform" onSubmit={() => {this.saveChallenge()}}>
+                <input type="text" placeholder="Edit title" required ref="title"/><br/>
+                <input type="text" placeholder="Edit description" required ref="description"/>
+              </form>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
+                {'Save'}
+              </button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+            </div>
+          </div>
+        );
+      }
+    };
+
     let checkFile = (type, response) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
@@ -117,17 +197,19 @@ class ChallengeComponent extends React.Component {
         return <img className="parent" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
+
     return (
       <div className="container-fluid">
         <center><h4 className="title">The Gauntlet</h4></center>
         <hr />
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <hr />
-        <h1>{'Challenge Title: ' + window.sessionStorage.title}</h1>
-        <h4>{'Description: ' + window.sessionStorage.description}</h4>
-        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}
+        <h1>{window.sessionStorage.title}</h1>
+        {taskButtons()}
+        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
+        <h3><Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`}>{window.sessionStorage.username}</Link></h3>
+        <h4>{window.sessionStorage.description}</h4>
         <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
-
         <form onSubmit={this.commentSubmit}>
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <input type="submit"/>

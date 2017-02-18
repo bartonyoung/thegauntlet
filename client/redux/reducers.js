@@ -1,4 +1,3 @@
-
 const reducer = (state, action) => {
   switch (action.type) {
   case 'ADD_CHALLENGE':
@@ -24,7 +23,7 @@ const reducer = (state, action) => {
   case 'SET_CATEGORY':
     return Object.assign({}, state, {
       currentCategory: action.payload
-    }); 
+    });
   case 'SET_VIEW':
     return Object.assign({}, state, {
       profileView: action.payload
@@ -33,7 +32,6 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       followers: action.payload
     });
-  
   default:
     return state;
   }

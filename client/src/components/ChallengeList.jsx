@@ -118,15 +118,17 @@ class ChallengeList extends React.Component {
         );
       }
     };
-     // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
+
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (
           <div className="col col-md-6">
+          <div>
             <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+            </div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
-              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              <h4><Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link></h4>
               {whichButton(challenge.user_id)}
               <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
                 <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
