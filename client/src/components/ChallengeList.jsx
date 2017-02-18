@@ -14,6 +14,7 @@ class ChallengeList extends React.Component {
     this.upVoteClick = this.upVoteClick.bind(this);
     this.followTheLeader = this.followTheLeader.bind(this);
     this.unFollow = this.unFollow.bind(this);
+    this.addToFavorites = this.addToFavorites.bind(this);
   }
 
   onChallengeClick(challenge) {
@@ -74,13 +75,24 @@ class ChallengeList extends React.Component {
     });
   }
 
-  unFollow (leaderId) {
+  unFollow(leaderId) {
     const outer = this;
     $.post('/api/unFollow', {
       leader_id: leaderId
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
+  }
+
+  addToFavorites(challengeId) {
+    const outer = this;
+    $.post('/api/favorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then( favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
       });
     });
   }
@@ -108,7 +120,7 @@ class ChallengeList extends React.Component {
       }
     };
 
-    let whichButton = (leaderId) => {
+    let whichFollowButton = (leaderId) => {
       if (this.props.leaders.includes(leaderId)) {
         return (
           <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
@@ -125,6 +137,23 @@ class ChallengeList extends React.Component {
       }
     };
 
+    let whichFavoriteIcon = (challengeId) => {
+      if (this.props.favorites.includes(challengeId)) {
+        return (
+          <button className="btn btn-default btn-sm pull-right">
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}}></span>
+          </button>  
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
+                <span className="glyphicon glyphicon-heart"></span>
+              </button> 
+        );
+      }
+    };     
+
+     // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (
@@ -134,8 +163,9 @@ class ChallengeList extends React.Component {
             </div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
-              <h4><Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link></h4>
-              {whichButton(challenge.user_id)}
+              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              {whichFollowButton(challenge.user_id)}
+              {whichFavoriteIcon(challenge.id)}
               <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
                 <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
               </button>
