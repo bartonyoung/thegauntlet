@@ -62,7 +62,6 @@ module.exports = {
   },
 
   getOne: (req, res) => {
-    console.log('inside get one');
     db.select()
     .from('challenges')
     .where({parent_id: req.query.parent_id})
@@ -76,8 +75,6 @@ module.exports = {
   },
 
   updateOne: (req, res) => {
-    console.log('req.body', req.body);
-    console.log('inside update challenge', req.params);
     const title = req.body.title;
     const description = req.body.description;
     const id = req.params.id;
@@ -149,15 +146,11 @@ module.exports = {
 
   favorite: (req, res) => {
     let favorite = req.body;
-    console.log('in favorite control', favorite);
-    console.log(req.session.displayName);
     db.select().from('users').where({username: req.session.displayName})
       .then(userData => {
-        console.log(userData);
         db.select().from('favorites').where({user_id: userData[0].id}).andWhere({challenge_id: favorite.challenge_id})
           .then( exists => {
             if (exists.length) {
-              console.log('favorite already exists!');
               res.sendStatus(201);
             } else {
               favorite.user_id = userData[0].id;
@@ -166,6 +159,14 @@ module.exports = {
               });
             }
           });
+      });
+  },
+
+  unFavorite: (req, res) => {
+    let favorite = req.body.challenge_id;
+    db.del().from('favorites').where({challenge_id: favorite})
+      .then(() => {
+        res.sendStatus(201);
       });
   },
 
