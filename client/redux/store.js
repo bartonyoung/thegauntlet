@@ -13,7 +13,10 @@ const configureStore = (initialState = {
   comments: [], 
   leaders: [], 
   currentCategory: 'all',
-  favorites: []
+  profileView: 'all',
+  favorites: [],
+  ranks: [],
+  followers: []
 }) => {
   return finalCreateStore(reducer, initialState);
 };
