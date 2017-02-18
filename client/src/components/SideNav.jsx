@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import actions from '../../redux/actions.js';
+import css from '../styles/sideNav.css';
 
 class SideNav extends React.Component {
   constructor(props) {
@@ -11,23 +12,34 @@ class SideNav extends React.Component {
   onSideBarClick(category) {
     const outer = this;
     this.props.dispatch(actions.setCurrentCategory(category));
-    $.get('/api/allchallenges')
-      .then(data=>{
-        if (category === 'all') {
-          data = data.reverse();
-        } else if (category === 'recent') {
-          data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
-        } else if (category === 'popular') {
-          data = data.sort((a, b) =>
-            b.upvotes - a.upvotes
-          );
-        } else {
-          data = data.filter(challenge =>
-            challenge.category === category
-          );
-        }
-        outer.props.dispatch(actions.addChallenge(data));
+    if (category === 'LeaderBoard') {
+      $.get('/api/ranks').then((rankData)=>{
+        outer.props.dispatch(actions.getRanks(rankData)); 
+      }).then(() => {
+        $.get('/api/allchallenges')
+        .then(data=>{
+          outer.props.dispatch(actions.addChallenge(data));
+        });
       });
+    } else {
+      $.get('/api/allchallenges')
+        .then(data=>{
+          if (category === 'all') {
+            data = data.reverse();
+          } else if (category === 'recent') {
+            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
+          } else if (category === 'popular') {
+            data = data.sort((a, b) =>
+              b.upvotes - a.upvotes
+            );
+          } else {
+            data = data.filter(challenge =>
+              challenge.category === category
+            );
+          }
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    }
   }
 
   render() {
@@ -41,6 +53,7 @@ class SideNav extends React.Component {
         <button onClick={()=>{ this.onSideBarClick('Fitness'); }} type="button" className="list-group-item">Fitness</button>
         <button onClick={()=>{ this.onSideBarClick('Music'); }} type="button" className="list-group-item">Music</button>
         <button onClick={()=>{ this.onSideBarClick('Gaming'); }} type="button" className="list-group-item">Gaming</button>
+        <button onClick={()=>{ this.onSideBarClick('LeaderBoard'); }} type="button" className="list-group-item">LeaderBoard</button>
       </div>
     );
   }

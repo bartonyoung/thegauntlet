@@ -11,13 +11,12 @@ class ProfileContent extends React.Component {
   }
 
   componentDidMount () {
+    const outer = this;
     this.props.dispatch(actions.setProfileView('all'));
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
-      this.followers();
-    }
+    $.get('/api/getLeaders').then(leaders => {
+      outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      outer.followers();
+    });
   }
 
   numFollowers () {
@@ -35,6 +34,7 @@ class ProfileContent extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
       });
     });
   }
@@ -46,6 +46,7 @@ class ProfileContent extends React.Component {
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
       });
     });
   }
@@ -95,30 +96,35 @@ class ProfileContent extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map(challenge => {
-      if (challenge.username === this.props.user[0].username) {
-        return (
-          <div>
-            <h4>{challenge.title}</h4>
-            <p>{challenge.description}</p>
-            {checkFile(challenge.filename.split('.').pop(), challenge)}
-          </div>
-        );
+      if (this.props.user[0]) {
+        if (challenge.username === this.props.user[0].username) {
+          return (
+            <div>
+              <h4>{challenge.title}</h4>
+              <p>{challenge.description}</p>
+              {checkFile(challenge.filename.split('.').pop(), challenge)}
+            </div>
+          );
+        }
       }
     });
 
     let mappedResponses = this.props.responses.map(response => {
-      if (response.username === this.props.user[0].username) {
-        return (
-          <div>
-            <h4>{response.title}</h4>
-            <p>{response.description}</p>
-            {checkFile(response.filename.split('.').pop(), response)}
-          </div>
-        );
+      if (this.props.user[0]) {
+        if (response.username === this.props.user[0].username) {
+          return (
+            <div>
+              <h4>{response.title}</h4>
+              <p>{response.description}</p>
+              {checkFile(response.filename.split('.').pop(), response)}
+            </div>
+          );
+        }
       }
     });
 
     let whichButton = (leaderId) => {
+      let outer = this;
       if (this.props.leaders.includes(leaderId)) {
         return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
       } else {
@@ -158,7 +164,8 @@ class ProfileContent extends React.Component {
           <div>
             Followers:
             {this.props.followers.map((follower, i) => {
-              return <div key={i}>{i + 1}.   {follower.username}</div>;
+              return <div key={i}>{i + 1}.{follower.username}</div>;
+
             })}
           </div>
         );
@@ -196,24 +203,33 @@ class ProfileContent extends React.Component {
       }
     }
 
-    return (
-      <div width={screen.width}>
-        <div className='profilePicture container'>
-          <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
-          Username: {this.props.user[0].username} <br />
-          Firstname: {this.props.user[0].firstname} <br />
-          Lastname: {this.props.user[0].lastname} <br />
-          Email: {this.props.user[0].email} <br />
-          Followers: {this.numFollowers()} <br />
-        </div><br/>
-        <div>
-          <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
-          <button onClick={() => this.changeProfileView('followers')}>Followers</button>
-          {renderMailbox()}
+    if (this.props.user.length) {
+      let target = this.props.user[0].username;
+      return (
+        <div width={screen.width}>
+          <div className='profilePicture container'>
+            <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
+            Username: {this.props.user[0].username} <br />
+            Firstname: {this.props.user[0].firstname} <br />
+            Lastname: {this.props.user[0].lastname} <br />
+            Email: {this.props.user[0].email} <br />
+            Rank# {this.props.ranks.map((rank, index)=>{
+              return {username: rank.username, rank: index + 1};
+            }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
+              {this.props.user[0].upvotes}) <br />
+            Followers: {this.numFollowers()} <br />
+          </div><br/>
+          <div>
+            <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
+            <button onClick={() => this.changeProfileView('followers')}>Followers</button>
+            <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+          </div>
+          {myView()}
         </div>
-        {myView()}
-      </div>
-    );
+      );
+    } else {
+      return <div></div>;
+    }
   }
 }
 

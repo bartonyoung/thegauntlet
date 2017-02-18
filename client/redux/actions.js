@@ -27,6 +27,13 @@ let actions = {
     };
   },
 
+  setFavorites: function(favorites) {
+    return {
+      type: 'SET_FAVORITES',
+      payload: favorites
+    };
+  },
+
   addUser: function(user) {
     return {
       type: 'ADD_USER',
@@ -52,6 +59,12 @@ let actions = {
     return {
       type: 'GET_FOLLOWERS',
       payload: followers,
+    };
+  },
+  getRanks: function(ranks) {
+    return {
+      type: 'GET_RANKS',
+      payload: ranks,
     };
   }
 };

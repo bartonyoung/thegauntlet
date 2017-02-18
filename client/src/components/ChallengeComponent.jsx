@@ -42,6 +42,7 @@ class ChallengeComponent extends React.Component {
         outer.props.dispatch(actions.addResponse(responseArr.reverse()));
       }
     });
+
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
@@ -49,6 +50,10 @@ class ChallengeComponent extends React.Component {
         outer.props.dispatch(actions.addComment(data));
       });
     });
+
+    $.get('/api/favorite').done(data => {
+      outer.props.dispatch(actions.setFavorites(data));
+    }); 
   }
 
   handleSubmit() {
