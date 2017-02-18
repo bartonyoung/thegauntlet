@@ -158,7 +158,7 @@ module.exports = {
           .then( exists => {
             if (exists.length) {
               console.log('favorite already exists!');
-              res.sendStatus(404);
+              res.sendStatus(201);
             } else {
               favorite.user_id = userData[0].id;
               db('favorites').insert(favorite).then(results=>{
@@ -166,6 +166,18 @@ module.exports = {
               });
             }
           });
+      });
+  },
+
+  getFavorites: (req, res) => {
+    db.select('id').from('users').where({username: req.session.displayName})
+      .then( userData => {
+        db.select('challenge_id').from('favorites').where({user_id: userData[0].id})
+          .then(favorites => 
+            res.json(favorites.map(favorite => {
+              return parseInt(favorite.challenge_id);
+            }))
+          );
       });
   },
 
