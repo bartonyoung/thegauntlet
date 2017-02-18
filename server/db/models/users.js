@@ -9,6 +9,7 @@ module.exports = knex.schema.createTableIfNotExists('users', (user) => {
   user.string('email');
   user.string('profilepic');
   user.integer('followers');
+  user.integer('upvotes');
 }).then(() => {
   console.log('user table created');
 });

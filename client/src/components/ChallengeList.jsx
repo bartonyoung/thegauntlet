@@ -18,17 +18,23 @@ class ChallengeList extends React.Component {
 
   onChallengeClick(challenge) {
     let outer = this;
-    window.sessionStorage.setItem('title', challenge.title);
-    window.sessionStorage.setItem('id', challenge.id);
-    window.sessionStorage.setItem('description', challenge.description);
-    window.sessionStorage.setItem('category', challenge.category);
-    window.sessionStorage.setItem('filename', challenge.filename);
-    window.sessionStorage.setItem('upvotes', challenge.upvotes);
-    window.sessionStorage.setItem('views', challenge.views);
-    window.sessionStorage.setItem('username', challenge.username);
-    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
-      outer.props.dispatch(actions.addUser(user));
-    });
+    if (typeof challenge === 'object') {
+      window.sessionStorage.setItem('title', challenge.title);
+      window.sessionStorage.setItem('id', challenge.id);
+      window.sessionStorage.setItem('description', challenge.description);
+      window.sessionStorage.setItem('category', challenge.category);
+      window.sessionStorage.setItem('filename', challenge.filename);
+      window.sessionStorage.setItem('upvotes', challenge.upvotes);
+      window.sessionStorage.setItem('views', challenge.views);
+      window.sessionStorage.setItem('username', challenge.username);
+      $.get('/api/profile/' + window.sessionStorage.username).done(user => {
+        outer.props.dispatch(actions.addUser(user));
+      });
+    } else {
+      $.get('/api/profile/' + challenge).done(user => {
+        outer.props.dispatch(actions.addUser(user));
+      }); 
+    }
   }
 
   upVoteClick(id) {
@@ -145,6 +151,30 @@ class ChallengeList extends React.Component {
           <h3>Sorry, currently there are no challenges in this category...</h3>
         </div>
       );
+    } else if (this.props.currentCategory === 'LeaderBoard') {
+      return <div className="col-md-12">
+              <h1 className="text-center">Rank Top 10</h1>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>#RANK</th>
+                    <th>USERNAME</th>
+                    <th>UPVOTES</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.props.ranks.map((rank, index) => {
+                    if (index <= 10) {
+                      return <tr className="success">
+                               <td> #{index + 1}</td>
+                               <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
+                               <td>{rank.upvotes}</td>
+                             </tr>;   
+                    }
+                  })}
+                </tbody>
+              </table> 
+            </div>;
     } else {
       return <div className="media">{mappedChallenges}</div>;
     }

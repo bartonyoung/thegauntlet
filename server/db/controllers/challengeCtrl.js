@@ -34,7 +34,7 @@ module.exports = {
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-          console.log('get one response', data)
+          console.log('get one response', data);
           res.json(data.reverse());
         });
       }).catch(err => {
@@ -130,10 +130,14 @@ module.exports = {
           res.sendStatus(404);
         } else {
           vote.user_id = userData[0].id;
-          db('votes').insert(vote).then( () => {
-            db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
-              db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
-                res.sendStatus(201);
+          db.select('user_id').from('challenges').where({id: req.body.challenge_id}).then(data => {
+            db.select().from('users').where({id: data[0].user_id}).increment('upvotes', 1).then(data => {
+              db('votes').insert(vote).then( () => {
+                db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
+                  db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
+                    res.sendStatus(201);
+                  });
+                });
               });
             });
           });
@@ -141,7 +145,7 @@ module.exports = {
       });
     });
   },
-
+      
   viewed: (req, res) => {
     db.select('views').from('challenges').where({id: req.body.challenge_id}).then(challengeData => {
       db.select().from('challenges').where({id: req.body.challenge_id}).update({views: challengeData[0].views + 1}).then( () => {

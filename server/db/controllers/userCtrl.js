@@ -24,7 +24,8 @@ module.exports = {
                 email: email,
                 username: username,
                 password: hash,
-                followers: 0
+                followers: 0,
+                upvotes: 0
               })
                 .then(rows => {
                   req.session.displayName = username;
@@ -42,7 +43,7 @@ module.exports = {
 
   getUser: function(req, res) {
     let username = req.params.username || req.session.displayName;
-    db.select('users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers').from('users').where('username', '=', username).then(data => {
+    db.select('users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('username', '=', username).then(data => {
       res.json(data);
     });
   },
@@ -75,6 +76,14 @@ module.exports = {
     let temp = req.session.displayName;
     req.session.destroy();
     res.send('Good bye  ' + temp);
+  },
+
+  getAllUsers: function(req, res) {
+    let username = req.params.username || req.session.displayName;
+    db.select( 'users.username', 'users.upvotes').from('users').then(data => {
+      data = data.sort((a, b)=> b.upvotes - a.upvotes);
+      res.json(data);
+    });
   }
 };
 

@@ -32,6 +32,10 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       followers: action.payload
     });
+  case 'GET_RANKS':
+    return Object.assign({}, state, {
+      ranks: action.payload
+    });
   default:
     return state;
   }
