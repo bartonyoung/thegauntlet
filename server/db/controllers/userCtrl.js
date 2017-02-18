@@ -43,7 +43,7 @@ module.exports = {
 
   getUser: function(req, res) {
     let username = req.params.username || req.session.displayName;
-    db.select('users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('username', '=', username).then(data => {
+    db.select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('username', '=', username).then(data => {
       res.json(data);
     });
   },
