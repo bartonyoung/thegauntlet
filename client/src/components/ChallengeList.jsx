@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
+import ProfileContent from './ProfileContent.jsx';
 import $ from 'jquery';
 import { Link } from 'react-router';
 import css from '../styles/challengeList.css';
@@ -33,6 +34,8 @@ class ChallengeList extends React.Component {
     } else {
       $.get('/api/profile/' + challenge).done(user => {
         outer.props.dispatch(actions.addUser(user));
+      }).then(() => {
+        outer.props.dispatch(actions.setCurrentCategory('profile'));
       }); 
     }
   }
@@ -145,6 +148,12 @@ class ChallengeList extends React.Component {
       }
     });
 
+    if (this.props.currentCategory === 'profile') {
+      return <div>
+                <ProfileContent/>
+            </div>;
+    }
+
     if (this.props.currentCategory === 'LeaderBoard') {
       return <div className="col-md-12">
               <h1 className="text-center">Rank Top 10</h1>
@@ -161,7 +170,7 @@ class ChallengeList extends React.Component {
                     if (index <= 10) {
                       return <tr className="success">
                                <td> #{index + 1}</td>
-                               <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
+                               <td><a onClick={() => this.onChallengeClick(rank.username)}>{rank.username}</a></td>
                                <td>{rank.upvotes}</td>
                              </tr>;   
                     }
@@ -169,8 +178,7 @@ class ChallengeList extends React.Component {
                 </tbody>
               </table> 
             </div>;
-    } 
-    if (!mappedChallenges.length) {
+    } else if (!mappedChallenges.length) {
       return (
         <div>
           <h3>Sorry, currently there are no challenges in this category...</h3>
