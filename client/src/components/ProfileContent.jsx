@@ -171,7 +171,7 @@ class ProfileContent extends React.Component {
               if (response.parent_id === challenge.id) {
                 console.log('inside mapping')
                 return (
-                  <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to your challenge'}</Link></h4></div>
+                  <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to ' + challenge.title}</Link></h4></div>
                 );
               }
             });

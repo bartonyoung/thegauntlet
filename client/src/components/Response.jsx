@@ -13,7 +13,7 @@ class Response extends React.Component {
     this.upVoteClick = this.upVoteClick.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
 
-     this.state = {
+    this.state = {
       isEditing: false
     };
   }
@@ -23,7 +23,7 @@ class Response extends React.Component {
     $.post('/api/upvote', {
       vote: 1,
       challenge_id: id
-    }).then(()=> {
+    }).then(() => {
       $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
         .then((data)=> {
           data = data.reverse();
@@ -158,29 +158,26 @@ class Response extends React.Component {
       }
     };
 
-    let isNotification = () => {
-      console.log('mailbox');
-      console.log(window.sessionStorage.respTitle, window.sessionStorage.respDescription)
-      return (
-        <div>
-          <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
-          <h5>{'Description: ' + window.sessionStorage.respDescription}</h5>
-          {taskButtons()}
-          {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
-          <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
-          <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
-          {whichButton(window.sessionStorage.respUser_id)}
-          <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
-        </div>
-      );
-    }
+    // let isNotification = () => {
+    //   console.log('mailbox');
+    //   console.log(window.sessionStorage.respTitle, window.sessionStorage.respDescription)
+    //   return (
+    //     <div>
+    //       <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
+    //       <h5>{'Description: ' + window.sessionStorage.respDescription}</h5>
+    //       {taskButtons()}
+    //       {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
+    //       <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
+    //       <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
+    //       {whichButton(window.sessionStorage.respUser_id)}
+    //       <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
+    //     </div>
+    //   );
+    // }
 
     let mappedResponses = this.props.responses.map((response, i) => {
       if (response.parent_id === parseInt(window.sessionStorage.id)) {
-        if (window.sessionStorage.respTitle !== response.title) {
-          console.log(window.sessionStorage.respTitle, response.title)
-          isNotification();
-        } else {
+        if (this.props.profileView === 'all' && !window.sessionStorage.respTitle) {
           console.log('responses')
           return (
             <div>
@@ -192,6 +189,20 @@ class Response extends React.Component {
               <h5>{`Views : ${response.views}`}</h5>
               {whichButton(response.user_id)}
               <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+            </div>
+          );
+        } else if (i === 0) {
+          console.log('mailbox response', window.sessionStorage.respTitle, response.title)
+          return (
+            <div>
+              <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
+              <h5>{'Description: ' + window.sessionStorage.respDescription}</h5>
+              {taskButtons()}
+              {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
+              <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
+              <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
+              {whichButton(window.sessionStorage.respUser_id)}
+              <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
             </div>
           );
         }
