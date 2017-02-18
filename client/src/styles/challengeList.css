@@ -10,10 +10,17 @@ video {
   border: 1px solid black;
 }
 
+a:hover{
+    text-decoration: none;
+    cursor:pointer;
+}
+td {
+}
+
+
 .media {
   width: 100%;
 }
-
 .edit {
   float: right;
   display: inline;
