@@ -3,6 +3,7 @@ import $ from 'jquery';
 import css from '../styles/landing.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
+import NavBar from './Nav.jsx';
 
 class Landing extends React.Component {
   constructor(props) { 
@@ -46,11 +47,13 @@ class Landing extends React.Component {
     }
 
     if (type === 'videos') {
+       // <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"></source>
+                  // <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4>{challenge.title}</h4>
                   <video width="320" height="240" controls>
-                    <source src="movie.mp4" type="video/mp4"></source>
+                     <source src="movie.mp4" type="video/mp4"></source>
                   </video>
               </div>;
       });
@@ -58,35 +61,18 @@ class Landing extends React.Component {
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4>{challenge.title}</h4>
-                  <img src="http://cdn.ttgtmedia.com/ITKE/uploads/blogs.dir/58/files/2015/02/challenge-yourself.png" width="300" height="200" alt=""/>
+                <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
               </div>;
       });
     } 
  
   } 
-  handleNav() {
-    if (this.state.auth) {
-      return <div className="container-fluid">
-              <a href="" className="btn" onClick={this.props.handleLogout}>Log out</a>
-              <a href="/#/dash" className="btn">Main Page</a>
-            </div>;
-    } else {
-      return <div className="container-fluid">
-              <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
-              <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
-              <a href="/#/dash" className="btn">Dashboard</a>
-            </div>;
-    }
-  }
-     
 
   render() {
     return (
-      <div className='container'>
-         <nav className="nav navbar navbar-fixed">
-           {this.handleNav()}
-          </nav>  
-          <div className="jumbotron container text-center">
+      <div>
+         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/> 
+          <div className="jumbotron container-fluid text-center main-content">
             <div className='row'>
               <div className="col-md-12">
                 <div className="col-md-12 text-center">

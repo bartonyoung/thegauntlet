@@ -17,6 +17,7 @@ a:hover{
 
 .media {
   width: 100%;
+  margin-bottom: 20px; 
 }
 .edit {
   float: right;
