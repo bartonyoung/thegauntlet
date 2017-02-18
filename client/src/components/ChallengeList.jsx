@@ -167,7 +167,6 @@ class ChallengeList extends React.Component {
                     if (index <= 10) {
                       return <tr className="success">
                                <td> #{index + 1}</td>
-                               {/*<td> <a on>{rank.username}</a></td>*/}
                                <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
                                <td>{rank.upvotes}</td>
                              </tr>;   
