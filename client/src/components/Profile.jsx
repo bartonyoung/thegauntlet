@@ -4,6 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import ProfileContent from './ProfileContent.jsx';
+import NavBar from './Nav.jsx';
 
 class Profile extends React.Component {
 
@@ -31,7 +32,10 @@ class Profile extends React.Component {
   render() {
     if (this.props.user) {
       return (
-        <ProfileContent />
+        <div className='container-fluid'>
+          <NavBar />
+          <ProfileContent />
+        </div>
       );
     } else {
       return <div></div>;
