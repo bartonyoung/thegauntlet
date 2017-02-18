@@ -223,7 +223,7 @@ class Response extends React.Component {
               <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
               <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
               {whichButton(window.sessionStorage.respUser_id)}
-              {whichFavoriteIcon(window.sessionStorage.respUser.id)}
+              {whichFavoriteIcon(window.sessionStorage.respUserid)}
               <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
             </div>
           );

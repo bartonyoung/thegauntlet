@@ -79,6 +79,7 @@ class ProfileContent extends React.Component {
     window.sessionStorage.setItem('respUpvotes', response.upvotes);
     window.sessionStorage.setItem('respViews', response.views);
     window.sessionStorage.setItem('respUsername', response.username);
+    window.sessionStorage.setItem('respUserId', response.user_id);
   }
 
   render() {
@@ -222,7 +223,7 @@ class ProfileContent extends React.Component {
           <div>
             <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
             <button onClick={() => this.changeProfileView('followers')}>Followers</button>
-            <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+            {renderMailbox()}
           </div>
           {myView()}
         </div>
