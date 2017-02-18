@@ -44,6 +44,7 @@ module.exports = {
   },
 
   s3: (req, res) => {
+    //s3(req.files.video, res);
     res.json(req.files.video.originalFilename);
   },
 
