@@ -126,7 +126,6 @@ class ChallengeList extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      console.log(challenge);
       if (!challenge.parent_id) {
         return (
           <div className="col col-md-6">
