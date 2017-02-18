@@ -17,7 +17,7 @@ routes.post('/unFollow', followerController.unFollow);
 routes.post('/response', challengeController.addOneResponse);
 routes.post('/follower', followerController.follow);
 routes.post('/favorite', challengeController.favorite);
-routes.post('/unFavorite', challengeController.favorite);
+routes.post('/unFavorite', challengeController.unFavorite);
 
 routes.get('/logout', userControllers.logout);
 routes.get('/allChallenges', challengeController.getAll);

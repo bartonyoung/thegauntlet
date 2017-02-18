@@ -49,7 +49,7 @@ class ChallengeList extends React.Component {
           if (outer.props.currentCategory === 'all') {
             data = data.reverse();
           } else if (outer.props.currentCategory === 'recent') {
-            data.length < 6 ? data = data : data = data.slice(-5).reverse();
+            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
           } else if (outer.props.currentCategory === 'popular') {
             data = data.sort((a, b) =>
             b.upvotes - a.upvotes
@@ -92,6 +92,18 @@ class ChallengeList extends React.Component {
       challenge_id: challengeId
     }).then(() => {
       $.get('/api/favorite').then( favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
+  }
+
+  removeFromFavorites(challengeId) {
+    console.log('Client remove', challengeId);
+    const outer = this;
+    $.post('/api/unFavorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then(favorites => {
         outer.props.dispatch(actions.setFavorites(favorites));
       });
     });
@@ -141,14 +153,14 @@ class ChallengeList extends React.Component {
       if (this.props.favorites.includes(challengeId)) {
         return (
           <button className="btn btn-default btn-sm pull-right">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}}></span>
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
           </button>  
         );
       } else {
         return (
           <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
-                <span className="glyphicon glyphicon-heart"></span>
-              </button> 
+            <span className="glyphicon glyphicon-heart"></span>
+          </button> 
         );
       }
     };     
