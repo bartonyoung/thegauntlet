@@ -6,14 +6,6 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
   }
-          // <nav className="nav navbar">
-          //   <div className="container-fluid">
-          //     <button className="btn btn-large btn-default navbar-right" onClick={this.props.handleLogout}>Log out</button>
-          //     <button className="btn btn-large btn-default navbar-right" onClick={() => this.props.editProfile()}>Edit profile</button>
-          //     <a className="btn btn-large btn-default navbar-right" href="/#/dash">Dashboard</a>
-          //     <h5 className="navbar-text navbar-left">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
-          //   </div>
-          // </nav>
 
   handleNav() {
     if (this.props.auth) {
