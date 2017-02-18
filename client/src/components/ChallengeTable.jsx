@@ -54,24 +54,24 @@ class ChallengeTable extends React.Component {
         <div className="col col-md-8 col-lg-8">
           <div className="container-fluid">
             <div className="row">
-              <ChallengeList dispatch={this.props.dispatch}/>
+              <ChallengeList/>
             </div>  
           </div>  
         </div>
         <div className="col col-md-2 col-lg-2">
           <form id="challenge">
             <h4>Add your challenge!</h4>
-            <div class="form-group">
+            <div className="form-group">
               <label>Challenge Name</label>
               <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label>Challenge Description</label>
               <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
             </div>
-            <div class="form-group">
+            <div className="form-group">
               <label>Category</label><br/>
-              <select class="form-control" required ref="category">
+              <select className="form-control" required ref="category">
                 <option>Charity</option>
                 <option>Gaming</option>
                 <option>Fitness</option>
