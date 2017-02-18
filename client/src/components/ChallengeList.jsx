@@ -131,7 +131,7 @@ class ChallengeList extends React.Component {
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (
-          <div className="col col-md-6">
+          <div className="col col-md-6" key={i}>
           <div>
             <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
             </div>
@@ -168,7 +168,7 @@ class ChallengeList extends React.Component {
                 <tbody>
                   {this.props.ranks.map((rank, index) => {
                     if (index <= 10) {
-                      return <tr className="success">
+                      return <tr className="success" key={index}>
                                <td> #{index + 1}</td>
                                <td><a onClick={() => this.onChallengeClick(rank.username)}>{rank.username}</a></td>
                                <td>{rank.upvotes}</td>
