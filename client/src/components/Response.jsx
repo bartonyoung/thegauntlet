@@ -13,7 +13,7 @@ class Response extends React.Component {
     this.upVoteClick = this.upVoteClick.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
 
-     this.state = {
+    this.state = {
       isEditing: false
     };
   }
@@ -65,6 +65,17 @@ class Response extends React.Component {
     });
   } 
 
+  removeFromFavorites(challengeId) { 
+    const outer = this;
+    $.post('/api/unFavorite', { 
+      challenge_id: challengeId
+    }).then(() => {  
+      $.get('/api/favorite').then(favorites => { 
+        outer.props.dispatch(actions.setFavorites(favorites));  
+      });
+    });
+  }   
+
   onUsernameClick(username) {
     window.sessionStorage.setItem('username', username);
   }
@@ -83,7 +94,7 @@ class Response extends React.Component {
         description: this.refs.description.value
       },
       success: function(data) {
-        window.location.href = "/#/dash";
+        window.location.href = '/#/dash';
         alert('Successfully edited!');
       }
     });
@@ -94,7 +105,7 @@ class Response extends React.Component {
       url: '/api/response/' + window.sessionStorage.id,
       type: 'DELETE',
       success: function(data) {
-        window.location.href = "/#/dash";
+        window.location.href = '/#/dash';
         alert('Successfully deleted!');
       }
     });
@@ -112,7 +123,7 @@ class Response extends React.Component {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => {this.editResponse()}}>
+              <button className="btn btn-large btn-default edit" onClick={() => { this.editResponse(); }}>
                 {'Edit'}
               </button>
               <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse()}>Delete</button>
@@ -123,7 +134,7 @@ class Response extends React.Component {
         return (
           <div>
             <div className="editor">
-              <form id="editform" onSubmit={() => {this.saveChallenge()}}>
+              <form id="editform" onSubmit={() => { this.saveChallenge(); }}>
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
@@ -173,7 +184,7 @@ class Response extends React.Component {
       if (this.props.favorites.includes(challengeId)) {
         return (
           <button className="btn btn-default btn-sm pull-right">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}}></span>
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
           </button>  
         );
       } else { 
