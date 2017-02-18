@@ -8,9 +8,11 @@ class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
   }
+
   componentDidMount () {
     this.props.dispatch(actions.setProfileView('all'));
   }
+
   componentDidUpdate (prevProps, prevState) {
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
       this.followers();
@@ -131,7 +133,7 @@ class ProfileContent extends React.Component {
               {mappedResponses}
             </div>
           </div>
-        );  
+        );
       } else if (this.props.profileView === 'followers') {
         return (
           <div>
@@ -147,6 +149,18 @@ class ProfileContent extends React.Component {
 
     };
 
+    let renderMailbox = () => {
+      if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
+        return (
+          <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+        );
+      } else {
+        return (
+          <div></div>
+        );
+      }
+    }
+
     return (
       <div width={screen.width}>
         <div className='profilePicture container'>
@@ -160,7 +174,7 @@ class ProfileContent extends React.Component {
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
           <button onClick={() => this.changeProfileView('followers')}>Followers</button>
-          <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+          {renderMailbox()}
         </div>
         {myView()}
       </div>
