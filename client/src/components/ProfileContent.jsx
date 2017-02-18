@@ -140,7 +140,7 @@ class ProfileContent extends React.Component {
           <div>
             Followers:
             {this.props.followers.map((follower, i) => {
-              return <div key={i}>{i + 1}.          {follower.username}</div>;
+              return <div key={i}>{i + 1}.{follower.username}</div>;
             })}
           </div>
         );
@@ -150,6 +150,7 @@ class ProfileContent extends React.Component {
 
     };
     if (this.props.user.length) {
+      let target = this.props.user[0].username;
       return (
         <div width={screen.width}>
           <div className='profilePicture container'>
@@ -160,7 +161,7 @@ class ProfileContent extends React.Component {
             Email: {this.props.user[0].email} <br />
             Rank# {this.props.ranks.map((rank, index)=>{
               return {username: rank.username, rank: index + 1};
-            })[0].rank} (
+            }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (  
               {this.props.user[0].upvotes}) <br />
             Followers: {this.numFollowers()} <br />
           </div><br/>
