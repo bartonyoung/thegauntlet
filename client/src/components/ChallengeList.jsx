@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions.js';
 import ChallengeComponent from './ChallengeComponent.jsx';
+import ProfileContent from './ProfileContent.jsx';
 import $ from 'jquery';
 import { Link } from 'react-router';
 import css from '../styles/challengeList.css';
@@ -34,6 +35,8 @@ class ChallengeList extends React.Component {
     } else {
       $.get('/api/profile/' + challenge).done(user => {
         outer.props.dispatch(actions.addUser(user));
+      }).then(() => {
+        outer.props.dispatch(actions.setCurrentCategory('profile'));
       }); 
     }
   }
@@ -169,7 +172,7 @@ class ChallengeList extends React.Component {
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (
-          <div className="col col-md-6">
+          <div className="col col-md-6" key={i}>
           <div>
             <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
             </div>
@@ -187,13 +190,13 @@ class ChallengeList extends React.Component {
       }
     });
 
-    if (!mappedChallenges.length) {
-      return (
-        <div>
-          <h3>Sorry, currently there are no challenges in this category...</h3>
-        </div>
-      );
-    } else if (this.props.currentCategory === 'LeaderBoard') {
+    if (this.props.currentCategory === 'profile') {
+      return <div>
+                <ProfileContent/>
+            </div>;
+    }
+
+    if (this.props.currentCategory === 'LeaderBoard') {
       return <div className="col-md-12">
               <h1 className="text-center">Rank Top 10</h1>
               <table className="table">
@@ -207,9 +210,9 @@ class ChallengeList extends React.Component {
                 <tbody>
                   {this.props.ranks.map((rank, index) => {
                     if (index <= 10) {
-                      return <tr className="success">
+                      return <tr className="success" key={index}>
                                <td> #{index + 1}</td>
-                               <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
+                               <td><a onClick={() => this.onChallengeClick(rank.username)}>{rank.username}</a></td>
                                <td>{rank.upvotes}</td>
                              </tr>;   
                     }
@@ -217,6 +220,12 @@ class ChallengeList extends React.Component {
                 </tbody>
               </table> 
             </div>;
+    } else if (!mappedChallenges.length) {
+      return (
+        <div>
+          <h3>Sorry, currently there are no challenges in this category...</h3>
+        </div>
+      );
     } else {
       return <div className="media">{mappedChallenges}</div>;
     }
