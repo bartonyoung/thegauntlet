@@ -26,6 +26,15 @@ class Dash extends React.Component {
     $.get('/api/profile').done(data => {
       outer.props.dispatch(actions.addUser(data));
     });
+
+    $.get('/api/ranks').then((rankData)=>{
+      outer.props.dispatch(actions.getRanks(rankData)); 
+    }).then(() => {
+      $.get('/api/allchallenges')
+        .then(data=>{
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    }); 
   }
 
   render() {
