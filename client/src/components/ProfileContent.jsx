@@ -97,30 +97,26 @@ class ProfileContent extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map(challenge => {
-      if (this.props.user[0]) {
-        if (challenge.username === this.props.user[0].username) {
-          return (
-            <div>
-              <h4>{challenge.title}</h4>
-              <p>{challenge.description}</p>
-              {checkFile(challenge.filename.split('.').pop(), challenge)}
-            </div>
-          );
-        }
+      if (challenge.username === this.props.user[0].username) {
+        return (
+          <div>
+            <h4>{challenge.title}</h4>
+            <p>{challenge.description}</p>
+            {checkFile(challenge.filename.split('.').pop(), challenge)}
+          </div>
+        );
       }
     });
 
     let mappedResponses = this.props.responses.map(response => {
-      if (this.props.user[0]) {
-        if (response.username === this.props.user[0].username) {
-          return (
-            <div>
-              <h4>{response.title}</h4>
-              <p>{response.description}</p>
-              {checkFile(response.filename.split('.').pop(), response)}
-            </div>
-          );
-        }
+      if (response.username === this.props.user[0].username) {
+        return (
+          <div>
+            <h4>{response.title}</h4>
+            <p>{response.description}</p>
+            {checkFile(response.filename.split('.').pop(), response)}
+          </div>
+        );
       }
     });
 
@@ -204,7 +200,7 @@ class ProfileContent extends React.Component {
       }
     }
 
-    if (this.props.user.length) {
+
       let target = this.props.user[0].username;
       return (
         <div width={screen.width}>
@@ -228,11 +224,11 @@ class ProfileContent extends React.Component {
           {myView()}
         </div>
       );
-    } else {
-      return <div></div>;
-    }
   }
 }
+    // } else {
+    //   return <div></div>;
+    // }
 
 const mapStateToProps = (state) => {
   return state;

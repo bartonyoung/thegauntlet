@@ -17,6 +17,7 @@ class Login extends React.Component {
     .done(data => {
       if (data) {
         window.sessionStorage.setItem('key', data);
+        window.sessionStorage.setItem('username', data);
         this.props.handleAuth(()=> {
           window.location.href = '#/dash';
         });
