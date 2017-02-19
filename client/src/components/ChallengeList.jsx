@@ -123,7 +123,8 @@ class ChallengeList extends React.Component {
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
-        'mp4': 'THIS IS A VIDEO!'
+        'mp4': 'THIS IS A VIDEO!',
+        'mov': 'ANOTHER VIDEO FORMAT'
       };
       if (fileType[type]) {
         return (
@@ -134,10 +135,10 @@ class ChallengeList extends React.Component {
           </div>
         );
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
+            // <img clasName="center-block" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} />
         return (
           <div>
-            <img className="center-block" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
+            <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
           </div>
         );
       }
@@ -152,7 +153,6 @@ class ChallengeList extends React.Component {
         );
       } else {
         return (
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
           <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
             <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>
@@ -176,7 +176,6 @@ class ChallengeList extends React.Component {
       }
     };
 
-     // {'Upvotes: ' + challenge.upvotes + ' Views: ' + challenge.views}
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (

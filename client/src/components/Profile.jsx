@@ -32,8 +32,8 @@ class Profile extends React.Component {
   render() {
     if (this.props.user) {
       return (
-        <div className='container-fluid'>
-          <NavBar />
+        <div className='container-fluid profile'>
+          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
           <ProfileContent />
         </div>
       );

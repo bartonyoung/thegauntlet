@@ -10,17 +10,17 @@ class NavBar extends React.Component {
   handleNav() {
     if (this.props.auth) {
       return (
-        <nav className="nav navbar navbar-default navbar-fixed-top">
+        <nav className="nav navbar navbar-fixed-top">
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <a href="javascript: void(0)" onClick={this.props.handleLogout}>Logout</a>
+                  <a href="javascript: void(0)" className="navButton" onClick={this.props.handleLogout}>Logout</a> 
                 </li>
                 <li>
-                  <a href="javascript: void(0)" onClick={() => this.props.editProfile()}>Edit Profile</a>
+                  <a href="javascript: void(0)" className="navButton" onClick={() => this.props.editProfile()}>Edit Profile</a>
                 </li>
                 <li>
-                  <a href="/#/dash">Dashboard</a>
+                  <a href="/#/dash" className="navButton">Dashboard</a>
                 </li>
               </ul>
               <ul className="nav navbar-nav navbar-left">
@@ -33,10 +33,19 @@ class NavBar extends React.Component {
       );
     } else {
       return (
-          <nav className="nav navbar">
-            <div className="container-fluid">
-              <a href="/#/signup" className="btn" onClick={this.props.handleDisplay}>Signup</a>
-              <a href="/#/login" className="btn" onClick={this.props.handleDisplay}>Login</a>
+          <nav className="nav navbar navbar-fixed-top">
+            <div className="container">
+              <ul className="nav navbar-nav navbar-left">
+                <li>
+                  <a href="/#/signup" className="navButton" onClick={this.props.handleDisplay}>Signup</a>
+                </li>
+                <li>
+                  <a href="/#/login" className="navButton" onClick={this.props.handleDisplay}>Login</a>
+                </li>
+                <li>
+                  <a href="/#/dash" className="navButton">Dashboard</a>
+                </li>
+              </ul>
             </div>
           </nav>
       );
@@ -52,3 +61,23 @@ class NavBar extends React.Component {
 }
 
 export default NavBar;
+//  <nav className="nav navbar navbar-default navbar-fixed-top">
+//             <div className="container">
+// <ul className="nav navbar-nav navbar-left">
+//                 <li>
+//                   <a href="javascript: void(0)" className="btn" onClick={this.props.handleDisplay}>Signup</a>
+//                 </li>
+//                 <li>
+//                   <a href="javascript: void(0)" className="btn" onClick={this.props.handleDisplay}>Login</a>
+//                 </li>
+//                 <li>
+//                   <a href="/#/dash">Dashboard</a>
+//                 </li>
+//               </ul>;
+//               <ul className="nav navbar-nav navbar-left">
+//                 <li>
+//                   <h5 className="navbar-text">You are logged in as <a href="" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
+//                 </li>
+//               </ul>
+//             </div>
+//           </nav>
