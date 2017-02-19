@@ -25,7 +25,7 @@ class NavBar extends React.Component {
               </ul>
               <ul className="nav navbar-nav navbar-left">
                 <li>
-                  <h5 className="navbar-text">You are logged in as <a href={`/#/profile/${window.sessionStorage.getItem('key')}`} className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
+                  <h5 className="navbar-text">You are logged in as <a href="#/profile" className="navbar-link">{window.sessionStorage.getItem('key')}</a></h5>
                 </li>
               </ul>
             </div>
