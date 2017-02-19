@@ -150,7 +150,8 @@ class Response extends React.Component {
 
     let checkFile = (type, responseFilename) => {
       const fileType = {
-        'mp4': 'THIS IS A VIDEO!'
+        'mp4': 'THIS IS A VIDEO!',
+        'mov': 'ANOTHER FORMAT'
       };
       if (fileType[type]) {
         return (<video className="response" controls>
@@ -172,7 +173,6 @@ class Response extends React.Component {
         );
       } else {
         return (
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
           <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
             <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
           </button>

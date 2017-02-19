@@ -22,6 +22,7 @@ class ChallengeTable extends React.Component {
       processData: false,  // tell jQuery not to process the data
       contentType: false,   // tell jQuery not to set contentType
       success: function(resp) {
+        
         $.ajax({
           url: '/api/challenge',
           type: 'POST',
