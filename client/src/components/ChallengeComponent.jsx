@@ -58,7 +58,7 @@ class ChallengeComponent extends React.Component {
 
   handleSubmit() {
     let outer = this;
-    var fd = new FormData(document.querySelector('#file'));
+    var fd = new FormData(document.querySelector('#upload'));
     $.ajax({
       url: '/api/s3',
       type: 'POST',
@@ -223,7 +223,7 @@ class ChallengeComponent extends React.Component {
           <input type="text" placeholder="Description" required ref="description" name="description"/>
           <input type="text" placeholder="category" required ref="category" name="category"/>
         </form>
-        <form ref="file" id="file">
+        <form ref="file" id="upload">
           <input type="file" placeholder="video" required ref="video" name="video"/>
         </form>
           <button onClick={this.handleSubmit}>Submit</button>
