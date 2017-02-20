@@ -44,6 +44,7 @@ class App extends React.Component {
     }).then(() => {
       $.get('/api/allchallenges')
         .then(data=>{
+          data = data.reverse();
           outer.props.dispatch(actions.addChallenge(data));
         });
     }); 
