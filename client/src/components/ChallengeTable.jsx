@@ -9,45 +9,46 @@ import { connect } from 'react-redux';
 class ChallengeTable extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit() {
-    let outer = this;
-    var fd = new FormData(document.querySelector('#file'));
-    $.ajax({
-      url: '/api/s3',
-      type: 'POST',
-      data: fd,
-      processData: false,  // tell jQuery not to process the data
-      contentType: false,   // tell jQuery not to set contentType
-      success: function(resp) {
+  // handleSubmit() {
+  //   console.log('handlesubmit fired!');
+  //   let outer = this;
+  //   var fd = new FormData(document.querySelector('#file'));
+  //   $.ajax({
+  //     url: '/api/s3',
+  //     type: 'POST',
+  //     data: fd,
+  //     processData: false,  // tell jQuery not to process the data
+  //     contentType: false,   // tell jQuery not to set contentType
+  //     success: function(resp) {
         
-        $.ajax({
-          url: '/api/challenge',
-          type: 'POST',
-          data: {
-            title: outer.refs.title.value,
-            description: outer.refs.description.value,
-            category: outer.refs.category.value,
-            filename: resp
-          },
-          success: function(data) {
-            data = data.reverse();
-            outer.props.dispatch(actions.addChallenge(data));
-            $.get('/api/allChallenges').done(challenge => {
-              challenge = challenge.reverse();
-              outer.props.dispatch(actions.addChallenge(challenge));
-            });
-            outer.refs.title.value = '';
-            outer.refs.description.value = '';
-            outer.refs.category.value = '';
-            outer.refs.video.value = '';
-          }
-        });
-      }
-    });
-  }
+  //       $.ajax({
+  //         url: '/api/challenge',
+  //         type: 'POST',
+  //         data: {
+  //           title: outer.refs.title.value,
+  //           description: outer.refs.description.value,
+  //           category: outer.refs.category.value,
+  //           filename: resp
+  //         },
+  //         success: function(data) {
+  //           data = data.reverse();
+  //           outer.props.dispatch(actions.addChallenge(data));
+  //           $.get('/api/allChallenges').done(challenge => {
+  //             challenge = challenge.reverse();
+  //             outer.props.dispatch(actions.addChallenge(challenge));
+  //           });
+  //           outer.refs.title.value = '';
+  //           outer.refs.description.value = '';
+  //           outer.refs.category.value = '';
+  //           outer.refs.video.value = '';
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   render() {
     return (
@@ -59,34 +60,6 @@ class ChallengeTable extends React.Component {
             </div>
           </div>
         </div>
-        <div className="col col-md-2 col-lg-2">
-          <form id="challenge">
-            <h4>Add your challenge!</h4>
-            <div className="form-group">
-              <label>Challenge Name</label>
-              <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
-            </div>
-            <div className="form-group">
-              <label>Challenge Description</label>
-              <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
-            </div>
-            <div className="form-group">
-              <label>Category</label><br/>
-              <select className="form-control" required ref="category">
-                <option>Charity</option>
-                <option>Gaming</option>
-                <option>Fitness</option>
-                <option>Funny</option>
-                <option>Music</option>
-                <option>Sports</option>
-              </select>
-            </div>
-          </form>
-          <form ref="file" id="file">
-            <input style={{width: '100%'}} type="file" placeholder="video or image" required ref="video" name="video"/>
-          </form>
-          <button onClick={this.handleSubmit} className="btn btn-default">Submit</button>
-        </div>
       </div>
     );
   }
@@ -97,3 +70,31 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeTable);
+// <div className="col col-md-2 col-lg-2">
+//           <form id="challenge">
+//             <h4>Add your challenge!</h4>
+//             <div className="form-group">
+//               <label>Challenge Name</label>
+//               <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+//             </div>
+//             <div className="form-group">
+//               <label>Challenge Description</label>
+//               <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
+//             </div>
+//             <div className="form-group">
+//               <label>Category</label><br/>
+//               <select className="form-control" required ref="category">
+//                 <option>Charity</option>
+//                 <option>Gaming</option>
+//                 <option>Fitness</option>
+//                 <option>Funny</option>
+//                 <option>Music</option>
+//                 <option>Sports</option>
+//               </select>
+//             </div>
+//           </form>
+//           <form ref="file" id="file">
+//             <input style={{width: '100%'}} type="file" placeholder="video or image" required ref="video" name="video"/>
+//           </form>
+//           <li onClick={this.handleSubmit} className="btn btn-default">Submit</li>
+//         </div>
