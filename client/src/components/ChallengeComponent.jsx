@@ -128,7 +128,7 @@ class ChallengeComponent extends React.Component {
         description: this.refs.description.value
       },
       success: function(data) {
-        window.location.href = "/#/dash";
+        window.location.href = '/#/dash';
         alert('Successfully edited!');
       }
     });
@@ -139,7 +139,7 @@ class ChallengeComponent extends React.Component {
       url: '/api/challenge/' + window.sessionStorage.id,
       type: 'DELETE',
       success: function(data) {
-        window.location.href = "/#/dash";
+        window.location.href = '/#/dash';
         alert('Successfully deleted!');
       }
     });
@@ -164,7 +164,7 @@ class ChallengeComponent extends React.Component {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => {this.editChallenge()}}>
+              <button className="btn btn-large btn-default edit" onClick={() => { this.editChallenge(); }}>
                 {'Edit'}
               </button>
               <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
@@ -175,7 +175,7 @@ class ChallengeComponent extends React.Component {
         return (
           <div>
             <div className="editor">
-              <form id="editform" onSubmit={() => {this.saveChallenge()}}>
+              <form id="editform" onSubmit={() => { this.saveChallenge(); }}>
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
@@ -204,11 +204,8 @@ class ChallengeComponent extends React.Component {
     };
 
     return (
-      <div className="container-fluid">
-        <center><h4 className="title">The Gauntlet</h4></center>
-        <hr />
+      <div className="container-fluid main-content">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <hr />
         <h1>{window.sessionStorage.title}</h1>
         {taskButtons()}
         {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
