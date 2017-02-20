@@ -12,3 +12,12 @@
 .navButton {
   color: white
 }
+
+.nav-label {
+  color: black
+}
+
+.nav-label-file {
+  color: black;
+  padding-left: 15px;
+}
