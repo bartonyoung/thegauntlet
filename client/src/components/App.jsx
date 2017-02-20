@@ -24,6 +24,35 @@ class App extends React.Component {
     this.editProfile = this.editProfile.bind(this);
   }
 
+  componentDidMount() {
+    let outer = this;
+    $.get('/api/allChallenges').done(data => {
+      data = data.reverse();
+      outer.props.dispatch(actions.addChallenge(data));
+    });
+
+    $.get('/api/getLeaders').then(leaders => {
+      outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+    });
+
+    $.get('/api/profile').done(data => {
+      outer.props.dispatch(actions.addUser(data));
+    });
+    
+    $.get('/api/ranks').then((rankData)=>{
+      outer.props.dispatch(actions.getRanks(rankData)); 
+    }).then(() => {
+      $.get('/api/allchallenges')
+        .then(data=>{
+          data = data.reverse();
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    }); 
+    $.get('/api/favorite').done(data => {
+      outer.props.dispatch(actions.setFavorites(data));
+    });
+  }
+
   handleLogout() {
     $.get('/api/logout')
     .done(data => {
