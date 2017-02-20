@@ -10,9 +10,6 @@ class Profile extends React.Component {
 
   componentDidMount() {
     let outer = this;
-    $.get('/api/allChallenges').done(data => {
-      outer.props.dispatch(actions.addChallenge(data));
-    });
     $.get('/api/response', {
       parent_id: window.sessionStorage.getItem('id')
     }).done(data => {

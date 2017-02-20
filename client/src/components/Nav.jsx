@@ -16,25 +16,25 @@ class NavBar extends React.Component {
     console.log(outer.props.dispatch);
     $.ajax({
       url: '/api/s3',
-      type: 'POST',    
+      type: 'POST',
       data: fd,
       processData: false,  // tell jQuery not to process the data
       contentType: false,   // tell jQuery not to set contentType
       success: function(resp) {
-        
+
         $.ajax({
           url: '/api/challenge',
           type: 'POST',
-          data: {    
+          data: {
             title: outer.refs.title.value,
             description: outer.refs.description.value,
-            category: outer.refs.category.value,    
+            category: outer.refs.category.value,
             filename: resp
           },
           success: function(data) {
             data = data.reverse();
             outer.props.dispatch(actions.addChallenge(data));
-            $.get('/api/allChallenges').done(challenge => { 
+            $.get('/api/allChallenges').done(challenge => {
               challenge = challenge.reverse();
               outer.props.dispatch(actions.addChallenge(challenge));
             });
@@ -46,7 +46,7 @@ class NavBar extends React.Component {
         });
       }
     });
-  }  
+  }
 
   handleNav() {
     if (this.props.auth) {
@@ -58,7 +58,7 @@ class NavBar extends React.Component {
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add Challenge!<span className="caret"></span></a>
                   <ul className="dropdown-menu">
                     <form id="challenge" style={{width: '300px', padding: '15px'}}>
-          
+
             <div className="form-group">
               <li className="nav-label">Name it!</li>
               <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
@@ -92,7 +92,7 @@ class NavBar extends React.Component {
                   <a href="/#/dash" className="navButton">Dashboard</a>
                 </li>
                 <li>
-                  <a href="javascript: void(0)" className="navButton" onClick={this.props.handleLogout}>Logout</a> 
+                  <a href="javascript: void(0)" className="navButton" onClick={this.props.handleLogout}>Logout</a>
                 </li>
               </ul>
               <ul className="nav navbar-nav navbar-left">
