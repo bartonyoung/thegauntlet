@@ -1,5 +1,5 @@
 .profilePicture.container{
-  height:200px;
+  height:226px;
   width:100%;
   margin-top: 65px;
   /*background-color:gray;
@@ -22,9 +22,8 @@
   float: left;
   border: 2px solid black;
   border-radius:5px;
-  -webkit-border-radius:5px;
-  -moz-border-radius:5px;
-  margin-bottom:10px;
+  -webkit-border-radius:100px;
+  -moz-border-radius:100px;
   padding:5px;
 }
 
@@ -34,4 +33,27 @@
 
 .challenge.description {
   display: block;
+}
+
+
+li {
+  list-style: none;
+  display: inline-block;
+}
+
+input {
+  width: 180px;
+}
+
+#picContainer {
+  display: block;
+}
+.editPic {
+  position: absolute; 
+  margin: 0px;
+  margin-top: 200px;
+  float: left;
+  margin-left: 0;
+  padding-left: 0;
+  left: 0;
 }
