@@ -164,7 +164,7 @@ class Response extends React.Component {
       }
     };
 
-    let whichButton = (leaderId) => {
+    let whichFollowButton = (leaderId) => {
       if (this.props.leaders.includes(leaderId)) {
         return (
           <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
@@ -180,9 +180,9 @@ class Response extends React.Component {
       }
     };
 
-     let whichFavoriteIcon = (challengeId) => {
+    let whichFavoriteIcon = (challengeId) => {  
       if (this.props.favorites.includes(challengeId)) {
-        return (
+        return (   
           <button className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
           </button>
@@ -199,7 +199,7 @@ class Response extends React.Component {
     let mappedResponses = this.props.responses.map((response, i) => {
       if (response.parent_id === parseInt(window.sessionStorage.id)) {
         if (this.props.profileView === 'all' && !window.sessionStorage.respTitle) {
-          console.log('responses')
+          console.log('responses');
           return (
             <div>
               <h4>{'Response title: ' + response.title}</h4>
@@ -208,12 +208,13 @@ class Response extends React.Component {
               {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
               <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
               <h5>{`Views : ${response.views}`}</h5>
-              {whichButton(response.user_id)}
+              {whichFollowButton(response.user_id)}
+              {whichFavoriteIcon(response.id)}
               <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
             </div>
           );
         } else if (i === 0) {
-          console.log('mailbox response', window.sessionStorage.respTitle, response.title)
+          console.log('mailbox response', window.sessionStorage.respTitle, response.title);
           return (
             <div>
               <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
@@ -222,9 +223,9 @@ class Response extends React.Component {
               {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
               <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
               <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
-              {whichButton(window.sessionStorage.respUser_id)}
-              {whichFavoriteIcon(window.sessionStorage.respUserid)}
-              <a onClick={()=> this.upVoteClick(window.sessionStorage.respId)}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
+              {whichFollowButton(window.sessionStorage.respUser_id)}
+              {whichFavoriteIcon(parseInt(window.sessionStorage.respID))}
+              <a onClick={()=> this.upVoteClick(parseInt(window.sessionStorage.respID))}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
             </div>
           );
         }

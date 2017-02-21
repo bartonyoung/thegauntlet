@@ -72,7 +72,8 @@ class ProfileContent extends React.Component {
     window.sessionStorage.setItem('views', challenge.views);
     window.sessionStorage.setItem('username', challenge.username);
     window.sessionStorage.setItem('respTitle', response.title);
-    window.sessionStorage.setItem('respId', response.parent_id);
+    window.sessionStorage.setItem('respParentID', response.parent_id);
+    window.sessionStorage.setItem('respID', response.id);
     window.sessionStorage.setItem('respDescription', response.description);
     window.sessionStorage.setItem('respCategory', response.category);
     window.sessionStorage.setItem('respFilename', response.filename);
@@ -199,7 +200,6 @@ class ProfileContent extends React.Component {
         );
       }
     };
- 
 
     let target = this.props.user[0].username;
     return (
