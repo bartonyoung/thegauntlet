@@ -14,7 +14,6 @@ class ChallengeComponent extends React.Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.commentSubmit = this.commentSubmit.bind(this);
     this.editChallenge = this.editChallenge.bind(this);
     this.saveChallenge = this.saveChallenge.bind(this);
     this.deleteChallenge = this.deleteChallenge.bind(this);
@@ -85,32 +84,6 @@ class ChallengeComponent extends React.Component {
           }
         });
       }
-    });
-  }
-
-  commentSubmit(e) {
-    e.preventDefault();
-    let outer = this;
-    let comments = {
-      comment: this.refs.comment.value,
-      challenge_id: window.sessionStorage.id
-    };
-    $.post('/api/comments', comments).then(() => {
-      $.get('/api/comments', {
-        challenge_id: window.sessionStorage.getItem('id')
-      }).then(data => {
-        outer.props.dispatch(actions.addComment(data));
-        outer.refs.comment.value = '';
-      });
-    });
-  }
-
-  renderComments() {
-    let outer = this;
-    $.get('/api/comments', {
-      challenge_id: window.sessionStorage.getItem('id')
-    }).done(data => {
-      outer.newComments = data;
     });
   }
 
@@ -194,29 +167,30 @@ class ChallengeComponent extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video className="parent" controls>
+        return (<video className="parentMedia" controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucke  t421/' + response.filename} width="320" height="240" />;
-        return <img className="parent" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
+        return <img className="parentMedia" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
 
     return (
-      <div className="container-fluid main-content">
+      <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <h1>{window.sessionStorage.title}</h1>
-        {taskButtons()}
-        {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
-        <h3><Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`}>{window.sessionStorage.username}</Link></h3>
-        <h4>{window.sessionStorage.description}</h4>
-        <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
-        <form onSubmit={this.commentSubmit}>
-          <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
-          <input type="submit"/>
-        </form>
-        <Comments />
+        <div className="row parentChallenge">
+          <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
+            <h1>{window.sessionStorage.title} by <Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`} className="userLink">{window.sessionStorage.username}</Link></h1>
+            <h4>{window.sessionStorage.description}</h4>
+            {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
+            {taskButtons()}
+            <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
+          </div>
+          <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
+            <Comments />
+          </div>
+        </div>
         {'Upload your response: '}
         <form id="challenge">
           <input type="text" placeholder="Name your response" required ref="title" name="title"/>
