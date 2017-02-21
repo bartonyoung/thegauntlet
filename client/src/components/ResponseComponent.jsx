@@ -94,8 +94,7 @@ class ResponseComponent extends React.Component {
       type: 'PUT',
       data: {
         title: this.refs.title.value,
-        description: this.refs.description.value,
-        parent_id: response.parent_id
+        description: this.refs.description.value
       },
       success: function(data) {
         console.log('put request', data);
@@ -240,6 +239,7 @@ class ResponseComponent extends React.Component {
 
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
     if (this.props.response.parent_id === parseInt(window.sessionStorage.id)) {
+      console.log("this response", this.props.response)
       return (
         <div>
           <h4>{'Response title: ' + this.props.response.title}</h4>

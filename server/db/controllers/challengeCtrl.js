@@ -89,8 +89,9 @@ module.exports = {
     const title = req.body.title;
     const description = req.body.description;
     const id = req.params.id;
-    db.from('challenges').where({parent_id: id}).update({title: title, description: description}).then(() => {
-      db.select().from('challenges').where({parent_id: id}).then(data => {
+    console.log("resp id", id);
+    db.from('challenges').where({id: id}).update({title: title, description: description}).then(() => {
+      db.select().from('challenges').where({id: id}).then(data => {
         res.json(data);
       });
     });
@@ -174,7 +175,7 @@ module.exports = {
     db.select('id').from('users').where({username: req.session.displayName})
       .then( userData => {
         db.select('challenge_id').from('favorites').where({user_id: userData[0].id})
-          .then(favorites => 
+          .then(favorites =>
             res.json(favorites.map(favorite => {
               return parseInt(favorite.challenge_id);
             }))
