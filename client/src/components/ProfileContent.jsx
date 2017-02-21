@@ -31,6 +31,7 @@ class ProfileContent extends React.Component {
     }
   }
 
+<<<<<<< HEAD
   followTheLeader(leaderId) {
     const outer = this;
     $.post('/api/follower', {
@@ -55,6 +56,8 @@ class ProfileContent extends React.Component {
     });
   }
 
+=======
+>>>>>>> Fix followers bug
   changeProfileView(view) {
     this.props.dispatch(actions.setProfileView(view));
   }
@@ -85,6 +88,92 @@ class ProfileContent extends React.Component {
     window.sessionStorage.setItem('respViews', response.views);
     window.sessionStorage.setItem('respUsername', response.username);
     window.sessionStorage.setItem('respUserId', response.user_id);
+<<<<<<< HEAD
+=======
+    window.sessionStorage.setItem('respId', response.id);
+    if (this.state[i] === 'none' || !this.state[i]) {
+      this.setState({
+        [i]: 'unset'
+      });
+    } else {
+      this.setState({
+        [i]: 'none'
+      });
+    }
+  }
+
+  upVoteClick(id) {
+    const outer = this;
+    $.post('/api/upvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(()=> {
+      $.get('/api/allChallenges/')
+        .then((data)=> {
+          if (outer.props.currentCategory === 'all') {
+            data = data.reverse();
+          } else if (outer.props.currentCategory === 'recent') {
+            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
+          } else if (outer.props.currentCategory === 'popular') {
+            data = data.sort((a, b) =>
+            b.upvotes - a.upvotes
+          );
+          } else {
+            data = data.filter(challenge =>
+            challenge.category === outer.props.currentCategory
+          );
+          }
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    });
+  }
+
+  followTheLeader(leaderId) {
+    const outer = this;
+    $.post('/api/follower', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
+      });
+    });
+  }
+
+  unFollow(leaderId) {
+    const outer = this;
+    $.post('/api/unFollow', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
+      });
+    });
+  }
+
+  addToFavorites(challengeId) {
+    const outer = this;
+    $.post('/api/favorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then( favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
+  }
+
+  removeFromFavorites(challengeId) {
+    console.log('Client remove', challengeId);
+    const outer = this;
+    $.post('/api/unFavorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then(favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
+>>>>>>> Fix followers bug
   }
 
   editProfileImage (id) {

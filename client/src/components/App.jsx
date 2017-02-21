@@ -29,11 +29,8 @@ class App extends React.Component {
       data = data.reverse();
       outer.props.dispatch(actions.addChallenge(data));
     });
-    if (window.sessionStorage.getItem('key')) {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
 
+<<<<<<< HEAD
       $.get('/api/profile').done(data => {
         outer.props.dispatch(actions.addUser(data));
       });
@@ -45,14 +42,11 @@ class App extends React.Component {
 
     $.get('/api/ranks').then((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData)); 
+=======
+    $.get('/api/ranks').then((rankData)=>{
+      outer.props.dispatch(actions.getRanks(rankData));
+>>>>>>> Fix followers bug
     });
-    // .then(() => {
-    //   $.get('/api/allchallenges')
-    //     .then(data=>{
-    //       data = data.reverse();
-    //       outer.props.dispatch(actions.addChallenge(data));
-    //     });
-    // }); 
   }
 
   handleLogout() {
