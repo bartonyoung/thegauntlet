@@ -86,6 +86,13 @@ module.exports = {
       data = data.sort((a, b)=> b.upvotes - a.upvotes);
       res.json(data);
     });
+  },
+
+  updateProfile: function(req, res) {
+    let edits = req.body;
+    db.select().from('users').where({id: req.body.id}).update(edits).then(() => {
+      res.sendStatus(200);
+    });
   }
 };
 
