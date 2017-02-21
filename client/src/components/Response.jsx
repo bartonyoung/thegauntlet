@@ -210,7 +210,9 @@ class Response extends React.Component {
               <h5>{`Views : ${response.views}`}</h5>
               {whichFollowButton(response.user_id)}
               {whichFavoriteIcon(response.id)}
-              <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+              <button onClick={()=>{ this.upVoteClick(response.id); }} type="button" className="btn btn-default btn-sm">
+                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${response.upvotes}`}
+              </button>
             </div>
           );
         } else if (i === 0) {
@@ -225,7 +227,9 @@ class Response extends React.Component {
               <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
               {whichFollowButton(window.sessionStorage.respUser_id)}
               {whichFavoriteIcon(parseInt(window.sessionStorage.respID))}
-              <a onClick={()=> this.upVoteClick(parseInt(window.sessionStorage.respID))}>{'Upvote'}</a><p>{`${window.sessionStorage.respUpvotes}`}</p>
+              <button onClick={()=>{ this.upVoteClick(parseInt(window.sessionStorage.respID)); }} type="button" className="btn btn-default btn-sm">
+                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${window.sessionStorage.respUpvotes}`}
+              </button>
             </div>
           );
         }
