@@ -30,7 +30,7 @@ class ProfileContent extends React.Component {
   followTheLeader(leaderId) {
     const outer = this;
     $.post('/api/follower', {
-      leader_id: leaderId
+      leader_id: leaderId 
     }).then(() => {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
@@ -173,7 +173,7 @@ class ProfileContent extends React.Component {
           if (challenge.username === window.sessionStorage.username) {
             mappedNotifications = this.props.responses.map(response => {
               if (response.parent_id === challenge.id) {
-                console.log('inside mapping')
+                console.log('inside mapping');
                 return (
                   <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to ' + challenge.title}</Link></h4></div>
                 );
@@ -198,11 +198,11 @@ class ProfileContent extends React.Component {
           <div></div>
         );
       }
-    }
+    };
+ 
 
-
-      let target = this.props.user[0].username;
-      return (
+    let target = this.props.user[0].username;
+    return (
         <div width={screen.width}>
           <div className='profilePicture container'>
             <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
@@ -223,7 +223,7 @@ class ProfileContent extends React.Component {
           </div>
           {myView()}
         </div>
-      );
+    );  
   }
 }
     // } else {

@@ -73,6 +73,7 @@ module.exports = {
   },
 
   logout: function(req, res) {
+    console.log(req.body);
     let temp = req.session.displayName;
     req.session.destroy();
     res.send('Good bye  ' + temp);
@@ -81,6 +82,7 @@ module.exports = {
   getAllUsers: function(req, res) {
     let username = req.params.username || req.session.displayName;
     db.select( 'users.username', 'users.upvotes').from('users').then(data => {
+      console.log('======================================>', data);
       data = data.sort((a, b)=> b.upvotes - a.upvotes);
       res.json(data);
     });
