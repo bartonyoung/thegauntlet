@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
-import css from '../styles/landing.css';
+import css from '../styles/signup.css';
 
 class Login extends React.Component {
   constructor(props) {
@@ -30,15 +30,17 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="container-login text-center">
-        <form id="auth" type="submit" onSubmit={this.handleLogin.bind(this)}>
+      <div className="container-signup text-center">
+        <form id="signup" type="submit" onSubmit={this.handleLogin.bind(this)}>
+         <h1 id="sign-up">SIGN IN</h1> 
           <p>Username</p>
-          <input type="text" required ref="username" />
+          <input type="text" placeholder="Username" required ref="username" className="input pass" />
           <p>Password</p>
-          <input type="password" required ref="password" />
+          <input type="password" placeholder="Password" required ref="password" className="input pass" />
           <p>
-            <input type="submit" value="Login" />
+            <input type="submit" value="Login" className="inputButton" />
           </p>
+          <a href="/">Back to main page</a>
         </form>
       </div>
     );
