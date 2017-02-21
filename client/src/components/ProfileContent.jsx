@@ -9,7 +9,7 @@ class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      display: 'none',
+      display: 'none'
     };
     this.editProfileImage = this.editProfileImage.bind(this);
   }
@@ -31,30 +31,6 @@ class ProfileContent extends React.Component {
     }
   }
 
-  followTheLeader(leaderId) {
-    const outer = this;
-    $.post('/api/follower', {
-      leader_id: leaderId 
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-        outer.followers();
-      });
-    });
-  }
-
-  unFollow (leaderId) {
-    const outer = this;
-    $.post('/api/unFollow', {
-      leader_id: leaderId
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-        outer.followers();
-      });
-    });
-  }
-
   changeProfileView(view) {
     this.props.dispatch(actions.setProfileView(view));
   }
@@ -66,7 +42,7 @@ class ProfileContent extends React.Component {
     });
   }
 
-  onNotificationClick(challenge, response) {
+  onNotificationClick(challenge, response, i) {
     window.sessionStorage.setItem('title', challenge.title);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
@@ -85,6 +61,89 @@ class ProfileContent extends React.Component {
     window.sessionStorage.setItem('respViews', response.views);
     window.sessionStorage.setItem('respUsername', response.username);
     window.sessionStorage.setItem('respUserId', response.user_id);
+    window.sessionStorage.setItem('respId', response.id);
+    if (this.state[i] === 'none' || !this.state[i]) {
+      this.setState({
+        [i]: 'unset'
+      });
+    } else {
+      this.setState({
+        [i]: 'none'
+      });
+    }
+  }
+
+  upVoteClick(id) {
+    const outer = this;
+    $.post('/api/upvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(()=> {
+      $.get('/api/allChallenges/')
+        .then((data)=> {
+          if (outer.props.currentCategory === 'all') {
+            data = data.reverse();
+          } else if (outer.props.currentCategory === 'recent') {
+            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
+          } else if (outer.props.currentCategory === 'popular') {
+            data = data.sort((a, b) =>
+            b.upvotes - a.upvotes
+          );
+          } else {
+            data = data.filter(challenge =>
+            challenge.category === outer.props.currentCategory
+          );
+          }
+          outer.props.dispatch(actions.addChallenge(data));
+        });
+    });
+  }
+
+  followTheLeader(leaderId) {
+    const outer = this;
+    $.post('/api/follower', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
+      });
+    });
+  }
+
+  unFollow(leaderId) {
+    const outer = this;
+    $.post('/api/unFollow', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+        outer.followers();
+      });
+    });
+  }
+
+  addToFavorites(challengeId) {
+    const outer = this;
+    $.post('/api/favorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then( favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
+  }
+
+  removeFromFavorites(challengeId) {
+    console.log('Client remove', challengeId);
+    const outer = this;
+    $.post('/api/unFavorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then(favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
   }
 
   editProfileImage (id) {
@@ -156,6 +215,74 @@ class ProfileContent extends React.Component {
       }
     });
 
+    let whichFollowButton = (leaderId) => {
+      if (this.props.leaders.includes(leaderId)) {
+        return (
+          <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+          </button>
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+          </button>
+        );
+      }
+    };
+
+    let whichFavoriteIcon = (challengeId) => {
+      if (this.props.favorites.includes(challengeId)) {
+        return (
+          <button className="btn btn-default btn-sm pull-right">
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
+          </button>
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
+            <span className="glyphicon glyphicon-heart"></span>
+          </button>
+        );
+      }
+    };
+
+    let calculateTime = (seconds) => {
+      if (seconds < 60) {
+        return Math.floor(seconds) + ' seconds ago';
+      } else if (seconds >= 60 && seconds < 3600) {
+        if (seconds < 120) {
+          return ' 1 minute ago';
+        } else {
+          return Math.floor(seconds / 60) + ' minutes ago';
+        }
+      } else if (seconds >= 3600 && seconds < 86400) {
+        if (seconds < 7200) {
+          return ' 1 hour ago';
+        } else {
+          return Math.floor(seconds / 3600) + ' hours ago';
+        }
+      } else if (seconds >= 86400 && seconds < 604800) {
+        if (seconds < 172800) {
+          return ' 1 day ago';
+        } else {
+          return Math.floor(seconds / 86400) + ' days ago';
+        }
+      } else if (seconds >= 2592000 && seconds < 31104000) {
+        if (seconds < 5184000) {
+          return ' 1 month ago';
+        } else {
+          return Math.floor(seconds / 2592000) + ' months ago';
+        }
+      } else {
+        if (seconds < 62208000) {
+          return ' 1 year ago';
+        } else {
+          return Math.floor(seconds / 31104000) + ' years ago';
+        }
+      }
+    };
+
     let whichButton = (leaderId) => {
       let outer = this;
       if (this.props.leaders.includes(leaderId)) {
@@ -205,13 +332,29 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'mailbox') {
         let mappedArray = [];
         let mappedNotifications;
-        this.props.challenges.forEach(challenge => {
+
+        this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
-            mappedNotifications = this.props.responses.map(response => {
+            mappedNotifications = this.props.responses.map((response, i) => {
+              let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
+
               if (response.parent_id === challenge.id) {
-                console.log('inside mapping');
                 return (
-                  <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to ' + challenge.title}</Link></h4></div>
+                  <div>
+                    <a href='javascript: void(0)' onClick={() => this.onNotificationClick(challenge, response, i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
+                    {calculateTime(timeDifferenceInSeconds)}<br/>
+                    <div className="showresponse" style={{display: this.state[i] || 'none'}}>
+                      <h4>{'Response title: ' + response.title}</h4>
+                      <h5>{'Description: ' + response.description}</h5>
+                      {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
+                      <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username + ' '}</Link>
+                      {calculateTime(timeDifferenceInSeconds)}<br/>
+                      <h5>{`Views : ${response.views}`}</h5>
+                      {whichButton(response.user_id)}
+                      {whichFavoriteIcon(response.user_id)}
+                      <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+                    </div>
+                  </div>
                 );
               }
             });
@@ -221,7 +364,6 @@ class ProfileContent extends React.Component {
 
         return mappedArray;
       }
-
     };
 
     let renderMailbox = () => {
@@ -250,7 +392,7 @@ class ProfileContent extends React.Component {
                 <li><form id='pic'>
                   <input type="file" placeholder="image" ref="video" name="video" onChange={()=> this.editProfileImage(this.props.user[0].id)} />
                 </form></li>
-              </ul>      
+              </ul>
             </div>
             Username: {this.props.user[0].username} <br />
             Firstname: {this.props.user[0].firstname} <br />
@@ -269,12 +411,9 @@ class ProfileContent extends React.Component {
           </div>
           {myView()}
         </div>
-    );  
+    );
   }
 }
-    // } else {
-    //   return <div></div>;
-    // }
 
 const mapStateToProps = (state) => {
   return state;

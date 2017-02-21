@@ -137,7 +137,7 @@ class ChallengeList extends React.Component {
             // <img clasName="center-block" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} />
         return (
           <div>
-            <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
+            <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
           </div>
         );
       }
@@ -175,7 +175,44 @@ class ChallengeList extends React.Component {
       }
     };
 
+    let calculateTime = (seconds) => {
+      if (seconds < 60) {
+        return Math.floor(seconds) + ' seconds ago';
+      } else if (seconds >= 60 && seconds < 3600) {
+        if (seconds < 120) {
+          return ' 1 minute ago';
+        } else {
+          return Math.floor(seconds / 60) + ' minutes ago';
+        }
+      } else if (seconds >= 3600 && seconds < 86400) {
+        if (seconds < 7200) {
+          return ' 1 hour ago';
+        } else {
+          return Math.floor(seconds / 3600) + ' hours ago';
+        }
+      } else if (seconds >= 86400 && seconds < 604800) {
+        if (seconds < 172800) {
+          return ' 1 day ago';
+        } else {
+          return Math.floor(seconds / 86400) + ' days ago';
+        }
+      } else if (seconds >= 2592000 && seconds < 31104000) {
+        if (seconds < 5184000) {
+          return ' 1 month ago';
+        } else {
+          return Math.floor(seconds / 2592000) + ' months ago';
+        }
+      } else {
+        if (seconds < 62208000) {
+          return ' 1 year ago';
+        } else {
+          return Math.floor(seconds / 31104000) + ' years ago';
+        }
+      }
+    };
+
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
+      let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
       if (!challenge.parent_id) {
         return (
           <div className="col col-md-6" key={i}>
@@ -184,7 +221,8 @@ class ChallengeList extends React.Component {
             </div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
-              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
+              {calculateTime(timeDifferenceInSeconds)}
               {whichFollowButton(challenge.user_id)}
               {whichFavoriteIcon(challenge.id)}
               <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">

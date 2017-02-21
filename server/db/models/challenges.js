@@ -8,7 +8,7 @@ module.exports = knex.schema.createTableIfNotExists('challenges', (challenge) =>
   challenge.string('category');
   challenge.integer('views');
   challenge.integer('upvotes');
-  challenge.timestamp('created_at').defaultTo(knex.fn.now());
+  challenge.string('created_at');
   challenge.integer('parent_id');
   challenge.integer('user_id').unsigned();//.references('id').inTable('users').onUpdate().onDelete();
 }).then(function() {

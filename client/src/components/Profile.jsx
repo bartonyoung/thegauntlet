@@ -21,9 +21,6 @@ class Profile extends React.Component {
       });
       outer.props.dispatch(actions.addResponse(responseArr));
     });
-    $.get('/api/profile/' + window.sessionStorage.username).done(data => {
-      outer.props.dispatch(actions.addUser(data));
-    });
   }
 
   render() {
