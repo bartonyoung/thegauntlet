@@ -31,7 +31,7 @@ class Login extends React.Component {
   render() {
     return (
       <div className="container-signup text-center">
-        <form id="signup" type="submit" onSubmit={this.handleLogin.bind(this)}>
+        <form className="register" type="submit" onSubmit={this.handleLogin.bind(this)}>
          <h1 id="sign-up">SIGN IN</h1> 
           <p>Username</p>
           <input type="text" placeholder="Username" required ref="username" className="input pass" />
