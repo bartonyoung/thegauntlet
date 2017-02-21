@@ -9,9 +9,13 @@ class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      display: 'none'
+      display: 'none',
+      first: false,
+      second: false,
+      third: false,
     };
     this.editProfileImage = this.editProfileImage.bind(this);
+    this.editFirstName = this.editFirstName.bind(this);
   }
 
   componentDidMount () {
@@ -20,6 +24,14 @@ class ProfileContent extends React.Component {
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
+    });
+  }
+
+  componentWillMount () {
+    const outer = this;
+    let endpoint = '/api' + window.location.hash.replace(/[#]/gi, '');
+    $.get(endpoint).then(data => {
+      outer.props.dispatch(actions.addUser(data));
     });
   }
 
@@ -177,6 +189,61 @@ class ProfileContent extends React.Component {
       }
     });
   }
+
+  editFirstName (id) {
+    let outer = this;  
+    $.ajax({
+      url: '/api/profile',
+      type: 'PUT',
+      data: {
+        id: id,
+        firstname: outer.refs.firstname.value,
+      },
+      success: function() {
+        $.get('/api/profile').then(userData => {
+          outer.props.dispatch(actions.addUser(userData));
+          outer.refs.firstname.value = '';
+          outer.setState({first: !outer.state.first});
+        });
+      }
+    });
+  }
+  editLastName (id) {
+    let outer = this;  
+    $.ajax({
+      url: '/api/profile',
+      type: 'PUT',
+      data: {
+        id: id,
+        lastname: outer.refs.lastname.value,
+      },
+      success: function() {
+        $.get('/api/profile').then(userData => {
+          outer.props.dispatch(actions.addUser(userData));
+          outer.refs.lastname.value = '';
+          outer.setState({second: !outer.state.second});
+        });
+      }
+    });
+  } 
+  editEmail (id) {
+    let outer = this;  
+    $.ajax({
+      url: '/api/profile',
+      type: 'PUT',
+      data: {
+        id: id,
+        email: outer.refs.email.value,
+      },
+      success: function() {
+        $.get('/api/profile').then(userData => {
+          outer.props.dispatch(actions.addUser(userData));
+          outer.refs.email.value = '';
+          outer.setState({third: !outer.state.third});
+        });
+      }
+    });
+  }               
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -377,27 +444,86 @@ class ProfileContent extends React.Component {
         );
       }
     };
+    let isUserProfile = (placement, user) => {
+      if (window.sessionStorage.getItem('key') === user) {
+        return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}>Edit</a>}</span>;
+      } else {
+        return <div></div>;
+      }
+    };
+    let isUserImageClickable = (user) => {
+      return window.sessionStorage.getItem('key') === user;
+          
+    };
+    let Firstname = (name, id, user) => {
+      if (!this.state.first) {
+        return (
+          <div>
+            Firstname: {name} {isUserProfile('first', user)}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <form>
+              <input ref='firstname' type='text' placeholder={name}/> <button onClick={() => this.editFirstName(id)}></button> <a href='javascript: void(0)' onClick={() => this.setState({first: !this.state.first})}>Edit</a>
+            </form>
+          </div>
+        );
+      }
+    };
 
+    let Lastname = (name, id, user) => {
+      if (!this.state.second) {
+        return (
+          <div>
+            Lastname: {name} {isUserProfile('second', user)}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <form>
+              <input ref='lastname' type='text' placeholder={name}/> <button onClick={() => this.editLastName(id)}></button> <a href='javascript: void(0)' onClick={() => this.setState({second: !this.state.second})}>Edit</a>
+            </form>
+          </div>
+        );
+      }
+    };    
+    let Email = (email, id, user) => {
+      if (!this.state.third) {
+        return (
+          <div>
+            Email: {email} {isUserProfile('third', user)}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <form>
+              <input ref='email' type='text' placeholder={email}/> <button onClick={() => this.editEmail(id)}></button> <a href='javascript: void(0)' onClick={() => this.setState({third: !this.state.third})}>Edit</a>
+            </form>
+          </div>
+        );
+      }
+    };         
     let target = this.props.user[0].username;
     return (
         <div width={screen.width}>
           <div className='profilePicture container'>
             <div id='picContainer'>
               {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-              <img className='profilePicture text' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() => this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'})}/>
+              <img className='profilePicture text' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(this.props.user[0].username)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
               <ul className='editPic' style={{display: this.state.display}}>
-                {/*<li><button id='formButton' onClick={()=> this.editProfileImage(this.props.user[0].id)}>
-                  Edit Profile Image
-                </button></li>*/}
                 <li><form id='pic'>
-                  <input type="file" placeholder="image" ref="video" name="video" onChange={()=> this.editProfileImage(this.props.user[0].id)} />
-                </form></li>
-              </ul>
+                  <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].id); }} />
+                </form></li>  
+              </ul>      
             </div>
             Username: {this.props.user[0].username} <br />
-            Firstname: {this.props.user[0].firstname} <br />
-            Lastname: {this.props.user[0].lastname} <br />
-            Email: {this.props.user[0].email} <br />
+            {Firstname(this.props.user[0].firstname, this.props.user[0].id, this.props.user[0].username)}
+            {Lastname(this.props.user[0].lastname, this.props.user[0].id, this.props.user[0].username)}
+            {Email(this.props.user[0].email, this.props.user[0].id, this.props.user[0].username)}
             Rank# {this.props.ranks.map((rank, index)=>{
               return {username: rank.username, rank: index + 1};
             }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
