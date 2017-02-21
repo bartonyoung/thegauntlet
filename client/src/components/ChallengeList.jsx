@@ -41,10 +41,9 @@ class ChallengeList extends React.Component {
         outer.props.dispatch(actions.addUser(user));
       });
     } else {
+      window.sessionStorage.setItem('username', challenge);
       $.get('/api/profile/' + challenge).done(user => {
         outer.props.dispatch(actions.addUser(user));
-      }).then(() => {
-        outer.props.dispatch(actions.setCurrentCategory('profile'));
       });
     }
   }
@@ -216,10 +215,10 @@ class ChallengeList extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.ranks.map((rank, index) => {
-                    if (index <= 10) {
+                    if (index < 10) {
                       return <tr className="success" key={index}>
                                <td> #{index + 1}</td>
-                               <td><a onClick={() => this.onChallengeClick(rank.username)}>{rank.username}</a></td>
+                               <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
                                <td>{rank.upvotes}</td>
                              </tr>;
                     }

@@ -49,7 +49,7 @@ class NavBar extends React.Component {
   }
 
   handleNav() {
-    if (this.props.auth) {
+    if (window.sessionStorage.getItem('key')) {
       return (
         <nav className="nav navbar navbar-fixed-top">
             <div className="container">

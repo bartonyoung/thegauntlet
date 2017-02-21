@@ -11,7 +11,27 @@ class Dash extends React.Component {
   constructor(props) {
     super(props);
   }
+  
+  componentDidMount() {
+    let outer = this;
 
+    if (window.sessionStorage.getItem('key')) {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+
+      $.get('/api/profile').done(data => {
+        outer.props.dispatch(actions.addUser(data));
+      }); 
+      $.get('/api/favorite').done(data => {
+        outer.props.dispatch(actions.setFavorites(data));
+      });
+      $.get('/api/ranks').then((rankData)=>{
+        outer.props.dispatch(actions.getRanks(rankData)); 
+      });
+    }
+  }  
+   
   render() {
     return (
       <div>
