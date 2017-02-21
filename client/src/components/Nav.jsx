@@ -99,9 +99,6 @@ class NavBar extends React.Component {
                 <li>
                   <h5 className="navbar-text">You are logged in as <a href="#/profile" className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
                 </li>
-                <li>
-                  <a href="javascript: void(0)" className="navButton" onClick={() => this.props.editProfile()}>Edit Profile</a>
-                </li>
               </ul>
             </div>
           </nav>

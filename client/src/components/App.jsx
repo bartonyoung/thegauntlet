@@ -21,7 +21,6 @@ class App extends React.Component {
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.handleAuth = this.handleAuth.bind(this);
-    this.editProfile = this.editProfile.bind(this);
   }
 
   componentDidMount() {
@@ -72,11 +71,6 @@ class App extends React.Component {
     this.setState({
       auth: window.sessionStorage.getItem('key')
     }, cb);
-  }
-
-  editProfile() {
-    window.sessionStorage.setItem('username', window.sessionStorage.getItem('key'));
-    window.location.href = '#/profile';
   }
 
   render() {
