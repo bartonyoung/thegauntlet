@@ -8,6 +8,10 @@ import { Link } from 'react-router';
 class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      display: 'none',
+    };
+    this.editProfileImage = this.editProfileImage.bind(this);
   }
 
   componentDidMount () {
@@ -82,6 +86,37 @@ class ProfileContent extends React.Component {
     window.sessionStorage.setItem('respUserId', response.user_id);
   }
 
+  editProfileImage (id) {
+    let outer = this;
+    var fd = new FormData(document.querySelector('#pic'));
+    $.ajax({
+      url: '/api/s3',
+      type: 'POST',
+      data: fd,
+      processData: false,  // tell jQuery not to process the data
+      contentType: false,   // tell jQuery not to set contentType
+      success: function(resp) {
+        $.ajax({
+          url: '/api/profile',
+          type: 'PUT',
+          data: {
+            id: id,
+            profilepic: resp
+          },
+          success: function(data) {
+            console.log('successfully updated');
+            outer.refs.video.value = '';
+            outer.setState({
+              display: 'none',
+            });
+            $.get('/api/profile').then(userData => {
+              outer.props.dispatch(actions.addUser(userData));
+            });
+          }
+        });
+      }
+    });
+  }
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -199,13 +234,23 @@ class ProfileContent extends React.Component {
         );
       }
     };
- 
 
     let target = this.props.user[0].username;
     return (
         <div width={screen.width}>
           <div className='profilePicture container'>
-            <div className='profilePicture text'>This is a placeholder for the profile picture editor</div>
+            <div id='picContainer'>
+              {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+              <img className='profilePicture text' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() => this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'})}/>
+              <ul className='editPic' style={{display: this.state.display}}>
+                {/*<li><button id='formButton' onClick={()=> this.editProfileImage(this.props.user[0].id)}>
+                  Edit Profile Image
+                </button></li>*/}
+                <li><form id='pic'>
+                  <input type="file" placeholder="image" ref="video" name="video" onChange={()=> this.editProfileImage(this.props.user[0].id)} />
+                </form></li>
+              </ul>      
+            </div>
             Username: {this.props.user[0].username} <br />
             Firstname: {this.props.user[0].firstname} <br />
             Lastname: {this.props.user[0].lastname} <br />

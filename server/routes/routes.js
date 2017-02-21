@@ -10,6 +10,7 @@ routes.post('/login', userControllers.login);
 routes.get('/logout', userControllers.logout);
 routes.get('/profile/:username', userControllers.getUser);
 routes.get('/profile', userControllers.getUser);
+routes.put('/profile', userControllers.updateProfile);
 routes.get('/ranks', userControllers.getAllUsers);
 routes.post('/userUpload', s3Controller);
 routes.post('/s3', challengeController.s3);
