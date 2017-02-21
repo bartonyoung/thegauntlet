@@ -1,5 +1,15 @@
-.parentChallenge {
+.challengeRow {
   margin-top: 65px;
+   background: rgb(128, 128, 128); 
+   background: rgba(128, 128, 128, .7);
+   height: 80vh;
+}
+
+.challengeInfo {
+  /*border: #3E3E3E solid;*/
+  background: #3E3E3E;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .parentMedia {
@@ -12,27 +22,34 @@
 }
 
 #comments {
+  margin: 15px 15px 0px 15px;
   overflow-y: auto;
   height: 60vh;
-  border: darkgray solid 3px;
-  border-radius: 3px;
+  border: #3E3E3E solid 3px; 
   padding: 15px;
   display: block;
-  width: 100%;
+  width: 90%;
+  background: white;
 }  
 
 .comment-box {
-  margin-top: 40px;
-  margin-right: 20px;
+  align-items: center;
+  margin-top: 15px;
+  margin-right: 10px;
+  margin-bottom: 15px;
   position: fixed;
   display: block;
+  background: #3E3E3E
+}
 
+.commentButton {
+  margin: 2px 50px 15px 50px;
 }
 
 textarea {
-  margin-top: 2px;
+  margin: 15px 15px 0px 15px;
   padding: 2px;
-  width: 100%;
+  width: 90%;
   resize: none;
   border: 1px darkgray 2px;
 }

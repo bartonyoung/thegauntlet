@@ -170,7 +170,6 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-
     let calculateTime = (seconds) => {
       if (seconds < 60) {
         return Math.floor(seconds) + ' seconds ago';
