@@ -1,4 +1,38 @@
-.parent {
+.parentChallenge {
+  margin-top: 65px;
+}
+
+.parentMedia {
   width: 50%;
-  height: 500px;
+  height: 100%;
+}
+
+.userLink {
+  font-size: 0.8em;
+}
+
+#comments {
+  overflow-y: auto;
+  height: 60vh;
+  border: darkgray solid 3px;
+  border-radius: 3px;
+  padding: 15px;
+  display: block;
+  width: 100%;
+}  
+
+.comment-box {
+  margin-top: 40px;
+  margin-right: 20px;
+  position: fixed;
+  display: block;
+
+}
+
+textarea {
+  margin-top: 2px;
+  padding: 2px;
+  width: 100%;
+  resize: none;
+  border: 1px darkgray 2px;
 }
