@@ -108,8 +108,8 @@ class ChallengeComponent extends React.Component {
         description: this.refs.description.value
       },
       success: function(data) {
-        window.location.href = '/#/dash';
         alert('Successfully edited!');
+        window.location.href = '/#/dash';
       }
     });
   }
@@ -119,8 +119,8 @@ class ChallengeComponent extends React.Component {
       url: '/api/challenge/' + window.sessionStorage.id,
       type: 'DELETE',
       success: function(data) {
-        window.location.href = '/#/dash';
         alert('Successfully deleted!');
+        window.location.href = '/#/dash';
       }
     });
   }

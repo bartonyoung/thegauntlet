@@ -254,6 +254,10 @@ class ResponseComponent extends React.Component {
         </div>
       );
     }
+
+    return (
+      <div></div>
+    );
   }
 }
 
