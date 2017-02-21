@@ -9,7 +9,7 @@ class ProfileContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      display: 'none',
+      display: 'none'
     };
     this.editProfileImage = this.editProfileImage.bind(this);
   }
@@ -42,7 +42,7 @@ class ProfileContent extends React.Component {
     });
   }
 
-  onNotificationClick(challenge, response) {
+  onNotificationClick(challenge, response, i) {
     window.sessionStorage.setItem('title', challenge.title);
     window.sessionStorage.setItem('id', challenge.id);
     window.sessionStorage.setItem('description', challenge.description);
@@ -215,6 +215,74 @@ class ProfileContent extends React.Component {
       }
     });
 
+    let whichFollowButton = (leaderId) => {
+      if (this.props.leaders.includes(leaderId)) {
+        return (
+          <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+          </button>
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+          </button>
+        );
+      }
+    };
+
+    let whichFavoriteIcon = (challengeId) => {
+      if (this.props.favorites.includes(challengeId)) {
+        return (
+          <button className="btn btn-default btn-sm pull-right">
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
+          </button>
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
+            <span className="glyphicon glyphicon-heart"></span>
+          </button>
+        );
+      }
+    };
+
+    let calculateTime = (seconds) => {
+      if (seconds < 60) {
+        return Math.floor(seconds) + ' seconds ago';
+      } else if (seconds >= 60 && seconds < 3600) {
+        if (seconds < 120) {
+          return ' 1 minute ago';
+        } else {
+          return Math.floor(seconds / 60) + ' minutes ago';
+        }
+      } else if (seconds >= 3600 && seconds < 86400) {
+        if (seconds < 7200) {
+          return ' 1 hour ago';
+        } else {
+          return Math.floor(seconds / 3600) + ' hours ago';
+        }
+      } else if (seconds >= 86400 && seconds < 604800) {
+        if (seconds < 172800) {
+          return ' 1 day ago';
+        } else {
+          return Math.floor(seconds / 86400) + ' days ago';
+        }
+      } else if (seconds >= 2592000 && seconds < 31104000) {
+        if (seconds < 5184000) {
+          return ' 1 month ago';
+        } else {
+          return Math.floor(seconds / 2592000) + ' months ago';
+        }
+      } else {
+        if (seconds < 62208000) {
+          return ' 1 year ago';
+        } else {
+          return Math.floor(seconds / 31104000) + ' years ago';
+        }
+      }
+    };
+
     let whichButton = (leaderId) => {
       let outer = this;
       if (this.props.leaders.includes(leaderId)) {
@@ -264,6 +332,7 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'mailbox') {
         let mappedArray = [];
         let mappedNotifications;
+
         this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
             mappedNotifications = this.props.responses.map((response, i) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Response from './Response.jsx';
+import ResponseList from './ResponseList.jsx';
 import actions from '../../redux/actions';
 import { connect } from 'react-redux';
 import $ from 'jquery';
@@ -52,39 +52,46 @@ class ChallengeComponent extends React.Component {
 
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
-    }); 
+    });
   }
 
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#upload'));
-    $.ajax({
-      url: '/api/s3',
-      type: 'POST',
-      data: fd,
-      processData: false,  // tell jQuery not to process the data
-      contentType: false,   // tell jQuery not to set contentType
-      success: function(resp) {
-        $.ajax({
-          url: '/api/response',
-          type: 'POST',
-          data: {
-            title: outer.refs.title.value,
-            description: outer.refs.description.value,
-            category: outer.refs.category.value,
-            filename: resp,
-            parent_id: window.sessionStorage.getItem('id')
-          },
-          success: function(data) {
-            outer.props.dispatch(actions.addResponse(data));
-            outer.refs.title.value = '';
-            outer.refs.description.value = '';
-            outer.refs.category.value = '';
-            outer.refs.video.value = '';
-          }
-        });
-      }
-    });
+    if (this.refs.video.value) {
+      $.ajax({
+        url: '/api/s3',
+        type: 'POST',
+        data: fd,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,   // tell jQuery not to set contentType
+        success: function(resp) {
+          let created_at = new Date().getTime();
+
+          $.ajax({
+            url: '/api/response',
+            type: 'POST',
+            data: {
+              title: outer.refs.title.value,
+              description: outer.refs.description.value,
+              category: outer.refs.category.value,
+              filename: resp,
+              parent_id: window.sessionStorage.getItem('id'),
+              created_at: created_at
+            },
+            success: function(data) {
+              outer.props.dispatch(actions.addResponse(data));
+              outer.refs.title.value = '';
+              outer.refs.description.value = '';
+              outer.refs.category.value = '';
+              outer.refs.video.value = '';
+            }
+          });
+        }
+      });
+    } else {
+      alert('Don\'t forget to submit a file');
+    }
   }
 
   saveChallenge(e) {
@@ -202,7 +209,7 @@ class ChallengeComponent extends React.Component {
         </form>
           <button onClick={this.handleSubmit}>Submit</button>
 
-        <Response />
+        <ResponseList />
       </div>
     );
   }

@@ -212,6 +212,7 @@ class ChallengeList extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
+      let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
       if (!challenge.parent_id) {
         return (
           <div className="col col-md-6" key={i}>
@@ -220,7 +221,8 @@ class ChallengeList extends React.Component {
             </div>
             {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             <div>
-              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username}</Link>
+              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
+              {calculateTime(timeDifferenceInSeconds)}
               {whichFollowButton(challenge.user_id)}
               {whichFavoriteIcon(challenge.id)}
               <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">

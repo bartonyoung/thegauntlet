@@ -5,8 +5,7 @@ import $ from 'jquery';
 import css from '../styles/response.css';
 import { Link } from 'react-router';
 
-
-class Response extends React.Component {
+class ResponseComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -15,6 +14,10 @@ class Response extends React.Component {
 
     this.state = {
       isEditing: false
+    };
+
+    this.state = {
+      renderResponse: false
     };
   }
 
@@ -80,29 +83,31 @@ class Response extends React.Component {
     window.sessionStorage.setItem('username', username);
   }
 
-  saveChallenge(e) {
+  saveChallenge(response) {
     let outer = this;
     this.setState({
       isEditing: !this.state.isEditing
     });
 
     $.ajax({
-      url: '/api/response/' + window.sessionStorage.id,
+      url: '/api/response/' + response.id,
       type: 'PUT',
       data: {
         title: this.refs.title.value,
-        description: this.refs.description.value
+        description: this.refs.description.value,
+        parent_id: response.parent_id
       },
       success: function(data) {
+        console.log('put request', data);
         window.location.href = '/#/dash';
         alert('Successfully edited!');
       }
     });
   }
 
-  deleteResponse() {
+  deleteResponse(response) {
     $.ajax({
-      url: '/api/response/' + window.sessionStorage.id,
+      url: '/api/response/' + response.id,
       type: 'DELETE',
       success: function(data) {
         window.location.href = '/#/dash';
@@ -118,15 +123,15 @@ class Response extends React.Component {
   }
 
   render() {
-    let taskButtons = () => {
-      if (window.sessionStorage.getItem('key') === window.sessionStorage.username) {
+    let taskButtons = (response) => {
+      if (window.sessionStorage.getItem('key') === this.props.response.username) {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => { this.editResponse(); }}>
+              <button className="btn btn-large btn-default edit" onClick={() => this.editResponse()}>
                 {'Edit'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse()}>Delete</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
             </div>
           );
         }
@@ -134,14 +139,14 @@ class Response extends React.Component {
         return (
           <div>
             <div className="editor">
-              <form id="editform" onSubmit={() => { this.saveChallenge(); }}>
+              <form id="editform" onSubmit={() => this.saveChallenge(response)}>
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
                 {'Save'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse()}>Delete</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
             </div>
           </div>
         );
@@ -164,7 +169,7 @@ class Response extends React.Component {
       }
     };
 
-    let whichFollowButton = (leaderId) => {
+    let whichButton = (leaderId) => {
       if (this.props.leaders.includes(leaderId)) {
         return (
           <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
@@ -180,9 +185,9 @@ class Response extends React.Component {
       }
     };
 
-    let whichFavoriteIcon = (challengeId) => {  
+    let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
-        return (   
+        return (
           <button className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
           </button>
@@ -196,47 +201,59 @@ class Response extends React.Component {
       }
     };
 
-    let mappedResponses = this.props.responses.map((response, i) => {
-      if (response.parent_id === parseInt(window.sessionStorage.id)) {
-        if (this.props.profileView === 'all' && !window.sessionStorage.respTitle) {
-          console.log('responses');
-          return (
-            <div>
-              <h4>{'Response title: ' + response.title}</h4>
-              <h5>{'Description: ' + response.description}</h5>
-              {taskButtons()}
-              {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
-              <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username}</Link><br/>
-              <h5>{`Views : ${response.views}`}</h5>
-              {whichFollowButton(response.user_id)}
-              {whichFavoriteIcon(response.id)}
-              <button onClick={()=>{ this.upVoteClick(response.id); }} type="button" className="btn btn-default btn-sm">
-                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${response.upvotes}`}
-              </button>
-            </div>
-          );
-        } else if (i === 0) {
-          console.log('mailbox response', window.sessionStorage.respTitle, response.title);
-          return (
-            <div>
-              <h4>{'Response title: ' + window.sessionStorage.respTitle}</h4>
-              <h5>{'Description: ' + window.sessionStorage.respDescription}</h5>
-              {taskButtons()}
-              {checkFile(window.sessionStorage.respFilename.split('.').pop(), window.sessionStorage.respFilename)}<br/>
-              <Link onClick={() => this.onUsernameClick(window.sessionStorage.respUsername)} to={`/profile/${window.sessionStorage.respUsername}`}>{window.sessionStorage.respUsername}</Link><br/>
-              <h5>{`Views : ${window.sessionStorage.respViews}`}</h5>
-              {whichFollowButton(window.sessionStorage.respUser_id)}
-              {whichFavoriteIcon(parseInt(window.sessionStorage.respID))}
-              <button onClick={()=>{ this.upVoteClick(parseInt(window.sessionStorage.respID)); }} type="button" className="btn btn-default btn-sm">
-                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${window.sessionStorage.respUpvotes}`}
-              </button>
-            </div>
-          );
+    let calculateTime = (seconds) => {
+      if (seconds < 60) {
+        return Math.floor(seconds) + ' seconds ago';
+      } else if (seconds >= 60 && seconds < 3600) {
+        if (seconds < 120) {
+          return ' 1 minute ago';
+        } else {
+          return Math.floor(seconds / 60) + ' minutes ago';
+        }
+      } else if (seconds >= 3600 && seconds < 86400) {
+        if (seconds < 7200) {
+          return ' 1 hour ago';
+        } else {
+          return Math.floor(seconds / 3600) + ' hours ago';
+        }
+      } else if (seconds >= 86400 && seconds < 604800) {
+        if (seconds < 172800) {
+          return ' 1 day ago';
+        } else {
+          return Math.floor(seconds / 86400) + ' days ago';
+        }
+      } else if (seconds >= 2592000 && seconds < 31104000) {
+        if (seconds < 5184000) {
+          return ' 1 month ago';
+        } else {
+          return Math.floor(seconds / 2592000) + ' months ago';
+        }
+      } else {
+        if (seconds < 62208000) {
+          return ' 1 year ago';
+        } else {
+          return Math.floor(seconds / 31104000) + ' years ago';
         }
       }
-    });
+    };
 
-    return <div className="response container">{mappedResponses}</div>;
+
+    let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
+    if (this.props.response.parent_id === parseInt(window.sessionStorage.id)) {
+      return (
+        <div>
+          <h4>{'Response title: ' + this.props.response.title}</h4>
+          <h5>{'Description: ' + this.props.response.description}</h5>
+          {taskButtons(this.props.response)}
+          {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
+          <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
+          {calculateTime(timeDifferenceInSeconds)}<br/>
+          <h5>{`Views : ${this.props.response.views}`}</h5>
+          {whichButton(this.props.response.user_id)}
+          <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
+        </div>
+      );
+    }
   }
 }
 
@@ -244,4 +261,4 @@ const mapStateToProps = (state) => {
   return state;
 };
 
-export default connect(mapStateToProps)(Response);
+export default connect(mapStateToProps)(ResponseComponent);

@@ -13,39 +13,45 @@ class NavBar extends React.Component {
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#file'));
-    console.log(outer.props.dispatch);
-    $.ajax({
-      url: '/api/s3',
-      type: 'POST',
-      data: fd,
-      processData: false,  // tell jQuery not to process the data
-      contentType: false,   // tell jQuery not to set contentType
-      success: function(resp) {
+    if (this.refs.video.value) {
+      $.ajax({
+        url: '/api/s3',
+        type: 'POST',
+        data: fd,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,   // tell jQuery not to set contentType
+        success: function(resp) {
+          let created_at = new Date().getTime();
 
-        $.ajax({
-          url: '/api/challenge',
-          type: 'POST',
-          data: {
-            title: outer.refs.title.value,
-            description: outer.refs.description.value,
-            category: outer.refs.category.value,
-            filename: resp
-          },
-          success: function(data) {
-            data = data.reverse();
-            outer.props.dispatch(actions.addChallenge(data));
-            $.get('/api/allChallenges').done(challenge => {
-              challenge = challenge.reverse();
-              outer.props.dispatch(actions.addChallenge(challenge));
-            });
-            outer.refs.title.value = '';
-            outer.refs.description.value = '';
-            outer.refs.category.value = '';
-            outer.refs.video.value = '';
-          }
-        });
-      }
-    });
+          $.ajax({
+            url: '/api/challenge',
+            type: 'POST',
+            data: {
+              title: outer.refs.title.value,
+              description: outer.refs.description.value,
+              category: outer.refs.category.value,
+              filename: resp,
+              created_at: created_at
+            },
+            success: function(data) {
+              console.log('challenge', data);
+              data = data.reverse();
+              outer.props.dispatch(actions.addChallenge(data));
+              $.get('/api/allChallenges').done(challenge => {
+                challenge = challenge.reverse();
+                outer.props.dispatch(actions.addChallenge(challenge));
+              });
+              outer.refs.title.value = '';
+              outer.refs.description.value = '';
+              outer.refs.category.value = '';
+              outer.refs.video.value = '';
+            }
+          });
+        }
+      });
+    } else {
+      alert('Don\'t forget to submit a file');
+    }
   }
 
   handleNav() {
