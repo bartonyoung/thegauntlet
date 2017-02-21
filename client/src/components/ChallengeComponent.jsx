@@ -115,7 +115,7 @@ class ChallengeComponent extends React.Component {
   }
 
   onUsernameClick(challenge) {
-    console.log('challenge userid', challenge.user_id)
+    console.log('challenge userid', challenge.user_id);
     let outer = this;
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
@@ -170,7 +170,6 @@ class ChallengeComponent extends React.Component {
         return <img className="parentMedia" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
-
 
     let calculateTime = (seconds) => {
       if (seconds < 60) {
