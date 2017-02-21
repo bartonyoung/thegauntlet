@@ -137,7 +137,7 @@ class ChallengeList extends React.Component {
             // <img clasName="center-block" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} />
         return (
           <div>
-            <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
+            <img className="response" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
           </div>
         );
       }
@@ -175,8 +175,6 @@ class ChallengeList extends React.Component {
       }
     };
 
-<<<<<<< HEAD
-=======
     let calculateTime = (seconds) => {
       if (seconds < 60) {
         return Math.floor(seconds) + ' seconds ago';
@@ -213,7 +211,6 @@ class ChallengeList extends React.Component {
       }
     };
 
->>>>>>> Fix bug for timestamp
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (!challenge.parent_id) {
         return (

@@ -31,33 +31,6 @@ class ProfileContent extends React.Component {
     }
   }
 
-<<<<<<< HEAD
-  followTheLeader(leaderId) {
-    const outer = this;
-    $.post('/api/follower', {
-      leader_id: leaderId 
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-        outer.followers();
-      });
-    });
-  }
-
-  unFollow (leaderId) {
-    const outer = this;
-    $.post('/api/unFollow', {
-      leader_id: leaderId
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-        outer.followers();
-      });
-    });
-  }
-
-=======
->>>>>>> Fix followers bug
   changeProfileView(view) {
     this.props.dispatch(actions.setProfileView(view));
   }
@@ -88,8 +61,6 @@ class ProfileContent extends React.Component {
     window.sessionStorage.setItem('respViews', response.views);
     window.sessionStorage.setItem('respUsername', response.username);
     window.sessionStorage.setItem('respUserId', response.user_id);
-<<<<<<< HEAD
-=======
     window.sessionStorage.setItem('respId', response.id);
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
@@ -173,7 +144,6 @@ class ProfileContent extends React.Component {
         outer.props.dispatch(actions.setFavorites(favorites));
       });
     });
->>>>>>> Fix followers bug
   }
 
   editProfileImage (id) {
@@ -294,13 +264,28 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'mailbox') {
         let mappedArray = [];
         let mappedNotifications;
-        this.props.challenges.forEach(challenge => {
+        this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
-            mappedNotifications = this.props.responses.map(response => {
+            mappedNotifications = this.props.responses.map((response, i) => {
+              let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
+
               if (response.parent_id === challenge.id) {
-                console.log('inside mapping');
                 return (
-                  <div><h4><Link onClick={() => this.onNotificationClick(challenge, response)} to={'/challenge'}>{response.username + ' responded to ' + challenge.title}</Link></h4></div>
+                  <div>
+                    <a href='javascript: void(0)' onClick={() => this.onNotificationClick(challenge, response, i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
+                    {calculateTime(timeDifferenceInSeconds)}<br/>
+                    <div className="showresponse" style={{display: this.state[i] || 'none'}}>
+                      <h4>{'Response title: ' + response.title}</h4>
+                      <h5>{'Description: ' + response.description}</h5>
+                      {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
+                      <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username + ' '}</Link>
+                      {calculateTime(timeDifferenceInSeconds)}<br/>
+                      <h5>{`Views : ${response.views}`}</h5>
+                      {whichButton(response.user_id)}
+                      {whichFavoriteIcon(response.user_id)}
+                      <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+                    </div>
+                  </div>
                 );
               }
             });
@@ -310,7 +295,6 @@ class ProfileContent extends React.Component {
 
         return mappedArray;
       }
-
     };
 
     let renderMailbox = () => {
@@ -339,7 +323,7 @@ class ProfileContent extends React.Component {
                 <li><form id='pic'>
                   <input type="file" placeholder="image" ref="video" name="video" onChange={()=> this.editProfileImage(this.props.user[0].id)} />
                 </form></li>
-              </ul>      
+              </ul>
             </div>
             Username: {this.props.user[0].username} <br />
             Firstname: {this.props.user[0].firstname} <br />
@@ -358,12 +342,9 @@ class ProfileContent extends React.Component {
           </div>
           {myView()}
         </div>
-    );  
+    );
   }
 }
-    // } else {
-    //   return <div></div>;
-    // }
 
 const mapStateToProps = (state) => {
   return state;
