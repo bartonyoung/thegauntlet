@@ -8,6 +8,7 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   handleSubmit() {
@@ -52,6 +53,15 @@ class NavBar extends React.Component {
     } else {
       alert('Don\'t forget to submit a file');
     }
+  }
+
+  setUser() {
+    const outer = this;
+    $.get('/api/profile').then(userData => {
+      console.log('How many times does this fire', userData);
+      outer.props.dispatch(actions.addUser(userData));
+      window.location.href = '#/profile';
+    });
   }
 
   handleNav() {
@@ -103,7 +113,7 @@ class NavBar extends React.Component {
               </ul>
               <ul className="nav navbar-nav navbar-left">
                 <li>
-                  <h5 className="navbar-text">You are logged in as <a href="#/profile" className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
+                  <h5 className="navbar-text">You are logged in as <a href="javascript: void(0)" onClick={()=> this.setUser()} className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
                 </li>
               </ul>
             </div>
