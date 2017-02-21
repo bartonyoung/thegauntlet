@@ -215,7 +215,7 @@ class ChallengeList extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.ranks.map((rank, index) => {
-                    if (index <= 10) {
+                    if (index < 10) {
                       return <tr className="success" key={index}>
                                <td> #{index + 1}</td>
                                <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
