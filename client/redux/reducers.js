@@ -2,6 +2,22 @@ const reducer = (state, action) => {
   console.log("state", state)
   console.log('action.payload', action.payload)
   if (action.type === 'ADD_CHALLENGE') {
+    let challengeObj = {};
+
+    for (var keys in state) {
+      if (keys === 'challenges') {
+        challengeObj[keys] = [];
+        challengeObj[keys].push(action.payload[0]);
+        state[keys].forEach((key, i) => {
+          challengeObj[keys].push(key);
+        });
+      } else {
+        challengeObj[keys] = state[keys];
+      }
+    }
+
+    return challengeObj;
+  } else if (action.type === 'GET_CHALLENGES') {
     return Object.assign({}, state, {
       challenges: action.payload
     });

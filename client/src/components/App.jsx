@@ -41,7 +41,7 @@ class App extends React.Component {
 
     $.get('/api/allChallenges').done(data => {
       data = data.reverse();
-      outer.props.dispatch(actions.addChallenge(data));
+      outer.props.dispatch(actions.getChallenges(data));
     });
 
     $.get('/api/ranks').then((rankData)=>{

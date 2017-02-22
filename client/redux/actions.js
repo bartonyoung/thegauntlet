@@ -1,4 +1,11 @@
 let actions = {
+  getChallenges: function(challenges) {
+    return {
+      type: 'GET_CHALLENGES',
+      payload: challenges
+    };
+  },
+
   addChallenge: function(challenge) {
     return {
       type: 'ADD_CHALLENGE',
@@ -76,12 +83,6 @@ let actions = {
   updatePost: function(post) {
     return {
       type: 'UPDATE_POST',
-      payload: post
-    };
-  },
-  deletePost: function(post) {
-    return {
-      type: 'DELETE_POST',
       payload: post
     };
   }
