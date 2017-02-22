@@ -52,7 +52,7 @@ class Comments extends React.Component {
       if (comment.id === parseInt(window.sessionStorage.id)) {
         return (
           <div>
-            {comment.username + ': ' + comment.comment}
+            <span className="chat-user" style={{fontWeight: 'bold'}}>{`${comment.username}: `}</span><span>{comment.comment}</span>
           </div>
         );
       }
@@ -60,10 +60,12 @@ class Comments extends React.Component {
 
     return (
     <div className='comment-box'>
-      <div id="comments">{mappedComments}</div>
-      <form onSubmit={this.commentSubmit}>
+      <div id="comments">{mappedComments}
+      
+      </div>
+      <form onSubmit={this.commentSubmit} className='chat-form'>
         <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
-        <input type="submit" className="btn btn-default btn-xs commentButton"/>
+        <button className="button comment-button">COMMENT</button>
       </form>  
     </div> 
     );
