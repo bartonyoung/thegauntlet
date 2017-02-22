@@ -9,10 +9,11 @@ import ResponseComponent from './ResponseComponent.jsx';
 class ResponseList extends React.Component {
   constructor(props) {
     super(props);
+    console.log('response list props', this.props);
   }
 
-  render() {
 
+  render() {
     return (
       <div className="response container">
         {this.props.responses.map((response, i) =>

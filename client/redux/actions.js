@@ -54,7 +54,6 @@ let actions = {
       payload: view,
     };
   },
-
   setFollowers: function(followers) {
     return {
       type: 'GET_FOLLOWERS',
@@ -69,7 +68,7 @@ let actions = {
   },
   updateResponse: function(response) {
     return {
-      type: 'UPDATE_RESPONSES',
+      type: 'UPDATE_RESPONSE',
       payload: response
     };
   }

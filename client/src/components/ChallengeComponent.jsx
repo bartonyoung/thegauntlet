@@ -17,13 +17,13 @@ class ChallengeComponent extends React.Component {
     this.editChallenge = this.editChallenge.bind(this);
     this.saveChallenge = this.saveChallenge.bind(this);
     this.deleteChallenge = this.deleteChallenge.bind(this);
-
+    console.log('challenge component props', this.props);
     this.state = {
       isEditing: false
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let outer = this;
     $.ajax({
       url: '/api/response',
@@ -35,8 +35,9 @@ class ChallengeComponent extends React.Component {
         console.log('response data', data)
         let responseArr = [];
         data.forEach(response => {
-          if (response.parent_id) {
+          if (response.parent_id === parseInt(window.sessionStorage.id)) {
             responseArr.push(response);
+            console.log('responseArr', responseArr)
           }
         });
         outer.props.dispatch(actions.addResponse(responseArr.reverse()));
@@ -223,37 +224,43 @@ class ChallengeComponent extends React.Component {
 
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(window.sessionStorage.created_at)) / 1000;
 
-    return (
-      <div className="container-fluid">
-        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <div className="row parentChallenge">
-          <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
-            <h1>{window.sessionStorage.title}</h1>
-            {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
-            <h4>{window.sessionStorage.description}</h4>
-            <h3><Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`} className="userLink">{window.sessionStorage.username}</Link></h3>
-            {calculateTime(timeDifferenceInSeconds)}
-            {taskButtons()}
-            <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
+    if (this.props.responses !== undefined) {
+      return (
+        <div className="container-fluid">
+          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
+          <div className="row parentChallenge">
+            <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
+              <h1>{window.sessionStorage.title}</h1>
+              {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
+              <h4>{window.sessionStorage.description}</h4>
+              <h3><Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`} className="userLink">{window.sessionStorage.username}</Link></h3>
+              {calculateTime(timeDifferenceInSeconds)}
+              {taskButtons()}
+              <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
+            </div>
+            <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
+              <Comments />
+            </div>
           </div>
-          <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
-            <Comments />
-          </div>
-        </div>
-        {'Upload your response: '}
-        <form id="challenge">
-          <input type="text" placeholder="Name your response" required ref="title" name="title"/>
-          <input type="text" placeholder="Description" required ref="description" name="description"/>
-          <input type="text" placeholder="category" required ref="category" name="category"/>
-        </form>
-        <form ref="file" id="upload">
-          <input type="file" placeholder="video" required ref="video" name="video"/>
-        </form>
-          <button onClick={this.handleSubmit}>Submit</button>
+          {'Upload your response: '}
+          <form id="challenge">
+            <input type="text" placeholder="Name your response" required ref="title" name="title"/>
+            <input type="text" placeholder="Description" required ref="description" name="description"/>
+            <input type="text" placeholder="category" required ref="category" name="category"/>
+          </form>
+          <form ref="file" id="upload">
+            <input type="file" placeholder="video" required ref="video" name="video"/>
+          </form>
+            <button onClick={this.handleSubmit}>Submit</button>
 
-        <ResponseList />
-      </div>
-    );
+          <ResponseList />
+        </div>
+      );
+    } else {
+      return (
+        <div></div>
+      );
+    }
   }
 }
 

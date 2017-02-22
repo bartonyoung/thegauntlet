@@ -79,19 +79,7 @@ module.exports = {
     const description = req.body.description;
     const id = req.params.id;
     db.from('challenges').where({id: id}).update({title: title, description: description}).then(() => {
-      db.select().from('challenges').where({id: id}).then(data => {
-        res.json(data);
-      });
-    });
-  },
-
-  updateOneResponse: (req, res) => {
-    const title = req.body.title;
-    const description = req.body.description;
-    const id = req.params.id;
-    console.log("resp id", id);
-    db.from('challenges').where({id: id}).update({title: title, description: description}).then(() => {
-      db.select().from('challenges').where({parent_id: !null}).innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+      db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('challenges.id', '=', id).then(data => {
         res.json(data);
       });
     });
