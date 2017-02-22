@@ -52,7 +52,7 @@ class Landing extends React.Component {
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4>{challenge.title}</h4>
-                  <video width="320" height="240" controls>
+                  <video width="220" height="140" controls>
                      <source src="movie.mp4" type="video/mp4"></source>
                   </video>
               </div>;
@@ -72,13 +72,13 @@ class Landing extends React.Component {
     return (
       <div>
          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/> 
-          <div className="jumbotron container-fluid text-center main-content">
-            <div className='row'>
-              <div className="col-md-12">
+          <div className="container-fluid text-center main-content">
+            <div className='row header'>
                 <div className="col-md-12 text-center">
-                <h1>Welcome to The Gauntlet!</h1>
-                <p>The Gauntlet is a place to test yourself against others!</p>
-                <p>Add your own challenge and watch others respond, or one-up another challenger</p>
+              <h1 id="title">Welcome to The Gauntlet!</h1>
+              <div>
+                <p claaName="subtitle">The Gauntlet is a place to test yourself against others!</p>
+                <p claaName="subtitle">Add your own challenge and watch others respond, or one-up another challenger</p>
               </div>
               </div>
             </div>  
