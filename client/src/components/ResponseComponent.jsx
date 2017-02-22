@@ -253,7 +253,10 @@ class ResponseComponent extends React.Component {
           {calculateTime(timeDifferenceInSeconds)}<br/>
           <h5>{`Views: ${this.props.response.views}`}</h5>
           {whichButton(this.props.response.user_id)}
-          <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
+          {whichFavoriteIcon(this.props.response.id)}
+           <button onClick={()=>{ this.upVoteClick(this.props.response.id); }} type="button" className="btn btn-default btn-sm pull-right">
+              <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${this.props.response.upvotes}`}
+          </button>
         </div>
       );
     } else {
