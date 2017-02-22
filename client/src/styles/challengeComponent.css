@@ -1,4 +1,4 @@
-.challengeRow {
+/*.challengeRow {
   margin-top: 65px;
    background: rgb(128, 128, 128); 
    background: rgba(128, 128, 128, .7);
@@ -6,7 +6,7 @@
 }
 
 .challengeInfo {
-  /*border: #3E3E3E solid;*/
+  
   background: #3E3E3E;
   margin-top: 15px;
   margin-bottom: 15px;
@@ -52,4 +52,69 @@ textarea {
   width: 90%;
   resize: none;
   border: 1px darkgray 2px;
+}*/
+
+
+.parentMedia {
+  object-fit: cover;
+}
+/*.mainRow {
+  padding-top: 65px; 
+  background: lightcoral
+}*/
+
+.mainRowColumn {
+  height: 400px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.challengeInfo {
+  background: #3E3E3E;
+  border: black 5px;
+  margin-top: 65px;
+}
+
+.outerBar {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+  height: 100vh;
+  background: lightgray;
+}
+
+.chat-form{
+  position: fixed;
+  bottom: 0;
+}
+
+textarea {
+  width: 100%;
+  margin: 0px 5px 2px 5px;
+  padding-right:5px;
+  padding-left:5px;
+}
+
+#comments {
+  overflow-y: auto;
+}  
+
+.comment-button {
+   background-color: orange;
+   height: 30px;
+   width: 90px;
+   cursor:pointer;
+   border: orange;
+   border-radius: 0px;
+   color:white;
+   float: right;
+   margin-bottom: 4px;
+   margin-right: -4px;
+}
+
+.comment-button:hover {
+   background-color: darkorange;
+   color:white;
 }
