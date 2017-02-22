@@ -23,7 +23,7 @@ class Comments extends React.Component {
 
   commentSubmit(e) {
     e.preventDefault();
-    let outer = this;     
+    let outer = this;    
     let comments = {
       comment: this.refs.comment.value,
       challenge_id: window.sessionStorage.id
@@ -48,11 +48,22 @@ class Comments extends React.Component {
   }
 
   render() {
+    let tag = (string) => {  
+      let comment = string.split(' ').map(word => {
+        if (word.includes('@')) {
+          return <a href={'/#/profile/' + word.slice(1)}>{word}</a>;
+        } else {
+          return ' ' + word;    
+        }
+      });  
+      return comment;
+    };
+
     let mappedComments = this.props.comments.map((comment, i) => {
       if (comment.id === parseInt(window.sessionStorage.id)) {
         return (
           <div>
-            {comment.username + ': ' + comment.comment}
+            {comment.username + ': '} {tag(comment.comment)}
           </div>
         );
       }
