@@ -66,10 +66,10 @@ let actions = {
       payload: ranks,
     };
   },
-  updateResponse: function(response) {
+  updatePost: function(post) {
     return {
-      type: 'UPDATE_RESPONSE',
-      payload: response
+      type: 'UPDATE_POST',
+      payload: post
     };
   }
 };

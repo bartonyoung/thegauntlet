@@ -96,7 +96,7 @@ class ResponseComponent extends React.Component {
       },
       success: function(data) {
         console.log('put request', data);
-        outer.props.dispatch(actions.updateResponse(data));
+        outer.props.dispatch(actions.updatePost(data));
       }
     });
   }

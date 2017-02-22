@@ -41,17 +41,17 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       favorites: action.payload
     });
-  } else if (action.type === 'UPDATE_RESPONSE') {
+  } else if (action.type === 'UPDATE_POST') {
     let updateObj = {};
 
     for (var keys in state) {
-      if (keys === 'responses') {
+      if (keys === 'responses' || keys === 'challenges') {
         updateObj[keys] = [];
-        state[keys].forEach((response, i) => {
-          if (response.id === action.payload[0].id) {
+        state[keys].forEach((key, i) => {
+          if (key.id === action.payload[0].id) {
             updateObj[keys][i] = action.payload[0];
           } else {
-            updateObj[keys][i] = response;
+            updateObj[keys][i] = key;
           }
         });
       } else {
