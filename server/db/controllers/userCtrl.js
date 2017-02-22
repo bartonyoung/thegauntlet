@@ -93,6 +93,17 @@ module.exports = {
     db.select().from('users').where({id: req.body.id}).update(edits).then(() => {
       res.sendStatus(200);
     });
+  },
+
+  isUser: (req, res) => {
+    let username = req.query;
+    db.select().from('users').where(username).then(exist => {
+      if (exist.length) {
+        res.json(true);
+      } else {
+        res.json(false);  
+      }
+    });
   }
 };
 
