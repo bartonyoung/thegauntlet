@@ -43,7 +43,6 @@ class Login extends React.Component {
               <div className="text-center">
                 <a href="/">Back to main page</a>
             </div>
->>>>>>> Update Laning page visual
         </form>
       </div>
     );
