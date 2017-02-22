@@ -12,7 +12,6 @@ class ResponseList extends React.Component {
     console.log('response list props', this.props);
   }
 
-
   render() {
     return (
       <div className="response container">

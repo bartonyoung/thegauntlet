@@ -22,7 +22,7 @@ class ChallengeComponent extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let outer = this;
     $.ajax({
       url: '/api/response',
@@ -31,13 +31,7 @@ class ChallengeComponent extends React.Component {
         parent_id: window.sessionStorage.getItem('id')
       },
       success: function(data) {
-        let responseArr = [];
-        data.forEach(response => {
-          if (response.parent_id === parseInt(window.sessionStorage.id)) {
-            responseArr.push(response);
-          }
-        });
-        outer.props.dispatch(actions.addResponse(responseArr.reverse()));
+        outer.props.dispatch(actions.getResponses(data.reverse()));
       }
     });
 
@@ -73,7 +67,6 @@ class ChallengeComponent extends React.Component {
             data: {
               title: outer.refs.title.value,
               description: outer.refs.description.value,
-              category: outer.refs.category.value,
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
               created_at: created_at
@@ -82,7 +75,6 @@ class ChallengeComponent extends React.Component {
               outer.props.dispatch(actions.addResponse(data));
               outer.refs.title.value = '';
               outer.refs.description.value = '';
-              outer.refs.category.value = '';
               outer.refs.video.value = '';
             }
           });
@@ -220,6 +212,7 @@ class ChallengeComponent extends React.Component {
         }
       }
     };
+
     for (var i = 0; i < this.props.challenges.length; i++) {
       if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
         let challenge = this.props.challenges[i];
@@ -246,7 +239,6 @@ class ChallengeComponent extends React.Component {
             <form id="challenge">
               <input type="text" placeholder="Name your response" required ref="title" name="title"/>
               <input type="text" placeholder="Description" required ref="description" name="description"/>
-              <input type="text" placeholder="category" required ref="category" name="category"/>
             </form>
             <form ref="file" id="upload">
               <input type="file" placeholder="video" required ref="video" name="video"/>

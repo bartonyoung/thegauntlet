@@ -20,7 +20,6 @@ module.exports = {
     .where('challenges.id', '=', req.query.challenge_id)
     .innerJoin('users', 'users.id', 'comments.user_id')
     .then( (data) => {
-      console.log('comment data', data);
       res.json(data);
     });
   }

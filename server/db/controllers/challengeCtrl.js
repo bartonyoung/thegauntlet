@@ -16,7 +16,7 @@ module.exports = {
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-          res.json(data);
+          res.json(data.slice(data.length - 1));
         });
       }).catch(err => {
         if (err) { console.error(err); }
@@ -35,8 +35,7 @@ module.exports = {
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-          console.log('get one response', data);
-          res.json(data.reverse());
+          res.json(data.slice(data.length - 1));
         });
       }).catch(err => {
         if (err) { console.error(err); }
@@ -56,7 +55,9 @@ module.exports = {
   },
 
   getAllResponses: (req, res) => {
-    db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+    let id = req.query.parent_id;
+
+    db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('challenges.parent_id', '=', id).then(data => {
       res.json(data);
     });
   },
@@ -89,10 +90,13 @@ module.exports = {
     const id = req.params.id;
     db.from('challenges').where({id: id}).del().then(() => {
       db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-      console.log('deleted data', data);
-      res.json(data);
-    })
+        res.json(data);
+      });
     });
+  },
+
+  deleteOneResponse: (req, res) => {
+    db.from('challenges').where()
   },
 
   getSomeonesSubmissions: (req, res) => {

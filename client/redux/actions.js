@@ -6,6 +6,13 @@ let actions = {
     };
   },
 
+  getResponses: function (responses) {
+    return {
+      type: 'GET_RESPONSES',
+      payload: responses
+    };
+  },
+
   addResponse: function(response) {
     return {
       type: 'ADD_RESPONSE',

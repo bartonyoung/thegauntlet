@@ -6,6 +6,22 @@ const reducer = (state, action) => {
       challenges: action.payload
     });
   } else if (action.type === 'ADD_RESPONSE') {
+    let responseObj = {};
+
+    for (var keys in state) {
+      if (keys === 'responses') {
+        responseObj[keys] = [];
+        responseObj[keys].push(action.payload[0]);
+        state[keys].forEach((key, i) => {
+          responseObj[keys].push(key);
+        });
+      } else {
+        responseObj[keys] = state[keys];
+      }
+    }
+
+    return responseObj;
+  } else if (action.type === 'GET_RESPONSES') {
     return Object.assign({}, state, {
       responses: action.payload
     });
