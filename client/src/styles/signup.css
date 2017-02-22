@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css?family=Poiret+One');
 
 #sign-up {
   margin-bottom: 25px;
@@ -24,7 +24,15 @@
 }
 
 #sign-up, input {
-  font-family: "Open Sans", Helvetica, sans-serif;
+  
+  color: orange;
+  /*font-weight: bold;*/
+  
+}
+#sign-up {
+  font-size: 33px;
+  font-weight: bold;
+  text-shadow: 3px 3px 4px #000000;
 }
 
 .container-signup{

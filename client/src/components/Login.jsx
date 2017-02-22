@@ -30,17 +30,20 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="container-signup text-center">
+      <div className="container-signup">
         <form className="register" type="submit" onSubmit={this.handleLogin.bind(this)}>
-         <h1 id="sign-up">SIGN IN</h1> 
-          <p>Username</p>
-          <input type="text" placeholder="Username" required ref="username" className="input pass" />
-          <p>Password</p>
-          <input type="password" placeholder="Password" required ref="password" className="input pass" />
-          <p>
-            <input type="submit" value="Login" className="inputButton" />
-          </p>
-          <a href="/">Back to main page</a>
+          <p id="sign-up">LOG IN</p> 
+            <p>Username</p>
+              <input type="text" placeholder="Username" required ref="username" className="input pass" />
+            <p>Password</p>
+              <input type="password" placeholder="Password" required ref="password" className="input pass" />
+            <p>
+              <input type="submit" value="Login" className="inputButton" />
+            </p>
+              <div className="text-center">
+                <a href="/">Back to main page</a>
+            </div>
+>>>>>>> Update Laning page visual
         </form>
       </div>
     );

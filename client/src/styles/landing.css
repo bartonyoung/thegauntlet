@@ -1,23 +1,65 @@
+<<<<<<< HEAD
 .main-content {
   margin-top: 65px;
-  min-height: 70vh;
-  color: black;
-  height: 300px;
-  background-repeat:no-repeat;
-  background-size: cover; 
+=======
+/*@import url('https://fonts.googleapis.com/css?family=Baloo');*/
+@import url('https://fonts.googleapis.com/css?family=Baloo|Limelight');
+body{
+  font-family: 'Limelight';
+  background-color: white;
+  /*background-image: url('https://openclipart.org/image/2400px/svg_to_png/265161/Jumping-Man-Silhouette-3.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:100% 100%;*/
 }
+
+.main-content {
+  margin-top: 50px;
+>>>>>>> Update Laning page visual
+  min-height: 70vh;
+  height: 300px;
+  /*background-image: url();*/
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:100% 100%;
+
+}
+
+.header {
+  position:relative;
+  left:-300px;
+  top:100px;
+}
+ 
+#title{
+  color: grey;
+  font-size: 3em;
+  font-weight:;
+  /*font-family: 'Baloo', cursive;*/
+
+  text-shadow: 2px 2px 2px #000000;
+}
+
+p{
+  
+}  
 
 .gallery {
   margin-bottom:20px;
-  border: 1px solid black;
 }
 
 #auth {
   border: 1px solid #ededed;
 }
 
-p { 
+
+p, h3 { 
   font-size: 20px;
+  color: orange;
+  /*font-weight: bold;*/
+}
+h4{
+  color: white;
 }
 img {
   border:;

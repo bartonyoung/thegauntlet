@@ -42,7 +42,7 @@ class Signup extends React.Component {
     return (
       <div className="container-signup" >
           <form className="register" type="submit" onSubmit={this.handleSignup.bind(this)}>
-            <h1 id="sign-up">SIGN UP</h1>
+            <p id="sign-up">SIGN UP</p>
             <p>Firstname</p>
               <input type="text" placeholder="What's your Firstname?" required ref="firstname" className="input pass" />
             <p>Lastname</p>
