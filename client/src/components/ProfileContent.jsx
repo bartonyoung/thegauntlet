@@ -446,15 +446,16 @@ class ProfileContent extends React.Component {
     };
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.getItem('key') === user) {
-        return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}>Edit</a>}</span>;
+        return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}><span className="glyphicon glyphicon-pencil"></span></a>}</span>;
       } else {
         return <div></div>;
       }
     };
+
     let isUserImageClickable = (user) => {
-      return window.sessionStorage.getItem('key') === user;
-          
+      return window.sessionStorage.getItem('key') === user;        
     };
+
     let Firstname = (name, id, user) => {
       if (!this.state.first) {
         return (
@@ -466,7 +467,7 @@ class ProfileContent extends React.Component {
         return (
           <div>
             <form>
-              <input ref='firstname' type='text' placeholder={name}/> <button onClick={() => this.editFirstName(id)}></button> <a href='javascript: void(0)' onClick={() => this.setState({first: !this.state.first})}>Edit</a>
+              <input ref='firstname' type='text' placeholder={name}/> <button onClick={() => this.editFirstName(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({first: !this.state.first})}><span className="glyphicon glyphicon-pencil"></span></a>
             </form>
           </div>
         );
@@ -484,7 +485,7 @@ class ProfileContent extends React.Component {
         return (
           <div>
             <form>
-              <input ref='lastname' type='text' placeholder={name}/> <button onClick={() => this.editLastName(id)}></button> <a href='javascript: void(0)' onClick={() => this.setState({second: !this.state.second})}>Edit</a>
+              <input ref='lastname' type='text' placeholder={name}/> <button onClick={() => this.editLastName(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({second: !this.state.second})}><span className="glyphicon glyphicon-pencil"></span></a>
             </form>
           </div>
         );
@@ -501,7 +502,7 @@ class ProfileContent extends React.Component {
         return (
           <div>
             <form>
-              <input ref='email' type='text' placeholder={email}/> <button onClick={() => this.editEmail(id)}></button> <a href='javascript: void(0)' onClick={() => this.setState({third: !this.state.third})}>Edit</a>
+              <input ref='email' type='text' placeholder={email}/> <button onClick={() => this.editEmail(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({third: !this.state.third})}><span className="glyphicon glyphicon-pencil"></span></a>
             </form>
           </div>
         );
@@ -520,7 +521,7 @@ class ProfileContent extends React.Component {
                 </form></li>  
               </ul>      
             </div>
-            Username: {this.props.user[0].username} <br /> hi
+            Username: {this.props.user[0].username} <br />
             {Firstname(this.props.user[0].firstname, this.props.user[0].id, this.props.user[0].username)}
             {Lastname(this.props.user[0].lastname, this.props.user[0].id, this.props.user[0].username)}
             {Email(this.props.user[0].email, this.props.user[0].id, this.props.user[0].username)}
