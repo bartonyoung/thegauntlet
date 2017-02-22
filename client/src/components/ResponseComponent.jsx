@@ -103,7 +103,7 @@ class ResponseComponent extends React.Component {
 
   deleteResponse(response) {
     $.ajax({
-      url: '/api/response/' + response.id,
+      url: '/api/challenge/' + response.id,
       type: 'DELETE',
       success: function(data) {
         window.location.href = '/#/dash';

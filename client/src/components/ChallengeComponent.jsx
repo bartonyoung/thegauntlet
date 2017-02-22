@@ -17,7 +17,6 @@ class ChallengeComponent extends React.Component {
     this.editChallenge = this.editChallenge.bind(this);
     this.saveChallenge = this.saveChallenge.bind(this);
     this.deleteChallenge = this.deleteChallenge.bind(this);
-    console.log('challenge component props', this.props);
     this.state = {
       isEditing: false
     };
@@ -32,12 +31,10 @@ class ChallengeComponent extends React.Component {
         parent_id: window.sessionStorage.getItem('id')
       },
       success: function(data) {
-        console.log('response data', data)
         let responseArr = [];
         data.forEach(response => {
           if (response.parent_id === parseInt(window.sessionStorage.id)) {
             responseArr.push(response);
-            console.log('responseArr', responseArr)
           }
         });
         outer.props.dispatch(actions.addResponse(responseArr.reverse()));
@@ -116,10 +113,15 @@ class ChallengeComponent extends React.Component {
   }
 
   deleteChallenge(challenge) {
+    let outer = this;
+
     $.ajax({
       url: '/api/challenge/' + challenge.id,
       type: 'DELETE',
       success: function(data) {
+        console.log('delete data', data);
+        outer.props.dispatch(actions.addChallenge(data));
+        window.location.href = '/#/dash';
       }
     });
   }
@@ -218,11 +220,10 @@ class ChallengeComponent extends React.Component {
         }
       }
     };
-
-    let timeDifferenceInSeconds = (new Date().getTime() - parseInt(window.sessionStorage.created_at)) / 1000;
     for (var i = 0; i < this.props.challenges.length; i++) {
       if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
         let challenge = this.props.challenges[i];
+        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
 
         return (
           <div className="container-fluid">
@@ -258,7 +259,7 @@ class ChallengeComponent extends React.Component {
       }
     }
 
-    return <div></div>
+    return <div></div>;
   }
 }
 

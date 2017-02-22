@@ -71,6 +71,12 @@ let actions = {
       type: 'UPDATE_POST',
       payload: post
     };
+  },
+  deletePost: function(post) {
+    return {
+      type: 'DELETE_POST',
+      payload: post
+    };
   }
 };
 

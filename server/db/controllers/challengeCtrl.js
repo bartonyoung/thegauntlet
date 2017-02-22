@@ -87,15 +87,11 @@ module.exports = {
 
   deleteOne: (req, res) => {
     const id = req.params.id;
-    db.from('challenges').where({id: id}).del().then((data) => {
+    db.from('challenges').where({id: id}).del().then(() => {
+      db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+      console.log('deleted data', data);
       res.json(data);
-    });
-  },
-
-  deleteOneResponse: (req, res) => {
-    const id = req.params.id;
-    db.from('challenges').where({parent_id: id}).del().then((data) => {
-      res.json(data);
+    })
     });
   },
 

@@ -21,7 +21,6 @@ routes.put('/challenge/:id', challengeController.updateOne);
 routes.delete('/challenge/:id', challengeController.deleteOne);
 routes.post('/response', challengeController.addOneResponse);
 routes.get('/response', challengeController.getAllResponses);
-routes.delete('/response/:id', challengeController.deleteOneResponse);
 routes.post('/comments', commentController.addOne);
 routes.get('/comments', commentController.getAll);
 routes.post('/upvote', challengeController.upvote);
