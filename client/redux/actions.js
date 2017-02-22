@@ -66,6 +66,12 @@ let actions = {
       type: 'GET_RANKS',
       payload: ranks,
     };
+  },
+  updateResponse: function(response) {
+    return {
+      type: 'UPDATE_RESPONSES',
+      payload: response
+    };
   }
 };
 

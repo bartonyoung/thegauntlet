@@ -98,7 +98,13 @@ class ResponseComponent extends React.Component {
       },
       success: function(data) {
         console.log('put request', data);
-        window.location.href = '/#/dash';
+        // window.location.href = '/#/dash';
+        // for (var i = 0; i < data.length; i++) {
+        //   if (data[i].id === response.id) {
+        //     data[i] = response
+        //   }
+        // }
+        outer.props.dispatch(actions.updateResponse(data));
         alert('Successfully edited!');
       }
     });
@@ -236,19 +242,17 @@ class ResponseComponent extends React.Component {
       }
     };
 
-
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
     if (this.props.response.parent_id === parseInt(window.sessionStorage.id)) {
-      console.log("this response", this.props.response)
       return (
         <div>
-          <h4>{'Response title: ' + this.props.response.title}</h4>
-          <h5>{'Description: ' + this.props.response.description}</h5>
+          <h4>{this.props.response.title}</h4>
           {taskButtons(this.props.response)}
           {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
+          <h5>{this.props.response.description}</h5>
           <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
           {calculateTime(timeDifferenceInSeconds)}<br/>
-          <h5>{`Views : ${this.props.response.views}`}</h5>
+          <h5>{`Views: ${this.props.response.views}`}</h5>
           {whichButton(this.props.response.user_id)}
           <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
         </div>

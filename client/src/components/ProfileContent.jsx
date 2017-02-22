@@ -54,26 +54,7 @@ class ProfileContent extends React.Component {
     });
   }
 
-  onNotificationClick(challenge, response, i) {
-    window.sessionStorage.setItem('title', challenge.title);
-    window.sessionStorage.setItem('id', challenge.id);
-    window.sessionStorage.setItem('description', challenge.description);
-    window.sessionStorage.setItem('category', challenge.category);
-    window.sessionStorage.setItem('filename', challenge.filename);
-    window.sessionStorage.setItem('upvotes', challenge.upvotes);
-    window.sessionStorage.setItem('views', challenge.views);
-    window.sessionStorage.setItem('username', challenge.username);
-    window.sessionStorage.setItem('respTitle', response.title);
-    window.sessionStorage.setItem('respParentID', response.parent_id);
-    window.sessionStorage.setItem('respID', response.id);
-    window.sessionStorage.setItem('respDescription', response.description);
-    window.sessionStorage.setItem('respCategory', response.category);
-    window.sessionStorage.setItem('respFilename', response.filename);
-    window.sessionStorage.setItem('respUpvotes', response.upvotes);
-    window.sessionStorage.setItem('respViews', response.views);
-    window.sessionStorage.setItem('respUsername', response.username);
-    window.sessionStorage.setItem('respUserId', response.user_id);
-    window.sessionStorage.setItem('respId', response.id);
+  onNotificationClick(i) {
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -408,7 +389,7 @@ class ProfileContent extends React.Component {
               if (response.parent_id === challenge.id) {
                 return (
                   <div>
-                    <a href='javascript: void(0)' onClick={() => this.onNotificationClick(challenge, response, i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
+                    <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
                     {calculateTime(timeDifferenceInSeconds)}<br/>
                     <div className="showresponse" style={{display: this.state[i] || 'none'}}>
                       <h4>{'Response title: ' + response.title}</h4>

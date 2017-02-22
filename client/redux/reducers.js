@@ -1,4 +1,5 @@
 const reducer = (state, action) => {
+  // console.log(action.payload)
   switch (action.type) {
   case 'ADD_CHALLENGE':
     return Object.assign({}, state, {
@@ -39,7 +40,15 @@ const reducer = (state, action) => {
   case 'SET_FAVORITES':
     return Object.assign({}, state, {
       favorites: action.payload
-    });    
+    });
+  case 'UPDATE_RESPONSE':
+  console.log(action.payload)
+    for (var i = 0; i < this.state.responses.length; i++) {
+      if (this.state.responses[i].id === action.payload.id) {
+        this.state.responses[i] = action.payload;
+      }
+    }
+    return Object.assign({}, state);
   default:
     return state;
   }
