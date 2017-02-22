@@ -34,5 +34,6 @@ routes.get('/listFollowers', followerController.getListOfFollowers);
 routes.post('/favorite', challengeController.favorite);
 routes.get('/favorite', challengeController.getFavorites);
 routes.post('/unFavorite', challengeController.unFavorite);
+routes.get('/isUser', userControllers.isUser);
 
 module.exports = routes;
