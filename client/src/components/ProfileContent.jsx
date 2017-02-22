@@ -520,7 +520,7 @@ class ProfileContent extends React.Component {
                 </form></li>  
               </ul>      
             </div>
-            Username: {this.props.user[0].username} <br />
+            Username: {this.props.user[0].username} <br /> hi
             {Firstname(this.props.user[0].firstname, this.props.user[0].id, this.props.user[0].username)}
             {Lastname(this.props.user[0].lastname, this.props.user[0].id, this.props.user[0].username)}
             {Email(this.props.user[0].email, this.props.user[0].id, this.props.user[0].username)}
