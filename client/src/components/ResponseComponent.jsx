@@ -102,12 +102,17 @@ class ResponseComponent extends React.Component {
   }
 
   deleteResponse(response) {
+    let outer = this;
+
     $.ajax({
-      url: '/api/challenge/' + response.id,
+      url: '/api/response/' + response.id,
       type: 'DELETE',
+      data: {
+        parent_id: window.sessionStorage.getItem('id')
+      },
       success: function(data) {
-        window.location.href = '/#/dash';
-        alert('Successfully deleted!');
+        console.log('data after delete', data);
+        outer.props.dispatch(actions.getResponses(data));
       }
     });
   }
