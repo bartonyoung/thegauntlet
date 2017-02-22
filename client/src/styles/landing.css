@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-.main-content {
-  margin-top: 65px;
-=======
 /*@import url('https://fonts.googleapis.com/css?family=Baloo');*/
 @import url('https://fonts.googleapis.com/css?family=Baloo|Limelight');
 body{
@@ -15,7 +11,6 @@ body{
 
 .main-content {
   margin-top: 50px;
->>>>>>> Update Laning page visual
   min-height: 70vh;
   height: 300px;
   /*background-image: url();*/
@@ -38,11 +33,7 @@ body{
   /*font-family: 'Baloo', cursive;*/
 
   text-shadow: 2px 2px 2px #000000;
-}
-
-p{
-  
-}  
+} 
 
 .gallery {
   margin-bottom:20px;
@@ -52,15 +43,13 @@ p{
   border: 1px solid #ededed;
 }
 
-
 p, h3 { 
   font-size: 20px;
   color: orange;
   /*font-weight: bold;*/
 }
+
 h4{
   color: white;
 }
-img {
-  border:;
-}
+
