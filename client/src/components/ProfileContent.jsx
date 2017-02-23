@@ -278,20 +278,22 @@ class ProfileContent extends React.Component {
       }
     });
 
-    let whichFollowButton = (leaderId) => {
-      if (this.props.leaders.includes(leaderId)) {
-        return (
-          <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
-          </button>
-        );
-      }
+    let whichFollowButton = (leaderId, user) => {
+      if (window.sessionStorage.getItem('key') !== user) {
+        if (this.props.leaders.includes(leaderId)) {
+          return (
+            <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
+              <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+            </button>
+          );
+        } else {
+          return (
+            <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
+              <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+            </button>
+          );
+        }
+      } 
     };
 
     let whichFavoriteIcon = (challengeId) => {
@@ -345,16 +347,6 @@ class ProfileContent extends React.Component {
         }
       }
     };
-
-    let whichButton = (leaderId) => {
-      let outer = this;
-      if (this.props.leaders.includes(leaderId)) {
-        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
-      } else {
-        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
-      }
-    };
-
 
     let myView = () => {
       if (this.props.profileView === 'all' && window.sessionStorage.getItem('key') === this.props.user[0].username) {
@@ -550,7 +542,7 @@ class ProfileContent extends React.Component {
 
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
-          Followers: {this.props.followers.length} {whichButton(this.props.user[0].id)} <br />
+          Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].id, target)} <br />
         </div><br/>
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
