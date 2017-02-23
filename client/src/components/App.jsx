@@ -26,18 +26,6 @@ class App extends React.Component {
   componentDidMount() {
     let outer = this;
 
-    if (window.sessionStorage.getItem('key')) {
-      // $.get('/api/getLeaders').then(leaders => {
-      //   outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      // });
-      // // $.get('/api/profile').done(data => {
-      // //   outer.props.dispatch(actions.addUser(data));
-      // // });
-      // $.get('/api/favorite').done(data => {
-      //   outer.props.dispatch(actions.setFavorites(data));
-      // });
-    }
-
     $.get('/api/allChallenges').done(data => {
       data = data.reverse();
       outer.props.dispatch(actions.getChallenges(data));

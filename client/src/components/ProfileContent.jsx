@@ -16,6 +16,7 @@ class ProfileContent extends React.Component {
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.editFirstName = this.editFirstName.bind(this);
+    this.onUsernameClick = this.onUsernameClick.bind(this);
   }
 
   componentDidMount () {
@@ -220,6 +221,14 @@ class ProfileContent extends React.Component {
     });
   }
 
+  onUsernameClick(response) {
+    let outer = this;
+    $.get('/api/profile/' + response.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.location.href = '/#/profile/' + response.username;
+    });
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -402,7 +411,7 @@ class ProfileContent extends React.Component {
                         <h4>{'Response title: ' + response.title}</h4>
                         <h5>{'Description: ' + response.description}</h5>
                         {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
-                        <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username + ' '}</Link>
+                        <Link onClick={() => this.onUsernameClick(response)}>{response.username + ' '}</Link>
                         {calculateTime(timeDifferenceInSeconds)}<br/>
                         <h5>{`Views : ${response.views}`}</h5>
                         {whichButton(response.user_id)}
