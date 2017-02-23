@@ -16,6 +16,7 @@ class ProfileContent extends React.Component {
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.editFirstName = this.editFirstName.bind(this);
+    this.onUsernameClick = this.onUsernameClick.bind(this);
   }
 
   componentDidMount () {
@@ -24,14 +25,6 @@ class ProfileContent extends React.Component {
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
-    });
-  }
-
-  componentWillMount () {
-    const outer = this;
-    let endpoint = '/api' + window.location.hash.replace(/[#]/gi, '');
-    $.get(endpoint).then(data => {
-      outer.props.dispatch(actions.addUser(data));
     });
   }
 
@@ -228,6 +221,14 @@ class ProfileContent extends React.Component {
     });
   }
 
+  onUsernameClick(post) {
+    let outer = this;
+    $.get('/api/profile/' + post.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.location.href = '/#/profile/' + post.username;
+    });
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -393,11 +394,29 @@ class ProfileContent extends React.Component {
         );
       } else if (this.props.profileView === 'mailbox') {
         let mappedArray = [];
-        let mappedNotifications;
 
         this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
-            mappedNotifications = this.props.responses.map((response, i) => {
+            mappedComments = this.props.comments.map((comment, j) => {
+              if (comment) {
+                let timeDifferenceInSeconds = (new Date().getTime() - parseInt(comment.created_at)) / 1000;
+                if (comment.challenge_id === challenge.id) {
+                  return (
+                    <div>
+                      <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{comment.username + ' commented to your challenge: ' + challenge.title}</h4></a>
+                      <div style={{display: this.state[j] || 'none'}}>
+                        <Link onClick={() => this.onUsernameClick(comment)}>{comment.username + ' '}</Link>
+                        {calculateTime(timeDifferenceInSeconds)}<br/>
+                        {comment.comment}
+                      </div>
+                    </div>
+                  );
+                }
+              } else {
+                return <div></div>;
+              }
+            });
+            mappedResponses = this.props.responses.map((response, i) => {
               if (response) {
                 let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
                 if (response.parent_id === challenge.id) {
@@ -405,11 +424,11 @@ class ProfileContent extends React.Component {
                     <div>
                       <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
                       {calculateTime(timeDifferenceInSeconds)}<br/>
-                      <div className="showresponse" style={{display: this.state[i] || 'none'}}>
+                      <div style={{display: this.state[i] || 'none'}}>
                         <h4>{'Response title: ' + response.title}</h4>
                         <h5>{'Description: ' + response.description}</h5>
                         {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
-                        <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username + ' '}</Link>
+                        <Link onClick={() => this.onUsernameClick(response)}>{response.username + ' '}</Link>
                         {calculateTime(timeDifferenceInSeconds)}<br/>
                         <h5>{`Views : ${response.views}`}</h5>
                         {whichButton(response.user_id)}
@@ -423,7 +442,8 @@ class ProfileContent extends React.Component {
                 return <div></div>;
               }
             });
-            mappedArray.push(mappedNotifications.reverse());
+            mappedArray.push(mappedResponses.reverse());
+            mappedArray.push(mappedComments.reverse());
           }
         });
 

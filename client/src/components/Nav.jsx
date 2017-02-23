@@ -8,7 +8,6 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.setUser = this.setUser.bind(this);
   }
 
   handleSubmit() {
@@ -44,17 +43,14 @@ class NavBar extends React.Component {
           });
         }
       });
-    } else {
-      alert('Don\'t forget to submit a file');
     }
   }
 
-  setUser() {
-    const outer = this;
-    $.get('/api/profile').then(userData => {
-      console.log('How many times does this fire', userData);
-      outer.props.dispatch(actions.addUser(userData));
-      window.location.href = '#/profile';
+  goToProfilePage() {
+    let outer = this;
+    $.get('/api/profile/' + window.sessionStorage.getItem('key')).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.location.href = '/#/profile';
     });
   }
 
@@ -65,7 +61,7 @@ class NavBar extends React.Component {
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li className="dropdown">
-                  <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add Challenge!<span className="caret"></span></a>
+                  <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
                     <form id="challenge" style={{width: '300px', padding: '15px'}}>
 
@@ -107,7 +103,7 @@ class NavBar extends React.Component {
               </ul>
               <ul className="nav navbar-nav navbar-left">
                 <li>
-                  <h5 className="navbar-text">You are logged in as <a href="javascript: void(0)" onClick={()=> this.setUser()} className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
+                  <h5 className="navbar-text">You are logged in as <a href="javascript: void(0)" onClick={()=> this.goToProfilePage()} className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
                 </li>
               </ul>
             </div>

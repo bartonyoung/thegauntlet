@@ -19,7 +19,12 @@ class Profile extends React.Component {
           responseArr.push(response);
         }
       });
-      outer.props.dispatch(actions.addResponse(responseArr));
+      outer.props.dispatch(actions.getResponses(responseArr));
+    });
+    $.get('/api/comments', {
+      user_id: window.sessionStorage.user_id
+    }).done(data => {
+      console.log('comment data', data);
     });
   }
 

@@ -32,7 +32,7 @@ class Login extends React.Component {
     return (
       <div className="container-signup">
         <form className="register" type="submit" onSubmit={this.handleLogin.bind(this)}>
-          <p id="sign-up">LOG IN</p> 
+          <p id="sign-up">LOG IN</p>
             <p>Username</p>
               <input type="text" placeholder="Username" required ref="username" className="input pass" />
             <p>Password</p>

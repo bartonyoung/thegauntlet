@@ -14,9 +14,7 @@ class ChallengeComponent extends React.Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.editChallenge = this.editChallenge.bind(this);
-    this.saveChallenge = this.saveChallenge.bind(this);
-    this.deleteChallenge = this.deleteChallenge.bind(this);
+    this.onUsernameClick = this.onUsernameClick.bind(this);
     this.state = {
       isEditing: false
     };
@@ -72,8 +70,6 @@ class ChallengeComponent extends React.Component {
           });
         }
       });
-    } else {
-      alert('Don\'t forget to submit a file');
     }
   }
 
@@ -103,7 +99,6 @@ class ChallengeComponent extends React.Component {
       url: '/api/challenge/' + challenge.id,
       type: 'DELETE',
       success: function(data) {
-        console.log('delete data', data);
         outer.props.dispatch(actions.getChallenges(data));
         window.location.href = '/#/dash';
       }
@@ -112,14 +107,23 @@ class ChallengeComponent extends React.Component {
 
   editChallenge() {
     this.setState({
-      isEditing: !this.state.isEditing
+      isEditing: true
     });
   }
 
-  onUsernameClick() {
+  onUsernameClick(challenge) {
+    console.log('challenge userid', challenge.user_id)
     let outer = this;
-    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
+    $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.user_id = challenge.user_id;
+      window.location.href = '/#/profile/' + challenge.username;
+    });
+  }
+
+  cancelEdit() {
+    this.setState({
+      isEditing: !this.state.isEditing
     });
   }
 
@@ -129,9 +133,7 @@ class ChallengeComponent extends React.Component {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>
-                {'Edit'}
-              </button>
+              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>Edit</button>
               <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
             </div>
           );
@@ -144,10 +146,8 @@ class ChallengeComponent extends React.Component {
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
-              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
-                {'Save'}
-              </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
+              <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>Cancel</button>
             </div>
           </div>
         );
@@ -218,7 +218,7 @@ class ChallengeComponent extends React.Component {
                 <h1>{challenge.title}</h1>
                 {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
                 <h4>{challenge.description}</h4>
-                <h3><Link onClick={() => this.onUsernameClick()} to={`/profile/${challenge.username}`} className="userLink">{challenge.username}</Link></h3>
+                <h3><Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
                 {calculateTime(timeDifferenceInSeconds)}
                 {taskButtons(challenge)}
                 <p>{'Upvotes: ' + challenge.upvotes}</p>

@@ -17,7 +17,7 @@ class Landing extends React.Component {
     $.get('/api/allChallenges')
     .then((data) => {
       data.reverse();
-      outer.props.dispatch(actions.addChallenge(data));
+      outer.props.dispatch(actions.getChallenges(data));
     });
   }
 

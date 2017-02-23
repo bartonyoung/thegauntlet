@@ -9,14 +9,11 @@ class ResponseComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.upVoteClick = this.upVoteClick.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
 
     this.state = {
       isEditing: false
     };
-
-    console.log('this.props', this.props);
   }
 
   upVoteClick(id) {
@@ -28,7 +25,7 @@ class ResponseComponent extends React.Component {
       $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
         .then((data)=> {
           data = data.reverse();
-          outer.props.dispatch(actions.addResponse(data));
+          outer.props.dispatch(actions.getResponses(data));
         });
     });
   }
@@ -77,8 +74,13 @@ class ResponseComponent extends React.Component {
     });
   }
 
-  onUsernameClick(username) {
-    window.sessionStorage.setItem('username', username);
+  onUsernameClick(response) {
+    let outer = this;
+    $.get('/api/profile/' + response.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.user_id = response.user_id;
+      window.location.href = '/#/profile/' + response.username;
+    });
   }
 
   saveChallenge(response) {
@@ -122,15 +124,19 @@ class ResponseComponent extends React.Component {
     });
   }
 
+  cancelEdit() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+  }
+
   render() {
     let taskButtons = (response) => {
-      if (window.sessionStorage.getItem('key') === this.props.response.username) {
+      if (window.sessionStorage.username === this.props.response.username) {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editResponse()}>
-                {'Edit'}
-              </button>
+              <button className="btn btn-large btn-default edit" onClick={() => this.editResponse()}>Edit</button>
               <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
             </div>
           );
@@ -143,10 +149,8 @@ class ResponseComponent extends React.Component {
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
-              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
-                {'Save'}
-              </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.cancelEdit()}>Cancel</button>
             </div>
           </div>
         );
@@ -245,7 +249,7 @@ class ResponseComponent extends React.Component {
           {taskButtons(this.props.response)}
           {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
           <h5>{this.props.response.description}</h5>
-          <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
+          <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
           {calculateTime(timeDifferenceInSeconds)}<br/>
           <h5>{`Views: ${this.props.response.views}`}</h5>
           {whichButton(this.props.response.user_id)}

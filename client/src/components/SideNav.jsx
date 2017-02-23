@@ -13,32 +13,22 @@ class SideNav extends React.Component {
     const outer = this;
     this.props.dispatch(actions.setCurrentCategory(category));
     if (category === 'LeaderBoard') {
-      $.get('/api/ranks').then((rankData)=>{
-        outer.props.dispatch(actions.getRanks(rankData)); 
-      }).then(() => {
-        $.get('/api/allchallenges')
-        .then(data=>{
-          outer.props.dispatch(actions.addChallenge(data));
-        });
+      $.get('/api/ranks').then((rankData) => {
+        outer.props.dispatch(actions.getRanks(rankData));
       });
     } else {
-      $.get('/api/allchallenges')
-        .then(data=>{
-          if (category === 'all') {
-            data = data.reverse();
-          } else if (category === 'recent') {
-            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
-          } else if (category === 'popular') {
-            data = data.sort((a, b) =>
-              b.upvotes - a.upvotes
-            );
-          } else {
-            data = data.filter(challenge =>
-              challenge.category === category
-            );
-          }
-          outer.props.dispatch(actions.addChallenge(data));
-        });
+      $.get('/api/allchallenges').done(data => {
+        if (category === 'all') {
+          data = data.reverse();
+        } else if (category === 'recent') {
+          data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
+        } else if (category === 'popular') {
+          data = data.sort((a, b) => b.upvotes - a.upvotes);
+        } else {
+          data = data.filter(challenge => challenge.category === category);
+        }
+        outer.props.dispatch(actions.getChallenges(data));
+      });
     }
   }
 
