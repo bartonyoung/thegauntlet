@@ -1,70 +1,14 @@
-/*.challengeRow {
-  margin-top: 65px;
-   background: rgb(128, 128, 128); 
-   background: rgba(128, 128, 128, .7);
-   height: 80vh;
-}
 
-.challengeInfo {
-  
-  background: #3E3E3E;
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.parentMedia {
-  width: 50%;
-  height: 100%;
-}
-
-.userLink {
-  font-size: 0.8em;
-}
-
-#comments {
-  margin: 15px 15px 0px 15px;
-  overflow-y: auto;
-  height: 60vh;
-  border: #3E3E3E solid 3px; 
-  padding: 15px;
-  display: block;
-  width: 90%;
-  background: white;
-}  
-
-.comment-box {
-  align-items: center;
-  margin-top: 15px;
-  margin-right: 10px;
-  margin-bottom: 15px;
-  position: fixed;
-  display: block;
-  background: #3E3E3E
-}
-
-.commentButton {
-  margin: 2px 50px 15px 50px;
-}
-
-textarea {
-  margin: 15px 15px 0px 15px;
-  padding: 2px;
-  width: 90%;
-  resize: none;
-  border: 1px darkgray 2px;
-}*/
 
 
 .parentMedia {
-  object-fit: cover;
+  padding-top: 15px;
+  max-width:100%;
+  max-height:80%;
 }
-/*.mainRow {
-  padding-top: 65px; 
-  background: lightcoral
-}*/
 
 .mainRowColumn {
-  height: 400px;
+  height: 55vh;
   margin-top: 15px;
   margin-bottom: 15px;
 }
@@ -72,11 +16,7 @@ textarea {
 .challengeInfo {
   background: #3E3E3E;
   border: black 5px;
-  margin-top: 65px;
-}
-
-.outerBar {
-  position: relative;
+  margin-top: 80px;
 }
 
 .fixed {
@@ -85,36 +25,89 @@ textarea {
   background: lightgray;
 }
 
-.chat-form{
+.left-fixed {
   position: fixed;
-  bottom: 0;
+  height: 100vh;
+  background: lightgray;
+}
+
+.outerBar {
+  position: relative;
+}
+
+.main-challenge-description {
+  color: white;
+  font-size: 1.2em;
+}
+
+.main-challenge-title {
+  color: white;
 }
 
 textarea {
-  width: 100%;
-  margin: 0px 5px 2px 5px;
-  padding-right:5px;
-  padding-left:5px;
+  width: 60%;
+  border-radius: 5px;
+}
+
+.comment-box {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.comment-button {
+  float: right;
 }
 
 #comments {
   overflow-y: auto;
+  height: 75%;
 }  
 
-.comment-button {
-   background-color: orange;
+.response-buttons-top {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.response-list {
+  width: 100%;
+  height: 85vh;
+  overflow-y: scroll
+}
+
+.response-button {
+  background-color: orange;
    height: 30px;
    width: 90px;
    cursor:pointer;
    border: orange;
    border-radius: 0px;
    color:white;
-   float: right;
-   margin-bottom: 4px;
-   margin-right: -4px;
+   margin: 55px 10px 0 10px;
 }
 
-.comment-button:hover {
+.response-button:hover {
    background-color: darkorange;
    color:white;
+}
+
+.response-info {
+  background:#3E3E3E;
+  height: 90%;
+  color: white
+}
+
+.one-response {
+  /*margin: 0 0 15px 0;*/
+  margin-right: 10px;
+  margin-left: 10px;
+  height: 30vh;
+}
+
+.response-interaction {
+  position: absolute;
+  right: 0;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  bottom:0;
+  width: 100%;
 }

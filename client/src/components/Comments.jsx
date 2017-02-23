@@ -59,15 +59,16 @@ class Comments extends React.Component {
     });
 
     return (
-    <div className='comment-box'>
-      <div id="comments">{mappedComments}
-      
-      </div>
-      <form onSubmit={this.commentSubmit} className='chat-form'>
-        <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
-        <button className="button comment-button">COMMENT</button>
-      </form>  
-    </div> 
+    <div className="row">  
+      <div className='comment-box col-lg-6 col-lg-offset-1'>
+        <form onSubmit={this.commentSubmit} className='chat-form'>
+          <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
+          <button className="button comment-button">COMMENT</button>
+        </form>  
+        <div id="comments">{mappedComments}
+        </div>
+      </div> 
+    </div>
     );
   }
 }

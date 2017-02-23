@@ -14,7 +14,7 @@ class ResponseList extends React.Component {
 
   render() {
     return (
-      <div className="response container-fluid">
+      <div className="response-list container">
         {this.props.responses.map((response, i) =>
           <ResponseComponent response={response}/>
         )}
