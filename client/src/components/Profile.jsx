@@ -21,9 +21,10 @@ class Profile extends React.Component {
       });
       outer.props.dispatch(actions.getResponses(responseArr));
     });
-    $.get('/api/comments')
-    .done(data => {
-      console.log('data');
+    $.get('/api/comments', {
+      username: window.sessionStorage.username
+    }).done(data => {
+      console.log('comment data', data);
     });
   }
 

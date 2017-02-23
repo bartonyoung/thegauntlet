@@ -14,11 +14,11 @@ class SideNav extends React.Component {
     this.props.dispatch(actions.setCurrentCategory(category));
     if (category === 'LeaderBoard') {
       $.get('/api/ranks').then((rankData)=>{
-        outer.props.dispatch(actions.getRanks(rankData)); 
+        outer.props.dispatch(actions.getRanks(rankData));
       }).then(() => {
         $.get('/api/allchallenges')
         .then(data=>{
-          outer.props.dispatch(actions.addChallenge(data));
+          outer.props.dispatch(actions.getChallenges(data));
         });
       });
     } else {
@@ -37,7 +37,7 @@ class SideNav extends React.Component {
               challenge.category === category
             );
           }
-          outer.props.dispatch(actions.addChallenge(data));
+          outer.props.dispatch(actions.getChallenges(data));
         });
     }
   }

@@ -17,12 +17,25 @@ module.exports = {
   },
 
   getAll: (req, res) => {
-    db.select('comments.comment', 'users.username', 'challenges.id', 'comments.created_at').from('challenges')
-    .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
-    .where('challenges.id', '=', req.query.challenge_id)
-    .innerJoin('users', 'users.id', 'comments.user_id')
-    .then( (data) => {
-      res.json(data);
-    });
+    if (req.query.challenge_id) {
+      db.select('comments.comment', 'users.username', 'challenges.id', 'comments.created_at').from('challenges')
+      .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
+      .where('challenges.id', '=', req.query.challenge_id)
+      .innerJoin('users', 'users.id', 'comments.user_id')
+      .then( (data) => {
+        console.log('comment get all', data)
+        res.json(data);
+      });
+    } else {
+      console.log('req.query.username', req.query.username)
+      db.select('comments.comment', 'users.username', 'challenges.id', 'comments.created_at', 'challenges.username').from('challenges')
+      .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
+      .where('challenges.username', '=', req.query.username)
+      .innerJoin('users', 'users.id', 'comments.user_id')
+      .then( (data) => {
+        console.log('comment get all', data)
+        res.json(data);
+      });
+    }
   }
 };

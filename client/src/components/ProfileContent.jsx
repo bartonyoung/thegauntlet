@@ -27,13 +27,14 @@ class ProfileContent extends React.Component {
     });
   }
 
-  componentWillMount () {
-    const outer = this;
-    let endpoint = '/api' + window.location.hash.replace(/[#]/gi, '');
-    $.get(endpoint).then(data => {
-      outer.props.dispatch(actions.addUser(data));
-    });
-  }
+  // componentWillMount () {
+  //   const outer = this;
+  //   let endpoint = '/api' + window.location.hash.replace(/[#]/gi, '');
+  //   console.log("will mount profile", endpoint)
+  //   $.get(endpoint).then(data => {
+  //     outer.props.dispatch(actions.addUser(data));
+  //   });
+  // }
 
   numFollowers () {
     if (this.props.user) {
@@ -397,7 +398,8 @@ class ProfileContent extends React.Component {
 
         this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
-            mappedNotifications = this.props.responses.map((response, i) => {
+            // mappedComments = this.props.comments.map
+            mappedResponses = this.props.responses.map((response, i) => {
               if (response) {
                 let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
                 if (response.parent_id === challenge.id) {
@@ -423,7 +425,7 @@ class ProfileContent extends React.Component {
                 return <div></div>;
               }
             });
-            mappedArray.push(mappedNotifications.reverse());
+            mappedArray.push(mappedResponses.reverse());
           }
         });
 

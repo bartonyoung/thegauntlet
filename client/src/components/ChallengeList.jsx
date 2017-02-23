@@ -11,32 +11,22 @@ class ChallengeList extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onChallengeClick = this.onChallengeClick.bind(this);
+    this.onUsernameClick = this.onUsernameClick.bind(this);
     this.upVoteClick = this.upVoteClick.bind(this);
     this.followTheLeader = this.followTheLeader.bind(this);
     this.unFollow = this.unFollow.bind(this);
     this.addToFavorites = this.addToFavorites.bind(this);
   }
 
-  onChallengeClick(challenge) {
+  onUsernameClick(challenge) {
     let outer = this;
-    if (typeof challenge === 'object') {
-      window.sessionStorage.setItem('title', challenge.title);
-      window.sessionStorage.setItem('id', challenge.id);
-      window.sessionStorage.setItem('description', challenge.description);
-      window.sessionStorage.setItem('category', challenge.category);
-      window.sessionStorage.setItem('filename', challenge.filename);
-      window.sessionStorage.setItem('upvotes', challenge.upvotes);
-      window.sessionStorage.setItem('views', challenge.views);
-      $.get('/api/profile/' + window.sessionStorage.username).done(user => {
-        outer.props.dispatch(actions.addUser(user));
-      });
-    } else {
-      window.sessionStorage.setItem('username', challenge);
-      $.get('/api/profile/' + challenge).done(user => {
-        outer.props.dispatch(actions.addUser(user));
-      });
-    }
+    $.get('/api/profile/' + challenge.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+    });
+  }
+
+  onChallengeTitleClick(challenge) {
+    window.sessionStorage.setItem('id', challenge.id);
   }
 
   upVoteClick(challenge) {
@@ -206,11 +196,11 @@ class ChallengeList extends React.Component {
           return (
             <div className="col col-md-6" key={i}>
             <div>
-              <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+              <h4 onClick={() => this.onChallengeTitleClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
               </div>
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
               <div>
-                <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
+                <Link onClick={() => this.onUsernameClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
                 {calculateTime(timeDifferenceInSeconds)}
                 {whichFollowButton(challenge.user_id)}
                 {whichFavoriteIcon(challenge.id)}
@@ -252,7 +242,7 @@ class ChallengeList extends React.Component {
                   return (
                     <tr className="success" key={index}>
                       <td> #{index + 1}</td>
-                      <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
+                      <td><Link to={`/profile/${rank.username}`}>{rank.username}</Link></td>
                       <td>{rank.upvotes}</td>
                    </tr>
                   );
