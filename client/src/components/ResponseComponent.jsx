@@ -136,12 +136,16 @@ class ResponseComponent extends React.Component {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editResponse()}>Edit</button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
+              <button className="btn btn-default btn-sm edit" onClick={() => this.editResponse()}>
+                <span className="glyphicon glyphicon-edit"></span>  
+              </button>
+              <button className="btn btn-default btn-sm delete" onClick={() => this.deleteResponse(response)}>
+                <span className="glyphicon glyphicon-remove"></span>  
+              </button>
             </div>
           );
         }
-
+    
         return (
           <div>
             <div className="editor">
@@ -149,6 +153,7 @@ class ResponseComponent extends React.Component {
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
+
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
               <button className="btn btn-large btn-default delete" onClick={() => this.cancelEdit()}>Cancel</button>
             </div>
@@ -176,14 +181,14 @@ class ResponseComponent extends React.Component {
     let whichButton = (leaderId) => {
       if (this.props.leaders.includes(leaderId)) {
         return (
-          <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+          <button className="btn btn-default btn-sm" style={{color: 'red'}}onClick={() => this.unFollow(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>
           </button>
         );
       } else {
         return (
-          <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+          <button className="btn btn-default btn-sm" onClick={() => this.followTheLeader(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>
           </button>
         );
       }
@@ -192,13 +197,13 @@ class ResponseComponent extends React.Component {
     let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
         return (
-          <button className="btn btn-default btn-sm pull-right">
+          <button className="btn  btn-default btn-sm">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
           </button>
         );
       } else {
         return (
-          <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
+          <button className="btn btn-default btn-sm" onClick={() => { this.addToFavorites(challengeId); }}>
             <span className="glyphicon glyphicon-heart"></span>
           </button>
         );
@@ -244,20 +249,26 @@ class ResponseComponent extends React.Component {
     if (this.props.response) {
       let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
       return (
-        <div>
-          <h4>{this.props.response.title}</h4>
-          {taskButtons(this.props.response)}
+    <div className="one-response row">
+        <div className="col-lg-4 response-info">
           {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
-          <h5>{this.props.response.description}</h5>
+        </div>
+        <div className="col-lg-8 response-info">
+          <span>{this.props.response.title}</span>
+          <span>{this.props.response.description}</span>
+          
           <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
           {calculateTime(timeDifferenceInSeconds)}<br/>
-          <h5>{`Views: ${this.props.response.views}`}</h5>
-          {whichButton(this.props.response.user_id)}
-          {whichFavoriteIcon(this.props.response.id)}
-           <button onClick={()=>{ this.upVoteClick(this.props.response.id); }} type="button" className="btn btn-default btn-sm pull-right">
-              <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${this.props.response.upvotes}`}
-          </button>
-        </div>
+          <div className="response-interaction">
+            {taskButtons(this.props.response)}
+            {whichButton(this.props.response.user_id)}
+            {whichFavoriteIcon(this.props.response.id)}
+            <button onClick={()=> this.upVoteClick(this.props.response.id) } type="button" className="btn btn-default btn-sm">
+              <span className="glyphicon glyphicon-arrow-up"></span>{` ${this.props.response.upvotes}`}
+            </button>
+          </div>
+        </div>  
+      </div>
       );
     } else {
       return <div></div>;
