@@ -78,7 +78,7 @@ class ResponseComponent extends React.Component {
     let outer = this;
     $.get('/api/profile/' + response.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.user_id = response.user_id;
+      window.sessionStorage.username = response.username;
       window.location.href = '/#/profile/' + response.username;
     });
   }
