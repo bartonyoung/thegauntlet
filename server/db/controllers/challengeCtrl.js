@@ -63,10 +63,11 @@ module.exports = {
   },
 
   getOne: (req, res) => {
+    console.log(req.params.id, req.query.id)
     db.select()
     .from('challenges')
-    .where({parent_id: req.query.parent_id})
-    .orWhere({id: req.query.parent_id})
+    .where({parent_id: req.params.id})
+    .orWhere({id: req.params.id})
     .then(data =>{
       res.json(data);
     })

@@ -544,8 +544,10 @@ class ProfileContent extends React.Component {
           {Firstname(this.props.user[0].firstname, this.props.user[0].id, target)}
           {Lastname(this.props.user[0].lastname, this.props.user[0].id, target)}
           {Email(this.props.user[0].email, this.props.user[0].id, target)}
-          Rank# {this.props.ranks.map((rank, index)=>{
-            return {username: rank.username, rank: index + 1};
+          Rank# {this.props.ranks.map((rank, index) => {
+
+              return {username: rank.username, rank: index + 1};
+
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
           Followers: {this.props.followers.length} {whichButton(this.props.user[0].id)} <br />

@@ -42,7 +42,8 @@ module.exports = {
   },
 
   getUser: function(req, res) {
-    let username = req.params.username || req.session.displayName;
+    console.log("inside get user", req.params)
+    let username = req.params.username;
     db.select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('username', '=', username).then(data => {
       res.json(data);
     });
@@ -73,7 +74,6 @@ module.exports = {
   },
 
   logout: function(req, res) {
-    console.log(req.body);
     let temp = req.session.displayName;
     req.session.destroy();
     res.send('Good bye  ' + temp);
@@ -82,7 +82,6 @@ module.exports = {
   getAllUsers: function(req, res) {
     let username = req.params.username || req.session.displayName;
     db.select( 'users.username', 'users.upvotes').from('users').then(data => {
-      console.log('======================================>', data);
       data = data.sort((a, b)=> b.upvotes - a.upvotes);
       res.json(data);
     });
@@ -101,7 +100,7 @@ module.exports = {
       if (exist.length) {
         res.json(true);
       } else {
-        res.json(false);  
+        res.json(false);
       }
     });
   }
