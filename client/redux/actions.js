@@ -6,6 +6,13 @@ let actions = {
     };
   },
 
+  getResponses: function (responses) {
+    return {
+      type: 'GET_RESPONSES',
+      payload: responses
+    };
+  },
+
   addResponse: function(response) {
     return {
       type: 'ADD_RESPONSE',
@@ -54,7 +61,6 @@ let actions = {
       payload: view,
     };
   },
-
   setFollowers: function(followers) {
     return {
       type: 'GET_FOLLOWERS',
@@ -65,6 +71,18 @@ let actions = {
     return {
       type: 'GET_RANKS',
       payload: ranks,
+    };
+  },
+  updatePost: function(post) {
+    return {
+      type: 'UPDATE_POST',
+      payload: post
+    };
+  },
+  deletePost: function(post) {
+    return {
+      type: 'DELETE_POST',
+      payload: post
     };
   }
 };

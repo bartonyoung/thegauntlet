@@ -16,9 +16,7 @@ class ResponseComponent extends React.Component {
       isEditing: false
     };
 
-    this.state = {
-      renderResponse: false
-    };
+    console.log('this.props', this.props);
   }
 
   upVoteClick(id) {
@@ -90,28 +88,31 @@ class ResponseComponent extends React.Component {
     });
 
     $.ajax({
-      url: '/api/response/' + response.id,
+      url: '/api/challenge/' + response.id,
       type: 'PUT',
       data: {
         title: this.refs.title.value,
-        description: this.refs.description.value,
-        parent_id: response.parent_id
+        description: this.refs.description.value
       },
       success: function(data) {
         console.log('put request', data);
-        window.location.href = '/#/dash';
-        alert('Successfully edited!');
+        outer.props.dispatch(actions.updatePost(data));
       }
     });
   }
 
   deleteResponse(response) {
+    let outer = this;
+
     $.ajax({
       url: '/api/response/' + response.id,
       type: 'DELETE',
+      data: {
+        parent_id: window.sessionStorage.getItem('id')
+      },
       success: function(data) {
-        window.location.href = '/#/dash';
-        alert('Successfully deleted!');
+        console.log('data after delete', data);
+        outer.props.dispatch(actions.getResponses(data));
       }
     });
   }
@@ -237,26 +238,19 @@ class ResponseComponent extends React.Component {
       }
     };
 
-
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
-    if (this.props.response.parent_id === parseInt(window.sessionStorage.id)) {
-      return (
-        <div>
-          <h4>{'Response title: ' + this.props.response.title}</h4>
-          <h5>{'Description: ' + this.props.response.description}</h5>
-          {taskButtons(this.props.response)}
-          {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
-          <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
-          {calculateTime(timeDifferenceInSeconds)}<br/>
-          <h5>{`Views : ${this.props.response.views}`}</h5>
-          {whichButton(this.props.response.user_id)}
-          <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
-        </div>
-      );
-    }
-
     return (
-      <div></div>
+      <div>
+        <h4>{this.props.response.title}</h4>
+        {taskButtons(this.props.response)}
+        {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
+        <h5>{this.props.response.description}</h5>
+        <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
+        {calculateTime(timeDifferenceInSeconds)}<br/>
+        <h5>{`Views: ${this.props.response.views}`}</h5>
+        {whichButton(this.props.response.user_id)}
+        <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
+      </div>
     );
   }
 }

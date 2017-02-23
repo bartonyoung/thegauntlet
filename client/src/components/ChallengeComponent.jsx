@@ -17,7 +17,6 @@ class ChallengeComponent extends React.Component {
     this.editChallenge = this.editChallenge.bind(this);
     this.saveChallenge = this.saveChallenge.bind(this);
     this.deleteChallenge = this.deleteChallenge.bind(this);
-
     this.state = {
       isEditing: false
     };
@@ -32,13 +31,7 @@ class ChallengeComponent extends React.Component {
         parent_id: window.sessionStorage.getItem('id')
       },
       success: function(data) {
-        let responseArr = [];
-        data.forEach(response => {
-          if (response.parent_id) {
-            responseArr.push(response);
-          }
-        });
-        outer.props.dispatch(actions.addResponse(responseArr.reverse()));
+        outer.props.dispatch(actions.getResponses(data.reverse()));
       }
     });
 
@@ -74,7 +67,6 @@ class ChallengeComponent extends React.Component {
             data: {
               title: outer.refs.title.value,
               description: outer.refs.description.value,
-              category: outer.refs.category.value,
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
               created_at: created_at
@@ -83,7 +75,6 @@ class ChallengeComponent extends React.Component {
               outer.props.dispatch(actions.addResponse(data));
               outer.refs.title.value = '';
               outer.refs.description.value = '';
-              outer.refs.category.value = '';
               outer.refs.video.value = '';
             }
           });
@@ -94,32 +85,34 @@ class ChallengeComponent extends React.Component {
     }
   }
 
-  saveChallenge(e) {
+  saveChallenge(challenge) {
     let outer = this;
     this.setState({
       isEditing: !this.state.isEditing
     });
 
     $.ajax({
-      url: '/api/challenge/' + window.sessionStorage.id,
+      url: '/api/challenge/' + challenge.id,
       type: 'PUT',
       data: {
         title: this.refs.title.value,
         description: this.refs.description.value
       },
       success: function(data) {
-        alert('Successfully edited!');
-        window.location.href = '/#/dash';
+        outer.props.dispatch(actions.updatePost(data));
       }
     });
   }
 
-  deleteChallenge() {
+  deleteChallenge(challenge) {
+    let outer = this;
+
     $.ajax({
-      url: '/api/challenge/' + window.sessionStorage.id,
+      url: '/api/challenge/' + challenge.id,
       type: 'DELETE',
       success: function(data) {
-        alert('Successfully deleted!');
+        console.log('delete data', data);
+        outer.props.dispatch(actions.addChallenge(data));
         window.location.href = '/#/dash';
       }
     });
@@ -131,7 +124,7 @@ class ChallengeComponent extends React.Component {
     });
   }
 
-  onChallengeClick(challenge) {
+  onUsernameClick() {
     let outer = this;
     $.get('/api/profile/' + window.sessionStorage.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
@@ -139,15 +132,15 @@ class ChallengeComponent extends React.Component {
   }
 
   render() {
-    let taskButtons = () => {
-      if (window.sessionStorage.getItem('key') === window.sessionStorage.username) {
+    let taskButtons = (challenge) => {
+      if (challenge.username === window.sessionStorage.username) {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => { this.editChallenge(); }}>
+              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>
                 {'Edit'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
             </div>
           );
         }
@@ -155,63 +148,110 @@ class ChallengeComponent extends React.Component {
         return (
           <div>
             <div className="editor">
-              <form id="editform" onSubmit={() => { this.saveChallenge(); }}>
+              <form id="editform" onSubmit={() => this.saveChallenge(challenge)}>
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
                 {'Save'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge()}>Delete</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
             </div>
           </div>
         );
       }
     };
 
-    let checkFile = (type, response) => {
+    let checkFile = (type, challenge) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
         return (<video className="parentMedia" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + response.filename} type="video/mp4"/>*/}
+          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucke  t421/' + response.filename} width="320" height="240" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucke  t421/' + challenge.filename} width="320" height="240" />;
         return <img className="parentMedia" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
       }
     };
 
-    return (
-      <div className="container-fluid">
-        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <div className="row parentChallenge">
-          <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
-            <h1>{window.sessionStorage.title} by <Link onClick={() => this.onChallengeClick()} to={`/profile/${window.sessionStorage.username}`} className="userLink">{window.sessionStorage.username}</Link></h1>
-            <h4>{window.sessionStorage.description}</h4>
-            {checkFile(window.sessionStorage.filename.split('.').pop(), window.sessionStorage)}<br/>
-            {taskButtons()}
-            <p>{'Upvotes: ' + window.sessionStorage.upvotes}</p>
-          </div>
-          <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
-            <Comments />
-          </div>
-        </div>
-        {'Upload your response: '}
-        <form id="challenge">
-          <input type="text" placeholder="Name your response" required ref="title" name="title"/>
-          <input type="text" placeholder="Description" required ref="description" name="description"/>
-          <input type="text" placeholder="category" required ref="category" name="category"/>
-        </form>
-        <form ref="file" id="upload">
-          <input type="file" placeholder="video" required ref="video" name="video"/>
-        </form>
-          <button onClick={this.handleSubmit}>Submit</button>
 
-        <ResponseList />
-      </div>
-    );
+    let calculateTime = (seconds) => {
+      if (seconds < 60) {
+        return Math.floor(seconds) + ' seconds ago';
+      } else if (seconds >= 60 && seconds < 3600) {
+        if (seconds < 120) {
+          return ' 1 minute ago';
+        } else {
+          return Math.floor(seconds / 60) + ' minutes ago';
+        }
+      } else if (seconds >= 3600 && seconds < 86400) {
+        if (seconds < 7200) {
+          return ' 1 hour ago';
+        } else {
+          return Math.floor(seconds / 3600) + ' hours ago';
+        }
+      } else if (seconds >= 86400 && seconds < 604800) {
+        if (seconds < 172800) {
+          return ' 1 day ago';
+        } else {
+          return Math.floor(seconds / 86400) + ' days ago';
+        }
+      } else if (seconds >= 2592000 && seconds < 31104000) {
+        if (seconds < 5184000) {
+          return ' 1 month ago';
+        } else {
+          return Math.floor(seconds / 2592000) + ' months ago';
+        }
+      } else {
+        if (seconds < 62208000) {
+          return ' 1 year ago';
+        } else {
+          return Math.floor(seconds / 31104000) + ' years ago';
+        }
+      }
+    };
+
+    for (var i = 0; i < this.props.challenges.length; i++) {
+      if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
+        let challenge = this.props.challenges[i];
+        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
+
+        return (
+          <div className="container-fluid">
+            <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
+            <div className="row parentChallenge">
+              <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
+                <h1>{challenge.title}</h1>
+                {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+                <h4>{challenge.description}</h4>
+                <h3><Link onClick={() => this.onUsernameClick()} to={`/profile/${challenge.username}`} className="userLink">{challenge.username}</Link></h3>
+                {calculateTime(timeDifferenceInSeconds)}
+                {taskButtons(challenge)}
+                <p>{'Upvotes: ' + challenge.upvotes}</p>
+              </div>
+              <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
+                <Comments />
+              </div>
+            </div>
+            {'Upload your response: '}
+            <form id="challenge">
+              <input type="text" placeholder="Name your response" required ref="title" name="title"/>
+              <input type="text" placeholder="Description" required ref="description" name="description"/>
+            </form>
+            <form ref="file" id="upload">
+              <input type="file" placeholder="video" required ref="video" name="video"/>
+            </form>
+              <button onClick={this.handleSubmit}>Submit</button>
+
+            <ResponseList />
+          </div>
+        );
+      }
+    }
+
+    return <div></div>;
   }
 }
 

@@ -29,14 +29,7 @@ class ChallengeList extends React.Component {
       window.sessionStorage.setItem('upvotes', challenge.upvotes);
       window.sessionStorage.setItem('views', challenge.views);
       window.sessionStorage.setItem('username', challenge.username);
-      window.sessionStorage.removeItem('respTitle');
-      window.sessionStorage.removeItem('respId');
-      window.sessionStorage.removeItem('respDescription');
-      window.sessionStorage.removeItem('respCategory');
-      window.sessionStorage.removeItem('respFilename');
-      window.sessionStorage.removeItem('respUpvotes');
-      window.sessionStorage.removeItem('respViews');
-      window.sessionStorage.removeItem('respUsername');
+      window.sessionStorage.setItem('created_at', challenge.created_at);
       $.get('/api/profile/' + window.sessionStorage.username).done(user => {
         outer.props.dispatch(actions.addUser(user));
       });
@@ -235,9 +228,11 @@ class ChallengeList extends React.Component {
     });
 
     if (this.props.currentCategory === 'profile') {
-      return <div>
-                <ProfileContent/>
-            </div>;
+      return (
+        <div>
+          <ProfileContent/>
+        </div>
+      )
     }
 
     if (this.props.currentCategory === 'LeaderBoard') {

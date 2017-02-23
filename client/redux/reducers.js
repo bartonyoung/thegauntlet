@@ -1,46 +1,82 @@
 const reducer = (state, action) => {
-  switch (action.type) {
-  case 'ADD_CHALLENGE':
+  console.log("state", state)
+  console.log('action.payload', action.payload)
+  if (action.type === 'ADD_CHALLENGE') {
     return Object.assign({}, state, {
       challenges: action.payload
     });
-  case 'ADD_RESPONSE':
+  } else if (action.type === 'ADD_RESPONSE') {
+    let responseObj = {};
+
+    for (var keys in state) {
+      if (keys === 'responses') {
+        responseObj[keys] = [];
+        responseObj[keys].push(action.payload[0]);
+        state[keys].forEach((key, i) => {
+          responseObj[keys].push(key);
+        });
+      } else {
+        responseObj[keys] = state[keys];
+      }
+    }
+
+    return responseObj;
+  } else if (action.type === 'GET_RESPONSES') {
     return Object.assign({}, state, {
       responses: action.payload
     });
-  case 'ADD_COMMENT':
+  } else if (action.type === 'ADD_COMMENT') {
     return Object.assign({}, state, {
       comments: action.payload
     });
-  case 'GET_LEADERS':
+  } else if (action.type === 'GET_LEADERS') {
     return Object.assign({}, state, {
       leaders: action.payload
     });
-  case 'ADD_USER':
+  } else if (action.type === 'ADD_USER') {
     return Object.assign({}, state, {
       user: action.payload
     });
-  case 'SET_CATEGORY':
+  } else if (action.type === 'SET_CATEGORY') {
     return Object.assign({}, state, {
       currentCategory: action.payload
     });
-  case 'SET_VIEW':
+  } else if (action.type === 'SET_VIEW') {
     return Object.assign({}, state, {
       profileView: action.payload
     });
-  case 'GET_FOLLOWERS':
+  } else if (action.type === 'GET_FOLLOWERS') {
     return Object.assign({}, state, {
       followers: action.payload
     });
-  case 'GET_RANKS':
+  } else if (action.type === 'GET_RANKS') {
     return Object.assign({}, state, {
       ranks: action.payload
     });
-  case 'SET_FAVORITES':
+  } else if (action.type === 'SET_FAVORITES') {
     return Object.assign({}, state, {
       favorites: action.payload
-    });    
-  default:
+    });
+  } else if (action.type === 'UPDATE_POST') {
+    let updateObj = {};
+
+    for (var keys in state) {
+      if (keys === 'responses' || keys === 'challenges') {
+        updateObj[keys] = [];
+        state[keys].forEach((key, i) => {
+          if (key.id === action.payload[0].id) {
+            updateObj[keys][i] = action.payload[0];
+          } else {
+            updateObj[keys][i] = key;
+          }
+        });
+      } else {
+        updateObj[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, updateObj);
+  } else {
     return state;
   }
 };
