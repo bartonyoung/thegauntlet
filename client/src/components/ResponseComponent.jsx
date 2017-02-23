@@ -9,9 +9,6 @@ class ResponseComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.upVoteClick = this.upVoteClick.bind(this);
-    this.onUsernameClick = this.onUsernameClick.bind(this);
-
     this.state = {
       isEditing: false
     };
@@ -26,7 +23,7 @@ class ResponseComponent extends React.Component {
       $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
         .then((data)=> {
           data = data.reverse();
-          outer.props.dispatch(actions.addResponse(data));
+          outer.props.dispatch(actions.getResponses(data));
         });
     });
   }

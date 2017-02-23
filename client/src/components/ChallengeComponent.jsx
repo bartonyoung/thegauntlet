@@ -13,11 +13,6 @@ class ChallengeComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.editChallenge = this.editChallenge.bind(this);
-    this.saveChallenge = this.saveChallenge.bind(this);
-    this.deleteChallenge = this.deleteChallenge.bind(this);
-    this.cancelEdit = this.cancelEdit.bind(this);
     this.state = {
       isEditing: false
     };
@@ -135,10 +130,8 @@ class ChallengeComponent extends React.Component {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>
-                {'Edit'}
-              </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Cancel</button>
+              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>Edit</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
             </div>
           );
         }
@@ -150,10 +143,8 @@ class ChallengeComponent extends React.Component {
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
-              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
-                {'Save'}
-              </button>
-              <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>{'Cancel'}</button>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
+              <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>Cancel</button>
             </div>
           </div>
         );
