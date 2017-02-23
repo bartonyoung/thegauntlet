@@ -14,6 +14,7 @@ class ChallengeComponent extends React.Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onUsernameClick = this.onUsernameClick.bind(this);
     this.state = {
       isEditing: false
     };
@@ -116,6 +117,8 @@ class ChallengeComponent extends React.Component {
     let outer = this;
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.username = challenge.username;
+      window.location.href = '/#/profile/' + challenge.username;
     });
   }
 
@@ -216,7 +219,7 @@ class ChallengeComponent extends React.Component {
                 <h1>{challenge.title}</h1>
                 {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
                 <h4>{challenge.description}</h4>
-                <h3><Link onClick={() => this.onUsernameClick(challenge.username)} to={`/profile/${challenge.username}`} className="userLink">{challenge.username}</Link></h3>
+                <h3><Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
                 {calculateTime(timeDifferenceInSeconds)}
                 {taskButtons(challenge)}
                 <p>{'Upvotes: ' + challenge.upvotes}</p>

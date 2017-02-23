@@ -27,6 +27,7 @@ class App extends React.Component {
     let outer = this;
 
     if (window.sessionStorage.getItem('key')) {
+      console.log('app get user')
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });

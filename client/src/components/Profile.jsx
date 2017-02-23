@@ -26,6 +26,7 @@ class Profile extends React.Component {
     }).done(data => {
       console.log('comment data', data);
     });
+    console.log('profile page mount', this.props.user)
   }
 
   render() {

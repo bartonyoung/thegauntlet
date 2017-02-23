@@ -22,6 +22,8 @@ class ChallengeList extends React.Component {
     let outer = this;
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.username = challenge.username;
+      window.location.href = '/#/profile/' + challenge.username;
     });
   }
 
@@ -200,7 +202,7 @@ class ChallengeList extends React.Component {
               </div>
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
               <div>
-                <Link onClick={() => this.onUsernameClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
+                <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
                 {calculateTime(timeDifferenceInSeconds)}
                 {whichFollowButton(challenge.user_id)}
                 {whichFavoriteIcon(challenge.id)}
@@ -242,7 +244,7 @@ class ChallengeList extends React.Component {
                   return (
                     <tr className="success" key={index}>
                       <td> #{index + 1}</td>
-                      <td><Link to={`/profile/${rank.username}`}>{rank.username}</Link></td>
+                      <td><Link onClick={() => this.onUsernameClick(rank)}>{rank.username}</Link></td>
                       <td>{rank.upvotes}</td>
                    </tr>
                   );

@@ -27,15 +27,6 @@ class ProfileContent extends React.Component {
     });
   }
 
-  // componentWillMount () {
-  //   const outer = this;
-  //   let endpoint = '/api' + window.location.hash.replace(/[#]/gi, '');
-  //   console.log("will mount profile", endpoint)
-  //   $.get(endpoint).then(data => {
-  //     outer.props.dispatch(actions.addUser(data));
-  //   });
-  // }
-
   numFollowers () {
     if (this.props.user) {
       return this.props.user.map((userInfo, i) => {
