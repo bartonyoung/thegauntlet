@@ -9,6 +9,8 @@ class ResponseComponent extends React.Component {
   constructor(props) {
     super(props);
 
+    this.onUsernameClick = this.onUsernameClick.bind(this);
+
     this.state = {
       isEditing: false
     };
@@ -72,8 +74,13 @@ class ResponseComponent extends React.Component {
     });
   }
 
-  onUsernameClick(username) {
-    window.sessionStorage.setItem('username', username);
+  onUsernameClick(response) {
+    let outer = this;
+    $.get('/api/profile/' + response.username).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.username = response.username;
+      window.location.href = '/#/profile/' + response.username;
+    });
   }
 
   saveChallenge(response) {
@@ -242,7 +249,7 @@ class ResponseComponent extends React.Component {
           {taskButtons(this.props.response)}
           {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
           <h5>{this.props.response.description}</h5>
-          <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
+          <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
           {calculateTime(timeDifferenceInSeconds)}<br/>
           <h5>{`Views: ${this.props.response.views}`}</h5>
           {whichButton(this.props.response.user_id)}
