@@ -23,19 +23,6 @@ class App extends React.Component {
     this.handleAuth = this.handleAuth.bind(this);
   }
 
-  componentDidMount() {
-    let outer = this;
-
-    $.get('/api/allChallenges').done(data => {
-      data = data.reverse();
-      outer.props.dispatch(actions.getChallenges(data));
-    });
-
-    $.get('/api/ranks').then((rankData)=>{
-      outer.props.dispatch(actions.getRanks(rankData));
-    });
-  }
-
   handleLogout() {
     $.get('/api/logout')
     .done(data => {

@@ -27,10 +27,10 @@ module.exports = {
         res.json(data);
       });
     } else {
-      console.log('req.query.username', req.query.username)
-      db.select('comments.comment', 'users.username', 'challenges.id', 'comments.created_at', 'challenges.username').from('challenges')
+      console.log('req.query.user_id', req.query.user_id)
+      db.select('comments.comment', 'users.username', 'challenges.user_id', 'comments.created_at').from('challenges')
       .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
-      .where('challenges.username', '=', req.query.username)
+      .where('challenges.user_id', '=', req.query.user_id)
       .innerJoin('users', 'users.id', 'comments.user_id')
       .then( (data) => {
         console.log('comment get all', data)

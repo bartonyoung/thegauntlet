@@ -70,8 +70,6 @@ class ChallengeComponent extends React.Component {
           });
         }
       });
-    } else {
-      alert('Don\'t forget to submit a file');
     }
   }
 
@@ -114,9 +112,11 @@ class ChallengeComponent extends React.Component {
   }
 
   onUsernameClick(challenge) {
+    console.log('challenge userid', challenge.user_id)
     let outer = this;
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.user_id = challenge.user_id;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }

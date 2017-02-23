@@ -43,8 +43,6 @@ class NavBar extends React.Component {
           });
         }
       });
-    } else {
-      alert('Don\'t forget to submit a file');
     }
   }
 

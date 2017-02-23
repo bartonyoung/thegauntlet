@@ -21,12 +21,11 @@ class Profile extends React.Component {
       });
       outer.props.dispatch(actions.getResponses(responseArr));
     });
-    // $.get('/api/comments', {
-    //   username: window.sessionStorage.username
-    // }).done(data => {
-    //   console.log('comment data', data);
-    // });
-    console.log('profile page mount', this.props.user)
+    $.get('/api/comments', {
+      user_id: window.sessionStorage.user_id
+    }).done(data => {
+      console.log('comment data', data);
+    });
   }
 
   render() {

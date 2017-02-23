@@ -221,11 +221,11 @@ class ProfileContent extends React.Component {
     });
   }
 
-  onUsernameClick(response) {
+  onUsernameClick(post) {
     let outer = this;
-    $.get('/api/profile/' + response.username).done(user => {
+    $.get('/api/profile/' + post.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.location.href = '/#/profile/' + response.username;
+      window.location.href = '/#/profile/' + post.username;
     });
   }
 
@@ -394,11 +394,28 @@ class ProfileContent extends React.Component {
         );
       } else if (this.props.profileView === 'mailbox') {
         let mappedArray = [];
-        let mappedNotifications;
 
         this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
-            // mappedComments = this.props.comments.map
+            mappedComments = this.props.comments.map((comment, j) => {
+              if (comment) {
+                let timeDifferenceInSeconds = (new Date().getTime() - parseInt(comment.created_at)) / 1000;
+                if (comment.challenge_id === challenge.id) {
+                  return (
+                    <div>
+                      <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{comment.username + ' commented to your challenge: ' + challenge.title}</h4></a>
+                      <div style={{display: this.state[j] || 'none'}}>
+                        <Link onClick={() => this.onUsernameClick(comment)}>{comment.username + ' '}</Link>
+                        {calculateTime(timeDifferenceInSeconds)}<br/>
+                        {comment.comment}
+                      </div>
+                    </div>
+                  );
+                }
+              } else {
+                return <div></div>;
+              }
+            });
             mappedResponses = this.props.responses.map((response, i) => {
               if (response) {
                 let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
@@ -407,7 +424,7 @@ class ProfileContent extends React.Component {
                     <div>
                       <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
                       {calculateTime(timeDifferenceInSeconds)}<br/>
-                      <div className="showresponse" style={{display: this.state[i] || 'none'}}>
+                      <div style={{display: this.state[i] || 'none'}}>
                         <h4>{'Response title: ' + response.title}</h4>
                         <h5>{'Description: ' + response.description}</h5>
                         {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
@@ -426,6 +443,7 @@ class ProfileContent extends React.Component {
               }
             });
             mappedArray.push(mappedResponses.reverse());
+            mappedArray.push(mappedComments.reverse());
           }
         });
 
