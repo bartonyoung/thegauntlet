@@ -111,7 +111,6 @@ class ResponseComponent extends React.Component {
         parent_id: window.sessionStorage.getItem('id')
       },
       success: function(data) {
-        console.log('data after delete', data);
         outer.props.dispatch(actions.getResponses(data));
       }
     });
@@ -238,20 +237,24 @@ class ResponseComponent extends React.Component {
       }
     };
 
-    let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
-    return (
-      <div>
-        <h4>{this.props.response.title}</h4>
-        {taskButtons(this.props.response)}
-        {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
-        <h5>{this.props.response.description}</h5>
-        <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
-        {calculateTime(timeDifferenceInSeconds)}<br/>
-        <h5>{`Views: ${this.props.response.views}`}</h5>
-        {whichButton(this.props.response.user_id)}
-        <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
-      </div>
-    );
+    if (this.props.response) {
+      let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
+      return (
+        <div>
+          <h4>{this.props.response.title}</h4>
+          {taskButtons(this.props.response)}
+          {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
+          <h5>{this.props.response.description}</h5>
+          <Link onClick={() => this.onUsernameClick(this.props.response.username)} to={`/profile/${this.props.response.username}`}>{this.props.response.username + ' '}</Link>
+          {calculateTime(timeDifferenceInSeconds)}<br/>
+          <h5>{`Views: ${this.props.response.views}`}</h5>
+          {whichButton(this.props.response.user_id)}
+          <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
   }
 }
 

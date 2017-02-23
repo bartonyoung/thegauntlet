@@ -3,7 +3,7 @@ import ResponseList from './ResponseList.jsx';
 import actions from '../../redux/actions';
 import { connect } from 'react-redux';
 import $ from 'jquery';
-import Comments from './Comments.jsx';
+import CommentList from './CommentList.jsx';
 import NavBar from './Nav.jsx';
 import css from '../styles/nav.css';
 import moreCSS from '../styles/challengeComponent.css';
@@ -22,27 +22,19 @@ class ChallengeComponent extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let outer = this;
-    $.ajax({
-      url: '/api/response',
-      type: 'GET',
-      data: {
-        parent_id: window.sessionStorage.getItem('id')
-      },
-      success: function(data) {
-        outer.props.dispatch(actions.getResponses(data.reverse()));
-      }
+    $.get('/api/response', {
+      parent_id: window.sessionStorage.getItem('id')
+    }).done(data => {
+      console.log('get response data', data);
+      outer.props.dispatch(actions.getResponses(data.reverse()));
     });
-
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
-      data.forEach(comment => {
-        outer.props.dispatch(actions.addComment(data));
-      });
+      outer.props.dispatch(actions.getComments(data.reverse()));
     });
-
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
     });
@@ -112,7 +104,7 @@ class ChallengeComponent extends React.Component {
       type: 'DELETE',
       success: function(data) {
         console.log('delete data', data);
-        outer.props.dispatch(actions.addChallenge(data));
+        outer.props.dispatch(actions.getChallenges(data));
         window.location.href = '/#/dash';
       }
     });
@@ -232,7 +224,7 @@ class ChallengeComponent extends React.Component {
                 <p>{'Upvotes: ' + challenge.upvotes}</p>
               </div>
               <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
-                <Comments />
+                <CommentList/>
               </div>
             </div>
             {'Upload your response: '}

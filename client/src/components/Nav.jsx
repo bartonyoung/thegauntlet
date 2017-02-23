@@ -35,13 +35,7 @@ class NavBar extends React.Component {
               created_at: created_at
             },
             success: function(data) {
-              console.log('challenge', data);
-              data = data.reverse();
               outer.props.dispatch(actions.addChallenge(data));
-              $.get('/api/allChallenges').done(challenge => {
-                challenge = challenge.reverse();
-                outer.props.dispatch(actions.addChallenge(challenge));
-              });
               outer.refs.title.value = '';
               outer.refs.description.value = '';
               outer.refs.category.value = '';

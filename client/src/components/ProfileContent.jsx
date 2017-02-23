@@ -172,7 +172,7 @@ class ProfileContent extends React.Component {
   }
 
   editFirstName (id) {
-    let outer = this;  
+    let outer = this;
     $.ajax({
       url: '/api/profile',
       type: 'PUT',
@@ -189,8 +189,9 @@ class ProfileContent extends React.Component {
       }
     });
   }
+
   editLastName (id) {
-    let outer = this;  
+    let outer = this;
     $.ajax({
       url: '/api/profile',
       type: 'PUT',
@@ -206,9 +207,10 @@ class ProfileContent extends React.Component {
         });
       }
     });
-  } 
+  }
+
   editEmail (id) {
-    let outer = this;  
+    let outer = this;
     $.ajax({
       url: '/api/profile',
       type: 'PUT',
@@ -224,7 +226,8 @@ class ProfileContent extends React.Component {
         });
       }
     });
-  }               
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -239,27 +242,38 @@ class ProfileContent extends React.Component {
       }
     };
 
+
     let mappedChallenges = this.props.challenges.map(challenge => {
-      if (challenge.username === this.props.user[0].username) {
-        return (
-          <div>
-            <h4>{challenge.title}</h4>
-            <p>{challenge.description}</p>
-            {checkFile(challenge.filename.split('.').pop(), challenge)}
-          </div>
-        );
+      if (challenge) {
+        if (challenge.username === this.props.user[0].username) {
+          return (
+            <div>
+              <h4>{challenge.title}</h4>
+              <p>{challenge.description}</p>
+              {checkFile(challenge.filename.split('.').pop(), challenge)}
+            </div>
+          );
+        }
+      } else {
+        return ' No challenges submitted yet';
       }
     });
 
+
+
     let mappedResponses = this.props.responses.map(response => {
-      if (response.username === this.props.user[0].username) {
-        return (
-          <div>
-            <h4>{response.title}</h4>
-            <p>{response.description}</p>
-            {checkFile(response.filename.split('.').pop(), response)}
-          </div>
-        );
+      if (response) {
+        if (response.username === this.props.user[0].username) {
+          return (
+            <div>
+              <h4>{response.title}</h4>
+              <p>{response.description}</p>
+              {checkFile(response.filename.split('.').pop(), response)}
+            </div>
+          );
+        }
+      } else {
+        return ' No responses submitted yet';
       }
     });
 
@@ -340,6 +354,7 @@ class ProfileContent extends React.Component {
       }
     };
 
+
     let myView = () => {
       if (this.props.profileView === 'all' && window.sessionStorage.getItem('key') === this.props.user[0].username) {
         return (
@@ -373,7 +388,6 @@ class ProfileContent extends React.Component {
             Followers:
             {this.props.followers.map((follower, i) => {
               return <div key={i}>{i + 1}.{follower.username}</div>;
-
             })}
           </div>
         );
@@ -384,26 +398,29 @@ class ProfileContent extends React.Component {
         this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
             mappedNotifications = this.props.responses.map((response, i) => {
-              let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
-
-              if (response.parent_id === challenge.id) {
-                return (
-                  <div>
-                    <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
-                    {calculateTime(timeDifferenceInSeconds)}<br/>
-                    <div className="showresponse" style={{display: this.state[i] || 'none'}}>
-                      <h4>{'Response title: ' + response.title}</h4>
-                      <h5>{'Description: ' + response.description}</h5>
-                      {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
-                      <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username + ' '}</Link>
+              if (response) {
+                let timeDifferenceInSeconds = (new Date().getTime() - parseInt(response.created_at)) / 1000;
+                if (response.parent_id === challenge.id) {
+                  return (
+                    <div>
+                      <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{response.username + ' responded to your challenge: ' + challenge.title}</h4></a>
                       {calculateTime(timeDifferenceInSeconds)}<br/>
-                      <h5>{`Views : ${response.views}`}</h5>
-                      {whichButton(response.user_id)}
-                      {whichFavoriteIcon(response.user_id)}
-                      <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+                      <div className="showresponse" style={{display: this.state[i] || 'none'}}>
+                        <h4>{'Response title: ' + response.title}</h4>
+                        <h5>{'Description: ' + response.description}</h5>
+                        {checkFile(response.filename.split('.').pop(), response.filename)}<br/>
+                        <Link onClick={() => this.onUsernameClick(response.username)} to={`/profile/${response.username}`}>{response.username + ' '}</Link>
+                        {calculateTime(timeDifferenceInSeconds)}<br/>
+                        <h5>{`Views : ${response.views}`}</h5>
+                        {whichButton(response.user_id)}
+                        {whichFavoriteIcon(response.user_id)}
+                        <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
+                      </div>
                     </div>
-                  </div>
-                );
+                  );
+                }
+              } else {
+                return <div></div>;
               }
             });
             mappedArray.push(mappedNotifications.reverse());
@@ -434,7 +451,7 @@ class ProfileContent extends React.Component {
     };
 
     let isUserImageClickable = (user) => {
-      return window.sessionStorage.getItem('key') === user;        
+      return window.sessionStorage.getItem('key') === user;
     };
 
     let Firstname = (name, id, user) => {
@@ -471,7 +488,7 @@ class ProfileContent extends React.Component {
           </div>
         );
       }
-    };    
+    };
     let Email = (email, id, user) => {
       if (!this.state.third) {
         return (
@@ -488,37 +505,38 @@ class ProfileContent extends React.Component {
           </div>
         );
       }
-    };         
+    };
     let target = this.props.user[0].username;
+
     return (
-        <div width={screen.width}>
-          <div className='profilePicture container'>
-            <div id='picContainer'>
-              {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-              <img className='profilePicture text' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(this.props.user[0].username)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
-              <ul className='editPic' style={{display: this.state.display}}>
-                <li><form id='pic'>
-                  <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].id); }} />
-                </form></li>  
-              </ul>      
-            </div>
-            Username: {this.props.user[0].username} <br />
-            {Firstname(this.props.user[0].firstname, this.props.user[0].id, this.props.user[0].username)}
-            {Lastname(this.props.user[0].lastname, this.props.user[0].id, this.props.user[0].username)}
-            {Email(this.props.user[0].email, this.props.user[0].id, this.props.user[0].username)}
-            Rank# {this.props.ranks.map((rank, index)=>{
-              return {username: rank.username, rank: index + 1};
-            }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
-              {this.props.user[0].upvotes}) <br />
-            Followers: {this.numFollowers()} <br />
-          </div><br/>
-          <div>
-            <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
-            <button onClick={() => this.changeProfileView('followers')}>Followers</button>
-            {renderMailbox()}
+      <div width={screen.width}>
+        <div className='profilePicture container'>
+          <div id='picContainer'>
+            {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+            <img className='profilePicture text' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
+            <ul className='editPic' style={{display: this.state.display}}>
+              <li><form id='pic'>
+                <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].id); }} />
+              </form></li>
+            </ul>
           </div>
-          {myView()}
+          Username: {target} <br />
+          {Firstname(this.props.user[0].firstname, this.props.user[0].id, target)}
+          {Lastname(this.props.user[0].lastname, this.props.user[0].id, target)}
+          {Email(this.props.user[0].email, this.props.user[0].id, target)}
+          Rank# {this.props.ranks.map((rank, index)=>{
+            return {username: rank.username, rank: index + 1};
+          }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
+            {this.props.user[0].upvotes}) <br />
+          Followers: {this.props.followers.length} {whichButton(this.props.user[0].id)} <br />
+        </div><br/>
+        <div>
+          <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
+          <button onClick={() => this.changeProfileView('followers')}>Followers</button>
+          {renderMailbox()}
         </div>
+        {myView()}
+      </div>
     );
   }
 }
