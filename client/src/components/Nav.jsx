@@ -49,7 +49,11 @@ class NavBar extends React.Component {
   }
 
   goToProfilePage() {
-    window.location.href = '#/profile';
+    let outer = this;
+    $.get('/api/profile/' + window.sessionStorage.getItem('key')).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.location.href = '/#/profile';
+    });
   }
 
   handleNav() {
