@@ -17,6 +17,7 @@ class ChallengeComponent extends React.Component {
     this.editChallenge = this.editChallenge.bind(this);
     this.saveChallenge = this.saveChallenge.bind(this);
     this.deleteChallenge = this.deleteChallenge.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
     this.state = {
       isEditing: false
     };
@@ -103,7 +104,6 @@ class ChallengeComponent extends React.Component {
       url: '/api/challenge/' + challenge.id,
       type: 'DELETE',
       success: function(data) {
-        console.log('delete data', data);
         outer.props.dispatch(actions.getChallenges(data));
         window.location.href = '/#/dash';
       }
@@ -112,7 +112,7 @@ class ChallengeComponent extends React.Component {
 
   editChallenge() {
     this.setState({
-      isEditing: !this.state.isEditing
+      isEditing: true
     });
   }
 
@@ -120,6 +120,12 @@ class ChallengeComponent extends React.Component {
     let outer = this;
     $.get('/api/profile/' + window.sessionStorage.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+    });
+  }
+
+  cancelEdit() {
+    this.setState({
+      isEditing: !this.state.isEditing
     });
   }
 
@@ -132,7 +138,7 @@ class ChallengeComponent extends React.Component {
               <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>
                 {'Edit'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Cancel</button>
             </div>
           );
         }
@@ -147,7 +153,7 @@ class ChallengeComponent extends React.Component {
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
                 {'Save'}
               </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
+              <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>{'Cancel'}</button>
             </div>
           </div>
         );

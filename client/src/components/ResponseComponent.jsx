@@ -15,8 +15,6 @@ class ResponseComponent extends React.Component {
     this.state = {
       isEditing: false
     };
-
-    console.log('this.props', this.props);
   }
 
   upVoteClick(id) {
@@ -122,15 +120,19 @@ class ResponseComponent extends React.Component {
     });
   }
 
+  cancelEdit() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+  }
+
   render() {
     let taskButtons = (response) => {
-      if (window.sessionStorage.getItem('key') === this.props.response.username) {
+      if (window.sessionStorage.username === this.props.response.username) {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editResponse()}>
-                {'Edit'}
-              </button>
+              <button className="btn btn-large btn-default edit" onClick={() => this.editResponse()}>Edit</button>
               <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
             </div>
           );
@@ -143,10 +145,8 @@ class ResponseComponent extends React.Component {
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
                 <input type="text" placeholder="Edit description" required ref="description"/>
               </form>
-              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">
-                {'Save'}
-              </button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteResponse(response)}>Delete</button>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
+              <button className="btn btn-large btn-default delete" onClick={() => this.cancelEdit()}>Cancel</button>
             </div>
           </div>
         );

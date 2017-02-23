@@ -28,8 +28,6 @@ class ChallengeList extends React.Component {
       window.sessionStorage.setItem('filename', challenge.filename);
       window.sessionStorage.setItem('upvotes', challenge.upvotes);
       window.sessionStorage.setItem('views', challenge.views);
-      window.sessionStorage.setItem('username', challenge.username);
-      window.sessionStorage.setItem('created_at', challenge.created_at);
       $.get('/api/profile/' + window.sessionStorage.username).done(user => {
         outer.props.dispatch(actions.addUser(user));
       });
