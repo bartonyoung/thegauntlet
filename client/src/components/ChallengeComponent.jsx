@@ -15,6 +15,8 @@ class ChallengeComponent extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
+    this.sortResponses = this.sortResponses.bind(this);
+
     this.state = {
       isEditing: false
     };
@@ -60,9 +62,10 @@ class ChallengeComponent extends React.Component {
             data: {
               title: outer.refs.title.value,
               description: outer.refs.description.value,
+              category: '',
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
-              created_at: created_at
+              created_at: created_at 
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -126,6 +129,14 @@ class ChallengeComponent extends React.Component {
   cancelEdit() {
     this.setState({
       isEditing: !this.state.isEditing
+    });
+  }
+
+  sortResponses(sortBy) {
+    $.get('/api/response/', {
+      parent_id: window.sessionStorage.getItem('id')
+    }).then( data => {
+      console.log(data);
     });
   }
 
@@ -212,38 +223,60 @@ class ChallengeComponent extends React.Component {
         let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
 
         return (
-          <div className="container-fluid">
-            <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-            <div className="row parentChallenge">
-              <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
-                <h1>{challenge.title}</h1>
-                {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-                <h4>{challenge.description}</h4>
-                <h3><Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
-                {calculateTime(timeDifferenceInSeconds)}
-                {taskButtons(challenge)}
-                <p>{'Upvotes: ' + challenge.upvotes}</p>
-              </div>
-              <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
-                <CommentList/>
-              </div>
+        <div className="container-fluid">
+        <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
+          <div className='row mainRow'>
+            <div className="col-lg-4 col-lg-offset-1 challengeInfo mainRowColumn">
+              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             </div>
-            {'Upload your response: '}
-            <form id="challenge">
-              <input type="text" placeholder="Name your response" required ref="title" name="title"/>
-              <input type="text" placeholder="Description" required ref="description" name="description"/>
-            </form>
-            <form ref="file" id="upload">
-              <input type="file" placeholder="video" required ref="video" name="video"/>
-            </form>
-              <button onClick={this.handleSubmit}>Submit</button>
-
-            <ResponseList />
+            <div className="col-lg-2 challengeInfo mainRowColumn">
+              <h3 className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
+              <p className='main-challenge-description'>{challenge.description}</p>
+              {calculateTime(timeDifferenceInSeconds)}
+              {taskButtons(challenge)}
+              <p>{'Upvotes: ' + challenge.upvotes}</p>
+            </div>
+            <div className="col-lg-4 col-lg-offset-1 mainRowColumn outerBar">
+              <div className="col-lg-4 fixed">
+                <div className="row text-center">
+                  <div className="response-buttons-top">
+                    <span className="dropdown">
+                      <button href="javascript: void(0)" className="dropdown-toggle response-button" data-toggle="dropdown" role="button" aria-haspopup="true">RESPOND<span className="caret"></span></button>
+                      <ul className="dropdown-menu">
+                        <form id="challenge" style={{width: '300px', padding: '15px'}}>
+                          <div className="form-group">
+                            <li className="nav-label">Name it!</li>
+                            <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+                          </div>
+                          <div className="form-group">
+                            <li className="nav-label">Describe it!</li>
+                            <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
+                          </div>
+                        </form>
+                        <form ref="file" id="upload">
+                          <li className="nav-label-file">Upload your video or image...</li>
+                          <input type="file" placeholder="video or image" required ref="video" name="video"/>
+                        </form>
+                        <li onClick={this.handleSubmit} className="btn btn-default pull-right">Submit</li>
+                      </ul>
+                    </span>
+                    <button className="button response-button" onClick={() => { this.sortResponses('recent'); }}>RECENT</button>
+                    <button className="button response-button" onClick={() => { this.sortResponses('top'); }}>TOP</button>
+                  </div>
+                </div>
+                
+                <ResponseList />
+                
+              </div>
+            </div>  
           </div>
+          
+          <CommentList />
+
+      </div>
         );
       }
     }
-
     return <div></div>;
   }
 }

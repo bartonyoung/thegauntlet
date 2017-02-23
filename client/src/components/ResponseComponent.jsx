@@ -249,26 +249,26 @@ class ResponseComponent extends React.Component {
     if (this.props.response) {
       let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
       return (
-    <div className="one-response row">
-        <div className="col-lg-4 response-info">
-          {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
-        </div>
-        <div className="col-lg-8 response-info">
-          <span>{this.props.response.title}</span>
-          <span>{this.props.response.description}</span>
-          
-          <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
-          {calculateTime(timeDifferenceInSeconds)}<br/>
-          <div className="response-interaction">
-            {taskButtons(this.props.response)}
-            {whichButton(this.props.response.user_id)}
-            {whichFavoriteIcon(this.props.response.id)}
-            <button onClick={()=> this.upVoteClick(this.props.response.id) } type="button" className="btn btn-default btn-sm">
-              <span className="glyphicon glyphicon-arrow-up"></span>{` ${this.props.response.upvotes}`}
-            </button>
+        <div className="one-response row">
+          <div className="col-lg-4 response-info">
+            {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
           </div>
-        </div>  
-      </div>
+          <div className="col-lg-8 response-info">
+            <span>{this.props.response.title}</span>
+            <span>{this.props.response.description}</span>
+            
+            <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
+            {calculateTime(timeDifferenceInSeconds)}<br/>
+            <div className="response-interaction">
+              {taskButtons(this.props.response)}
+              {whichButton(this.props.response.user_id)}
+              {whichFavoriteIcon(this.props.response.id)}
+              <button onClick={()=> this.upVoteClick(this.props.response.id) } type="button" className="btn btn-default btn-sm">
+                <span className="glyphicon glyphicon-arrow-up"></span>{` ${this.props.response.upvotes}`}
+              </button>
+            </div>
+          </div>  
+        </div>
       );
     } else {
       return <div></div>;
