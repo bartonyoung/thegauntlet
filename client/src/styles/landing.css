@@ -1,37 +1,65 @@
 /*@import url('https://fonts.googleapis.com/css?family=Baloo');*/
-@import url('https://fonts.googleapis.com/css?family=Baloo|Limelight');
+/*@import url('https://fonts.googleapis.com/css?family=Baloo|Limelight');*/
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Ubuntu');
+
 body{
-  font-family: 'Limelight';
-  background-color: white;
+  font-family: 'Ubuntu', sans-serif;
+  background-color: #efefef;
   /*background-image: url('https://openclipart.org/image/2400px/svg_to_png/265161/Jumping-Man-Silhouette-3.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size:100% 100%;*/
 }
 
-.main-content {
+p{ 
+  font-size: 20px;
+  color: #4C4C4C;
+  /*font-weight: bold;*/
+}
+
+h2{
+  /*TODOS*/
+}
+
+h4{
+  color: black;
+} 
+.video-landing {
+    height: 200px;
+    width: 100%;
+    border: 1px solid black;
+}
+.img-landing {
+    height: 200px;
+    width: 100%;
+    border: 1px solid black;
+}
+
+
+.landing-cover {
   margin-top: 50px;
   min-height: 70vh;
   height: 300px;
-  /*background-image: url();*/
+  background-image: url('http://wbpsites.com/creed/us/tumblrv2/assets/shared/home/desktop/ropes2.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size:100% 100%;
-
 }
-
 .header {
-  position:relative;
-  left:-300px;
-  top:100px;
+  padding-top: 0px;
+  /*position:absolute;
+  left:350px;
+  top:50px;*/
+}
+.description {
+  margin-top:0px;
+  text-shadow: 1px 1px 1px #ededed;
 }
  
 #title{
-  color: grey;
-  font-size: 3em;
-  font-weight:;
-  /*font-family: 'Baloo', cursive;*/
-
+  color: white;
+  font-size: 5em;
+  font-weight:bold;
   text-shadow: 2px 2px 2px #000000;
 } 
 
@@ -43,13 +71,4 @@ body{
   border: 1px solid #ededed;
 }
 
-p, h3 { 
-  font-size: 20px;
-  color: orange;
-  /*font-weight: bold;*/
-}
-
-h4{
-  color: white;
-}
 
