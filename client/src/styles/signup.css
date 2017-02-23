@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Poiret+One');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Ubuntu');
 
 #sign-up {
   margin-bottom: 25px;
@@ -25,14 +25,14 @@
 
 #sign-up, input {
   
-  color: orange;
+  color: #4C4C4C;
   /*font-weight: bold;*/
   
 }
 #sign-up {
   font-size: 33px;
   font-weight: bold;
-  text-shadow: 3px 3px 4px #000000;
+  /*text-shadow: 3px 3px 4px #000000;*/
 }
 
 .container-signup{
@@ -43,6 +43,7 @@
 }
 
 .input {
+  color:black;
   width: 100%;
   height: 25px;
   display: block;
