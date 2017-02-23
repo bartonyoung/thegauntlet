@@ -287,3 +287,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeComponent);
+
+//JUST FOR SAFETY!!
