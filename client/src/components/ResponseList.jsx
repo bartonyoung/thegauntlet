@@ -16,7 +16,7 @@ class ResponseList extends React.Component {
     return (
       <div className="response container">
         {this.props.responses.map((response, i) =>
-          <ResponseComponent response={response} />
+          <ResponseComponent response={response}/>
         )}
       </div>
     );

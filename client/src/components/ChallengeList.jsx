@@ -41,29 +41,26 @@ class ChallengeList extends React.Component {
     }
   }
 
-  upVoteClick(id) {
+  upVoteClick(challenge) {
     const outer = this;
     $.post('/api/upvote', {
       vote: 1,
-      challenge_id: id
-    }).then(()=> {
+      challenge_id: challenge.id
+    })
+    .then(() => {
       $.get('/api/allChallenges/')
-        .then((data)=> {
-          if (outer.props.currentCategory === 'all') {
-            data = data.reverse();
-          } else if (outer.props.currentCategory === 'recent') {
-            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
-          } else if (outer.props.currentCategory === 'popular') {
-            data = data.sort((a, b) =>
-            b.upvotes - a.upvotes
-          );
-          } else {
-            data = data.filter(challenge =>
-            challenge.category === outer.props.currentCategory
-          );
-          }
-          outer.props.dispatch(actions.addChallenge(data));
-        });
+      .then((data)=> {
+        if (outer.props.currentCategory === 'all') {
+          data = data.reverse();
+        } else if (outer.props.currentCategory === 'recent') {
+          data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();
+        } else if (outer.props.currentCategory === 'popular') {
+          data = data.sort((a, b) => b.upvotes - a.upvotes);
+        } else {
+          data = data.filter(challenge => challenge.category === outer.props.currentCategory);
+        }
+        outer.props.dispatch(actions.getChallenges(data));
+      });
     });
   }
 
@@ -205,25 +202,29 @@ class ChallengeList extends React.Component {
     };
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
-      if (!challenge.parent_id) {
-        return (
-          <div className="col col-md-6" key={i}>
-          <div>
-            <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
-            </div>
-            {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+      if (challenge) {
+        let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
+        if (!challenge.parent_id) {
+          return (
+            <div className="col col-md-6" key={i}>
             <div>
-              <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
-              {calculateTime(timeDifferenceInSeconds)}
-              {whichFollowButton(challenge.user_id)}
-              {whichFavoriteIcon(challenge.id)}
-              <button onClick={()=>{ this.upVoteClick(challenge.id); }} type="button" className="btn btn-default btn-sm pull-right">
-                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
-              </button>
+              <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+              </div>
+              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+              <div>
+                <Link onClick={() => this.onChallengeClick(challenge)} to={`/profile/${challenge.username}`}>{challenge.username + ' '}</Link>
+                {calculateTime(timeDifferenceInSeconds)}
+                {whichFollowButton(challenge.user_id)}
+                {whichFavoriteIcon(challenge.id)}
+                <button onClick={() => this.upVoteClick(challenge)} type="button" className="btn btn-default btn-sm pull-right">
+                  <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
+                </button><br/>
+              </div>
             </div>
-          </div>
-        );
+          );
+        }
+      } else {
+        return <div></div>
       }
     });
 
@@ -232,41 +233,47 @@ class ChallengeList extends React.Component {
         <div>
           <ProfileContent/>
         </div>
-      )
+      );
     }
 
     if (this.props.currentCategory === 'LeaderBoard') {
-      return <div className="col-md-12">
-              <h1 className="text-center">Rank Top 10</h1>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>#RANK</th>
-                    <th>USERNAME</th>
-                    <th>UPVOTES</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.props.ranks.map((rank, index) => {
-                    if (index < 10) {
-                      return <tr className="success" key={index}>
-                               <td> #{index + 1}</td>
-                               <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
-                               <td>{rank.upvotes}</td>
-                             </tr>;
-                    }
-                  })}
-                </tbody>
-              </table>
-            </div>;
-    } else if (!mappedChallenges.length) {
+      return (
+        <div className="col-md-12">
+          <h1 className="text-center">Rank Top 10</h1>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>#RANK</th>
+                <th>USERNAME</th>
+                <th>UPVOTES</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.ranks.map((rank, index) => {
+                if (index < 10) {
+                  return (
+                    <tr className="success" key={index}>
+                      <td> #{index + 1}</td>
+                      <td><Link onClick={() => this.onChallengeClick(rank.username)} to={`/profile/${rank.username}`}>{rank.username}</Link></td>
+                      <td>{rank.upvotes}</td>
+                   </tr>
+                  );
+                }
+              })}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    if (mappedChallenges) {
+      return <div className="media">{mappedChallenges}</div>;
+    } else {
       return (
         <div>
           <h3>Sorry, currently there are no challenges in this category...</h3>
         </div>
       );
-    } else {
-      return <div className="media">{mappedChallenges}</div>;
     }
   }
 }

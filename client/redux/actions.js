@@ -27,6 +27,13 @@ let actions = {
     };
   },
 
+  getComments: function(comments) {
+    return {
+      type: 'GET_COMMENTS',
+      payload: comments
+    };
+  },
+
   addComment: function(comment) {
     return {
       type: 'ADD_COMMENT',

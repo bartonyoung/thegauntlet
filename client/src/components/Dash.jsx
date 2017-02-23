@@ -6,12 +6,13 @@ import NavBar from './Nav.jsx';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import css from '../styles/dash.css';
+import ChallengeList from './ChallengeList.jsx';
 
 class Dash extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   componentDidMount() {
     let outer = this;
 
@@ -19,19 +20,18 @@ class Dash extends React.Component {
       $.get('/api/getLeaders').then(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });
-
       $.get('/api/profile').done(data => {
         outer.props.dispatch(actions.addUser(data));
-      }); 
+      });
       $.get('/api/favorite').done(data => {
         outer.props.dispatch(actions.setFavorites(data));
       });
       $.get('/api/ranks').then((rankData)=>{
-        outer.props.dispatch(actions.getRanks(rankData)); 
+        outer.props.dispatch(actions.getRanks(rankData));
       });
     }
-  }  
-   
+  }
+
   render() {
     return (
       <div>
