@@ -29,10 +29,9 @@ class CommentList extends React.Component {
 
   render() {
     let mappedComments = this.props.comments.map((comment, i) => {
-      console.log('comment list map comment', comment)
       return (
-        <div>
-          <CommentComponent comment={comment}/>
+        <div key={i}>
+          <CommentComponent comment={comment} />
         </div>
       );
     });
