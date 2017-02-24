@@ -16,7 +16,7 @@ class Dash extends React.Component {
   componentDidMount() {
     let outer = this;
 
-    if (window.sessionStorage.getItem('key')) {
+    if (window.sessionStorage.username) {
       $.get('/api/getLeaders').done(leaders => {
         outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       });

@@ -20,15 +20,16 @@ class ChallengeList extends React.Component {
 
   onUsernameClick(challenge) {
     let outer = this;
-    $.get('/api/profile/' + challenge.username).done(user => {
+    window.sessionStorage.newUsername = challenge.username;
+    window.sessionStorage.newUser_id = challenge.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = challenge.username;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }
 
   onChallengeTitleClick(challenge) {
-    window.sessionStorage.setItem('id', challenge.id);
+    window.sessionStorage.setItem('challengeId', challenge.id);
   }
 
   upVoteClick(challenge) {

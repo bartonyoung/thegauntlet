@@ -23,24 +23,22 @@ class ChallengeComponent extends React.Component {
   componentWillMount() {
     let outer = this;
     $.get('/api/response', {
-      parent_id: window.sessionStorage.getItem('id')
+      parent_id: window.sessionStorage.challengeId
     }).done(data => {
-      console.log('get response data', data);
       outer.props.dispatch(actions.getResponses(data.reverse()));
     });
     $.get('/api/comments', {
-      challenge_id: window.sessionStorage.getItem('id')
+      challenge_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getComments(data.reverse()));
     });
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
     });
-    $.get('/api/challenge/' + window.sessionStorage.id).done(data => {
+    $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
       outer.props.dispatch(actions.getChallenges(data));
     });
   }
-
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#upload'));
@@ -62,7 +60,8 @@ class ChallengeComponent extends React.Component {
               description: outer.refs.description.value,
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
-              created_at: created_at
+              created_at: created_at,
+              username: window.sessionStorage.username
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -115,10 +114,10 @@ class ChallengeComponent extends React.Component {
   }
 
   onUsernameClick(challenge) {
-    let outer = this;
-    $.get('/api/profile/' + challenge.username).done(user => {
+    window.sessionStorage.newUsername = challenge.username;
+    window.sessionStorage.newUser_id = challenge.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = challenge.username;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }
@@ -207,45 +206,44 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-    for (var i = 0; i < this.props.challenges.length; i++) {
-      if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
-        let challenge = this.props.challenges[i];
-        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
+    let challenge = this.props.challenges[0];
 
-        return (
-          <div className="container-fluid">
-            <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-            <div className="row parentChallenge">
-              <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
-                <h1>{challenge.title}</h1>
-                {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-                <h4>{challenge.description}</h4>
-                <h3><Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
-                {calculateTime(timeDifferenceInSeconds)}
-                {taskButtons(challenge)}
-                <p>{'Upvotes: ' + challenge.upvotes}</p>
-              </div>
-              <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
-                <CommentList/>
-              </div>
+    if (challenge) {
+      let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
+
+      return (
+        <div className="container-fluid">
+          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
+          <div className="row parentChallenge">
+            <div className="col-xl-6 col-xl-offset-2 col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2">
+              <h1>{challenge.title}</h1>
+              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+              <h4>{challenge.description}</h4>
+              <h3><Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
+              {calculateTime(timeDifferenceInSeconds)}
+              {taskButtons(challenge)}
+              <p>{'Upvotes: ' + challenge.upvotes}</p>
             </div>
-            {'Upload your response: '}
-            <form id="challenge">
-              <input type="text" placeholder="Name your response" required ref="title" name="title"/>
-              <input type="text" placeholder="Description" required ref="description" name="description"/>
-            </form>
-            <form ref="file" id="upload">
-              <input type="file" placeholder="video" required ref="video" name="video"/>
-            </form>
-              <button onClick={this.handleSubmit}>Submit</button>
-
-            <ResponseList />
+            <div className="col-xl-3 col-xl-offset-1 col-lg-3  col-lg-offset-1 col-md-3 col-md-offset-1">
+              <CommentList/>
+            </div>
           </div>
-        );
-      }
-    }
+          {'Upload your response: '}
+          <form id="challenge">
+            <input type="text" placeholder="Name your response" required ref="title" name="title"/>
+            <input type="text" placeholder="Description" required ref="description" name="description"/>
+          </form>
+          <form ref="file" id="upload">
+            <input type="file" placeholder="video" required ref="video" name="video"/>
+          </form>
+            <button onClick={this.handleSubmit}>Submit</button>
 
-    return <div></div>;
+          <ResponseList />
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
   }
 }
 
