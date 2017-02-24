@@ -19,7 +19,6 @@ class ChallengeList extends React.Component {
   }
 
   onUsernameClick(challenge) {
-    console.log('rank click', challenge)
     let outer = this;
     window.sessionStorage.newUsername = challenge.username;
     window.sessionStorage.newUser_id = challenge.user_id || window.sessionStorage.user_id;
