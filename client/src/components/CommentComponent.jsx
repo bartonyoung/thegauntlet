@@ -58,9 +58,20 @@ class CommentComponent extends React.Component {
 
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.comment.created_at)) / 1000;
 
+    let tag = (string) => {  
+      let comment = string.split(' ').map((word, i) => {
+        if (word.includes('@')) {
+          return <a href={'/#/profile/' + word.slice(1)} key={i}>{word}</a>;
+        } else {
+          return ' ' + word;    
+        }
+      });        
+      return comment;
+    };     
+
     return (
       <div>
-        <h4 className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></h4><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{this.props.comment.comment}
+        <h4 className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></h4><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{tag(this.props.comment.comment)}
       </div>
     );
   }
@@ -68,6 +79,6 @@ class CommentComponent extends React.Component {
 
 const mapStateToProps = (state) => {
   return state;
-}
+};
 
 export default connect(mapStateToProps)(CommentComponent);

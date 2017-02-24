@@ -56,14 +56,12 @@ module.exports = {
 
   getAllResponses: (req, res) => {
     let id = req.query.parent_id;
-
     db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('challenges.parent_id', '=', id).then(data => {
       res.json(data);
     });
   },
 
   getOne: (req, res) => {
-    console.log(req.params.id, req.query.id)
     db.select()
     .from('challenges')
     .where({parent_id: req.params.id})
@@ -184,6 +182,13 @@ module.exports = {
     db.select('views').from('challenges').where({id: req.body.challenge_id}).then(challengeData => {
       db.select().from('challenges').where({id: req.body.challenge_id}).update({views: challengeData[0].views + 1}).then( () => {
       });
+    });
+  },
+
+  challengeSearch: (req, res) => {
+    let search = req.query.search;
+    db.select().from('challenges').where('title', 'like', `%${search}%`).innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+      res.json(data);
     });
   }
 };

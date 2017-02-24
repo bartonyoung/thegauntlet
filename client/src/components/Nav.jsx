@@ -87,9 +87,9 @@ class NavBar extends React.Component {
           </form>
           <form ref="file" id="file">
           <li className="nav-label-file">Upload your video or image...</li>
-            <input type="file" placeholder="video or image" required ref="video" name="video"/>
+            <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
           </form>
-          <li onClick={this.handleSubmit} className="btn btn-default pull-right">Submit</li>
+          <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
 
 
                   </ul>

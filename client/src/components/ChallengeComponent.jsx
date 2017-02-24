@@ -115,7 +115,6 @@ class ChallengeComponent extends React.Component {
   }
 
   onUsernameClick(challenge) {
-    console.log('challenge userid', challenge.user_id)
     let outer = this;
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
