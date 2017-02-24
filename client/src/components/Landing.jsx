@@ -5,14 +5,17 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import NavBar from './Nav.jsx';
 import { Link } from 'react-router';
+import ReactPlayer from 'react-player'
 
 class Landing extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      auth: this.props.auth
+      auth: this.props.auth,
+      coverVideo:false
     };
     this.onChallengeClick = this.onChallengeClick.bind(this);
+    this.topVideo;
   }
   componentDidMount() {
     let outer = this;
@@ -47,6 +50,7 @@ class Landing extends React.Component {
   }
 
   handleGallery(type) {
+    let outer = this;
     let challenges = this.props.challenges;
     let gallery = [];
     let counter = 1;
@@ -70,8 +74,11 @@ class Landing extends React.Component {
         }
       }
     }
-
     if (type === 'videos') {
+      (function randomIndex(array) {
+        let index = Math.floor(Math.random()*Array.length);
+         outer.state.coverVideo = array[index];
+      })(gallery);
        // <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"></source>
                   // <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />
       return gallery.map(challenge =>{
@@ -100,11 +107,22 @@ class Landing extends React.Component {
           <div className="container-fluid text-center main-content landing-cover">
             <div className='row header'>
                 <div className="col-md-12 text-center">
-              <h1 id="title">Welcome to The Gauntlet!</h1>
-              <div className="description">
-                <p>The Gauntlet is a place to test yourself against others!</p>
-                <p>Add your own challenge and watch others respond, or one-up another challenger</p>
-              </div>
+                  <div className="col-md-4">
+                     {/*{<ReactPlayer 
+                       volume={0} 
+                       controls={true} 
+                       className="video-cover" 
+                       url='https://www.youtube.com/watch?v=6-dyNQXYgxQ' 
+                       playing 
+                       width='540'
+                       height='260'
+                       />}*/}
+                  </div>  
+                  <h1 id="title">Welcome to The Gauntlet!</h1>
+                <div className="description">
+                  <p>The Gauntlet is a place to test yourself against others!</p>
+                  <p>Add your own challenge and watch others respond, or one-up another challenger</p>
+                </div>
               </div>
             </div>
           </div>
