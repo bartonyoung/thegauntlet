@@ -247,13 +247,7 @@ class ChallengeComponent extends React.Component {
         <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
-            <div className="col-lg-6 col-lg-offset-1 challengeInfo">
-              <div className='row current-media-row'>
-              </div>
-              <div className='row current-challenge-info-row'>
-              </div>
-            </div>
-            <div className="col-lg-4 col-lg-offset-1 mainRowColumn outerBar">
+            <div className="col-lg-4 col-lg-offset-8 mainRowColumn outerBar">
               <div className="col-lg-4 fixed">
                 <div className="row text-center">
                   <div className="response-buttons-top">
@@ -287,9 +281,26 @@ class ChallengeComponent extends React.Component {
               </div>
             </div>  
           </div>
-        
-            <CommentList />
           
+          <div className="row current-viewing-row">
+           <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
+              <div className='row current-media-row'>
+                {checkFile(challenge.filename.split('.').pop(), challenge)}
+              </div>
+              <div className='row current-challenge-info-row'>
+                <div className="current-info">
+                  <span className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></span>
+                  <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
+                  <p className='main-challenge-description'>{challenge.description}</p>
+                </div> 
+                <div className="col-lg-6">
+
+                </div>
+              </div>
+            </div>            
+          </div>
+            
+          <CommentList />
       </div>
         );
       }
@@ -317,3 +328,6 @@ export default connect(mapStateToProps)(ChallengeComponent);
             //   {taskButtons(challenge)}
             //   <p>{'Upvotes: ' + challenge.upvotes}</p>
             // </div>
+
+
+            

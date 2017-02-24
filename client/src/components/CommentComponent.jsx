@@ -72,7 +72,7 @@ class CommentComponent extends React.Component {
     return (
       <div className="one-comment">
         <div className="comment-data">
-          <h4 className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></h4><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{tag(this.props.comment.comment)}
+          <p className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></p><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{tag(this.props.comment.comment)}
         </div>
       </div>
     );
