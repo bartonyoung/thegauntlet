@@ -29,15 +29,18 @@ class ChallengeComponent extends React.Component {
     }).done(data => {
       console.log('get response data', data);
       outer.props.dispatch(actions.getResponses(data.reverse()));
-    });
+    }); 
+
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.getItem('id')
     }).done(data => {
       outer.props.dispatch(actions.getComments(data.reverse()));
     });
+
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
     });
+    
     $.get('/api/challenge/' + window.sessionStorage.id).done(data => {
       outer.props.dispatch(actions.getChallenges(data));
     });
@@ -133,12 +136,24 @@ class ChallengeComponent extends React.Component {
   }
 
   sortResponses(sortBy) {
+    const outer = this;
     $.get('/api/response/', {
       parent_id: window.sessionStorage.getItem('id')
     }).then( data => {
-      console.log(data);
+      if (sortBy === 'top') {
+        data = data.sort( (a, b) => {
+          b.upvotes - a.upvotes;
+        });
+      } else {
+        data = data.reverse();
+      }
+      outer.props.dispatch(actions.getResponses(data));
     });
   }
+
+    // <button className="btn  btn-default btn-sm">
+    //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
+    //       </button>
 
   render() {
     let taskButtons = (challenge) => {
@@ -146,8 +161,12 @@ class ChallengeComponent extends React.Component {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>Edit</button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
+              <button className="btn btn-sm btn-default task-button">
+                <span className="glyphicon glyphicon-edit" onClick={() => this.editChallenge()}></span>
+              </button>
+              <button className="btn btn-sm btn-default task-button" onClick={() => this.deleteChallenge(challenge)}>
+                <span className="glyphicon glyphicon-remove" onClick={() => this.deleteChallenge()}></span>
+              </button>
             </div>
           );
         }
@@ -218,6 +237,8 @@ class ChallengeComponent extends React.Component {
     };
 
     for (var i = 0; i < this.props.challenges.length; i++) {
+      // console.log('ONE CHALLENGE', challenge);
+      // console.log('ALL CHALLENGES', challenge);
       if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
         let challenge = this.props.challenges[i];
         let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
@@ -226,15 +247,11 @@ class ChallengeComponent extends React.Component {
         <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
-            <div className="col-lg-4 col-lg-offset-1 challengeInfo mainRowColumn">
-              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-            </div>
-            <div className="col-lg-2 challengeInfo mainRowColumn">
-              <h3 className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
-              <p className='main-challenge-description'>{challenge.description}</p>
-              {calculateTime(timeDifferenceInSeconds)}
-              {taskButtons(challenge)}
-              <p>{'Upvotes: ' + challenge.upvotes}</p>
+            <div className="col-lg-6 col-lg-offset-1 challengeInfo">
+              <div className='row current-media-row'>
+              </div>
+              <div className='row current-challenge-info-row'>
+              </div>
             </div>
             <div className="col-lg-4 col-lg-offset-1 mainRowColumn outerBar">
               <div className="col-lg-4 fixed">
@@ -270,9 +287,9 @@ class ChallengeComponent extends React.Component {
               </div>
             </div>  
           </div>
+        
+            <CommentList />
           
-          <CommentList />
-
       </div>
         );
       }
@@ -286,5 +303,17 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeComponent);
+              
+              // {calculateTime(timeDifferenceInSeconds)}
 
-//JUST FOR SAFETY!!
+
+
+            //   <div className="col-lg-4 col-lg-offset-1 challengeInfo mainRowColumn">
+            //   {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+            // </div>
+            // <div className="col-lg-2 challengeInfo mainRowColumn">
+            //   <p className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></p>
+            //   <p className='main-challenge-description'>{challenge.description}</p>
+            //   {taskButtons(challenge)}
+            //   <p>{'Upvotes: ' + challenge.upvotes}</p>
+            // </div>

@@ -255,12 +255,9 @@ class ResponseComponent extends React.Component {
           </div>
           <div className="col-lg-8 response-info">
             <span>{this.props.response.title}</span>
-            <span>{this.props.response.description}</span>
-            
-            <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
+          <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
             {calculateTime(timeDifferenceInSeconds)}<br/>
             <div className="response-interaction">
-              {taskButtons(this.props.response)}
               {whichButton(this.props.response.user_id)}
               {whichFavoriteIcon(this.props.response.id)}
               <button onClick={()=> this.upVoteClick(this.props.response.id) } type="button" className="btn btn-default btn-sm">
@@ -281,3 +278,6 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ResponseComponent);
+
+// {taskButtons(this.props.response)}
+// <span>{this.props.response.description}</span>
