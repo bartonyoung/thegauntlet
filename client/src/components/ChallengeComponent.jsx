@@ -64,7 +64,8 @@ class ChallengeComponent extends React.Component {
               filename: resp,
               parent_id: window.sessionStorage.challengeId,
               created_at: created_at,
-              username: window.sessionStorage.username
+              username: window.sessionStorage.username,
+              to: window.sessionStorage.newUsername
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));

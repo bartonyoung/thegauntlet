@@ -297,6 +297,22 @@ class ProfileContent extends React.Component {
       }
     };
 
+    let whichButton = (leaderId) => {
+      if (this.props.leaders.includes(leaderId)) {
+        return (
+          <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+          </button>
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
+            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+          </button>
+        );
+      }
+    };
+
     let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
         return (
@@ -543,9 +559,7 @@ class ProfileContent extends React.Component {
           {Lastname(this.props.user[0].lastname, this.props.user[0].scott, target)}
           {Email(this.props.user[0].email, this.props.user[0].scott, target)}
           Rank# {this.props.ranks.map((rank, index) => {
-
               return {username: rank.username, rank: index + 1};
-
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
           Followers: {this.props.followers.length} {whichButton(this.props.user[0].scott)} <br />

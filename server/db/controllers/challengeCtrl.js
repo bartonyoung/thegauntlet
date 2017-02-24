@@ -67,7 +67,6 @@ module.exports = {
     .from('challenges')
     .where({id: req.params.id})
     .then(data =>{
-      console.log('get one data', data)
       res.json(data);
     })
     .catch((err) => {
