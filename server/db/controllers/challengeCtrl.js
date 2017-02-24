@@ -62,11 +62,13 @@ module.exports = {
   },
 
   getOne: (req, res) => {
+    console.log('CHALLENGE CONTROL FIRED!');
     db.select()
     .from('challenges').innerJoin('users', 'challenges.user_id', 'users.id')
     .where({parent_id: req.params.id})
     .orWhere('challenges.id', '=', req.params.id)
     .then(data =>{
+      console.log('THIS IS THE DATA', data);
       res.json(data);
     })
     .catch((err) => {

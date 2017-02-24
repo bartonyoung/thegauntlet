@@ -18,7 +18,8 @@ class ChallengeComponent extends React.Component {
     this.sortResponses = this.sortResponses.bind(this);
 
     this.state = {
-      isEditing: false
+      isEditing: false,
+      currentVideo: null
     };
   }
 
@@ -27,7 +28,6 @@ class ChallengeComponent extends React.Component {
     $.get('/api/response', {
       parent_id: window.sessionStorage.getItem('id')
     }).done(data => {
-      console.log('get response data', data);
       outer.props.dispatch(actions.getResponses(data.reverse()));
     }); 
 
@@ -42,7 +42,9 @@ class ChallengeComponent extends React.Component {
     });
     
     $.get('/api/challenge/' + window.sessionStorage.id).done(data => {
-      outer.props.dispatch(actions.getChallenges(data));
+      // outer.props.dispatch(actions.getChallenges(data));
+      console.log(data);
+      this.setState({currentVideo: data[0]});
     });
   }
 
@@ -236,14 +238,15 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-    for (var i = 0; i < this.props.challenges.length; i++) {
-      // console.log('ONE CHALLENGE', challenge);
-      // console.log('ALL CHALLENGES', challenge);
-      if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
-        let challenge = this.props.challenges[i];
-        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
-
-        return (
+    // for (var i = 0; i < this.props.challenges.length; i++) {
+    //   if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
+    //     this.setState({
+    //       currentVideo: this.props.challenges[i]
+    //     });
+        // let challenge = this.props.challenges[i];
+    if (this.state.currentVideo) {
+      let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
+      return (
         <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
@@ -285,13 +288,13 @@ class ChallengeComponent extends React.Component {
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
               <div className='row current-media-row'>
-                {checkFile(challenge.filename.split('.').pop(), challenge)}
+                {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
               </div>
               <div className='row current-challenge-info-row'>
                 <div className="current-info">
-                  <span className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></span>
+                  <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
                   <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
-                  <p className='main-challenge-description'>{challenge.description}</p>
+                  <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
                 </div> 
                 <div className="col-lg-6">
 
@@ -302,8 +305,7 @@ class ChallengeComponent extends React.Component {
             
           <CommentList />
       </div>
-        );
-      }
+      );
     }
     return <div></div>;
   }
