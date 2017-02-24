@@ -25,6 +25,7 @@ class Signup extends React.Component {
         } else {
           window.sessionStorage.setItem('user_id', data.scott);
           window.sessionStorage.setItem('username', data.username);
+          
           this.props.handleAuth(() => {
             window.location.href = '#/dash';
           });

@@ -1,38 +1,115 @@
-.parentChallenge {
-  margin-top: 65px;
-}
+
+
 
 .parentMedia {
-  width: 50%;
-  height: 100%;
+  padding-top: 15px;
+  max-width:100%;
+  max-height:80%;
 }
 
-.userLink {
-  font-size: 0.8em;
+.mainRowColumn {
+  height: 55vh;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.challengeInfo {
+  background: #3E3E3E;
+  border: black 5px;
+  margin-top: 80px;
+}
+
+.fixed {
+  position: fixed;
+  height: 100vh;
+  background: lightgray;
+}
+
+.left-fixed {
+  position: fixed;
+  height: 100vh;
+  background: lightgray;
+}
+
+.outerBar {
+  position: relative;
+}
+
+.main-challenge-description {
+  color: white;
+  font-size: 1.2em;
+}
+
+.main-challenge-title {
+  color: white;
+}
+
+textarea {
+  width: 60%;
+  border-radius: 5px;
+}
+
+.comment-box {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.comment-button {
+  float: right;
 }
 
 #comments {
   overflow-y: auto;
-  height: 60vh;
-  border: darkgray solid 3px;
-  border-radius: 3px;
-  padding: 15px;
-  display: block;
-  width: 100%;
+  height: 75%;
 }  
 
-.comment-box {
-  margin-top: 40px;
-  margin-right: 20px;
-  position: fixed;
-  display: block;
-
+.response-buttons-top {
+  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
-textarea {
-  margin-top: 2px;
-  padding: 2px;
+.response-list {
   width: 100%;
-  resize: none;
-  border: 1px darkgray 2px;
+  height: 85vh;
+  overflow-y: scroll
 }
+
+.response-button {
+  background-color: orange;
+   height: 30px;
+   width: 90px;
+   cursor:pointer;
+   border: orange;
+   border-radius: 0px;
+   color:white;
+   margin: 55px 10px 0 10px;
+}
+
+.response-button:hover {
+   background-color: darkorange;
+   color:white;
+}
+
+.response-info {
+  background:#3E3E3E;
+  height: 90%;
+  color: white
+}
+
+.one-response {
+  /*margin: 0 0 15px 0;*/
+  margin-right: 10px;
+  margin-left: 10px;
+  height: 30vh;
+}
+
+.response-interaction {
+  position: absolute;
+  right: 0;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  bottom:0;
+  width: 100%;
+}
+
+/*JUST FOR SAFTEY!!!!!*/
