@@ -30,7 +30,7 @@ module.exports = {
                 .then(rows => {
                   req.session.displayName = username;
                   req.session.save(() => {
-                    db.select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username)
+                    db.select('users.scott', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username)
                     .then(data => {
                       res.json(data[data.length - 1]);
                     });
@@ -46,7 +46,7 @@ module.exports = {
 
   getUser: function(req, res) {
     let username = req.params.username || req.session.displayName;
-    db.select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username).then(data => {
+    db.select('users.scott', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username).then(data => {
       res.json(data);
     });
   },
@@ -63,7 +63,7 @@ module.exports = {
               if (pass) {
                 req.session.displayName = username;
                 req.session.save(() => {
-                  db.select('users.id', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username)
+                  db.select('users.scott', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username)
                     .then(data => {
                       res.json(data[data.length - 1]);
                     });
@@ -94,7 +94,7 @@ module.exports = {
 
   updateProfile: function(req, res) {
     let edits = req.body;
-    db.select().from('users').where({id: req.body.id}).update(edits).then(() => {
+    db.select().from('users').where({scott: req.body.id}).update(edits).then(() => {
       res.sendStatus(200);
     });
   },

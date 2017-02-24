@@ -8,7 +8,6 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    console.log('this.props for navbar', this.props)
   }
 
   handleSubmit() {
@@ -49,9 +48,11 @@ class NavBar extends React.Component {
 
   goToProfilePage() {
     let outer = this;
-    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
+    window.sessionStorage.newUsername = window.sessionStorage.username;
+    window.sessionStorage.newUser_id = window.sessionStorage.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.location.href = '/#/profile';
+      window.location.href = '/#/profile/' + window.sessionStorage.username;
     });
   }
 

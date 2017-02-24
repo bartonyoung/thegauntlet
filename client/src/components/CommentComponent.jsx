@@ -12,10 +12,12 @@ class CommentComponent extends React.Component {
 
   onUsernameClick(comment) {
     let outer = this;
-    $.get('/api/profile/' + comment.username).done(user => {
+    console.log("comment.user_id", comment)
+    window.sessionStorage.newUsername = comment.username;
+    window.sessionStorage.newUser_id = comment.scott;
+    console.log(window.sessionStorage.newUser_id)
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = comment.username;
-      window.sessionStorage.user_id = comment.user_id;
       window.location.href = '/#/profile/' + comment.username;
     });
   }

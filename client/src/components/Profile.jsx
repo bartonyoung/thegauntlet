@@ -8,7 +8,7 @@ import NavBar from './Nav.jsx';
 
 class Profile extends React.Component {
 
-  componentDidMount() {
+  componentWillMount() {
     let outer = this;
     $.get('/api/response', {
       parent_id: window.sessionStorage.getItem('id')
@@ -22,19 +22,26 @@ class Profile extends React.Component {
       outer.props.dispatch(actions.getResponses(responseArr));
     });
     $.get('/api/comments', {
-      user_id: window.sessionStorage.user_id
+      user_id: window.sessionStorage.newUser_id
     }).done(data => {
       console.log('comment data', data);
+      outer.props.dispatch(actions.getComments(data.reverse()));
     });
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
     });
-    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
-      outer.props.dispatch(actions.addUser(user));
-    });
-    $.get('/api/allChallenges/').done(challenges => {
+    console.log('new userid', window.sessionStorage.newUser_id)
+    $.get('/api/userChallenges', {
+      user_id: window.sessionStorage.newUser_id
+    }).done(challenges => {
+      console.log('get user challenges', challenges)
       outer.props.dispatch(actions.getChallenges(challenges.reverse()));
     });
+    if (!outer.props.user) {
+      $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
+        outer.props.dispatch(actions.addUser(user));
+      });
+    }
   }
 
   render() {

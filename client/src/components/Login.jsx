@@ -16,8 +16,8 @@ class Login extends React.Component {
     $.post('/api/login', login)
     .done(data => {
       if (data) {
-        console.log('handlelogin data', data)
-        window.sessionStorage.setItem('user_id', data.id);
+        console.log('data on login', data);
+        window.sessionStorage.setItem('user_id', data.scott);
         window.sessionStorage.setItem('username', data.username);
         this.props.handleAuth(() => {
           window.location.href = '#/dash';
