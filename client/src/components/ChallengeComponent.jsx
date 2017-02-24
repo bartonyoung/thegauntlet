@@ -218,7 +218,7 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-        let challenge = this.props.challenges[i];
+        let challenge = this.props.challenges[0];
         if (challenge) {
         let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
 
