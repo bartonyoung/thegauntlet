@@ -29,21 +29,34 @@ h4{
     width: 100%;
     border: 1px solid black;
 }
+.video-cover{
+    height: 300px;
+    width: 600px;
+    margin-top: 0;
+    border: 1px solid black;
+}
 .img-landing {
     height: 200px;
     width: 100%;
     border: 1px solid black;
 }
 
+.description{
+  margin-top: 30px;
+}
 
 .landing-cover {
   margin-top: 50px;
   min-height: 70vh;
   height: 300px;
   background-image: url('http://wbpsites.com/creed/us/tumblrv2/assets/shared/home/desktop/ropes2.png');
+  /*background-image: url('https://collectionofawesome.files.wordpress.com/2010/10/video-game-skills.png');*/
+  /*background-image:url('https://languagefixation.files.wordpress.com/2011/01/challenge-accepted.jpg');*/
   background-repeat: no-repeat;
   background-position: center;
-  background-size:100% 100%;
+  background-size:50% 50%;
+
+
 }
 .header {
   padding-top: 0px;
