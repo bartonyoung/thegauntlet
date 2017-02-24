@@ -62,7 +62,7 @@ class ChallengeComponent extends React.Component {
               description: outer.refs.description.value,
               category: '',
               filename: resp,
-              parent_id: window.sessionStorage.getItem('id'),
+              parent_id: window.sessionStorage.challengeId,
               created_at: created_at,
               username: window.sessionStorage.username
             },
@@ -219,8 +219,8 @@ class ChallengeComponent extends React.Component {
 
         let challenge = this.props.challenges[i];
         if (challenge) {
-        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000; 
-  
+        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
+
         return (
 
         <div className="container-fluid">
@@ -264,13 +264,13 @@ class ChallengeComponent extends React.Component {
                     <button className="button response-button" onClick={() => { this.sortResponses('top'); }}>TOP</button>
                   </div>
                 </div>
-                
+
                 <ResponseList />
-                
+
               </div>
-            </div>  
+            </div>
           </div>
-          
+
           <CommentList />
 
       </div>

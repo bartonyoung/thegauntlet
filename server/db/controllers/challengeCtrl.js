@@ -35,6 +35,7 @@ module.exports = {
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+          console.log('addone response data', data)
           res.json(data.slice(data.length - 1));
         });
       }).catch(err => {
@@ -64,8 +65,7 @@ module.exports = {
   getOne: (req, res) => {
     db.select()
     .from('challenges')
-    .where({parent_id: req.params.id})
-    .orWhere({id: req.params.id})
+    .where({id: req.params.id})
     .then(data =>{
       console.log('get one data', data)
       res.json(data);
