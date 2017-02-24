@@ -11,7 +11,7 @@ class Profile extends React.Component {
   componentWillMount() {
     let outer = this;
     $.get('/api/response', {
-      parent_id: window.sessionStorage.getItem('id')
+      parent_id: window.sessionStorage.newUser_id
     }).done(data => {
       let responseArr = [];
       data.forEach(response => {
@@ -30,7 +30,6 @@ class Profile extends React.Component {
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
     });
-    console.log('new userid', window.sessionStorage.newUser_id)
     $.get('/api/userChallenges', {
       user_id: window.sessionStorage.newUser_id
     }).done(challenges => {

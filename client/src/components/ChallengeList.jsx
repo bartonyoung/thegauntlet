@@ -21,7 +21,7 @@ class ChallengeList extends React.Component {
   onUsernameClick(challenge) {
     let outer = this;
     window.sessionStorage.newUsername = challenge.username;
-    window.sessionStorage.newUser_id = challenge.user_id;
+    window.sessionStorage.newUser_id = challenge.user_id || window.sessionStorage.user_id;
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.location.href = '/#/profile/' + challenge.username;
