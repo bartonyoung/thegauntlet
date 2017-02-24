@@ -116,6 +116,7 @@ module.exports = {
 
   upvote: (req, res) => { //CHECK: Should fix upvote spam but needs to be tested
     let vote = req.body; //req.body should have challenge_id and vote = 1
+    console.log('userData', userData[0])
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
       db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
         if (exists.length) {

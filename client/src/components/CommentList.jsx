@@ -20,7 +20,8 @@ class CommentList extends React.Component {
       challenge_id: window.sessionStorage.challengeId,
       created_at: created_at,
       username: window.sessionStorage.username,
-      user_id: window.sessionStorage.user_id
+      user_id: window.sessionStorage.user_id,
+      title: this.props.challenges[0].title
     };
     $.post('/api/comments', comments).then(data => {
       outer.props.dispatch(actions.addComment(data));
