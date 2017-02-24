@@ -198,25 +198,23 @@ class ChallengeList extends React.Component {
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (challenge) {
         let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
-        if (!challenge.parent_id) {
-          return (
-            <div className="col col-md-6" key={i}>
-            <div>
-              <h4 onClick={() => this.onChallengeTitleClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
-              </div>
-              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-              <div>
-                <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
-                {calculateTime(timeDifferenceInSeconds)}
-                {whichFollowButton(challenge.user_id, challenge.username)}
-                {whichFavoriteIcon(challenge.id)}
-                <button onClick={() => this.upVoteClick(challenge)} type="button" className="btn btn-default btn-sm pull-right">
-                  <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
-                </button><br/>
-              </div>
+        return (
+          <div className="col col-md-6" key={i}>
+          <div>
+            <h4 onClick={() => this.onChallengeTitleClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
             </div>
-          );
-        }
+            {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+            <div>
+              <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
+              {calculateTime(timeDifferenceInSeconds)}
+              {whichFollowButton(challenge.user_id, challenge.username)}
+              {whichFavoriteIcon(challenge.id)}
+              <button onClick={() => this.upVoteClick(challenge)} type="button" className="btn btn-default btn-sm pull-right">
+                <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
+              </button><br/>
+            </div>
+          </div>
+        );
       } else {
         return <div></div>;
       }
