@@ -63,9 +63,9 @@ module.exports = {
 
   getOne: (req, res) => {
     db.select()
-    .from('challenges')
+    .from('challenges').innerJoin('users', 'challenges.user_id', 'users.id')
     .where({parent_id: req.params.id})
-    .orWhere({id: req.params.id})
+    .orWhere('challenges.id', '=', req.params.id)
     .then(data =>{
       res.json(data);
     })
