@@ -21,16 +21,19 @@ class Profile extends React.Component {
       });
       outer.props.dispatch(actions.getResponses(responseArr));
     });
-    // $.get('/api/comments', {
-    //   user_id: window.sessionStorage.user_id
-    // }).done(data => {
-    //   console.log('comment data', data);
-    // });
+    $.get('/api/comments', {
+      user_id: window.sessionStorage.user_id
+    }).done(data => {
+      console.log('comment data', data);
+    });
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
     });
     $.get('/api/profile/' + window.sessionStorage.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+    });
+    $.get('/api/allChallenges/').done(challenges => {
+      outer.props.dispatch(actions.getChallenges(challenges.reverse()));
     });
   }
 

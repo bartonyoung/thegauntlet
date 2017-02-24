@@ -23,6 +23,7 @@ class ChallengeList extends React.Component {
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.sessionStorage.username = challenge.username;
+      window.sessionStorage.user_id = challenge.user_id;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }

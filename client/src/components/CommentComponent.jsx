@@ -15,6 +15,7 @@ class CommentComponent extends React.Component {
     $.get('/api/profile/' + comment.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.sessionStorage.username = comment.username;
+      window.sessionStorage.user_id = comment.user_id;
       window.location.href = '/#/profile/' + comment.username;
     });
   }

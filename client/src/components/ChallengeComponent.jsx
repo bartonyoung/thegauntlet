@@ -62,7 +62,8 @@ class ChallengeComponent extends React.Component {
               description: outer.refs.description.value,
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
-              created_at: created_at
+              created_at: created_at,
+              username: window.sessionStorage.username
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -119,6 +120,7 @@ class ChallengeComponent extends React.Component {
     $.get('/api/profile/' + challenge.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.sessionStorage.username = challenge.username;
+      window.sessionStorage.user_id = response.user_id;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }

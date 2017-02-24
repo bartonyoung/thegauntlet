@@ -225,6 +225,8 @@ class ProfileContent extends React.Component {
     let outer = this;
     $.get('/api/profile/' + post.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
+      window.sessionStorage.username = post.username;
+      window.sessionStorage.user_id = post.user_id;
       window.location.href = '/#/profile/' + post.username;
     });
   }
@@ -349,7 +351,7 @@ class ProfileContent extends React.Component {
     };
 
     let myView = () => {
-      if (this.props.profileView === 'all' && window.sessionStorage.getItem('key') === this.props.user[0].username) {
+      if (this.props.profileView === 'all' && window.sessionStorage.username === this.props.user[0].username) {
         return (
           <div>
             <div>
@@ -444,7 +446,7 @@ class ProfileContent extends React.Component {
     };
 
     let renderMailbox = () => {
-      if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
+      if (window.sessionStorage.username === this.props.user[0].username) {
         return (
           <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
         );
@@ -455,7 +457,7 @@ class ProfileContent extends React.Component {
       }
     };
     let isUserProfile = (placement, user) => {
-      if (window.sessionStorage.getItem('key') === user) {
+      if (window.sessionStorage.username === user) {
         return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}><span className="glyphicon glyphicon-pencil"></span></a>}</span>;
       } else {
         return <div></div>;
@@ -463,7 +465,7 @@ class ProfileContent extends React.Component {
     };
 
     let isUserImageClickable = (user) => {
-      return window.sessionStorage.getItem('key') === user;
+      return window.sessionStorage.username === user;
     };
 
     let Firstname = (name, id, user) => {

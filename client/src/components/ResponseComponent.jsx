@@ -79,6 +79,7 @@ class ResponseComponent extends React.Component {
     $.get('/api/profile/' + response.username).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.sessionStorage.username = response.username;
+      window.sessionStorage.user_id = response.user_id;
       window.location.href = '/#/profile/' + response.username;
     });
   }
@@ -251,7 +252,6 @@ class ResponseComponent extends React.Component {
           <h5>{this.props.response.description}</h5>
           <Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link>
           {calculateTime(timeDifferenceInSeconds)}<br/>
-          <h5>{`Views: ${this.props.response.views}`}</h5>
           {whichButton(this.props.response.user_id)}
           <a onClick={()=> this.upVoteClick(this.props.response.id)}>{'Upvote'}</a><p>{`${this.props.response.upvotes}`}</p>
         </div>

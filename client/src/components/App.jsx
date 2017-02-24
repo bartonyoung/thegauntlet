@@ -17,7 +17,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      auth: window.sessionStorage.getItem('key')
+      auth: window.sessionStorage.username
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.handleAuth = this.handleAuth.bind(this);
@@ -26,7 +26,7 @@ class App extends React.Component {
   handleLogout() {
     $.get('/api/logout')
     .done(data => {
-      window.sessionStorage.removeItem('key');
+      window.sessionStorage.removeItem('username');
 
       window.location.href = '/';
       this.setState({
@@ -37,7 +37,7 @@ class App extends React.Component {
 
   handleAuth(cb) {
     this.setState({
-      auth: window.sessionStorage.getItem('key')
+      auth: window.sessionStorage.username
     }, cb);
   }
 
