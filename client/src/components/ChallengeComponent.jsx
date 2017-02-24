@@ -26,13 +26,13 @@ class ChallengeComponent extends React.Component {
   componentWillMount() {
     let outer = this;
     $.get('/api/response', {
-      parent_id: window.sessionStorage.getItem('id')
+      parent_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getResponses(data.reverse()));
     }); 
 
     $.get('/api/comments', {
-      challenge_id: window.sessionStorage.getItem('id')
+      challenge_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getComments(data.reverse()));
     });
@@ -47,7 +47,6 @@ class ChallengeComponent extends React.Component {
       this.setState({currentVideo: data[0]});
     });
   }
-
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#upload'));
@@ -70,7 +69,8 @@ class ChallengeComponent extends React.Component {
               category: '',
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
-              created_at: created_at 
+              created_at: created_at,
+              username: window.sessionStorage.username
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -124,9 +124,10 @@ class ChallengeComponent extends React.Component {
 
   onUsernameClick(challenge) {
     let outer = this;
-    $.get('/api/profile/' + challenge.username).done(user => {
+    window.sessionStorage.newUsername = challenge.username;
+    window.sessionStorage.newUser_id = challenge.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = challenge.username;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }
@@ -156,7 +157,6 @@ class ChallengeComponent extends React.Component {
     // <button className="btn  btn-default btn-sm">
     //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
     //       </button>
-
   render() {
     let taskButtons = (challenge) => {
       if (challenge.username === window.sessionStorage.username) {
@@ -238,12 +238,6 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-    // for (var i = 0; i < this.props.challenges.length; i++) {
-    //   if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
-    //     this.setState({
-    //       currentVideo: this.props.challenges[i]
-    //     });
-        // let challenge = this.props.challenges[i];
     if (this.state.currentVideo) {
       let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
       return (
