@@ -35,7 +35,6 @@ module.exports = {
       challenge.views = 0;
       db('challenges').insert(challenge).then(data => {
         db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-          console.log('addone response data', data)
           res.json(data.slice(data.length - 1));
         });
       }).catch(err => {
@@ -108,7 +107,6 @@ module.exports = {
 
   getUserChallenges: (req, res) => {
     let id = req.query.user_id;
-    console.log('id', id)
     db.select().from('challenges').where({user_id: id}).innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where({parent_id: null}).then(data => {
       res.json(data);
     });
@@ -118,20 +116,15 @@ module.exports = {
     let vote = req.body; //req.body should have challenge_id and vote = 1
 
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
-      console.log(userData)
       db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
-        console.log(exists)
         if (exists.length) {
           res.sendStatus(404);
         } else {
           vote.user_id = userData[0].scott;
           db.select('user_id').from('challenges').where({id: req.body.challenge_id}).then(data => {
-            console.log('data', data)
             db.select().from('users').where({scott: data[0].user_id}).increment('upvotes', 1).then(data => {
-              console.log('data', data)
               db('votes').insert(vote).then( () => {
                 db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
-                  console.log('voteData', voteData)
                   db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
                     res.sendStatus(201);
                   });
