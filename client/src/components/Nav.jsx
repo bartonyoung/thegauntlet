@@ -48,14 +48,16 @@ class NavBar extends React.Component {
 
   goToProfilePage() {
     let outer = this;
-    $.get('/api/profile/' + window.sessionStorage.getItem('key')).done(user => {
+    window.sessionStorage.newUsername = window.sessionStorage.username;
+    window.sessionStorage.newUser_id = window.sessionStorage.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.location.href = '/#/profile';
+      window.location.href = '/#/profile/' + window.sessionStorage.username;
     });
   }
 
   handleNav() {
-    if (window.sessionStorage.getItem('key')) {
+    if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
             <div className="container">
@@ -63,7 +65,7 @@ class NavBar extends React.Component {
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
-                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
+                    <form id="challenxe" style={{width: '300px', padding: '15px'}}>
 
             <div className="form-group">
               <li className="nav-label">Name it!</li>
@@ -87,9 +89,9 @@ class NavBar extends React.Component {
           </form>
           <form ref="file" id="file">
           <li className="nav-label-file">Upload your video or image...</li>
-            <input type="file" placeholder="video or image" required ref="video" name="video"/>
+            <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
           </form>
-          <li onClick={this.handleSubmit} className="btn btn-default pull-right">Submit</li>
+          <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
 
 
                   </ul>
@@ -103,7 +105,7 @@ class NavBar extends React.Component {
               </ul>
               <ul className="nav navbar-nav navbar-left">
                 <li>
-                  <h5 className="navbar-text">You are logged in as <a href="javascript: void(0)" onClick={()=> this.goToProfilePage()} className="navbar-link username-nav">{window.sessionStorage.getItem('key')}</a></h5>
+                  <h5 className="navbar-text">You are logged in as <a href="javascript: void(0)" onClick={()=> this.goToProfilePage()} className="navbar-link username-nav">{window.sessionStorage.username}</a></h5>
                 </li>
               </ul>
             </div>

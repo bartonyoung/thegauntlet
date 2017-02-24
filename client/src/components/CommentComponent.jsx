@@ -12,9 +12,12 @@ class CommentComponent extends React.Component {
 
   onUsernameClick(comment) {
     let outer = this;
-    $.get('/api/profile/' + comment.username).done(user => {
+    console.log("comment.user_id", comment)
+    window.sessionStorage.newUsername = comment.username;
+    window.sessionStorage.newUser_id = comment.scott;
+    console.log(window.sessionStorage.newUser_id)
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = comment.username;
       window.location.href = '/#/profile/' + comment.username;
     });
   }
@@ -58,9 +61,20 @@ class CommentComponent extends React.Component {
 
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.comment.created_at)) / 1000;
 
+    let tag = (string) => {  
+      let comment = string.split(' ').map((word, i) => {
+        if (word.includes('@')) {
+          return <a href={'/#/profile/' + word.slice(1)} key={i}>{word}</a>;
+        } else {
+          return ' ' + word;    
+        }
+      });        
+      return comment;
+    };     
+
     return (
       <div>
-        <h4 className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></h4><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{this.props.comment.comment}
+        <h4 className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></h4><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{tag(this.props.comment.comment)}
       </div>
     );
   }
@@ -68,6 +82,6 @@ class CommentComponent extends React.Component {
 
 const mapStateToProps = (state) => {
   return state;
-}
+};
 
 export default connect(mapStateToProps)(CommentComponent);

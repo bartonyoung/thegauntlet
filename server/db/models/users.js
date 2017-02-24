@@ -1,7 +1,7 @@
 const knex = require('../index.js');
 
 module.exports = knex.schema.createTableIfNotExists('users', (user) => {
-  user.increments();
+  user.increments('scott');
   user.string('firstname');
   user.string('lastname');
   user.string('username');

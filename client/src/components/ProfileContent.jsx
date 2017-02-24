@@ -222,8 +222,9 @@ class ProfileContent extends React.Component {
   }
 
   onUsernameClick(post) {
-    let outer = this;
-    $.get('/api/profile/' + post.username).done(user => {
+    window.sessionStorage.newUsername = post.username;
+    window.sessionStorage.newUser_id = post.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.location.href = '/#/profile/' + post.username;
     });
@@ -278,19 +279,21 @@ class ProfileContent extends React.Component {
       }
     });
 
-    let whichFollowButton = (leaderId) => {
-      if (this.props.leaders.includes(leaderId)) {
-        return (
-          <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
-          </button>
-        );
+    let whichFollowButton = (leaderId, user) => {
+      if (window.sessionStorage.getItem('key') !== user) {
+        if (this.props.leaders.includes(leaderId)) {
+          return (
+            <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
+              <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+            </button>
+          );
+        } else {
+          return (
+            <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
+              <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+            </button>
+          );
+        }
       }
     };
 
@@ -346,18 +349,8 @@ class ProfileContent extends React.Component {
       }
     };
 
-    let whichButton = (leaderId) => {
-      let outer = this;
-      if (this.props.leaders.includes(leaderId)) {
-        return <button onClick={() => this.unFollow(leaderId)}>Unfollow</button>;
-      } else {
-        return <button onClick={() => this.followTheLeader(leaderId)}>Follow</button>;
-      }
-    };
-
-
     let myView = () => {
-      if (this.props.profileView === 'all' && window.sessionStorage.getItem('key') === this.props.user[0].username) {
+      if (this.props.profileView === 'all' && window.sessionStorage.username === this.props.user[0].username) {
         return (
           <div>
             <div>
@@ -394,19 +387,23 @@ class ProfileContent extends React.Component {
         );
       } else if (this.props.profileView === 'mailbox') {
         let mappedArray = [];
+        let mappedComments;
+        let mappedResponses;
 
         this.props.challenges.forEach((challenge) => {
           if (challenge.username === window.sessionStorage.username) {
             mappedComments = this.props.comments.map((comment, j) => {
               if (comment) {
+
                 let timeDifferenceInSeconds = (new Date().getTime() - parseInt(comment.created_at)) / 1000;
-                if (comment.challenge_id === challenge.id) {
+                if (comment.username === challenge.username) {
+
                   return (
                     <div>
-                      <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{comment.username + ' commented to your challenge: ' + challenge.title}</h4></a>
+                      <a href='javascript: void(0)' onClick={() => this.onNotificationClick(j)}><h4>{comment.username + ' commented to your challenge: ' + challenge.title}</h4></a>
+                      <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
                       <div style={{display: this.state[j] || 'none'}}>
-                        <Link onClick={() => this.onUsernameClick(comment)}>{comment.username + ' '}</Link>
-                        {calculateTime(timeDifferenceInSeconds)}<br/>
+                        <Link onClick={() => this.onUsernameClick(comment)}>{comment.username + ' '}</Link><br/>
                         {comment.comment}
                       </div>
                     </div>
@@ -442,17 +439,18 @@ class ProfileContent extends React.Component {
                 return <div></div>;
               }
             });
-            mappedArray.push(mappedResponses.reverse());
-            mappedArray.push(mappedComments.reverse());
+            mappedArray.push(mappedResponses);
+            mappedArray.push(mappedComments);
+
           }
         });
 
-        return mappedArray;
+        return mappedArray.sort();
       }
     };
 
     let renderMailbox = () => {
-      if (window.sessionStorage.getItem('key') === this.props.user[0].username) {
+      if (window.sessionStorage.username === this.props.user[0].username) {
         return (
           <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
         );
@@ -463,7 +461,7 @@ class ProfileContent extends React.Component {
       }
     };
     let isUserProfile = (placement, user) => {
-      if (window.sessionStorage.getItem('key') === user) {
+      if (window.sessionStorage.username === user) {
         return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}><span className="glyphicon glyphicon-pencil"></span></a>}</span>;
       } else {
         return <div></div>;
@@ -471,7 +469,7 @@ class ProfileContent extends React.Component {
     };
 
     let isUserImageClickable = (user) => {
-      return window.sessionStorage.getItem('key') === user;
+      return window.sessionStorage.username === user;
     };
 
     let Firstname = (name, id, user) => {
@@ -536,21 +534,21 @@ class ProfileContent extends React.Component {
             <img className='profilePicture text' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
             <ul className='editPic' style={{display: this.state.display}}>
               <li><form id='pic'>
-                <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].id); }} />
+                <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].scott); }} />
               </form></li>
             </ul>
           </div>
           Username: {target} <br />
-          {Firstname(this.props.user[0].firstname, this.props.user[0].id, target)}
-          {Lastname(this.props.user[0].lastname, this.props.user[0].id, target)}
-          {Email(this.props.user[0].email, this.props.user[0].id, target)}
+          {Firstname(this.props.user[0].firstname, this.props.user[0].scott, target)}
+          {Lastname(this.props.user[0].lastname, this.props.user[0].scott, target)}
+          {Email(this.props.user[0].email, this.props.user[0].scott, target)}
           Rank# {this.props.ranks.map((rank, index) => {
 
               return {username: rank.username, rank: index + 1};
 
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
-          Followers: {this.props.followers.length} {whichButton(this.props.user[0].id)} <br />
+          Followers: {this.props.followers.length} {whichButton(this.props.user[0].scott)} <br />
         </div><br/>
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>

@@ -19,17 +19,17 @@ class ChallengeList extends React.Component {
   }
 
   onUsernameClick(challenge) {
-    console.log('challenge userid', challenge.user_id)
     let outer = this;
-    $.get('/api/profile/' + challenge.username).done(user => {
+    window.sessionStorage.newUsername = challenge.username;
+    window.sessionStorage.newUser_id = challenge.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = challenge.username;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }
 
   onChallengeTitleClick(challenge) {
-    window.sessionStorage.setItem('id', challenge.id);
+    window.sessionStorage.setItem('challengeId', challenge.id);
   }
 
   upVoteClick(challenge) {
@@ -124,19 +124,21 @@ class ChallengeList extends React.Component {
       }
     };
 
-    let whichFollowButton = (leaderId) => {
-      if (this.props.leaders.includes(leaderId)) {
-        return (
-          <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
-          </button>
-        );
+    let whichFollowButton = (leaderId, user) => {
+      if (window.sessionStorage.getItem('key') !== user) {
+        if (this.props.leaders.includes(leaderId)) {
+          return (
+            <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId, user)}>
+              <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+            </button>
+          );
+        } else {
+          return (
+            <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId, user)}>
+              <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+            </button>
+          );
+        }
       }
     };
 
@@ -205,7 +207,7 @@ class ChallengeList extends React.Component {
               <div>
                 <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
                 {calculateTime(timeDifferenceInSeconds)}
-                {whichFollowButton(challenge.user_id)}
+                {whichFollowButton(challenge.user_id, challenge.username)}
                 {whichFavoriteIcon(challenge.id)}
                 <button onClick={() => this.upVoteClick(challenge)} type="button" className="btn btn-default btn-sm pull-right">
                   <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
@@ -215,7 +217,7 @@ class ChallengeList extends React.Component {
           );
         }
       } else {
-        return <div></div>
+        return <div></div>;
       }
     });
 

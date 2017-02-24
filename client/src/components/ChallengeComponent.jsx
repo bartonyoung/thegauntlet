@@ -25,24 +25,22 @@ class ChallengeComponent extends React.Component {
   componentWillMount() {
     let outer = this;
     $.get('/api/response', {
-      parent_id: window.sessionStorage.getItem('id')
+      parent_id: window.sessionStorage.challengeId
     }).done(data => {
-      console.log('get response data', data);
       outer.props.dispatch(actions.getResponses(data.reverse()));
     });
     $.get('/api/comments', {
-      challenge_id: window.sessionStorage.getItem('id')
+      challenge_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getComments(data.reverse()));
     });
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
     });
-    $.get('/api/challenge/' + window.sessionStorage.id).done(data => {
+    $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
       outer.props.dispatch(actions.getChallenges(data));
     });
   }
-
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#upload'));
@@ -65,7 +63,8 @@ class ChallengeComponent extends React.Component {
               category: '',
               filename: resp,
               parent_id: window.sessionStorage.getItem('id'),
-              created_at: created_at 
+              created_at: created_at,
+              username: window.sessionStorage.username
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -118,11 +117,11 @@ class ChallengeComponent extends React.Component {
   }
 
   onUsernameClick(challenge) {
-    console.log('challenge userid', challenge.user_id);
     let outer = this;
-    $.get('/api/profile/' + challenge.username).done(user => {
+    window.sessionStorage.newUsername = challenge.username;
+    window.sessionStorage.newUser_id = challenge.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      window.sessionStorage.username = challenge.username;
       window.location.href = '/#/profile/' + challenge.username;
     });
   }
@@ -218,12 +217,12 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-    for (var i = 0; i < this.props.challenges.length; i++) {
-      if (this.props.challenges[i].id === parseInt(window.sessionStorage.id)) {
         let challenge = this.props.challenges[i];
-        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
-
+        if (challenge) {
+        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000; 
+  
         return (
+
         <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
@@ -276,9 +275,9 @@ class ChallengeComponent extends React.Component {
 
       </div>
         );
-      }
+      } else {
+      return <div></div>;
     }
-    return <div></div>;
   }
 }
 
@@ -287,5 +286,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeComponent);
-
-//JUST FOR SAFETY!!

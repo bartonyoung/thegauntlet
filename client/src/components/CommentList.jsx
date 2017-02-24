@@ -19,7 +19,8 @@ class CommentList extends React.Component {
       comment: this.refs.comment.value,
       challenge_id: window.sessionStorage.id,
       created_at: created_at,
-      username: window.sessionStorage.getItem('key')
+      username: window.sessionStorage.username,
+      // user_id: window.sessionStorage
     };
     $.post('/api/comments', comments).then(data => {
       outer.props.dispatch(actions.addComment(data));
@@ -29,10 +30,9 @@ class CommentList extends React.Component {
 
   render() {
     let mappedComments = this.props.comments.map((comment, i) => {
-      console.log('comment list map comment', comment)
       return (
-        <div>
-          <CommentComponent comment={comment}/>
+        <div key={i}>
+          <CommentComponent comment={comment} />
         </div>
       );
     });
