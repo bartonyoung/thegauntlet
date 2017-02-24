@@ -62,7 +62,6 @@ module.exports = {
   },
 
   getOne: (req, res) => {
-    console.log(req.params.id, req.query.id);
     db.select()
     .from('challenges')
     .where({parent_id: req.params.id})
