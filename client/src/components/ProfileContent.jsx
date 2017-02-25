@@ -297,6 +297,24 @@ class ProfileContent extends React.Component {
       }
     };
 
+    // let whichButton = (leaderId) => {
+    //   if (this.props.leaders.includes(leaderId)) {
+    //     return (
+    //       <button className="btn btn-default btn-sm" style={{color: 'red'}}onClick={() => this.unFollow(leaderId)}>
+    //         <span className="glyphicon glyphicon-ok"></span>
+    //       </button>
+    //     );
+    //   } else {
+    //     return (
+    //       <button className="btn btn-default btn-sm" onClick={() => this.followTheLeader(leaderId)}>
+    //         <span className="glyphicon glyphicon-ok"></span>
+    //       </button>
+    //     );
+    //   }
+    // };
+
+
+
     let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
         return (
@@ -428,7 +446,7 @@ class ProfileContent extends React.Component {
                         <Link onClick={() => this.onUsernameClick(response)}>{response.username + ' '}</Link>
                         {calculateTime(timeDifferenceInSeconds)}<br/>
                         <h5>{`Views : ${response.views}`}</h5>
-                        {whichButton(response.user_id)}
+                        {whichFollowButton(response.user_id, response.username)}
                         {whichFavoriteIcon(response.user_id)}
                         <a onClick={()=> this.upVoteClick(response.id)}>{'Upvote'}</a><p>{`${response.upvotes}`}</p>
                       </div>
@@ -544,11 +562,11 @@ class ProfileContent extends React.Component {
           {Email(this.props.user[0].email, this.props.user[0].scott, target)}
           Rank# {this.props.ranks.map((rank, index) => {
 
-              return {username: rank.username, rank: index + 1};
+            return {username: rank.username, rank: index + 1};  
 
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
-          Followers: {this.props.followers.length} {whichButton(this.props.user[0].scott)} <br />
+          Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott)} <br />
         </div><br/>
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>

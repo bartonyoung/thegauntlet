@@ -9,7 +9,7 @@ module.exports = {
       comment.user_id = userData[0].scott;
       db('comments').insert(comment).then(() => {
         db.select().from('comments').then(data => {
-          console.log('comment addOne data', data)
+          console.log('comment addOne data', data);
           res.json(data.slice(data.length - 1));
         });
       });
@@ -17,14 +17,13 @@ module.exports = {
   },
 
   getAll: (req, res) => {
-      console.log('req', req.query)
     if (req.query.challenge_id) {
       db.select('comments.comment', 'users.username', 'challenges.id', 'comments.created_at', 'users.scott').from('challenges')
       .innerJoin('comments', 'challenges.id', 'comments.challenge_id')
       .where('challenges.id', '=', req.query.challenge_id)
       .innerJoin('users', 'comments.user_id', 'users.scott')
       .then( (data) => {
-        console.log('data', data)
+        console.log('data', data);
         res.json(data);
       });
     } else {

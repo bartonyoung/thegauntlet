@@ -7,6 +7,7 @@ const s3 = require('./s3Ctrl.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
+    console.log('THIS IS THE challenge', challenge);
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -26,6 +27,7 @@ module.exports = {
 
   addOneResponse: (req, res) => {
     const challenge = req.body;
+    console.log('THIS IS THE RESPONSE', challenge);
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -62,12 +64,12 @@ module.exports = {
   },
 
   getOne: (req, res) => {
-    console.log('CHALLENGE CONTROL FIRED!');
+    console.log('HELLO');
     db.select()
-    .from('challenges').innerJoin('users', 'challenges.user_id', 'users.id')
-    .where({parent_id: req.params.id})
-    .orWhere('challenges.id', '=', req.params.id)
+    .from('challenges')
+    .where({id: req.params.id})
     .then(data =>{
+      console.log(data);
       res.json(data);
     })
     .catch((err) => {
@@ -109,7 +111,7 @@ module.exports = {
 
   getUserChallenges: (req, res) => {
     let id = req.query.user_id;
-    console.log('id', id);
+    console.log('HELLO!!', id);
     db.select().from('challenges').where({user_id: id}).innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where({parent_id: null}).then(data => {
       res.json(data);
     });
@@ -117,16 +119,19 @@ module.exports = {
 
   upvote: (req, res) => { //CHECK: Should fix upvote spam but needs to be tested
     let vote = req.body; //req.body should have challenge_id and vote = 1
+    console.log('THIS IS THE VOTE', vote);
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      console.log('THIS IS THE USERDATA', userData);
       db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
         if (exists.length) {
           res.sendStatus(404);
         } else {
           vote.user_id = userData[0].scott;
           db.select('user_id').from('challenges').where({id: req.body.challenge_id}).then(data => {
-            db.select().from('users').where({id: data[0].user_id}).increment('upvotes', 1).then(data => {
+            db.select().from('users').where({scott: data[0].user_id}).increment('upvotes', 1).then(data => {
               db('votes').insert(vote).then( () => {
                 db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
+                  console.log('this is vote data', voteData);
                   db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
                     res.sendStatus(201);
                   });

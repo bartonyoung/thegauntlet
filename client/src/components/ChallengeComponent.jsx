@@ -41,9 +41,8 @@ class ChallengeComponent extends React.Component {
       outer.props.dispatch(actions.setFavorites(data));
     });
     
-    $.get('/api/challenge/' + window.sessionStorage.id).done(data => {
+    $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
       // outer.props.dispatch(actions.getChallenges(data));
-      console.log(data);
       this.setState({currentVideo: data[0]});
     });
   }
@@ -68,7 +67,7 @@ class ChallengeComponent extends React.Component {
               description: outer.refs.description.value,
               category: '',
               filename: resp,
-              parent_id: window.sessionStorage.getItem('id'),
+              parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
               username: window.sessionStorage.username
             },
@@ -141,7 +140,7 @@ class ChallengeComponent extends React.Component {
   sortResponses(sortBy) {
     const outer = this;
     $.get('/api/response/', {
-      parent_id: window.sessionStorage.getItem('id')
+      parent_id: window.sessionStorage.getItem('challengeId')
     }).then( data => {
       if (sortBy === 'top') {
         data = data.sort( (a, b) => {
@@ -301,7 +300,7 @@ class ChallengeComponent extends React.Component {
       </div>
       );
     }
-    return <div></div>;
+    return <div>HI!</div>;
   }
 }
 

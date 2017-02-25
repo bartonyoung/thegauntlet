@@ -125,7 +125,7 @@ class ChallengeList extends React.Component {
     };
 
     let whichFollowButton = (leaderId, user) => {
-      if (window.sessionStorage.getItem('key') !== user) {
+      if (window.sessionStorage.username !== user) {
         if (this.props.leaders.includes(leaderId)) {
           return (
             <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId, user)}>
