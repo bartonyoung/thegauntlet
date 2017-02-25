@@ -12,10 +12,9 @@ class Landing extends React.Component {
     super(props);
     this.state = {
       auth: this.props.auth,
-      coverVideo:false
+      cover:undefined
     };
     this.onChallengeClick = this.onChallengeClick.bind(this);
-    this.topVideo;
   }
   componentDidMount() {
     let outer = this;
@@ -47,6 +46,40 @@ class Landing extends React.Component {
       $.get('/api/profile/' + window.sessionStorage.username).done(user => {
         outer.props.dispatch(actions.addUser(user));
       });
+  }
+
+  handleSignup(e) {
+    e.preventDefault();
+    let signup = {
+      firstname: this.refs.firstname.value,
+      lastname: this.refs.lastname.value,
+      username: this.refs.username.value,
+      password: this.refs.password.value,
+      email: this.refs.email.value
+    };
+    let confirmPassword = this.refs.confirmPassword.value;
+
+    if (signup.password === confirmPassword) {
+      $.post('/api/signup', signup)
+      .done(data => {
+        if (!data) {
+          alert('username already exists!');
+          this.refs.username.value = '';
+          window.location.href = '#/';
+        } else {
+          window.sessionStorage.setItem('key', data);
+          window.sessionStorage.setItem('username', data);
+          this.props.handleAuth(() => {
+            window.location.href = '#/dash';
+          });
+        }
+      });
+    } else {
+      this.refs.password.value = '';
+      this.refs.confirmPassword.value = '';
+      window.location.href = '#/';
+      alert('Password does not match...');
+    }
   }
 
   handleGallery(type) {
@@ -89,13 +122,26 @@ class Landing extends React.Component {
                   </video>
               </div>;
       });
-    } else {
+    } else if(type === 'videos') {
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
                 <img className="img-landing" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
               </div>;
       });
+    }else if(type === undefined){
+      // return <img id="gauntlet" src="" alt=""/>
+     return  <div className="landing-cover-video" >
+                <ReactPlayer
+                  volume={0} 
+                  controls={true} 
+                  className="video-cover" 
+                  url='https://www.youtube.com/watch?v=6-dyNQXYgxQ' 
+                  playing 
+                  width='640'
+                  height='360'
+                  />
+              </div>
     }
 
   }
@@ -106,36 +152,41 @@ class Landing extends React.Component {
          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/> 
           <div className="container-fluid text-center main-content landing-cover">
             <div className='row header'>
-                <div className="col-md-12 text-center">
-                  <div className="col-md-4">
-                     {/*{<ReactPlayer 
-                       volume={0} 
-                       controls={true} 
-                       className="video-cover" 
-                       url='https://www.youtube.com/watch?v=6-dyNQXYgxQ' 
-                       playing 
-                       width='540'
-                       height='260'
-                       />}*/}
-                  </div>  
-                  <h1 id="title">Welcome to The Gauntlet!</h1>
-                <div className="description">
-                  <p>The Gauntlet is a place to test yourself against others!</p>
-                  <p>Add your own challenge and watch others respond, or one-up another challenger</p>
+              <div className="col-md-12 text-center landing-header">
+                <div className="col-md-8 text-center landing-header-left">  
+                    <h1 className="landing-intro" id="landing-title">Welcome to The Gauntlet!</h1>
+                        {this.handleGallery(this.state.cover)}
+                  <div className="description">
+                    <p>The Gauntlet is a place to test yourself against others!</p>
+                    <p>Add your own challenge and watch others respond, or one-up another challenger</p>
+                  </div>
+               </div>
+               <div className="col-md-4 landing-header-right">
+                    <form className="landing-register" type="submit" onSubmit={this.handleSignup.bind(this)}>
+                      {/*<p id="sign-up">SIGN UP</p>*/}
+                      <input type="text" placeholder="What's your Firstname?" required ref="firstname" className=" landing-input pass" />
+                      <input type="text" placeholder="What's your Lasttname?" required ref="lastname"className=" landing-input pass" />
+                      <input type="text" placeholder="Create a Username" required ref="username" className="landing-input pass" />
+                      <input type="email" placeholder="Enter your Email" required ref="email" className="landing-input pass" />
+                      <input type="password" placeholder="Create a Password"required ref="password" className="landing-input pass" />
+                      <input type="password" placeholder="Confirm Password" ref="confirmPassword" className=" landing-input pass" />
+                      <input type="submit" value="Join Gauntlet!" className=" landing-inputButton" />
+                    </form>
                 </div>
               </div>
+              {/*{this.handleGallery(this.state.cover)}*/}
             </div>
           </div>
             <div className="text-center container gallery">
-              <h2>CHALLENGES</h2>  
+              {/*<h2>CHALLENGES</h2>  */}
                 <div className='row'>  
-                  {this.handleGallery('videos')}
+                  {/*{this.handleGallery('videos')}*/}
                 </div>
             </div>
             <div className="text-center container gallery">
-              <h3>Most Recent Photos</h3>
+              {/*<h3>Most Recent Photos</h3>*/}
                 <div className='row'>
-                  {this.handleGallery()}
+                  {/*{this.handleGallery()}*/}
                 </div>
             </div>
         </div>
