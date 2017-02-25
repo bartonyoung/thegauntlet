@@ -108,6 +108,12 @@ let actions = {
       type: 'ADD_MESSAGE',
       payload: message
     };
+  },
+  getMessages: function(messages) {
+    return {
+      type: 'GET_MESSAGES',
+      payload: messages
+    };
   }
 };
 

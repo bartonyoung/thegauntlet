@@ -260,7 +260,7 @@ class ProfileContent extends React.Component {
       toUser_id: window.sessionStorage.newUser_id,
       created_at: created_at
     };
-    $.post('/api/message', message).done(data => {
+    $.post('/api/messages', message).done(data => {
       console.log('message', data);
       outer.props.dispatch(actions.addMessage(data));
       this.refs.message.value = '';

@@ -67,12 +67,18 @@ class NavBar extends React.Component {
     });
   } 
 
+
   handleNav() {
     if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
+                <li>
+                  <a href="#">
+                    <span className="glyphicon glyphicon-envelope"></span>
+                  </a>
+                </li>
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
