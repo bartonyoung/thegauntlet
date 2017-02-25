@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import NavBar from './Nav.jsx';
 import { Link } from 'react-router';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 
 class Landing extends React.Component {
   constructor(props) {
@@ -126,18 +126,18 @@ class Landing extends React.Component {
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
-                <img className="img-landing" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
+                <img className="img-landing" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
               </div>;
       });
     }else if(type === undefined){
       // return <img id="gauntlet" src="" alt=""/>
      return  <div className="landing-cover-video" >
                 <ReactPlayer
-                  volume={0} 
-                  controls={true} 
-                  className="video-cover" 
-                  url='https://www.youtube.com/watch?v=ic869w93roI' 
-                  playing 
+                  volume={0}
+                  controls={true}
+                  className="video-cover"
+                  url='https://www.youtube.com/watch?v=ic869w93roI'
+                  playing
                   width='640'
                   height='360'
                   />
@@ -149,11 +149,11 @@ class Landing extends React.Component {
   render() {
     return (
       <div>
-         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/> 
+         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
           <div className="container-fluid text-center main-content landing-cover">
             <div className='row header'>
               <div className="col-md-12 text-center landing-header">
-                <div className="col-md-8 text-center landing-header-left">  
+                <div className="col-md-8 text-center landing-header-left">
                     <h1 className="landing-intro" id="landing-title">Welcome to The Gauntlet!</h1>
                         {this.handleGallery(this.state.cover)}
                   <div className="description">
@@ -179,7 +179,7 @@ class Landing extends React.Component {
           </div>
             <div className="text-center container gallery">
               {/*<h2>CHALLENGES</h2>  */}
-                <div className='row'>  
+                <div className='row'>
                   {/*{this.handleGallery('videos')}*/}
                 </div>
             </div>
