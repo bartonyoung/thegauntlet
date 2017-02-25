@@ -55,8 +55,17 @@ class NavBar extends React.Component {
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.location.href = '/#/profile/' + window.sessionStorage.username;
+      $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
+        outer.props.dispatch(actions.setFavorites(data));
+      });       
+      $.get('/api/userChallenges', {
+        user_id: window.sessionStorage.newUser_id
+      }).done(challenges => {
+        console.log('get user challenges', challenges);
+        outer.props.dispatch(actions.getChallenges(challenges.reverse()));
+      });     
     });
-  }
+  } 
 
   handleNav() {
     if (window.sessionStorage.username) {
