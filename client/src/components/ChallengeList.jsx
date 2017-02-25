@@ -143,7 +143,7 @@ class ChallengeList extends React.Component {
     };
 
     let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.includes(challengeId)) {
+      if (this.props.favorites.some(challenge => challenge.id === challengeId)) {
         return (
           <button className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
