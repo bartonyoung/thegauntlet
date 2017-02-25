@@ -46,7 +46,7 @@ class App extends React.Component {
       <div>
       <Router history={hashHistory}>
         <Route path="/" component={() => {
-          return <Landing auth={this.state.auth} handleLogout={this.handleLogout} />;
+          return <Landing auth={this.state.auth} handleLogout={this.handleLogout} handleAuth={this.handleAuth.bind(this)} />;
         }} />
         <Route path="/signup" component={() => {
           return <Signup handleAuth={this.handleAuth.bind(this)} />;
