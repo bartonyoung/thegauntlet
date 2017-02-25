@@ -21,6 +21,12 @@ class Profile extends React.Component {
       });
       outer.props.dispatch(actions.getResponses(responseArr));
     });
+    $.get('/api/messages', {
+      toUser_id: window.sessionStorage.user_id
+    }).done(messages => {
+      console.log('get messages', messages);
+      outer.props.dispatch(actions.getMessages(messages));
+    })
     $.get('/api/comments', {
       user_id: window.sessionStorage.newUser_id
     }).done(data => {

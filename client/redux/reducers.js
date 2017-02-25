@@ -122,6 +122,10 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, messageObj);
+  } else if (action.type === 'GET_MESSAGES') {
+    return Object.assign({}, state, {
+      messages: action.payload
+    });
   } else {
     return state;
   }
