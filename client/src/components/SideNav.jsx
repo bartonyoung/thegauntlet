@@ -15,8 +15,7 @@ class SideNav extends React.Component {
     this.props.dispatch(actions.setCurrentCategory(category));
     if (category === 'LeaderBoard') {
       $.get('/api/ranks').then((rankData) => {
-        let users = rankData.filter(person =>person.upvotes > 0);
-        outer.props.dispatch(actions.getRanks(users));
+        outer.props.dispatch(actions.getRanks(rankData));
       });
     } else {
       $.get('/api/allchallenges').done(data => {
