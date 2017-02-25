@@ -281,7 +281,7 @@ class ProfileContent extends React.Component {
     });
 
     let whichFollowButton = (leaderId, user) => {
-      if (window.sessionStorage.getItem('key') !== user) {
+      if (window.sessionStorage.username !== user) {
         if (this.props.leaders.includes(leaderId)) {
           return (
             <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
@@ -295,22 +295,6 @@ class ProfileContent extends React.Component {
             </button>
           );
         }
-      }
-    };
-
-    let whichButton = (leaderId) => {
-      if (this.props.leaders.includes(leaderId)) {
-        return (
-          <button className="btn btn-default btn-sm pull-right"onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm pull-right" onClick={() => this.followTheLeader(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
-          </button>
-        );
       }
     };
 
@@ -438,7 +422,7 @@ class ProfileContent extends React.Component {
                   <h4>{notification.title}</h4>
                   <h5>{notification.description}</h5>
                   <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                  {whichButton(notification.user_id)}
+                  {whichFollowButton(notification.user_id, notification.username)}
                   {whichFavoriteIcon(notification.user_id)}
                   <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
                 </div>
@@ -544,10 +528,10 @@ class ProfileContent extends React.Component {
           {Lastname(this.props.user[0].lastname, this.props.user[0].scott, target)}
           {Email(this.props.user[0].email, this.props.user[0].scott, target)}
           Rank# {this.props.ranks.map((rank, index) => {
-              return {username: rank.username, rank: index + 1};
+            return {username: rank.username, rank: index + 1};
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
-          Followers: {this.props.followers.length} {whichButton(this.props.user[0].scott)} <br />
+          Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
         </div><br/>
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
