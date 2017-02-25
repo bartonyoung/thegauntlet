@@ -44,7 +44,7 @@ class Dash extends React.Component {
             <div className="col col-md-2">
               <SideNav />
             </div>
-              <ChallengeTable dispatch={this.props.dispatch} />
+              <ChallengeList dispatch={this.props.dispatch} />
           </div>
         </div>
       </div>
