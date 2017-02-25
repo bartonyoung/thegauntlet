@@ -18,7 +18,7 @@ app.use(require('express-session')({
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: 'hrsf70t',
+    password: '',
     database: 'thegauntlet'
   })
 })
