@@ -523,6 +523,7 @@ class ProfileContent extends React.Component {
         );
       }
     };
+
     let Email = (email, id, user) => {
       if (!this.state.third) {
         return (
@@ -541,11 +542,13 @@ class ProfileContent extends React.Component {
       }
     };
 
-    // let renderRank() {
-    //   ranks.map((rank, index) => {
-
-    //   }
-    // }
+    let sendMessage = () => {
+      if (window.sessionStorage.username !== window.sessionStorage.newUsername) {
+        return <button onClick={() => this.onSendMessageClick()}>Send a message</button>;
+      } else {
+        return <div></div>;
+      }
+    };
 
     let target = this.props.user[0].username;
 
@@ -570,6 +573,7 @@ class ProfileContent extends React.Component {
           }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
             {this.props.user[0].upvotes}) <br />
           Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
+          {sendMessage()}
         </div><br/>
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
