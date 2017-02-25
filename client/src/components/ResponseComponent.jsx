@@ -255,8 +255,7 @@ class ResponseComponent extends React.Component {
             {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
           </div>
           <div className="col-lg-7 response-info">
-            
-            <div>{this.props.response.title}</div>
+            <div><a href="javasript:void(0)" onClick={() => { this.props.onResponseTitleClick(this.props.response); }}>{this.props.response.title}</a></div>
             <div><Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link></div>
             <div>{`Upvotes: ${this.props.response.upvotes}`}</div>
           </div>  

@@ -16,7 +16,7 @@ class ChallengeComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.sortResponses = this.sortResponses.bind(this);
-
+    this.onResponseTitleClick = this.onResponseTitleClick.bind(this);
     this.state = {
       isEditing: false,
       currentVideo: null
@@ -42,7 +42,7 @@ class ChallengeComponent extends React.Component {
     });
     
     $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
-      // outer.props.dispatch(actions.getChallenges(data));
+      outer.props.dispatch(actions.getChallenges(data));
       this.setState({currentVideo: data[0]});
     });
   }
@@ -152,6 +152,11 @@ class ChallengeComponent extends React.Component {
       }
       outer.props.dispatch(actions.getResponses(data));
     });
+  }
+
+  onResponseTitleClick(response) {
+    // console.log('THIS IS THE RESPONSE!', response);
+    this.setState({currentVideo: response});
   }
 
     // <button className="btn  btn-default btn-sm">
@@ -274,7 +279,7 @@ class ChallengeComponent extends React.Component {
                   </div>
                 </div>
 
-                <ResponseList />
+                <ResponseList onResponseTitleClick={this.onResponseTitleClick}/>
 
               </div>
             </div>
