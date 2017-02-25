@@ -1,5 +1,3 @@
-/*@import url('https://fonts.googleapis.com/css?family=Baloo');*/
-/*@import url('https://fonts.googleapis.com/css?family=Baloo|Limelight');*/
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Ubuntu');
 
 body{
@@ -14,11 +12,9 @@ body{
 p{ 
   font-size: 20px;
   color: #4C4C4C;
-  /*font-weight: bold;*/
 }
 
 h2{
-  /*TODOS*/
 }
 
 h4{
