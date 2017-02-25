@@ -69,7 +69,8 @@ class ChallengeComponent extends React.Component {
               filename: resp,
               parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
-              username: window.sessionStorage.username
+              username: window.sessionStorage.username,
+              to: window.sessionStorage.newUsername
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -237,6 +238,7 @@ class ChallengeComponent extends React.Component {
       }
     };
 
+
     if (this.state.currentVideo) {
       let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
       return (
@@ -271,13 +273,12 @@ class ChallengeComponent extends React.Component {
                     <button className="button response-button" onClick={() => { this.sortResponses('top'); }}>TOP</button>
                   </div>
                 </div>
-                
+
                 <ResponseList />
-                
+
               </div>
-            </div>  
+            </div>
           </div>
-          
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
               <div className='row current-media-row'>

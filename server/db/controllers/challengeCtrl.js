@@ -69,7 +69,6 @@ module.exports = {
     .from('challenges')
     .where({id: req.params.id})
     .then(data =>{
-      console.log(data);
       res.json(data);
     })
     .catch((err) => {
@@ -111,7 +110,6 @@ module.exports = {
 
   getUserChallenges: (req, res) => {
     let id = req.query.user_id;
-    console.log('HELLO!!', id);
     db.select().from('challenges').where({user_id: id}).innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where({parent_id: null}).then(data => {
       res.json(data);
     });
@@ -119,7 +117,6 @@ module.exports = {
 
   upvote: (req, res) => { //CHECK: Should fix upvote spam but needs to be tested
     let vote = req.body; //req.body should have challenge_id and vote = 1
-    console.log('THIS IS THE VOTE', vote);
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
       console.log('THIS IS THE USERDATA', userData);
       db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
@@ -191,7 +188,7 @@ module.exports = {
 
   challengeSearch: (req, res) => {
     let search = req.query.search;
-    db.select().from('challenges').where('title', 'like', `%${search}%`).innerJoin('users', 'challenges.user_id', 'users.id').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+    db.select().from('challenges').where('title', 'like', `%${search}%`).innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
       res.json(data);
     });
   }

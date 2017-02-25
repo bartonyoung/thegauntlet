@@ -31,7 +31,9 @@ class NavBar extends React.Component {
               description: outer.refs.description.value,
               category: outer.refs.category.value,
               filename: resp,
-              created_at: created_at
+              created_at: created_at,
+              username: window.sessionStorage.username,
+              to: null
             },
             success: function(data) {
               outer.props.dispatch(actions.addChallenge(data));
