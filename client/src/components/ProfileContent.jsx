@@ -25,7 +25,7 @@ class ProfileContent extends React.Component {
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
-    });
+    }); 
   }
 
   numFollowers () {
@@ -228,12 +228,20 @@ class ProfileContent extends React.Component {
     this.changeProfileView('all');
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-    });
+      $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
+        outer.props.dispatch(actions.setFavorites(data));
+      });      
+      $.get('/api/userChallenges', {
+        user_id: window.sessionStorage.newUser_id
+      }).done(challenges => {
+        outer.props.dispatch(actions.getChallenges(challenges.reverse()));
+      });      
+    });    
   }
 
   sendMessage() {
 
-  }
+  }     
 
   render() {
     let checkFile = (type, challenge) => {
@@ -266,7 +274,18 @@ class ProfileContent extends React.Component {
       }
     });
 
-
+    let favoritedChallenges = this.props.favorites.map((challenge, i) => {
+      if (challenge) { 
+        return (
+          <div>
+            <h4>{challenge.title}</h4>
+            <p>{challenge.description}</p>
+            {checkFile(challenge.filename.split('.').pop(), challenge)}
+            <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
+          </div>  
+        ); 
+      }
+    });             
 
     let mappedResponses = this.props.responses.map(response => {
       if (response) {
@@ -303,7 +322,7 @@ class ProfileContent extends React.Component {
     };
 
     let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.includes(challengeId)) {
+      if (this.props.favorites.some(challenge => challenge.id === challengeId)) {
         return (
           <button className="btn btn-default btn-sm pull-right">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
@@ -379,6 +398,13 @@ class ProfileContent extends React.Component {
               {this.props.user[0].username + '\'s responses:'}
               {mappedResponses}
             </div>
+          </div>
+        );
+      } else if (this.props.profileView === 'favorites') {
+        return (
+          <div>
+            Favorites:  
+            {favoritedChallenges}
           </div>
         );
       } else if (this.props.profileView === 'followers') {
@@ -547,6 +573,7 @@ class ProfileContent extends React.Component {
         </div><br/>
         <div>
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
+          <button onClick={() => this.changeProfileView('favorites')}>Favorites</button>
           <button onClick={() => this.changeProfileView('followers')}>Followers</button>
           {renderMailbox()}
         </div>

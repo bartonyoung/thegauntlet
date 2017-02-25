@@ -168,15 +168,16 @@ module.exports = {
   },
 
   getFavorites: (req, res) => {
-    db.select('scott').from('users').where({username: req.session.displayName})
-      .then( userData => {
-        db.select('challenge_id').from('favorites').where({user_id: userData[0].scott})
-          .then(favorites =>
-            res.json(favorites.map(favorite => {
-              return parseInt(favorite.challenge_id);
-            }))
-          );
+    let username = req.query.username || req.session.displayName;
+    db.select('scott').from('users').where({username: username})
+    .then( userData => {
+      db.select().from('favorites')
+      .innerJoin('challenges', 'challenges.id', 'favorites.challenge_id')
+      .where('favorites.user_id', '=', userData[0].scott)
+      .then(favorites => {
+        res.json(favorites);
       });
+    });
   },
 
   viewed: (req, res) => {
