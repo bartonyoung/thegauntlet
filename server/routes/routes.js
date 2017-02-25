@@ -4,6 +4,7 @@ const s3Controller = require('../db/controllers/s3Ctrl.js');
 const challengeController = require('../db/controllers/challengeCtrl.js');
 const commentController = require('../db/controllers/commentCtrl.js');
 const followerController = require('../db/controllers/followerCtrl.js');
+const messageController = require('../db/controllers/messageCtrl.js');
 
 routes.post('/signup', userControllers.signup);
 routes.post('/login', userControllers.login);
@@ -39,4 +40,6 @@ routes.get('/isUser', userControllers.isUser);
 routes.get('/challengeSearch', challengeController.challengeSearch);
 routes.post('/userUpload', s3Controller);
 routes.post('/s3', challengeController.s3);
+routes.post('/message', messageController.sendOne);
+routes.get('/message', messageController.getAll);
 module.exports = routes;

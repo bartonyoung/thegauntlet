@@ -248,10 +248,22 @@ class ProfileContent extends React.Component {
   }     
 =======
   onSendMessageClick() {
-    console.log("sending")
+    let outer = this;
     this.setState({
       messageDisplay: 'unset',
       formDisplay: 'none'
+    });
+    let created_at = new Date().getTime();
+    let message = {
+      message: this.refs.message.value,
+      fromUser_id: window.sessionStorage.user_id,
+      toUser_id: window.sessionStorage.newUser_id,
+      created_at: created_at
+    };
+    $.post('/api/message', message).done(data => {
+      console.log('message', data);
+      outer.props.dispatch(actions.addMessage(data));
+      this.refs.message.value = '';
     });
   }
 >>>>>>> Display form input for sending a message on button click, and hide form input on send click

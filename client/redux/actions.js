@@ -92,6 +92,12 @@ let actions = {
       type: 'UPDATE_POST',
       payload: post
     };
+  },
+  addMessage: function(message) {
+    return {
+      type: 'ADD_MESSAGE',
+      payload: message
+    };
   }
 };
 
