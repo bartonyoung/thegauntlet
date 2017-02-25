@@ -4,7 +4,7 @@ const knex = require('knex')({
   connection: {
     host: '127.0.0.1',
     user: 'root',
-    password: 'hrsf70t',
+    password: '',
     database: 'thegauntlet'
   },
   useNullAsDefault: true

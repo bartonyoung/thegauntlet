@@ -14,8 +14,8 @@ class Landing extends React.Component {
       auth: this.props.auth,
       cover:undefined
     };
-    this.onChallengeClick = this.onChallengeClick.bind(this);
   }
+
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges')
@@ -23,29 +23,6 @@ class Landing extends React.Component {
       data.reverse();
       outer.props.dispatch(actions.getChallenges(data));
     });
-  }
-
-  onChallengeClick(challenge) {
-    let outer = this;
-       window.sessionStorage.setItem('title', challenge.title);
-      window.sessionStorage.setItem('id', challenge.id);
-      window.sessionStorage.setItem('description', challenge.description);
-      window.sessionStorage.setItem('category', challenge.category);
-      window.sessionStorage.setItem('filename', challenge.filename);
-      window.sessionStorage.setItem('upvotes', challenge.upvotes);
-      window.sessionStorage.setItem('views', challenge.views);
-      window.sessionStorage.setItem('username', challenge.username);
-      window.sessionStorage.removeItem('respTitle');
-      window.sessionStorage.removeItem('respId');
-      window.sessionStorage.removeItem('respDescription');
-      window.sessionStorage.removeItem('respCategory');
-      window.sessionStorage.removeItem('respFilename');
-      window.sessionStorage.removeItem('respUpvotes');
-      window.sessionStorage.removeItem('respViews');
-      window.sessionStorage.removeItem('respUsername');
-      $.get('/api/profile/' + window.sessionStorage.username).done(user => {
-        outer.props.dispatch(actions.addUser(user));
-      });
   }
 
   handleSignup(e) {
@@ -67,8 +44,8 @@ class Landing extends React.Component {
           this.refs.username.value = '';
           window.location.href = '#/';
         } else {
-          window.sessionStorage.setItem('key', data);
-          window.sessionStorage.setItem('username', data);
+          window.sessionStorage.setItem('user_id', data.scott);
+          window.sessionStorage.setItem('username', data.username);
           this.props.handleAuth(() => {
             window.location.href = '#/dash';
           });
@@ -110,7 +87,7 @@ class Landing extends React.Component {
     if (type === 'videos') {
       (function randomIndex(array) {
         let index = Math.floor(Math.random()*Array.length);
-         outer.state.coverVideo = array[index];
+        outer.state.coverVideo = array[index];
       })(gallery);
        // <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"></source>
                   // <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />
@@ -122,29 +99,31 @@ class Landing extends React.Component {
                   </video>
               </div>;
       });
-    } else if(type === 'videos') {
+    } else if (type === 'videos') {
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
                 <img className="img-landing" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
               </div>;
       });
-    }else if(type === undefined){
+    } else if (type === undefined) {
       // return <img id="gauntlet" src="" alt=""/>
-     return  <div className="landing-cover-video" >
-                <ReactPlayer
-                  volume={0}
-                  controls={true}
-                  className="video-cover"
-                  url='https://www.youtube.com/watch?v=ic869w93roI'
-                  playing
-                  width='640'
-                  height='360'
-                  />
-              </div>
+      return (
+        <div className="landing-cover-video" >
+          <ReactPlayer
+            volume={0}
+            controls={true}
+            className="video-cover"
+            url='https://www.youtube.com/watch?v=ic869w93roI'
+            playing
+            width='640'
+            height='360'
+            />
+        </div>
+        );
+      }
     }
 
-  }
 
   render() {
     return (
