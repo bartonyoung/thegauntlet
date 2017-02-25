@@ -33,13 +33,17 @@ class Profile extends React.Component {
     $.get('/api/userChallenges', {
       user_id: window.sessionStorage.newUser_id
     }).done(challenges => {
-      console.log('get user challenges', challenges)
       outer.props.dispatch(actions.getChallenges(challenges.reverse()));
     });
     if (!outer.props.user) {
       $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
         outer.props.dispatch(actions.addUser(user));
       });
+    }
+    if (outer.props.favorites.length === 0) {
+      $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
+        outer.props.dispatch(actions.setFavorites(data));
+      });    
     }
   }
 
