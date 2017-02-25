@@ -1,39 +1,104 @@
-/*@import url('https://fonts.googleapis.com/css?family=Baloo');*/
-@import url('https://fonts.googleapis.com/css?family=Baloo|Limelight');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Ubuntu');
+
 body{
   background-color: white;
+  font-family: 'Ubuntu', sans-serif;
+  /*background-image: url('http://pre04.deviantart.net/f80e/th/pre/i/2012/163/6/e/clean_background_with_light_by_mariogembell-d53aspz.jpg');*/
+  /*background-repeat: no-repeat;
+  background-position: center;
+  background-size:100% 100%;*/
+}
+
+p{ 
+  font-size: 20px;
+  color: #4C4C4C;
+}
+
+h2{
+}
+
+h4{
+  color: black;
+}
+
+.landing-cover {
+  margin-top: 50px;
+  min-height: 100vh;
+  height: 300px;
+  background-image: url('http://pre04.deviantart.net/f80e/th/pre/i/2012/163/6/e/clean_background_with_light_by_mariogembell-d53aspz.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:100% 100%;
+}
+
+.landing-header{
+  font-family: 'Ubuntu', sans-serif;
   /*background-image: url('https://openclipart.org/image/2400px/svg_to_png/265161/Jumping-Man-Silhouette-3.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size:100% 100%;*/
 }
+/*.landing-intro {
+  position: relative;
+  top:40px;
+  margin: 0 auto;
+}*/
 
-.main-content {
+#landing-title{
+  color: white;
+  position: relative;
+  top:100px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  font-size:5em;
+  font-weight:bolder;
+  text-shadow: 4px 2px 3px #000000;
+} 
+
+.landing-cover-video{
+  position: relative;
+  top:120px;
+}
+.video-landing {
+    height: 200px;
+    width: 100%;
+    border: 1px solid black;
+}
+.video-cover{
+    height: 300px;
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border: 1px solid black;
+}
+.img-landing {
+    height: 200px;
+    width: 100%;
+    border: 1px solid black;
+}
+
+#gauntlet {
+  width:15%;
+  height:15%;
   margin-top: 50px;
-  min-height: 70vh;
-  height: 300px;
-  /*background-image: url();*/
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size:100% 100%;
-
+}
+.description{
+  margin-top: 500px;
+  font-weight: bold;
+  /*border: 1px dashed green;*/
 }
 
 .header {
-  position:relative;
-  left:-300px;
-  top:100px;
+  padding-top: 0px;
+  /*position:absolute;
+  left:350px;
+  top:50px;*/
+}
+.description {
+  margin-top:200px;
+  text-shadow: 1px 1px 1px #ededed;
 }
  
-#title{
-  color: grey;
-  font-size: 3em;
-  font-weight:;
-  /*font-family: 'Baloo', cursive;*/
-
-  text-shadow: 2px 2px 2px #000000;
-} 
-
 .gallery {
   margin-bottom:20px;
 }
@@ -42,13 +107,72 @@ body{
   border: 1px solid #ededed;
 }
 
-p, h3 { 
-  font-size: 20px;
-  color: orange;
-  /*font-weight: bold;*/
+.landing-register {
+  position: relative;
+  top:200px;
+  left:-15px;
+  /*border: 1px dashed red;*/
 }
 
-h4{
-  color: white;
+.landing-header-left{
+  /*background-image: url('https://img.clipartfox.com/f12ee2b00765abf3a86ccc537a501264_mac-mac-clipart-desktop_1254-1000.png'); */
+  background-size:70% 50%;
+  background-repeat: no-repeat;
+  /*background-position: center;*/
+  background-position-x: 280px;
+  background-position-y: 120px;
+  /*border: 1px dashed blue;*/
 }
+
+.landing-header-right{
+  height: 800px;
+  /*border: 1px dashed blue;*/
+}
+
+.landing-header-left{
+  height: 800px;
+  /*border: 1px dashed blue;*/
+}
+
+.landing-input {
+  color:black;
+  width: 55%;
+  height: 35px;
+  display: block;
+  margin:0 0 10px 0;
+  padding: 0 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  /*border-bottom: 2px solid #ebebeb;*/
+}
+
+.landing-inputButton {
+  position: relative;
+  width: 55%;
+  height: 35px;
+  display: block;
+  color: white;
+  background-color:#3E3E3E; 
+  border: none;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 5px 0 #2CADAD;
+  -moz-box-shadow: 0 5px 0 #2CADAD;
+  box-shadow: 2px 3px 0 #2CADAD;
+}
+
+.landing-inputButton:hover {
+  top: 2px;
+  -webkit-box-shadow: 0 3px 0 #2CADAD;
+  -moz-box-shadow: 0 3px 0 #2CADAD;
+  box-shadow: 0 3px 0 orange;
+}
+.landing-inputButton:active {
+  top: 5px;
+  box-shadow: none;
+}
+.landing-inputButton:focus {
+  outline: none;
+}
+
+
 
