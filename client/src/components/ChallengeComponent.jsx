@@ -155,7 +155,6 @@ class ChallengeComponent extends React.Component {
   }
 
   onResponseTitleClick(response) {
-    // console.log('THIS IS THE RESPONSE!', response);
     this.setState({currentVideo: response});
   }
 
