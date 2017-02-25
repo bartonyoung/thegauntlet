@@ -1,5 +1,4 @@
 import React from 'react';
-import ChallengeTable from './ChallengeTable.jsx';
 import SideNav from './SideNav.jsx';
 import actions from '../../redux/actions';
 import NavBar from './Nav.jsx';
@@ -44,8 +43,14 @@ class Dash extends React.Component {
             <div className="col col-md-2">
               <SideNav />
             </div>
-              <ChallengeList dispatch={this.props.dispatch} />
-          </div>
+              <div className="col col-md-8 col-lg-8">
+                <div className="container-fluid">
+                  <div className="row">
+                    <ChallengeList dispatch={this.props.dispatch} />
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
     );

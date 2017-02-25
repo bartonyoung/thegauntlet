@@ -14,8 +14,8 @@ class Landing extends React.Component {
       auth: this.props.auth,
       cover: undefined
     };
-    this.onChallengeClick = this.onChallengeClick.bind(this);
   }
+
   componentDidMount() {
     let outer = this;
     $.get('/api/allChallenges')
@@ -25,28 +25,6 @@ class Landing extends React.Component {
     });
   }
 
-  onChallengeClick(challenge) {
-    let outer = this;
-    window.sessionStorage.setItem('title', challenge.title);
-    window.sessionStorage.setItem('id', challenge.id);
-    window.sessionStorage.setItem('description', challenge.description);
-    window.sessionStorage.setItem('category', challenge.category);
-    window.sessionStorage.setItem('filename', challenge.filename);
-    window.sessionStorage.setItem('upvotes', challenge.upvotes);
-    window.sessionStorage.setItem('views', challenge.views);
-    window.sessionStorage.setItem('username', challenge.username);
-    window.sessionStorage.removeItem('respTitle');
-    window.sessionStorage.removeItem('respId');
-    window.sessionStorage.removeItem('respDescription');
-    window.sessionStorage.removeItem('respCategory');
-    window.sessionStorage.removeItem('respFilename');
-    window.sessionStorage.removeItem('respUpvotes');
-    window.sessionStorage.removeItem('respViews');
-    window.sessionStorage.removeItem('respUsername');
-    $.get('/api/profile/' + window.sessionStorage.username).done(user => {
-        outer.props.dispatch(actions.addUser(user));
-      });
-  }
 
   handleSignup(e) {
     e.preventDefault();
@@ -67,8 +45,8 @@ class Landing extends React.Component {
           this.refs.username.value = '';
           window.location.href = '#/';
         } else {
-          window.sessionStorage.setItem('key', data);
-          window.sessionStorage.setItem('username', data);
+          window.sessionStorage.setItem('user_id', data.scott);
+          window.sessionStorage.setItem('username', data.username);
           this.props.handleAuth(() => {
             window.location.href = '#/dash';
           });
@@ -126,7 +104,7 @@ class Landing extends React.Component {
       return gallery.map(challenge =>{
         return <div className="col-md-4">
                 <h4 onClick={() => this.onChallengeClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
-                <img className="img-landing" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />        
+                <img className="img-landing" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />
               </div>;
       });
     } else if (type === undefined) {
@@ -143,17 +121,16 @@ class Landing extends React.Component {
                   />
               </div>;
     }
-
   }
 
   render() {
     return (
       <div>
-         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/> 
+         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
           <div className="container-fluid text-center main-content landing-cover">
             <div className='row header'>
               <div className="col-md-12 text-center landing-header">
-                <div className="col-md-8 text-center landing-header-left">  
+                <div className="col-md-8 text-center landing-header-left">
                     <h1 className="landing-intro" id="landing-title">Welcome to The Gauntlet!</h1>
                         {this.handleGallery(this.state.cover)}
                   <div className="description">
@@ -179,7 +156,7 @@ class Landing extends React.Component {
           </div>
             <div className="text-center container gallery">
               {/*<h2>CHALLENGES</h2>  */}
-                <div className='row'>  
+                <div className='row'>
                   {/*{this.handleGallery('videos')}*/}
                 </div>
             </div>
@@ -188,7 +165,7 @@ class Landing extends React.Component {
                 <div className='row'>
                   {/*{this.handleGallery()}*/}
                 </div>
-            </div>
+            </div>git
         </div>
     );
   }

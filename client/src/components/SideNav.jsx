@@ -50,7 +50,7 @@ class SideNav extends React.Component {
         <form>
           <input type="text" required ref="search" placeholder="Search"/>
           <button type="button" onClick={() => this.challengeSearch()}>
-            <span className="glyphicon glyphicon-search"></span> 
+            <span className="glyphicon glyphicon-search"></span>
           </button>
         </form>
         <div className="list-group side-nav">
