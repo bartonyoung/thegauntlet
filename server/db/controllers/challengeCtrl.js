@@ -56,6 +56,12 @@ module.exports = {
     });
   },
 
+  getEveryChallenge: (req, res) => {
+    db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
+      res.json(data);
+    });   
+  },
+
   getAllResponses: (req, res) => {
     let id = req.query.parent_id;
     db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('challenges.parent_id', '=', id).then(data => {
@@ -64,7 +70,6 @@ module.exports = {
   },
 
   getOne: (req, res) => {
-    console.log('HELLO');
     db.select()
     .from('challenges')
     .where({id: req.params.id})

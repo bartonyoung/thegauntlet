@@ -12,7 +12,6 @@ class CommentList extends React.Component {
   }
 
   commentSubmit(e) {
-    console.log('HI BARTON')
     e.preventDefault();
     let outer = this;
     let created_at = new Date().getTime();

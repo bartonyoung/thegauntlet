@@ -14,6 +14,7 @@ routes.put('/profile', userControllers.updateProfile);
 routes.get('/profile/:username', userControllers.getUser);
 routes.post('/challenge', challengeController.addOne);
 routes.get('/allChallenges', challengeController.getAll);
+routes.get('/everyChallenge', challengeController.getEveryChallenge);
 routes.get('/challenge/:id', challengeController.getOne);
 routes.put('/challenge/:id', challengeController.updateOne);
 routes.delete('/challenge/:id', challengeController.deleteOne);

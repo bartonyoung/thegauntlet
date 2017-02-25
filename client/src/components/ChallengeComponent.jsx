@@ -41,11 +41,18 @@ class ChallengeComponent extends React.Component {
       outer.props.dispatch(actions.setFavorites(data));
     });
     
-    $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
-      outer.props.dispatch(actions.getChallenges(data));
-      this.setState({currentVideo: data[0]});
+    $.get('/api/everyChallenge').done(data => {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === parseInt(window.sessionStorage.challengeId)) {
+          outer.props.dispatch( actions.getChallenges( [data[i]] ));
+        }
+        if (data[i].id === parseInt(window.sessionStorage.currentId)) {
+          this.setState({currentVideo: data[i]});   
+        }
+      }
     });
   }
+
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#upload'));
