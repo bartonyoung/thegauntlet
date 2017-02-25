@@ -136,7 +136,7 @@ class Landing extends React.Component {
                   volume={0} 
                   controls={true} 
                   className="video-cover" 
-                  url='https://www.youtube.com/watch?v=6-dyNQXYgxQ' 
+                  url='https://www.youtube.com/watch?v=ic869w93roI' 
                   playing 
                   width='640'
                   height='360'
