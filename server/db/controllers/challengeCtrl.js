@@ -7,6 +7,7 @@ const s3 = require('./s3Ctrl.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
+    console.log('THIS IS THE challenge', challenge);
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -26,6 +27,7 @@ module.exports = {
 
   addOneResponse: (req, res) => {
     const challenge = req.body;
+    console.log('THIS IS THE RESPONSE', challenge);
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -62,6 +64,7 @@ module.exports = {
   },
 
   getOne: (req, res) => {
+    console.log('HELLO');
     db.select()
     .from('challenges')
     .where({id: req.params.id})
@@ -114,8 +117,8 @@ module.exports = {
 
   upvote: (req, res) => { //CHECK: Should fix upvote spam but needs to be tested
     let vote = req.body; //req.body should have challenge_id and vote = 1
-
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      console.log('THIS IS THE USERDATA', userData);
       db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
         if (exists.length) {
           res.sendStatus(404);
@@ -125,6 +128,7 @@ module.exports = {
             db.select().from('users').where({scott: data[0].user_id}).increment('upvotes', 1).then(data => {
               db('votes').insert(vote).then( () => {
                 db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
+                  console.log('this is vote data', voteData);
                   db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
                     res.sendStatus(201);
                   });

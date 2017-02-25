@@ -391,6 +391,7 @@ class ProfileContent extends React.Component {
           </div>
         );
       } else if (this.props.profileView === 'mailbox') {
+
         let notifications = [];
 
         this.props.responses.forEach(response => {

@@ -16,9 +16,10 @@ class ChallengeComponent extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.sortResponses = this.sortResponses.bind(this);
-
+    this.onResponseTitleClick = this.onResponseTitleClick.bind(this);
     this.state = {
-      isEditing: false
+      isEditing: false,
+      currentVideo: null
     };
   }
 
@@ -28,17 +29,21 @@ class ChallengeComponent extends React.Component {
       parent_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getResponses(data.reverse()));
-    });
+    }); 
+
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getComments(data.reverse()));
     });
+
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
     });
+    
     $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
       outer.props.dispatch(actions.getChallenges(data));
+      this.setState({currentVideo: data[0]});
     });
   }
   handleSubmit() {
@@ -62,7 +67,7 @@ class ChallengeComponent extends React.Component {
               description: outer.refs.description.value,
               category: '',
               filename: resp,
-              parent_id: window.sessionStorage.challengeId,
+              parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
               username: window.sessionStorage.username,
               to: window.sessionStorage.newUsername
@@ -134,21 +139,40 @@ class ChallengeComponent extends React.Component {
   }
 
   sortResponses(sortBy) {
+    const outer = this;
     $.get('/api/response/', {
-      parent_id: window.sessionStorage.getItem('id')
+      parent_id: window.sessionStorage.getItem('challengeId')
     }).then( data => {
-      console.log(data);
+      if (sortBy === 'top') {
+        data = data.sort( (a, b) => {
+          b.upvotes - a.upvotes;
+        });
+      } else {
+        data = data.reverse();
+      }
+      outer.props.dispatch(actions.getResponses(data));
     });
   }
 
+  onResponseTitleClick(response) {
+    this.setState({currentVideo: response});
+  }
+
+    // <button className="btn  btn-default btn-sm">
+    //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
+    //       </button>
   render() {
     let taskButtons = (challenge) => {
       if (challenge.username === window.sessionStorage.username) {
         if (!this.state.isEditing) {
           return (
             <div>
-              <button className="btn btn-large btn-default edit" onClick={() => this.editChallenge()}>Edit</button>
-              <button className="btn btn-large btn-default delete" onClick={() => this.deleteChallenge(challenge)}>Delete</button>
+              <button className="btn btn-sm btn-default task-button">
+                <span className="glyphicon glyphicon-edit" onClick={() => this.editChallenge()}></span>
+              </button>
+              <button className="btn btn-sm btn-default task-button" onClick={() => this.deleteChallenge(challenge)}>
+                <span className="glyphicon glyphicon-remove" onClick={() => this.deleteChallenge()}></span>
+              </button>
             </div>
           );
         }
@@ -218,26 +242,14 @@ class ChallengeComponent extends React.Component {
       }
     };
 
-        let challenge = this.props.challenges[0];
-        if (challenge) {
-        let timeDifferenceInSeconds = (new Date().getTime() - challenge.created_at) / 1000;
 
-        return (
-
+    if (this.state.currentVideo) {
+      let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
+      return (
         <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
-            <div className="col-lg-4 col-lg-offset-1 challengeInfo mainRowColumn">
-              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-            </div>
-            <div className="col-lg-2 challengeInfo mainRowColumn">
-              <h3 className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></h3>
-              <p className='main-challenge-description'>{challenge.description}</p>
-              {calculateTime(timeDifferenceInSeconds)}
-              {taskButtons(challenge)}
-              <p>{'Upvotes: ' + challenge.upvotes}</p>
-            </div>
-            <div className="col-lg-4 col-lg-offset-1 mainRowColumn outerBar">
+            <div className="col-lg-4 col-lg-offset-8 mainRowColumn outerBar">
               <div className="col-lg-4 fixed">
                 <div className="row text-center">
                   <div className="response-buttons-top">
@@ -266,19 +278,34 @@ class ChallengeComponent extends React.Component {
                   </div>
                 </div>
 
-                <ResponseList />
+                <ResponseList onResponseTitleClick={this.onResponseTitleClick}/>
 
               </div>
             </div>
           </div>
+          <div className="row current-viewing-row">
+           <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
+              <div className='row current-media-row'>
+                {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
+              </div>
+              <div className='row current-challenge-info-row'>
+                <div className="current-info">
+                  <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
+                  <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
+                  <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
+                </div> 
+                <div className="col-lg-6">
 
+                </div>
+              </div>
+            </div>            
+          </div>
+            
           <CommentList />
-
       </div>
-        );
-      } else {
-      return <div></div>;
+      );
     }
+    return <div>HI!</div>;
   }
 }
 
@@ -287,3 +314,20 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeComponent);
+              
+              // {calculateTime(timeDifferenceInSeconds)}
+
+
+
+            //   <div className="col-lg-4 col-lg-offset-1 challengeInfo mainRowColumn">
+            //   {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+            // </div>
+            // <div className="col-lg-2 challengeInfo mainRowColumn">
+            //   <p className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></p>
+            //   <p className='main-challenge-description'>{challenge.description}</p>
+            //   {taskButtons(challenge)}
+            //   <p>{'Upvotes: ' + challenge.upvotes}</p>
+            // </div>
+
+
+            

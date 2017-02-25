@@ -12,7 +12,7 @@ class Landing extends React.Component {
     super(props);
     this.state = {
       auth: this.props.auth,
-      cover:undefined
+      cover: undefined
     };
   }
 
@@ -24,6 +24,7 @@ class Landing extends React.Component {
       outer.props.dispatch(actions.getChallenges(data));
     });
   }
+
 
   handleSignup(e) {
     e.preventDefault();
@@ -86,7 +87,7 @@ class Landing extends React.Component {
     }
     if (type === 'videos') {
       (function randomIndex(array) {
-        let index = Math.floor(Math.random()*Array.length);
+        let index = Math.floor(Math.random() * Array.length);
         outer.state.coverVideo = array[index];
       })(gallery);
        // <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"></source>
@@ -108,22 +109,19 @@ class Landing extends React.Component {
       });
     } else if (type === undefined) {
       // return <img id="gauntlet" src="" alt=""/>
-      return (
-        <div className="landing-cover-video" >
-          <ReactPlayer
-            volume={0}
-            controls={true}
-            className="video-cover"
-            url='https://www.youtube.com/watch?v=ic869w93roI'
-            playing
-            width='640'
-            height='360'
-            />
-        </div>
-        );
-      }
+      return <div className="landing-cover-video" >
+                <ReactPlayer
+                  volume={0} 
+                  controls={true} 
+                  className="video-cover" 
+                  url='https://www.youtube.com/watch?v=ic869w93roI' 
+                  playing 
+                  width='640'
+                  height='360'
+                  />
+              </div>;
     }
-
+  }
 
   render() {
     return (
