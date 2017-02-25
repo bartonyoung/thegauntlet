@@ -14,6 +14,7 @@
     text-shadow: 2px 2px 4px #000000;
 }*/
 
+
 .register {
   width: 400px;
   margin: 0 auto;
@@ -41,7 +42,6 @@
   display: flex;
   height: 100%;
 }
-
 .input {
   color:black;
   width: 100%;
@@ -52,9 +52,10 @@
   border: none;
   border-bottom: 2px solid #ebebeb;
 }
+
 .input:focus {
   outline: none;
-  border-bottom-color: orange !important;
+  border-bottom-color: grey !important;
 }
 .input:hover {
   border-bottom-color: #dcdcdc;
@@ -66,10 +67,9 @@
 .pass:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 1000px white inset;
 }
-
 .inputButton {
   position: relative;
-  width: 85%;
+  width: 50%;
   height: 25px;
   display: block;
   margin: 30px auto 30px;
@@ -81,6 +81,13 @@
   -moz-box-shadow: 0 5px 0 #2CADAD;
   box-shadow: 0 5px 0 orange;
 }
+
+.landing-register {
+  margin:60px 100px 0 0;
+}
+
+
+
 .inputButton:hover {
   top: 2px;
   -webkit-box-shadow: 0 3px 0 #2CADAD;
