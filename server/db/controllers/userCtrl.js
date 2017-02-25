@@ -25,13 +25,14 @@ module.exports = {
                 username: username,
                 password: hash,
                 followers: 0,
-                upvotes: 0
+                upvotes: 0,
               })
                 .then(rows => {
                   req.session.displayName = username;
                   req.session.save(() => {
                     db.select('users.scott', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username)
                     .then(data => {
+                      console.log('signup data', data)
                       res.json(data[data.length - 1]);
                     });
                   });
@@ -65,6 +66,7 @@ module.exports = {
                 req.session.save(() => {
                   db.select('users.scott', 'users.firstname', 'users.lastname', 'users.email', 'users.profilepic', 'users.username', 'users.followers', 'users.upvotes').from('users').where('users.username', '=', username)
                     .then(data => {
+                      console.log('login data', data)
                       res.json(data[data.length - 1]);
                     });
                 });
