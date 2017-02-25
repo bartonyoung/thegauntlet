@@ -89,7 +89,7 @@ h4{
 .description{
   margin-top: 500px;
   font-weight: bold;
-  border: 1px dashed green;
+  /*border: 1px dashed green;*/
 }
 
 .header {
@@ -115,7 +115,7 @@ h4{
   position: relative;
   top:200px;
   left:-15px;
-  border: 1px dashed red;
+  /*border: 1px dashed red;*/
 }
 
 .landing-header-left{
@@ -125,17 +125,17 @@ h4{
   /*background-position: center;*/
   background-position-x: 280px;
   background-position-y: 120px;
-  border: 1px dashed blue;
+  /*border: 1px dashed blue;*/
 }
 
 .landing-header-right{
   height: 800px;
-  border: 1px dashed blue;
+  /*border: 1px dashed blue;*/
 }
 
 .landing-header-left{
   height: 800px;
-  border: 1px dashed blue;
+  /*border: 1px dashed blue;*/
 }
 
 .landing-input {
