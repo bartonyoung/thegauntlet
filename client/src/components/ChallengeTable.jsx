@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import ChallengeList from './ChallengeList.jsx';
 import path from 'path';
 import actions from '../../redux/actions.js';
@@ -30,4 +30,4 @@ const mapStateToProps = (state) => {
   return state;
 };
 
-export default connect(mapStateToProps)(ChallengeTable);
+export default connect(mapStateToProps)(ChallengeTable);*/
