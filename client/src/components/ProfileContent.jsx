@@ -422,7 +422,7 @@ class ProfileContent extends React.Component {
                   <h4>{notification.title}</h4>
                   <h5>{notification.description}</h5>
                   <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                  {whichButton(notification.user_id)}
+                  {whichFollowButton(notification.user_id, notification.username)}
                   {whichFavoriteIcon(notification.user_id)}
                   <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
                 </div>
