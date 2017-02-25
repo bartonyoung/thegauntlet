@@ -231,6 +231,10 @@ class ProfileContent extends React.Component {
     });
   }
 
+  sendMessage() {
+
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -509,6 +513,13 @@ class ProfileContent extends React.Component {
         );
       }
     };
+
+    // let renderRank() {
+    //   ranks.map((rank, index) => {
+
+    //   }
+    // }
+
     let target = this.props.user[0].username;
 
     return (
