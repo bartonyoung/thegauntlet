@@ -188,7 +188,7 @@ class Landing extends React.Component {
                 <div className='row'>
                   {/*{this.handleGallery()}*/}
                 </div>
-            </div>
+            </div>git
         </div>
     );
   }
