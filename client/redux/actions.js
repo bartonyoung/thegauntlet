@@ -103,6 +103,10 @@ let actions = {
     return {
       type: 'GET_DOWNVOTED',
       payload: downvote
+  addMessage: function(message) {
+    return {
+      type: 'ADD_MESSAGE',
+      payload: message
     };
   }
 };

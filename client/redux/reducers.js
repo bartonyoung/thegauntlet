@@ -114,6 +114,22 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, updateObj);
+  } else if (action.type === 'ADD_MESSAGE') {
+    let messageObj = {};
+
+    for (var keys in state) {
+      if (keys === 'messages') {
+        messageObj[keys] = [];
+        messageObj[keys].push(action.payload[0]);
+        state[keys].forEach(key => {
+          messageObj[keys].push(key);
+        });
+      } else {
+        messageObj[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, messageObj);
   } else {
     return state;
   }
