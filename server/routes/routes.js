@@ -40,6 +40,6 @@ routes.get('/isUser', userControllers.isUser);
 routes.get('/challengeSearch', challengeController.challengeSearch);
 routes.post('/userUpload', s3Controller);
 routes.post('/s3', challengeController.s3);
-routes.post('/message', messageController.sendOne);
+routes.post('/messages', messageController.sendOne);
 routes.get('/messages', messageController.getAll);
 module.exports = routes;

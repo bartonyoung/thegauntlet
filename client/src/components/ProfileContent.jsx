@@ -486,7 +486,31 @@ class ProfileContent extends React.Component {
             );
           }
         });
+
         return mappedNotifications;
+      } else if (this.props.profileView === 'messages' && window.sessionStorage.username === this.props.user[0].username) {
+        let mappedMessages = this.props.messages.map((message, i) => {
+          if (message) {
+            return (
+              <div>
+                <div>
+                  {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+                  <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
+                    <span className='messageUsername'>
+                      <strong>{message.username + ': '}</strong>
+                    </span>
+                    <span className='messageMessage'>
+                      {message.message}
+                    </span>
+                </div>
+              </div>
+            );
+          } else {
+            return 'No messages';
+          }
+        });
+
+        return mappedMessages;
       }
     };
 
@@ -501,6 +525,19 @@ class ProfileContent extends React.Component {
         );
       }
     };
+
+    let renderMessages = () => {
+      if (window.sessionStorage.username === this.props.user[0].username) {
+        return (
+          <button onClick={() => this.changeProfileView('messages')}>Messages</button>
+        );
+      } else {
+        return (
+          <div></div>
+        );
+      }
+    };
+
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.username === user) {
         return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}><span className="glyphicon glyphicon-pencil"></span></a>}</span>;
@@ -616,6 +653,7 @@ class ProfileContent extends React.Component {
           <button onClick={() => this.changeProfileView('favorites')}>Favorites</button>
           <button onClick={() => this.changeProfileView('followers')}>Followers</button>
           {renderMailbox()}
+          {renderMessages()}
         </div>
         {myView()}
       </div>

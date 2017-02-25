@@ -3,6 +3,7 @@ import $ from 'jquery';
 import css from '../styles/nav.css';
 import actions from '../../redux/actions.js';
 import {connect} from 'react-redux';
+import { Link } from 'react-router';
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -75,9 +76,7 @@ class NavBar extends React.Component {
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <a href="#">
-                    <span className="glyphicon glyphicon-envelope"></span>
-                  </a>
+                  <Link className="glyphicon glyphicon-envelope"></Link>
                 </li>
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>

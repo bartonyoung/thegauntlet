@@ -13,7 +13,12 @@ module.exports = {
   },
 
   getAll: (req, res) => {
-
+    console.log('req.body.toUser_id', req.query.toUser_id);
+    let toUser_id = req.query.toUser_id;
+    db.select('messages.message_id', 'messages.message', 'messages.fromUser_id', 'messages.toUser_id', 'users.username', 'messages.created_at', 'users.profilepic').from('messages').where({toUser_id: toUser_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
+      console.log('messages', messages);
+      res.json(messages);
+    });
   }
   // addOne: (req, res) => {
   //   let comment = req.body;
