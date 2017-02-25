@@ -12,6 +12,7 @@ class CommentList extends React.Component {
   }
 
   commentSubmit(e) {
+    console.log('HI BARTON')
     e.preventDefault();
     let outer = this;
     let created_at = new Date().getTime();
@@ -39,16 +40,16 @@ class CommentList extends React.Component {
     });
 
     return (
-    <div className="row comments-row">  
+    <div className="row comments-row">
       <div className='comment-box col-lg-6 col-lg-offset-1'>
          <form onSubmit={this.commentSubmit} className='chat-form'>
           <textarea name="comment" required ref="comment" placeholder="Enter comment..."></textarea>
           <button className="button comment-button">COMMENT</button>
-        </form>  
+        </form>
         <div id="comments">{mappedComments}</div>
-      </div> 
+      </div>
     </div>
-      
+
     );
   }
 }
