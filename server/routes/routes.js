@@ -13,6 +13,7 @@ routes.get('/profile', userControllers.getUser);
 routes.put('/profile', userControllers.updateProfile);
 routes.get('/profile/:username', userControllers.getUser);
 routes.post('/challenge', challengeController.addOne);
+routes.get('/singleChallenge', challengeController.getSingleChallengeById);
 routes.get('/allChallenges', challengeController.getAll);
 routes.get('/everyChallenge', challengeController.getEveryChallenge);
 routes.get('/challenge/:id', challengeController.getOne);

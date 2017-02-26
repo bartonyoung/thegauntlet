@@ -12,7 +12,6 @@
 }
 
 .current-viewing-row {
-  height: 75vh;
   margin-top: 70px;
   border: blue solid;
 }
@@ -168,6 +167,25 @@ border: black solid
 .response-data > li {
   display: block;
   padding: 10px;
+}
+
+.original-back-button {
+  background-color: mediumseagreen;
+   height: 30px;
+   width: 100%;
+   cursor:pointer;
+   border: orange;
+   border-radius: 0px;
+   color:white;
+   margin-top: 4px;
+   margin-bottom: 4px;
+   padding: 5px;
+   border-radius: 3px;
+}
+
+.original-back-button:hover {
+   background-color:lawngreen;
+   color: white;
 }
 
 /*.response-interaction {

@@ -69,6 +69,15 @@ module.exports = {
     });
   },
 
+  getSingleChallengeById: (req, res) => {
+    console.log('SINGLE CHALLENGE ID', req.query.id);
+    let challengeId = req.query.id;
+    db.select().from('challenges').where('id', '=', challengeId)
+      .then(challenge => {
+        res.json(challenge);
+      });
+  },
+
   getOne: (req, res) => {
     db.select()
     .from('challenges')
