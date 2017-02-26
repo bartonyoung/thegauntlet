@@ -7,6 +7,14 @@ import ProfileContent from './ProfileContent.jsx';
 import NavBar from './Nav.jsx';
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      color: 'white'
+    };
+  }
 
   componentWillMount() {
     let outer = this;
@@ -52,12 +60,24 @@ class Profile extends React.Component {
     }
   }
 
+  handleChange() {
+    if (this.state.color === 'white') {
+      this.setState({
+        color: 'red'
+      });
+    } else {
+      this.setState({
+        color: 'white'
+      });
+    }
+  }
+
   render() {
     if (this.props.user) {
       return (
         <div className='container-fluid profile'>
-          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
-          <ProfileContent />
+          <NavBar color={this.state.color} handleChange={this.handleChange} auth={this.props.auth} handleLogout={this.props.handleLogout}/>
+          <ProfileContent handleChange={this.handleChange}/>
         </div>
       );
     } else {

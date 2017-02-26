@@ -261,9 +261,9 @@ class ProfileContent extends React.Component {
       created_at: created_at
     };
     $.post('/api/messages', message).done(data => {
-      console.log('message', data);
       outer.props.dispatch(actions.addMessage(data));
       this.refs.message.value = '';
+      this.props.handleChange();
     });
   }
 >>>>>>> Display form input for sending a message on button click, and hide form input on send click
