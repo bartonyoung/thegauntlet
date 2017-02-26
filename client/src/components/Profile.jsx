@@ -12,7 +12,9 @@ class Profile extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      color: 'white'
+      color: 'white',
+      messageNumber: 0,
+      notificationNumber: 0
     };
   }
 
@@ -37,7 +39,6 @@ class Profile extends React.Component {
     $.get('/api/comments', {
       user_id: window.sessionStorage.newUser_id
     }).done(data => {
-      console.log('comment data', data);
       outer.props.dispatch(actions.getComments(data.reverse()));
     });
     $.get('/api/ranks').done((rankData)=>{
@@ -60,14 +61,14 @@ class Profile extends React.Component {
     }
   }
 
-  handleChange() {
-    if (this.state.color === 'white') {
+  handleChange(icon) {
+    if (icon === 'messages') {
       this.setState({
-        color: 'red'
+        messageNumber: this.state.messageNumber += 1
       });
     } else {
       this.setState({
-        color: 'white'
+        notificationNumber: this.state.notificationNumber++
       });
     }
   }
@@ -76,7 +77,7 @@ class Profile extends React.Component {
     if (this.props.user) {
       return (
         <div className='container-fluid profile'>
-          <NavBar color={this.state.color} handleChange={this.handleChange} auth={this.props.auth} handleLogout={this.props.handleLogout}/>
+          <NavBar messageNumber={this.state.messageNumber} notificationNumber={this.state.notificationNumber} handleChange={this.handleChange} auth={this.props.auth} handleLogout={this.props.handleLogout}/>
           <ProfileContent handleChange={this.handleChange}/>
         </div>
       );

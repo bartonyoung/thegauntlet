@@ -74,6 +74,14 @@ class NavBar extends React.Component {
     this.props.handleChange();
   }
 
+  renderMessagesNumber() {
+    if (this.props.messageNumber) {
+      return <span className="messages-number">{this.props.messageNumber}</span>;
+    } else {
+      return <div></div>;
+    }
+  }
+
   handleNav() {
     if (window.sessionStorage.username) {
       return (
@@ -81,7 +89,8 @@ class NavBar extends React.Component {
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick('messages')} style={{color: this.props.color}}></Link>
+                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick('messages')}></Link>
+                  {this.renderMessagesNumber()}
                 </li>
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
