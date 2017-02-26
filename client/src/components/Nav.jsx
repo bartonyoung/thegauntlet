@@ -9,6 +9,8 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleNotificationClick = this.handleNotificationClick.bind(this);
+    console.log('navbar props', this.props);
   }
 
   handleSubmit() {
@@ -68,6 +70,9 @@ class NavBar extends React.Component {
     });
   } 
 
+  handleNotificationClick(icon) {
+    this.props.handleChange();
+  }
 
   handleNav() {
     if (window.sessionStorage.username) {
@@ -76,12 +81,12 @@ class NavBar extends React.Component {
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <Link className="glyphicon glyphicon-envelope"></Link>
+                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick('messages')} style={{color: this.props.color}}></Link>
                 </li>
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
-                    <form id="challenxe" style={{width: '300px', padding: '15px'}}>
+                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
 
             <div className="form-group">
               <li className="nav-label">Name it!</li>
