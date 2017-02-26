@@ -17,6 +17,7 @@ class ChallengeComponent extends React.Component {
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.sortResponses = this.sortResponses.bind(this);
     this.onResponseTitleClick = this.onResponseTitleClick.bind(this);
+    this.backToOriginalChallenge = this.backToOriginalChallenge.bind(this);
     this.state = {
       isEditing: false,
       currentVideo: null
@@ -41,11 +42,18 @@ class ChallengeComponent extends React.Component {
       outer.props.dispatch(actions.setFavorites(data));
     });
     
-    $.get('/api/challenge/' + window.sessionStorage.challengeId).done(data => {
-      outer.props.dispatch(actions.getChallenges(data));
-      this.setState({currentVideo: data[0]});
+    $.get('/api/everyChallenge').done(data => {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === parseInt(window.sessionStorage.challengeId)) {
+          outer.props.dispatch( actions.getChallenges( [data[i]] ));
+        }
+        if (data[i].id === parseInt(window.sessionStorage.currentId)) {
+          this.setState({currentVideo: data[i]});   
+        }
+      }
     });
   }
+
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#upload'));
@@ -132,6 +140,63 @@ class ChallengeComponent extends React.Component {
     });
   }
 
+  upVoteClick(id) {
+    const outer = this;   
+    $.post('/api/upvote', {
+      vote: 1,
+      challenge_id: id    
+    }).then(() => {
+      $.get('/api/singleChallenge', {id: id})
+        .then(data => { 
+          this.setState({currentVideo: data[0]});
+        });
+    });  
+  }
+
+  followTheLeader(leaderId) {
+    const outer = this;
+    $.post('/api/follower', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
+  }
+
+  unFollow (leaderId) {
+    const outer = this;
+    $.post('/api/unFollow', {
+      leader_id: leaderId
+    }).then(() => {
+      $.get('/api/getLeaders').then(leaders => {
+        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
+      });
+    });
+  }
+
+  addToFavorites(challengeId) {
+    const outer = this;
+    $.post('/api/favorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then( favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
+  }
+
+  removeFromFavorites(challengeId) {
+    const outer = this;
+    $.post('/api/unFavorite', {
+      challenge_id: challengeId
+    }).then(() => {
+      $.get('/api/favorite').then(favorites => {
+        outer.props.dispatch(actions.setFavorites(favorites));
+      });
+    });
+  }
+
   cancelEdit() {
     this.setState({
       isEditing: !this.state.isEditing
@@ -158,27 +223,70 @@ class ChallengeComponent extends React.Component {
     this.setState({currentVideo: response});
   }
 
+  backToOriginalChallenge(challengeId) {
+    $.get('/api/singleChallenge', {id: challengeId})
+      .then( data => {
+        this.setState({currentVideo: data[0]});
+      });
+  }
+
     // <button className="btn  btn-default btn-sm">
     //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
     //       </button>
   render() {
+    
+    let whichFollowButton = (leaderId, user) => {
+      if (window.sessionStorage.username !== user) {
+        if (this.props.leaders.includes(leaderId)) {   
+          return ( 
+            <button className="btn btn-default btn-sm follower" style={{color: 'green'}} onClick={() => this.unFollow(leaderId, user)}>
+              <span className="glyphicon glyphicon-user"></span>
+            </button>
+          );
+        } else {  
+          return (
+            <button className="btn btn-default btn-sm follower" onClick={() => this.followTheLeader(leaderId, user)}>
+              <span className="glyphicon glyphicon-user"></span>
+            </button>
+          ); 
+        }
+      }
+    };
+
+    let whichFavoriteIcon = (challengeId) => {
+      if (this.props.favorites.includes(challengeId)) {
+        return (
+          <button className="btn  btn-default btn-sm">
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
+          </button>
+        );
+      } else {
+        return (
+          <button className="btn btn-default btn-sm" onClick={() => { this.addToFavorites(challengeId); }}>
+            <span className="glyphicon glyphicon-heart"></span>
+          </button>
+        );
+      }
+    };
+
+
     let taskButtons = (challenge) => {
       if (challenge.username === window.sessionStorage.username) {
         if (!this.state.isEditing) {
           return (
-            <div>
+            <span>
               <button className="btn btn-sm btn-default task-button">
                 <span className="glyphicon glyphicon-edit" onClick={() => this.editChallenge()}></span>
               </button>
               <button className="btn btn-sm btn-default task-button" onClick={() => this.deleteChallenge(challenge)}>
                 <span className="glyphicon glyphicon-remove" onClick={() => this.deleteChallenge()}></span>
               </button>
-            </div>
+            </span>
           );
         }
 
         return (
-          <div>
+          <span>
             <div className="editor">
               <form id="editform" onSubmit={() => this.saveChallenge(challenge)}>
                 <input type="text" placeholder="Edit title" required ref="title"/><br/>
@@ -187,7 +295,7 @@ class ChallengeComponent extends React.Component {
               <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
               <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>Cancel</button>
             </div>
-          </div>
+          </span>
         );
       }
     };
@@ -201,8 +309,8 @@ class ChallengeComponent extends React.Component {
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucke  t421/' + challenge.filename} width="320" height="240" />;
-        return <img className="parentMedia" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
+        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
+        return <img className="parentMedia" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
       }
     };
 
@@ -285,6 +393,9 @@ class ChallengeComponent extends React.Component {
           </div>
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
+              <div className="row">
+                 <button className="button original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</button>
+              </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
               </div>
@@ -294,9 +405,14 @@ class ChallengeComponent extends React.Component {
                   <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
                   <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
                 </div> 
-                <div className="col-lg-6">
-
-                </div>
+                  <div>
+                    {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
+                    {whichFavoriteIcon(this.state.currentVideo.id)}
+                    <button onClick={() => this.upVoteClick(this.state.currentVideo.id)} type="button" className="btn btn-default btn-sm">
+                      <span className="glyphicon glyphicon-arrow-up"></span>{this.state.currentVideo.upvotes}
+                    </button>
+                  </div>
+                
               </div>
             </div>            
           </div>
@@ -314,20 +430,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ChallengeComponent);
-              
-              // {calculateTime(timeDifferenceInSeconds)}
-
-
-
-            //   <div className="col-lg-4 col-lg-offset-1 challengeInfo mainRowColumn">
-            //   {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-            // </div>
-            // <div className="col-lg-2 challengeInfo mainRowColumn">
-            //   <p className='main-challenge-title'>{challenge.title} by <Link onClick={() => this.onUsernameClick(challenge)} className="userLink">{challenge.username}</Link></p>
-            //   <p className='main-challenge-description'>{challenge.description}</p>
-            //   {taskButtons(challenge)}
-            //   <p>{'Upvotes: ' + challenge.upvotes}</p>
-            // </div>
-
 
             

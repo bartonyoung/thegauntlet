@@ -9,17 +9,26 @@ import ResponseComponent from './ResponseComponent.jsx';
 class ResponseList extends React.Component {
   constructor(props) {
     super(props);
-    console.log('response list props', this.props);
   }
 
   render() {
-    return (
+    if (this.props.responses.length) {
+      return (
       <div className="response-list container">
         {this.props.responses.map((response, i) =>
           <ResponseComponent response={response} onResponseTitleClick={this.props.onResponseTitleClick}/>
         )}
       </div>
-    );
+      );
+    } else {
+      return (
+      <div className="response-list container">
+        <div className="text-center">
+          <p>No one has responded to this challenge! Be the first!</p>
+        </div>
+      </div>
+      );
+    }
   }
 }
 

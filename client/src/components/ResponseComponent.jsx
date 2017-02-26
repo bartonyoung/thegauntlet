@@ -16,64 +16,6 @@ class ResponseComponent extends React.Component {
     };
   }
 
-  upVoteClick(id) {
-    const outer = this;
-    $.post('/api/upvote', {
-      vote: 1,
-      challenge_id: id
-    }).then(() => {
-      $.get('/api/response', {parent_id: window.sessionStorage.getItem('id')})
-        .then((data)=> {
-          data = data.reverse();
-          outer.props.dispatch(actions.getResponses(data));
-        });
-    });
-  }
-
-  followTheLeader(leaderId) {
-    const outer = this;
-    $.post('/api/follower', {
-      leader_id: leaderId
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
-    });
-  }
-
-  unFollow (leaderId) {
-    const outer = this;
-    $.post('/api/unFollow', {
-      leader_id: leaderId
-    }).then(() => {
-      $.get('/api/getLeaders').then(leaders => {
-        outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
-      });
-    });
-  }
-
-  addToFavorites(challengeId) {
-    const outer = this;
-    $.post('/api/favorite', {
-      challenge_id: challengeId
-    }).then(() => {
-      $.get('/api/favorite').then( favorites => {
-        outer.props.dispatch(actions.setFavorites(favorites));
-      });
-    });
-  }
-
-  removeFromFavorites(challengeId) {
-    const outer = this;
-    $.post('/api/unFavorite', {
-      challenge_id: challengeId
-    }).then(() => {
-      $.get('/api/favorite').then(favorites => {
-        outer.props.dispatch(actions.setFavorites(favorites));
-      });
-    });
-  }
-
   onUsernameClick(response) {
     let outer = this;
     window.sessionStorage.newUsername = response.username;
@@ -173,41 +115,9 @@ class ResponseComponent extends React.Component {
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} type="video/mp4"/>*/}
         </video>);
       } else {
-        return <img className="response-media" src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" />;
+        return <img className="response-media" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
 
         // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} width="320" height="240" />;
-      }
-    };
-
-    let whichButton = (leaderId) => {
-      if (this.props.leaders.includes(leaderId)) {
-        return (
-          <button className="btn btn-default btn-sm" style={{color: 'red'}}onClick={() => this.unFollow(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm" onClick={() => this.followTheLeader(leaderId)}>
-            <span className="glyphicon glyphicon-ok"></span>
-          </button>
-        );
-      }
-    };
-
-    let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.includes(challengeId)) {
-        return (
-          <button className="btn  btn-default btn-sm">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm" onClick={() => { this.addToFavorites(challengeId); }}>
-            <span className="glyphicon glyphicon-heart"></span>
-          </button>
-        );
       }
     };
 

@@ -3,7 +3,7 @@ const knex = require('../index.js');
 module.exports = knex.schema.createTableIfNotExists('challenges', (challenge) => {
   challenge.increments();
   challenge.string('title');
-  challenge.string('description');
+  challenge.string('description', 1000);
   challenge.string('filename');
   challenge.string('category');
   challenge.integer('views');
