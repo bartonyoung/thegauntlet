@@ -92,6 +92,18 @@ let actions = {
       type: 'UPDATE_POST',
       payload: post
     };
+  },
+  getUpvoted: function(upvote) {
+    return {
+      type: 'GET_UPVOTED',
+      payload: upvote
+    };
+  },
+  getDownvoted: function(downvote) {
+    return {
+      type: 'GET_DOWNVOTED',
+      payload: downvote
+    };
   }
 };
 
