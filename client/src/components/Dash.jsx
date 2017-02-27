@@ -25,6 +25,9 @@ class Dash extends React.Component {
       $.get('/api/favorite').done(data => {
         outer.props.dispatch(actions.setFavorites(data));
       });
+      $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
+        outer.props.dispatch(actions.getMessages(messages));
+      });
     }
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));

@@ -31,7 +31,9 @@ class ChallengeComponent extends React.Component {
     }).done(data => {
       outer.props.dispatch(actions.getResponses(data.reverse()));
     });
-
+    $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
+      outer.props.dispatch(actions.getMessages(messages));
+    });
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.challengeId
     }).done(data => {

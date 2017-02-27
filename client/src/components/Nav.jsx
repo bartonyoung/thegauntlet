@@ -10,7 +10,12 @@ class NavBar extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNotificationClick = this.handleNotificationClick.bind(this);
+    this.renderMessagesNumber = this.renderMessagesNumber.bind(this);
     console.log('navbar props', this.props);
+    this.state = {
+      messagesNum: 0,
+      display: 'messages-number'
+    };
   }
 
   handleSubmit() {
@@ -51,6 +56,17 @@ class NavBar extends React.Component {
     }
   }
 
+  componentWillMount() {
+    console.log("will mount navbar props", this.props)
+    let outer = this;
+
+    $.get('/api/messages/' + window.sessionStorage.user_id).done(data => {
+      outer.setState({
+        messagesNum: data.length
+      });
+    });
+  }
+
   goToProfilePage() {
     let outer = this;
     window.sessionStorage.newUsername = window.sessionStorage.username;
@@ -70,16 +86,19 @@ class NavBar extends React.Component {
     });
   }
 
-  handleNotificationClick(icon) {
-    console.log("here")
-    // this.props.handleChange();
+  handleNotificationClick() {
+    this.setState({
+      messagesNum: 0,
+      display: 'messages-checked'
+    });
+    console.log(this.state, 'after notification click')
   }
 
-  renderMessagesNumber() {
-    console.log('in here')
-    if (this.props.messageNumber) {
-      console.log('this.props.messageNumber', this.props.messageNumber)
-      return <span className="messages-number">{this.props.messageNumber}</span>;
+  renderMessagesNumber(num) {
+    if (this.props.messages && this.state.display === 'messages-number') {
+      return <span className={this.state.display}>{this.state.messagesNum}</span>;
+    } else if (this.state.display === 'messages-checked') {
+      return <div></div>;
     } else {
       return <div></div>;
     }
@@ -92,7 +111,7 @@ class NavBar extends React.Component {
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick('messages')}></Link>
+                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick()}></Link>
                   {this.renderMessagesNumber()}
                 </li>
                 <li className="dropdown">
