@@ -52,6 +52,15 @@ class ChallengeComponent extends React.Component {
         }
       }
     });
+
+    if (window.sessionStorage.username) {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));
+      });
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+    }
   }
 
   handleSubmit() {
@@ -146,12 +155,37 @@ class ChallengeComponent extends React.Component {
       vote: 1,
       challenge_id: id    
     }).then(() => {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));
+      });
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
       $.get('/api/singleChallenge', {id: id})
         .then(data => { 
           this.setState({currentVideo: data[0]});
         });
     });  
   }
+
+  downVoteClick(id) {
+    const outer = this;   
+    $.post('/api/downvote', {
+      vote: 1,
+      challenge_id: id    
+    }).then(() => {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));
+      });
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+      $.get('/api/singleChallenge', {id: id})
+        .then(data => { 
+          this.setState({currentVideo: data[0]});
+        });
+    });  
+  }       
 
   followTheLeader(leaderId) {
     const outer = this;
@@ -234,6 +268,42 @@ class ChallengeComponent extends React.Component {
     //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
     //       </button>
   render() {
+    let voteButtons = (challengeId) => {
+      if (this.props.upvoted.includes(challengeId)) {
+        return (
+          <span>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm" style={{color: 'green'}}>
+              <span className="glyphicon glyphicon-arrow-up"></span>
+            </button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+              <span className="glyphicon glyphicon-arrow-down"></span>
+            </button>
+          </span>
+        );
+      } else if (this.props.downvoted.includes(challengeId)) {
+        return (
+          <span>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+              <span className="glyphicon glyphicon-arrow-up"></span>
+            </button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm" style={{color: 'red'}}>
+              <span className="glyphicon glyphicon-arrow-down"></span>
+            </button>
+          </span>
+        );        
+      } else {
+        return (
+          <span>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+              <span className="glyphicon glyphicon-arrow-up"></span>
+            </button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+              <span className="glyphicon glyphicon-arrow-down"></span>
+            </button>
+          </span>
+        );   
+      }
+    };
     
     let whichFollowButton = (leaderId, user) => {
       if (window.sessionStorage.username !== user) {
@@ -408,9 +478,7 @@ class ChallengeComponent extends React.Component {
                   <div>
                     {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
                     {whichFavoriteIcon(this.state.currentVideo.id)}
-                    <button onClick={() => this.upVoteClick(this.state.currentVideo.id)} type="button" className="btn btn-default btn-sm">
-                      <span className="glyphicon glyphicon-arrow-up"></span>{this.state.currentVideo.upvotes}
-                    </button>
+                    {voteButtons(this.state.currentVideo.id)} {this.state.currentVideo.upvotes}
                   </div>
                 
               </div>
