@@ -25,11 +25,6 @@ class Dash extends React.Component {
       $.get('/api/favorite').done(data => {
         outer.props.dispatch(actions.setFavorites(data));
       });
-      $.get('/api/messages', {
-        toUser_id: window.sessionStorage.user_id
-      }).done(messages => {
-        outer.props.dispatch(actions.getMessages(messages));
-      });
     }
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
@@ -43,7 +38,7 @@ class Dash extends React.Component {
     return (
       <div>
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <div className="container main-content">
+        <div className="container-fluid main-content">
           <div className="row">
             <div className="col col-md-2">
               <SideNav />

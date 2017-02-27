@@ -28,7 +28,7 @@ class ProfileContent extends React.Component {
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
-    }); 
+    });
   }
 
   numFollowers () {
@@ -233,21 +233,18 @@ class ProfileContent extends React.Component {
       outer.props.dispatch(actions.addUser(user));
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
-      });      
+      });
       $.get('/api/userChallenges', {
         user_id: window.sessionStorage.newUser_id
       }).done(challenges => {
         outer.props.dispatch(actions.getChallenges(challenges.reverse()));
-      });      
-    });    
+      });
+    });
   }
 
-<<<<<<< HEAD
-  sendMessage() {
 
-  }     
-=======
-  onSendMessageClick() {
+  onSendMessageClick(e) {
+    e.preventDefault();
     let outer = this;
     this.setState({
       messageDisplay: 'unset',
@@ -266,7 +263,6 @@ class ProfileContent extends React.Component {
       this.props.handleChange('messages');
     });
   }
->>>>>>> Display form input for sending a message on button click, and hide form input on send click
 
   render() {
     let checkFile = (type, challenge) => {
@@ -300,17 +296,17 @@ class ProfileContent extends React.Component {
     });
 
     let favoritedChallenges = this.props.favorites.map((challenge, i) => {
-      if (challenge) { 
+      if (challenge) {
         return (
           <div>
             <h4>{challenge.title}</h4>
             <p>{challenge.description}</p>
             {checkFile(challenge.filename.split('.').pop(), challenge)}
             <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
-          </div>  
-        ); 
+          </div>
+        );
       }
-    });             
+    });
 
     let mappedResponses = this.props.responses.map(response => {
       if (response) {
@@ -428,7 +424,7 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'favorites') {
         return (
           <div>
-            Favorites:  
+            Favorites:
             {favoritedChallenges}
           </div>
         );
