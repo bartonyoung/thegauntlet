@@ -263,5 +263,22 @@ module.exports = {
     .then(data => {
       res.json(data);
     });
-  }
+  },
+
+  getUpvoted: (req, res) => {
+    db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      db.select('votes.challenge_id').from('votes').where({user_id: userData[0].scott}).then(data => {
+        data = data.map(obj => parseInt(obj.challenge_id));
+        res.json(data);
+      });
+    });
+  },
+  getDownvoted: (req, res) => {
+    db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      db.select('downvotes.challenge_id').from('downvotes').where({user_id: userData[0].scott}).then(data => {
+        data = data.map(obj => parseInt(obj.challenge_id));
+        res.json(data);
+      });
+    });
+  }       
 };
