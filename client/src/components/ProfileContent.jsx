@@ -24,7 +24,6 @@ class ProfileContent extends React.Component {
 
   componentDidMount () {
     const outer = this;
-    this.props.dispatch(actions.setProfileView('all'));
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();

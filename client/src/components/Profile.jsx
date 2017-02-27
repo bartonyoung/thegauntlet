@@ -58,7 +58,7 @@ class Profile extends React.Component {
     if (this.props.user) {
       return (
         <div className='container-fluid profile'>
-          <NavBar messageNumber={this.state.messageNumber} notificationNumber={this.state.notificationNumber} auth={this.props.auth} handleLogout={this.props.handleLogout}/>
+          <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
           <ProfileContent handleChange={this.handleChange}/>
         </div>
       );

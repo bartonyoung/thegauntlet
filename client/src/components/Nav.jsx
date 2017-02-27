@@ -73,6 +73,7 @@ class NavBar extends React.Component {
     window.sessionStorage.newUser_id = window.sessionStorage.user_id;
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
+      this.props.dispatch(actions.setProfileView('all'));
       window.location.href = '/#/profile/' + window.sessionStorage.username;
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
@@ -87,11 +88,12 @@ class NavBar extends React.Component {
   }
 
   handleNotificationClick() {
-    this.setState({
-      messagesNum: 0,
-      display: 'messages-checked'
-    });
-    console.log(this.state, 'after notification click')
+    // this.setState({
+    //   messagesNum: 0,
+    //   display: 'messages-checked'
+    // });
+    this.props.dispatch(actions.setProfileView('messages'))
+    window.location.href = '/#/profile/' + window.sessionStorage.username;
   }
 
   renderMessagesNumber(num) {
