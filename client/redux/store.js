@@ -16,7 +16,9 @@ const configureStore = (initialState = {
   profileView: 'all',
   favorites: [],
   ranks: [],
-  followers: []
+  followers: [],
+  upvoted: [],
+  downvoted: []
 }) => {
   return finalCreateStore(reducer, initialState);
 };

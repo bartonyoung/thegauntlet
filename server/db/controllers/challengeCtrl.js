@@ -1,13 +1,13 @@
 const challenges = require('../models/challenges.js');
 const favorites = require('../models/favorites');
 const votes = require('../models/votes.js');
+const downvotes = require('../models/downvotes.js');
 const db = require('../index.js');
 const s3 = require('./s3Ctrl.js');
 
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
-    console.log('THIS IS THE challenge', challenge);
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -27,7 +27,6 @@ module.exports = {
 
   addOneResponse: (req, res) => {
     const challenge = req.body;
-    console.log('THIS IS THE RESPONSE', challenge);
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -103,7 +102,6 @@ module.exports = {
 
   deleteOne: (req, res) => {
     const id = req.params.id;
-
     db.from('challenges').where({id: id}).del().then(() => {
       db.select().from('challenges').where({parent_id: null}).innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
         res.json(data);
@@ -114,7 +112,6 @@ module.exports = {
   deleteOneResponse: (req, res) => {
     const id = req.params.id;
     const parent_id = req.body.parent_id;
-
     db.from('challenges').where({id: id}).del().then(() => {
       db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('challenges.parent_id', '=', parent_id).then(data => {
         res.json(data);
@@ -132,23 +129,79 @@ module.exports = {
   upvote: (req, res) => { //CHECK: Should fix upvote spam but needs to be tested
     let vote = req.body; //req.body should have challenge_id and vote = 1
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
-      console.log('THIS IS THE USERDATA', userData);
       db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
+        vote.user_id = userData[0].scott;
         if (exists.length) {
-          res.sendStatus(404);
-        } else {
-          vote.user_id = userData[0].scott;
-          db.select('user_id').from('challenges').where({id: req.body.challenge_id}).then(data => {
-            db.select().from('users').where({scott: data[0].user_id}).increment('upvotes', 1).then(data => {
+          db.select().from('votes').where({id: exists[0].id}).del().then(() => {
+            db.from('challenges').where({id: req.body.challenge_id}).decrement('upvotes', 1).then(() =>{
+              db.select().from('users').where({scott: vote.user_id}).decrement('upvotes', 1).then(() => {
+                res.sendStatus(201);
+              });
+            });     
+          });
+        } else {  
+          db.select().from('downvotes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(downVoted => {
+            if (downVoted.length) {
+              db.select().from('downvotes').where({id: downVoted[0].id}).del().then(()=>{
+                db('votes').insert(vote).then( () => {
+                  db.from('challenges').where({id: req.body.challenge_id}).increment('upvotes', 2).then(() => {
+                    db.select().from('users').where({scott: vote.user_id}).increment('upvotes', 2).then(() => {
+                      res.sendStatus(201);
+                    });     
+                  });     
+                });     
+              });
+            } else {
               db('votes').insert(vote).then( () => {
-                db.select().from('votes').where({challenge_id: req.body.challenge_id}).then((voteData) => {
-                  console.log('this is vote data', voteData);
-                  db.from('challenges').where({id: req.body.challenge_id}).update({upvotes: voteData.length}).then(() => {
+                db.from('challenges').where({id: req.body.challenge_id}).increment('upvotes', 1).then(() => {
+                  db.select().from('users').where({scott: vote.user_id}).increment('upvotes', 1).then(() => {
                     res.sendStatus(201);
-                  });
+                  });     
+                });     
+              });     
+            }
+          });      
+        }
+      });
+    });
+  },
+
+  downvotes: (req, res) => {
+    let vote = req.body;
+    db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      db.select().from('downvotes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(exists => {
+        vote.user_id = userData[0].scott;
+        if (exists.length) {
+          db.select().from('downvotes').where({id: exists[0].id}).del().then(() => {
+            db.select().from('downvotes').where({challenge_id: req.body.challenge_id}).then(() => {
+              db.from('challenges').where({id: req.body.challenge_id}).increment('upvotes', 1).then( () => {
+                db.select().from('users').where({scott: vote.user_id}).increment('upvotes', 1).then(() => {
+                  res.sendStatus(201);
                 });
               });
             });
+          });
+        } else {
+          db.select().from('votes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(upVoted => {
+            if (upVoted.length) {
+              db.select().from('votes').where({id: upVoted[0].id}).del().then(() => {
+                db('downvotes').insert(vote).then(() => {
+                  db.select().from('challenges').where({id: req.body.challenge_id}).decrement('upvotes', 2).then(() => {
+                    db.select().from('users').where({scott: vote.user_id}).decrement('upvotes', 2).then(() => {
+                      res.sendStatus(201);
+                    });
+                  });
+                });      
+              });
+            } else {
+              db('downvotes').insert(vote).then(() => {
+                db.select().from('challenges').where({id: req.body.challenge_id}).decrement('upvotes', 1).then(() => {
+                  db.select().from('users').where({scott: vote.user_id}).decrement('upvotes', 1).then(() => {
+                    res.sendStatus(201);
+                  });
+                });
+              });       
+            }
           });
         }
       });
@@ -210,5 +263,22 @@ module.exports = {
     .then(data => {
       res.json(data);
     });
-  }
+  },
+
+  getUpvoted: (req, res) => {
+    db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      db.select('votes.challenge_id').from('votes').where({user_id: userData[0].scott}).then(data => {
+        data = data.map(obj => parseInt(obj.challenge_id));
+        res.json(data);
+      });
+    });
+  },
+  getDownvoted: (req, res) => {
+    db.select().from('users').where({username: req.session.displayName}).then(userData => {
+      db.select('downvotes.challenge_id').from('downvotes').where({user_id: userData[0].scott}).then(data => {
+        data = data.map(obj => parseInt(obj.challenge_id));
+        res.json(data);
+      });
+    });
+  }       
 };
