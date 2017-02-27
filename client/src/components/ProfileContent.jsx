@@ -13,10 +13,13 @@ class ProfileContent extends React.Component {
       first: false,
       second: false,
       third: false,
+      messageDisplay: 'unset',
+      formDisplay: 'none'
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.editFirstName = this.editFirstName.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
+    this.onSendMessageClick = this.onSendMessageClick.bind(this);
   }
 
   componentDidMount () {
@@ -239,9 +242,19 @@ class ProfileContent extends React.Component {
     });    
   }
 
+<<<<<<< HEAD
   sendMessage() {
 
   }     
+=======
+  onSendMessageClick() {
+    console.log("sending")
+    this.setState({
+      messageDisplay: 'unset',
+      formDisplay: 'none'
+    });
+  }
+>>>>>>> Display form input for sending a message on button click, and hide form input on send click
 
   render() {
     let checkFile = (type, challenge) => {
@@ -544,7 +557,18 @@ class ProfileContent extends React.Component {
 
     let sendMessage = () => {
       if (window.sessionStorage.username !== window.sessionStorage.newUsername) {
-        return <button onClick={() => this.onSendMessageClick()}>Send a message</button>;
+        return (
+          <div>
+            <button style={{display: this.state.messageDisplay}} onClick={() => this.setState({
+              messageDisplay: 'none',
+              formDisplay: 'unset'
+            })}>Send a message</button>
+            <form style={{display: this.state.formDisplay}} onSubmit={this.onSendMessageClick}>
+              <input type='text' placeholder='Enter your message' required ref='message'/>
+              <input type='submit' value='Send'/>
+            </form>
+          </div>
+        );
       } else {
         return <div></div>;
       }
