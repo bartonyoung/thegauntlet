@@ -8,6 +8,7 @@ class Login extends React.Component {
   }
 
   handleLogin(e) {
+    let outer = this;
     e.preventDefault();
     let login = {
       username: this.refs.username.value,

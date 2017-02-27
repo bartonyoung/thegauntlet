@@ -60,23 +60,20 @@ class NavBar extends React.Component {
       window.location.href = '/#/profile/' + window.sessionStorage.username;
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
-      });       
+      });
       $.get('/api/userChallenges', {
         user_id: window.sessionStorage.newUser_id
       }).done(challenges => {
         console.log('get user challenges', challenges);
         outer.props.dispatch(actions.getChallenges(challenges.reverse()));
-      });     
+      });
     });
-  } 
-
-  handleNotificationClick(icon) {
-    this.props.handleChange();
   }
 
-  // componentWillMount() {
-  //   this.renderMessagesNumber();
-  // }
+  handleNotificationClick(icon) {
+    console.log("here")
+    // this.props.handleChange();
+  }
 
   renderMessagesNumber() {
     console.log('in here')
@@ -92,7 +89,7 @@ class NavBar extends React.Component {
     if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
-            <div className="container-fluid">
+            <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
                   <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick('messages')}></Link>
@@ -101,7 +98,7 @@ class NavBar extends React.Component {
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
-                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
+                    <form id="challenxe" style={{width: '300px', padding: '15px'}}>
 
             <div className="form-group">
               <li className="nav-label">Name it!</li>
@@ -128,8 +125,6 @@ class NavBar extends React.Component {
             <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
           </form>
           <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
-
-
                   </ul>
                 </li>
                 <li>
