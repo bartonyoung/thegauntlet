@@ -28,13 +28,6 @@ module.exports = {
     });
   },
 
-  // check: (req, res) => {
-  //   db.select('id').from('users').where({username: req.session.displayName}).then((userData) => {
-  //     db.select().from('followers').where({user_id: userData[0].id}).andWhere({leader_id: req.body.leader_id}).then((followerData) => {
-  //       res.json(followerData);
-  //     });
-  //   });
-  // },
   getLeaders: (req, res) => {
     db.select('scott').from('users').where({username: req.session.displayName}).then(userData => {
       db.select().from('followers').where({user_id: userData[0].scott}).then(leaders => {
