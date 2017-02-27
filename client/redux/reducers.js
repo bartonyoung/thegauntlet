@@ -87,6 +87,14 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       favorites: action.payload
     });
+  } else if (action.type === 'GET_UPVOTED') {
+    return Object.assign({}, state, {
+      upvoted: action.payload
+    });
+  } else if (action.type === 'GET_DOWNVOTED') {
+    return Object.assign({}, state, {
+      downvoted: action.payload
+    });
   } else if (action.type === 'UPDATE_POST') {
     let updateObj = {};
 
