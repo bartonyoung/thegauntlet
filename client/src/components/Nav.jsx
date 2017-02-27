@@ -74,8 +74,14 @@ class NavBar extends React.Component {
     this.props.handleChange();
   }
 
+  // componentWillMount() {
+  //   this.renderMessagesNumber();
+  // }
+
   renderMessagesNumber() {
+    console.log('in here')
     if (this.props.messageNumber) {
+      console.log('this.props.messageNumber', this.props.messageNumber)
       return <span className="messages-number">{this.props.messageNumber}</span>;
     } else {
       return <div></div>;
@@ -86,7 +92,7 @@ class NavBar extends React.Component {
     if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
-            <div className="container">
+            <div className="container-fluid">
               <ul className="nav navbar-nav navbar-right">
                 <li>
                   <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick('messages')}></Link>

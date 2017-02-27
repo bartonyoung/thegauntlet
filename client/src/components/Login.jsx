@@ -19,6 +19,11 @@ class Login extends React.Component {
         console.log('data on login', data);
         window.sessionStorage.setItem('user_id', data.scott);
         window.sessionStorage.setItem('username', data.username);
+        $.get('/api/messages', {
+          toUser_id: window.sessionStorage.user_id
+        }).done(messages => {
+          outer.props.dispatch(actions.getMessages(messages));
+        });
         this.props.handleAuth(() => {
           window.location.href = '#/dash';
         });
