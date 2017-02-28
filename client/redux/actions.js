@@ -75,24 +75,28 @@ let actions = {
       payload: view,
     };
   },
+
   setFollowers: function(followers) {
     return {
       type: 'GET_FOLLOWERS',
       payload: followers,
     };
   },
+
   getRanks: function(ranks) {
     return {
       type: 'GET_RANKS',
       payload: ranks,
     };
   },
+
   updatePost: function(post) {
     return {
       type: 'UPDATE_POST',
       payload: post
     };
   },
+
   getUpvoted: function(upvote) {
     return {
       type: 'GET_UPVOTED',
@@ -103,16 +107,34 @@ let actions = {
     return {
       type: 'GET_DOWNVOTED',
       payload: downvote
+    };
+  },
+
   addMessage: function(message) {
     return {
       type: 'ADD_MESSAGE',
       payload: message
     };
   },
+
   getMessages: function(messages) {
     return {
       type: 'GET_MESSAGES',
       payload: messages
+    };
+  },
+
+  readMessages: function(messages) {
+    return {
+      type: 'READ_MESSAGES',
+      payload: messages
+    };
+  },
+
+  setDisplay: function(display) {
+    return {
+      type: 'SET_DISPLAY',
+      payload: display
     };
   }
 };

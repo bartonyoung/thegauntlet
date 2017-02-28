@@ -241,7 +241,6 @@ class ProfileContent extends React.Component {
     });
   }
 
-
   onSendMessageClick(e) {
     e.preventDefault();
     let outer = this;
@@ -254,10 +253,11 @@ class ProfileContent extends React.Component {
       message: this.refs.message.value,
       fromUser_id: window.sessionStorage.user_id,
       toUser_id: window.sessionStorage.newUser_id,
-      created_at: created_at
+      created_at: created_at,
+      read: 0
     };
     $.post('/api/messages/' + window.sessionStorage.newUser_id, message).done(data => {
-      outer.props.handleChange('messages');
+      outer.refs.message.value = '';
     });
   }
 
@@ -490,7 +490,7 @@ class ProfileContent extends React.Component {
                   {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
                   <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
                     <span className='messageUsername'>
-                      <strong>{message.username + ': '}</strong>
+                      {message.username + ': '}
                     </span>
                     <span className='messageMessage'>
                       {message.message}

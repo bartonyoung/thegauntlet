@@ -11,11 +11,6 @@ class NavBar extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNotificationClick = this.handleNotificationClick.bind(this);
     this.renderMessagesNumber = this.renderMessagesNumber.bind(this);
-    console.log('navbar props', this.props);
-    this.state = {
-      messagesNum: 0,
-      display: 'messages-number'
-    };
   }
 
   handleSubmit() {
@@ -56,17 +51,6 @@ class NavBar extends React.Component {
     }
   }
 
-  componentWillMount() {
-    console.log("will mount navbar props", this.props)
-    let outer = this;
-
-    $.get('/api/messages/' + window.sessionStorage.user_id).done(data => {
-      outer.setState({
-        messagesNum: data.length
-      });
-    });
-  }
-
   goToProfilePage() {
     let outer = this;
     window.sessionStorage.newUsername = window.sessionStorage.username;
@@ -88,18 +72,26 @@ class NavBar extends React.Component {
   }
 
   handleNotificationClick() {
-    // this.setState({
-    //   messagesNum: 0,
-    //   display: 'messages-checked'
-    // });
-    this.props.dispatch(actions.setProfileView('messages'))
+    let outer = this;
+
+    this.props.dispatch(actions.setProfileView('messages'));
+    this.props.dispatch(actions.setDisplay('messages-checked'));
+    $.ajax({
+      url: '/api/messages/' + window.sessionStorage.user_id,
+      type: 'PUT',
+      success: function(data) {
+        outer.props.dispatch(actions.readMessages(data));
+      }
+    });
+    this.props.dispatch(actions.readMessages());
     window.location.href = '/#/profile/' + window.sessionStorage.username;
   }
 
   renderMessagesNumber(num) {
-    if (this.props.messages && this.state.display === 'messages-number') {
-      return <span className={this.state.display}>{this.state.messagesNum}</span>;
-    } else if (this.state.display === 'messages-checked') {
+    console.log(!!this.props.messages)
+    if (this.props.messages && this.props.display === 'messages-number') {
+      return <span className={this.props.display}>{this.props.messages.length}</span>;
+    } else if (this.props.messages && this.props.display === 'messages-checked') {
       return <div></div>;
     } else {
       return <div></div>;

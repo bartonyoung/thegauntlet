@@ -19,7 +19,9 @@ const configureStore = (initialState = {
   followers: [],
   upvoted: [],
   downvoted: [],
-  messages: []
+  messages: [],
+  messages: [],
+  display: ''
 }) => {
   return finalCreateStore(reducer, initialState);
 };
