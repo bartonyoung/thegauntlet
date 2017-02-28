@@ -21,6 +21,9 @@ class Profile extends React.Component {
         data.forEach(response => {
           if (response.parent_id) {
             responseArr.push(response);
+            if (response.read === 0 && this.props.displayNotifications !== 'notifications-number') {
+              outer.props.dispatch(actions.setDisplayNotifications('notifications-number'));
+            }
           }
         });
         outer.props.dispatch(actions.getResponses(responseArr));
@@ -36,7 +39,7 @@ class Profile extends React.Component {
         messages.forEach(message => {
           outer.props.dispatch(actions.getMessages(messages));
           if (message.read === 0) {
-            outer.props.dispatch(actions.setDisplay('messages-number'));
+            outer.props.dispatch(actions.setDisplayMessages('messages-number'));
           }
         });
       });

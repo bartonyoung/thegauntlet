@@ -21,7 +21,8 @@ class CommentList extends React.Component {
       created_at: created_at,
       username: window.sessionStorage.username,
       user_id: window.sessionStorage.user_id,
-      title: this.props.challenges[0].title
+      title: this.props.challenges[0].title,
+      read: 0
     };
     $.post('/api/comments', comments).then(data => {
       outer.props.dispatch(actions.addComment(data));

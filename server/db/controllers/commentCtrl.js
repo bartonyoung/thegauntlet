@@ -16,17 +16,28 @@ module.exports = {
 
   getAll: (req, res) => {
     if (req.query.challenge_id) {
-      db.select('comments.comment', 'comments.username', 'comments.created_at', 'comments.challenge_id')
+      db.select('comments.comment', 'comments.username', 'comments.created_at', 'comments.challenge_id', 'comments.read', 'comments.id')
       .from('comments')
       .innerJoin('challenges', 'challenges.id', 'comments.challenge_id').where('comments.challenge_id', '=', req.query.challenge_id).then(data => {
         res.json(data);
       });
     } else {
-      db.select('comments.comment', 'comments.username', 'comments.created_at', 'comments.user_id', 'comments.challenge_id', 'comments.title')
+      db.select('comments.comment', 'comments.username', 'comments.created_at', 'comments.user_id', 'comments.challenge_id', 'comments.title', 'comments.read', 'comments.id')
       .from('comments').innerJoin('challenges', 'challenges.id', 'comments.challenge_id').innerJoin('users', 'users.scott', 'challenges.user_id').where('users.scott', '=', req.query.user_id)
       .then((data) => {
         res.json(data);
       });
     }
+  },
+
+  read: (req, res) => {
+    let id = req.params.id;
+    console.log('comment id', id)
+    db.from('comments').where({id: id}).update({read: 1}).then(() => {
+      db.select().from('comments').where({id: id}).then((data) => {
+        console.log('comment update data', data)
+        res.json(data);
+      });
+    });
   }
 };

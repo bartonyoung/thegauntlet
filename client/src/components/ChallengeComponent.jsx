@@ -36,7 +36,7 @@ class ChallengeComponent extends React.Component {
         messages.forEach(message => {
           outer.props.dispatch(actions.getMessages(messages));
           if (message.read === 0) {
-            outer.props.dispatch(actions.setDisplay('messages-number'));
+            outer.props.dispatch(actions.setDisplayMessages('messages-number'));
           }
         });
       });
@@ -96,7 +96,8 @@ class ChallengeComponent extends React.Component {
               parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
               username: window.sessionStorage.username,
-              to: window.sessionStorage.newUsername
+              to: window.sessionStorage.newUsername,
+              read: 0
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -273,9 +274,6 @@ class ChallengeComponent extends React.Component {
       });
   }
 
-    // <button className="btn  btn-default btn-sm">
-    //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
-    //       </button>
   render() {
     let voteButtons = (challengeId) => {
       if (this.props.upvoted.includes(challengeId)) {

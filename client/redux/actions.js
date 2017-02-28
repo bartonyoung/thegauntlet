@@ -131,10 +131,24 @@ let actions = {
     };
   },
 
-  setDisplay: function(display) {
+  setDisplayMessages: function(display) {
     return {
-      type: 'SET_DISPLAY',
+      type: 'SET_DISPLAY_MESSAGES',
       payload: display
+    };
+  },
+
+  setDisplayNotifications: function(display) {
+    return {
+      type: 'SET_DISPLAY_NOTIFICATIONS',
+      payload: display
+    };
+  },
+
+  readNotification: function(notification) {
+    return {
+      type: 'READ_NOTIFICATION',
+      payload: notification
     };
   }
 };

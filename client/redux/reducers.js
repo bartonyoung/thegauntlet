@@ -154,9 +154,44 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, readMessage);
-  } else if (action.type === 'SET_DISPLAY') {
+  } else if (action.type === 'READ_NOTIFICATION') {
+    let readNotification = {};
+    console.log(action.payload[0].id)
+    console.log(state.responses)
+    for (var keys in state) {
+      if (keys === 'comments' && action.payload[0].comment) {
+        readNotification[keys] = [];
+        state[keys].forEach(key => {
+          readNotification[keys].push(key);
+        });
+        readNotification[keys].forEach(comment => {
+          if (comment.id === action.payload[0].id) {
+            comment.read = 1;
+          }
+        });
+      } else if (keys === 'responses' && action.payload[0].parent_id) {
+        readNotification[keys] = [];
+        state[keys].forEach(key => {
+          readNotification[keys].push(key);
+        });
+        readNotification[keys].forEach((response, i) => {
+          if (response.id === action.payload[0].id) {
+            readNotification[keys][i] = action.payload[0];
+          }
+        });
+      } else {
+        readNotification[keys] = state[keys];
+      }
+    }
+    console.log(readNotification, 'after updating readNotification')
+    return Object.assign({}, readNotification);
+  } else if (action.type === 'SET_DISPLAY_MESSAGES') {
     return Object.assign({}, state, {
-      display: action.payload
+      displayMessages: action.payload
+    });
+  } else if (action.type === 'SET_DISPLAY_NOTIFICATIONS') {
+    return Object.assign({}, state, {
+      displayNotifications: action.payload
     });
   } else {
     return state;

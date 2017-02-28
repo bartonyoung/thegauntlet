@@ -9,8 +9,9 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleNotificationClick = this.handleNotificationClick.bind(this);
+    this.handleIconClick = this.handleIconClick.bind(this);
     this.renderMessagesNumber = this.renderMessagesNumber.bind(this);
+    this.renderNotificationsNumber = this.renderNotificationsNumber.bind(this);
   }
 
   handleSubmit() {
@@ -71,14 +72,19 @@ class NavBar extends React.Component {
     });
   }
 
-  handleNotificationClick() {
-    this.props.dispatch(actions.setProfileView('messages'));
+  handleIconClick(icon) {
+    if (icon === 'message') {
+      this.props.dispatch(actions.setProfileView('messages'));
+    } else if (icon === 'notification') {
+      this.props.dispatch(actions.setProfileView('notifications'));
+    }
+
     window.location.href = '/#/profile/' + window.sessionStorage.username;
   }
 
   renderMessagesNumber() {
-    var unRead = this.props.messages.reduce((a, c) => {
-      if (!c.read) {
+    var unReadMessages = this.props.messages.reduce((a, c) => {
+      if (c.read === 0) {
         a += 1;
       }
 
@@ -87,10 +93,32 @@ class NavBar extends React.Component {
 
     for (var i = 0; i < this.props.messages.length; i++) {
       var message = this.props.messages[i];
-      if (this.props.display === 'messages-number' && unRead > 0) {
-        return <span className={this.props.display}>{unRead}</span>;
-      } else if (unRead === 0) {
+      if (this.props.displayMessages === 'messages-number' && unReadMessages > 0) {
+        return <span className={this.props.displayMessages}>{unReadMessages}</span>;
+      } else if (unReadMessages === 0) {
         return <span className={'messages-checked'}></span>;
+      }
+    }
+
+    return <div></div>;
+  }
+
+  renderNotificationsNumber() {
+    let notifications = this.props.comments.concat(this.props.responses);
+    let unReadNotifications = notifications.reduce((a, c) => {
+      if (c.read === 0) {
+        a += 1;
+      }
+
+      return a;
+    }, 0);
+    console.log(unReadNotifications, 'unReadNotifications number');
+    for (var n = 0; n < notifications.length; n++) {
+      var notification = notifications[n];
+      if (this.props.displayNotifications === 'notifications-number' && unReadNotifications > 0) {
+        return <span className={this.props.displayNotifications}>{unReadNotifications}</span>;
+      } else if (unReadNotifications === 0) {
+        return <span className={'notifications-checked'}></span>;
       }
     }
 
@@ -104,7 +132,11 @@ class NavBar extends React.Component {
             <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
-                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleNotificationClick()}></Link>
+                  <Link className="glyphicon glyphicon-fire" onClick={() => this.handleIconClick('notification')}></Link>
+                  {this.renderNotificationsNumber()}
+                </li>
+                <li>
+                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleIconClick('message')}></Link>
                   {this.renderMessagesNumber()}
                 </li>
                 <li className="dropdown">

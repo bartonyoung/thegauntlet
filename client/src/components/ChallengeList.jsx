@@ -27,7 +27,7 @@ class ChallengeList extends React.Component {
       window.location.href = '/#/profile/' + challenge.username;
     });
   }
-      
+
 
   onChallengeTitleClick(challenge) {
     if (challenge.parent_id === null) {
@@ -42,7 +42,7 @@ class ChallengeList extends React.Component {
       window.sessionStorage.challengeId = challenge.parent_id;
       window.sessionStorage.currentId = challenge.id;
       window.sessionStorage.challengeName = challenge.title;
-    } 
+    }
   }
 
   upVoteClick(challenge) {
@@ -208,7 +208,6 @@ class ChallengeList extends React.Component {
     };
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (challenge) {
-        console.log('this is a challenge', challenge);
         let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
         return (
           <div className="col col-md-6" key={i}>

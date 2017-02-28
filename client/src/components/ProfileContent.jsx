@@ -49,7 +49,7 @@ class ProfileContent extends React.Component {
     });
   }
 
-  onNotificationClick(i) {
+  onNotificationClick(i, notification) {
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -58,6 +58,29 @@ class ProfileContent extends React.Component {
       this.setState({
         [i]: 'none'
       });
+    }
+    let outer = this;
+
+    if (notification.read === 0) {
+      if (notification.comment) {
+        console.log('inside notification.comment', notification)
+        $.ajax({
+          url: '/api/comments/' + notification.id,
+          type: 'PUT',
+          success: function(data) {
+            console.log('put comment data', data)
+            outer.props.dispatch(actions.readNotification(data));
+          }
+        });
+      } else {
+        $.ajax({
+          url: '/api/response/' + notification.id,
+          type: 'PUT',
+          success: function(data) {
+            outer.props.dispatch(actions.readNotification(data));
+          }
+        });
+      }
     }
   }
 
@@ -449,16 +472,10 @@ class ProfileContent extends React.Component {
             })}
           </div>
         );
-      } else if (this.props.profileView === 'mailbox') {
+      } else if (this.props.profileView === 'notifications') {
 
-        let notifications = [];
+        let notifications = this.props.responses.concat(this.props.comments);
 
-        this.props.responses.forEach(response => {
-          notifications.push(response);
-        });
-        this.props.comments.forEach(comment => {
-          notifications.push(comment);
-        });
         notifications.sort((a, b) => {
           return a.created_at < b.created_at;
         });
@@ -466,32 +483,63 @@ class ProfileContent extends React.Component {
         let mappedNotifications = notifications.map((notification, i) => {
           let timeDifferenceInSeconds = (new Date().getTime() - parseInt(notification.created_at)) / 1000;
           if (notification.comment) {
-            return (
-              <div>
-                <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{notification.username + ' commented to your challenge: ' + notification.title}</h4></a>
-                <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
-                <div style={{display: this.state[i] || 'none'}}>
-                  <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
-                  {notification.comment}
+            if (notification.read === 0) {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD commented to your challenge: ' + notification.title}</h4></a>
+                  <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
+                    {notification.comment}
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            } else {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' commented to your challenge: ' + notification.title}</h4></a>
+                  <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
+                    {notification.comment}
+                  </div>
+                </div>
+              );
+            }
           } else if (notification.parent_id) {
-            return (
-              <div>
-                <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{notification.username + ' responded to your challenge...'}</h4></a>
-                {calculateTime(timeDifferenceInSeconds)}<br/>
-                <div style={{display: this.state[i] || 'none'}}>
-                  {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
-                  <h4>{notification.title}</h4>
-                  <h5>{notification.description}</h5>
-                  <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                  {whichFollowButton(notification.user_id, notification.username)}
-                  {whichFavoriteIcon(notification.user_id)}
-                  <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
+            if (notification.read === 0) {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD responded to your challenge...'}</h4></a>
+                  {calculateTime(timeDifferenceInSeconds)}<br/>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
+                    <h4>{notification.title}</h4>
+                    <h5>{notification.description}</h5>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
+                    {whichFollowButton(notification.user_id, notification.username)}
+                    {whichFavoriteIcon(notification.user_id)}
+                    <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            } else {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' responded to your challenge...'}</h4></a>
+                  {calculateTime(timeDifferenceInSeconds)}<br/>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
+                    <h4>{notification.title}</h4>
+                    <h5>{notification.description}</h5>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
+                    {whichFollowButton(notification.user_id, notification.username)}
+                    {whichFavoriteIcon(notification.user_id)}
+                    <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
+                  </div>
+                </div>
+              );
+            }
           }
         });
 
@@ -499,7 +547,7 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'messages' && window.sessionStorage.username === this.props.user[0].username) {
         let mappedMessages = this.props.messages.map((message, i) => {
           if (message) {
-            if (!message.read) {
+            if (message.read === 0) {
               return (
                 <div>
                   <div onClick={() => this.onMessageClick(message)}>
@@ -539,10 +587,10 @@ class ProfileContent extends React.Component {
       }
     };
 
-    let renderMailbox = () => {
+    let renderNotifications = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
         return (
-          <button onClick={() => this.changeProfileView('mailbox')}>Mailbox</button>
+          <button onClick={() => this.changeProfileView('notifications')}>Notifications</button>
         );
       } else {
         return (
@@ -677,7 +725,7 @@ class ProfileContent extends React.Component {
           <button onClick={() => this.changeProfileView('all')}>Challenges/Responses</button>
           <button onClick={() => this.changeProfileView('favorites')}>Favorites</button>
           <button onClick={() => this.changeProfileView('followers')}>Followers</button>
-          {renderMailbox()}
+          {renderNotifications()}
           {renderMessages()}
         </div>
         {myView()}
