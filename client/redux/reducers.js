@@ -114,7 +114,12 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, updateObj);
-  } else {
+  
+}else if(action.type === "UPDATE_COVERVIDEO"){
+    return Object.assign({}, state, {
+      coverVideo: action.payload
+    });
+  }else {
     return state;
   }
 };

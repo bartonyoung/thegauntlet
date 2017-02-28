@@ -18,7 +18,8 @@ const configureStore = (initialState = {
   ranks: [],
   followers: [],
   upvoted: [],
-  downvoted: []
+  downvoted: [],
+  coverVideo: ''
 }) => {
   return finalCreateStore(reducer, initialState);
 };

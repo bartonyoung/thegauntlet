@@ -103,6 +103,12 @@ let actions = {
     return {
       type: 'GET_DOWNVOTED',
       payload: downvote
+    }
+  },
+  setCoverVideo: function(video) {
+    return {
+      type: 'UPDATE_COVERVIDEO',
+      payload: video
     };
   }
 };
