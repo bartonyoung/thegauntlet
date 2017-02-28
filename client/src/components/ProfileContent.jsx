@@ -148,7 +148,6 @@ class ProfileContent extends React.Component {
   }
 
   removeFromFavorites(challengeId) {
-    console.log('Client remove', challengeId);
     const outer = this;
     $.post('/api/unFavorite', {
       challenge_id: challengeId

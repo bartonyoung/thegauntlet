@@ -1,3 +1,9 @@
 .side-nav {
   position: fixed;
+  border: red dashed;
 }
+
+/*.list-group-item {
+  border: 
+  width: 100%;
+}*/

@@ -73,8 +73,10 @@ class Dash extends React.Component {
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
         <div className="container-fluid main-content">
           <div className="row">
-            <div className="col col-md-2">
-              <SideNav />
+            <div className="col-md-2 left-bar">
+              <div className="">
+                <SideNav />
+              </div>
             </div>
               <div className="col col-md-8 col-lg-8">
                 <div className="container-fluid">

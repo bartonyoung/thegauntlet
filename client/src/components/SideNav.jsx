@@ -46,14 +46,14 @@ class SideNav extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="side-nav">
         <form>
           <input type="text" required ref="search" placeholder="Search"/>
           <button type="button" onClick={() => this.challengeSearch()}>
             <span className="glyphicon glyphicon-search"></span>
           </button>
         </form>
-        <div className="list-group side-nav">
+        <div>
           <button onClick={()=>{ this.onSideBarClick('all'); }} type="button" className="list-group-item">All Challenges</button>
           <button onClick={()=>{ this.onSideBarClick('popular'); }} type="button" className="list-group-item">Most Popular</button>
           <button onClick={()=>{ this.onSideBarClick('recent'); }} type="button" className="list-group-item">Recent</button>
