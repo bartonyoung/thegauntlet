@@ -20,10 +20,11 @@ module.exports = {
     });
   },
 
-  readAll: (req, res) => {
-    let toUser_id = req.params.toUser_id;
-    db.from('messages').where({read: null}).update({read: 1}).then(() => {
-      db.select('messages.message_id', 'messages.message', 'messages.fromUser_id', 'messages.toUser_id', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({toUser_id: toUser_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
+  read: (req, res) => {
+    let message_id = req.params.id;
+    console.log('message id', message_id)
+    db.from('messages').where({read: 0}).update({read: 1}).then(() => {
+      db.select('messages.message_id', 'messages.message', 'messages.fromUser_id', 'messages.toUser_id', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
         console.log('messages updated', messages);
         res.json(messages);
       });

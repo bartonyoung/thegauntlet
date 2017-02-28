@@ -72,30 +72,29 @@ class NavBar extends React.Component {
   }
 
   handleNotificationClick() {
-    let outer = this;
-
     this.props.dispatch(actions.setProfileView('messages'));
-    this.props.dispatch(actions.setDisplay('messages-checked'));
-    $.ajax({
-      url: '/api/messages/' + window.sessionStorage.user_id,
-      type: 'PUT',
-      success: function(data) {
-        outer.props.dispatch(actions.readMessages(data));
-      }
-    });
-    this.props.dispatch(actions.readMessages());
     window.location.href = '/#/profile/' + window.sessionStorage.username;
   }
 
-  renderMessagesNumber(num) {
-    console.log(!!this.props.messages)
-    if (this.props.messages && this.props.display === 'messages-number') {
-      return <span className={this.props.display}>{this.props.messages.length}</span>;
-    } else if (this.props.messages && this.props.display === 'messages-checked') {
-      return <div></div>;
-    } else {
-      return <div></div>;
+  renderMessagesNumber() {
+    var unRead = this.props.messages.reduce((a, c) => {
+      if (!c.read) {
+        a += 1;
+      }
+
+      return a;
+    }, 0);
+
+    for (var i = 0; i < this.props.messages.length; i++) {
+      var message = this.props.messages[i];
+      if (this.props.display === 'messages-number' && unRead > 0) {
+        return <span className={this.props.display}>{unRead}</span>;
+      } else if (unRead === 0) {
+        return <span className={'messages-checked'}></span>;
+      }
     }
+
+    return <div></div>;
   }
 
   handleNav() {

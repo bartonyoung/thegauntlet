@@ -27,14 +27,14 @@ class Dash extends React.Component {
       });
       $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
         messages.forEach(message => {
+          outer.props.dispatch(actions.getMessages(messages));
           if (message.read === 0) {
             outer.props.dispatch(actions.setDisplay('messages-number'));
-            outer.props.dispatch(actions.getMessages(messages));
           }
         });
       });
     }
-    $.get('/api/ranks').done((rankData)=>{
+    $.get('/api/ranks').done((rankData) => {
       outer.props.dispatch(actions.getRanks(rankData));
     });
     $.get('/api/allChallenges').done(challenges => {

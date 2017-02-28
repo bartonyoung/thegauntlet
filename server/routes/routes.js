@@ -45,5 +45,5 @@ routes.post('/userUpload', s3Controller);
 routes.post('/s3', challengeController.s3);
 routes.post('/messages/:toUser_id', messageController.sendOne);
 routes.get('/messages/:toUser_id', messageController.getAll);
-routes.put('/messages/:toUser_id', messageController.readAll);
+routes.put('/messages/:id', messageController.read);
 module.exports = routes;

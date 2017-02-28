@@ -261,6 +261,21 @@ class ProfileContent extends React.Component {
     });
   }
 
+  onMessageClick(message) {
+    let outer = this;
+
+    if (!message.read) {
+      $.ajax({
+        url: '/api/messages/' + message.message_id,
+        type: 'PUT',
+        success: function(data) {
+          console.log('put message data', data)
+          outer.props.dispatch(actions.readMessage(data));
+        }
+      });
+    }
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -484,20 +499,37 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'messages' && window.sessionStorage.username === this.props.user[0].username) {
         let mappedMessages = this.props.messages.map((message, i) => {
           if (message) {
-            return (
-              <div>
+            if (!message.read) {
+              return (
                 <div>
-                  {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-                  <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
-                    <span className='messageUsername'>
-                      {message.username + ': '}
-                    </span>
-                    <span className='messageMessage'>
-                      {message.message}
-                    </span>
+                  <div onClick={() => this.onMessageClick(message)}>
+                    {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
+                      <span className='messageUsername'>
+                        {message.username + ': '}
+                      </span>
+                      <span className='messageMessage'>
+                        {message.message + ' UNREAD'}
+                      </span>
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            } else if (message.read) {
+              return (
+                <div>
+                  <div onClick={() => this.onMessageClick(message)}>
+                    {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
+                      <span className='messageUsername'>
+                        {message.username + ': '}
+                      </span>
+                      <span className='messageMessage'>
+                        {message.message}
+                      </span>
+                  </div>
+                </div>
+              );
+            }
           } else {
             return 'No messages';
           }

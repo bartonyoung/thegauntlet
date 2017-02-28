@@ -124,10 +124,10 @@ let actions = {
     };
   },
 
-  readMessages: function(messages) {
+  readMessage: function(message) {
     return {
-      type: 'READ_MESSAGES',
-      payload: messages
+      type: 'READ_MESSAGE',
+      payload: message
     };
   },
 

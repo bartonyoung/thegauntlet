@@ -134,24 +134,26 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       messages: action.payload
     });
-  } else if (action.type === 'READ_MESSAGES') {
-    let readMessages = {};
+  } else if (action.type === 'READ_MESSAGE') {
+    let readMessage = {};
 
     for (var keys in state) {
       if (keys === 'messages') {
-        readMessages[keys] = [];
+        readMessage[keys] = [];
         state[keys].forEach(key => {
-          readMessages[keys].push(key);
+          readMessage[keys].push(key);
         });
-        readMessages[keys].forEach(message => {
-          message.read = 1;
+        readMessage[keys].forEach(message => {
+          if (message.message_id === action.payload[0].message_id) {
+            message.read = 1;
+          }
         });
       } else {
-        readMessages[keys] = state[keys];
+        readMessage[keys] = state[keys];
       }
     }
 
-    return Object.assign({}, readMessages);
+    return Object.assign({}, readMessage);
   } else if (action.type === 'SET_DISPLAY') {
     return Object.assign({}, state, {
       display: action.payload
