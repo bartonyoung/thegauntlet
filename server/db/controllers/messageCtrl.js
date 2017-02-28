@@ -8,7 +8,7 @@ module.exports = {
     console.log(toUser_id, 'toUser_id');
     db('messages').where({toUser_id: toUser_id}).insert(message).then(() => {
       db.select().from('messages').where({toUser_id: toUser_id}).then(message => {
-        res.send(201);
+        res.json(message);
       });
     });
   },

@@ -34,16 +34,16 @@ class Profile extends React.Component {
         outer.props.dispatch(actions.getComments(data.reverse()));
       });
     }
-    if (this.props.profileView !== 'messages') {
-      $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
-        messages.forEach(message => {
-          outer.props.dispatch(actions.getMessages(messages));
-          if (message.read === 0) {
-            outer.props.dispatch(actions.setDisplayMessages('messages-number'));
-          }
-        });
+
+    $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
+      messages.forEach(message => {
+        outer.props.dispatch(actions.getMessages(messages));
+        if (message.read === 0 && this.props.displayMessages !== 'messagess-number') {
+          outer.props.dispatch(actions.setDisplayMessages('messages-number'));
+        }
       });
-    }
+    });
+
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
     });

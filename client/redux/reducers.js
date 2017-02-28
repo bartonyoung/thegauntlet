@@ -136,6 +136,8 @@ const reducer = (state, action) => {
     });
   } else if (action.type === 'READ_MESSAGE') {
     let readMessage = {};
+    console.log(state.messages)
+    console.log(action.payload[0])
 
     for (var keys in state) {
       if (keys === 'messages') {
@@ -153,6 +155,7 @@ const reducer = (state, action) => {
       }
     }
 
+    console.log(readMessage)
     return Object.assign({}, readMessage);
   } else if (action.type === 'READ_NOTIFICATION') {
     let readNotification = {};

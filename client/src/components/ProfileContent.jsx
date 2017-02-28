@@ -68,7 +68,6 @@ class ProfileContent extends React.Component {
           url: '/api/comments/' + notification.id,
           type: 'PUT',
           success: function(data) {
-            console.log('put comment data', data)
             outer.props.dispatch(actions.readNotification(data));
           }
         });

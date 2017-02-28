@@ -34,7 +34,7 @@ class Dash extends React.Component {
         });
       });
       $.get('/api/response', {
-        parent_id: window.sessionStorage.newUser_id
+        parent_id: window.sessionStorage.user_id
       }).done(data => {
         let responseArr = [];
         data.forEach(response => {
@@ -48,7 +48,7 @@ class Dash extends React.Component {
         outer.props.dispatch(actions.getResponses(responseArr));
       });
       $.get('/api/comments', {
-        user_id: window.sessionStorage.newUser_id
+        user_id: window.sessionStorage.user_id
       }).done(data => {
         data.forEach(comment => {
           if (comment.read === 0) {
