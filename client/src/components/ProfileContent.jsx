@@ -13,19 +13,22 @@ class ProfileContent extends React.Component {
       first: false,
       second: false,
       third: false,
+      messageDisplay: 'unset',
+      formDisplay: 'none'
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.editFirstName = this.editFirstName.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
+    this.onSendMessageClick = this.onSendMessageClick.bind(this);
+    this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
   }
 
   componentDidMount () {
     const outer = this;
-    this.props.dispatch(actions.setProfileView('all'));
     $.get('/api/getLeaders').then(leaders => {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
-    }); 
+    });
   }
 
   numFollowers () {
@@ -47,7 +50,7 @@ class ProfileContent extends React.Component {
     });
   }
 
-  onNotificationClick(i) {
+  onNotificationClick(i, notification) {
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -56,6 +59,28 @@ class ProfileContent extends React.Component {
       this.setState({
         [i]: 'none'
       });
+    }
+    let outer = this;
+
+    if (notification.read === 0) {
+      if (notification.comment) {
+        console.log('inside notification.comment', notification)
+        $.ajax({
+          url: '/api/comments/' + notification.id,
+          type: 'PUT',
+          success: function(data) {
+            outer.props.dispatch(actions.readNotification(data));
+          }
+        });
+      } else {
+        $.ajax({
+          url: '/api/response/' + notification.id,
+          type: 'PUT',
+          success: function(data) {
+            outer.props.dispatch(actions.readNotification(data));
+          }
+        });
+      }
     }
   }
 
@@ -230,18 +255,65 @@ class ProfileContent extends React.Component {
       outer.props.dispatch(actions.addUser(user));
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
-      });      
+      });
       $.get('/api/userChallenges', {
         user_id: window.sessionStorage.newUser_id
       }).done(challenges => {
         outer.props.dispatch(actions.getChallenges(challenges.reverse()));
-      });      
-    });    
+      });
+    });
   }
 
-  sendMessage() {
+  onSendMessageClick(e) {
+    e.preventDefault();
+    let outer = this;
+    this.setState({
+      messageDisplay: 'unset',
+      formDisplay: 'none'
+    });
+    let created_at = new Date().getTime();
+    let message = {
+      message: this.refs.message.value,
+      fromUser_id: window.sessionStorage.user_id,
+      toUser_id: window.sessionStorage.newUser_id,
+      created_at: created_at,
+      read: 0
+    };
+    $.post('/api/messages/' + window.sessionStorage.newUser_id, message).done(data => {
+      outer.refs.message.value = '';
+    });
+  }
 
-  }     
+  onMessageClick(message) {
+    let outer = this;
+
+    if (!message.read) {
+      $.ajax({
+        url: '/api/messages/' + message.message_id,
+        type: 'PUT',
+        success: function(data) {
+          console.log('put message data', data)
+          outer.props.dispatch(actions.readMessage(data));
+        }
+      });
+    }
+  }
+
+  onChallengeTitleClick(challenge) {
+    if (challenge.parent_id === null) {
+      window.sessionStorage.setItem('challengeId', challenge.id);
+      window.sessionStorage.setItem('currentId', challenge.id);
+      window.sessionStorage.setItem('challengeName', challenge.title);
+    } else if (window.sessionStorage.challengeId === undefined) {
+      window.sessionStorage.setItem('challengeId', challenge.parent_id);
+      window.sessionStorage.setItem('currentId', challenge.id);
+      window.sessionStorage.setItem('challengeName', challenge.title);
+    } else {
+      window.sessionStorage.challengeId = challenge.parent_id;
+      window.sessionStorage.currentId = challenge.id;
+      window.sessionStorage.challengeName = challenge.title;
+    }
+  }
 
   render() {
     let checkFile = (type, challenge) => {
@@ -262,10 +334,12 @@ class ProfileContent extends React.Component {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div>
-              <h4>{challenge.title}</h4>
-              <p>{challenge.description}</p>
-              {checkFile(challenge.filename.split('.').pop(), challenge)}
+            <div onClick={() => this.onChallengeTitleClick(challenge)}>
+              <Link to={'/challenge'}>
+                <h4>{challenge.title}</h4>
+                <p>{challenge.description}</p>
+                {checkFile(challenge.filename.split('.').pop(), challenge)}
+              </Link>
             </div>
           );
         }
@@ -275,26 +349,28 @@ class ProfileContent extends React.Component {
     });
 
     let favoritedChallenges = this.props.favorites.map((challenge, i) => {
-      if (challenge) { 
+      if (challenge) {
         return (
           <div>
             <h4>{challenge.title}</h4>
             <p>{challenge.description}</p>
             {checkFile(challenge.filename.split('.').pop(), challenge)}
             <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
-          </div>  
-        ); 
+          </div>
+        );
       }
-    });             
+    });
 
     let mappedResponses = this.props.responses.map(response => {
       if (response) {
         if (response.username === this.props.user[0].username) {
           return (
-            <div>
+            <div onClick={() => this.onChallengeTitleClick(response)}>
+              <Link to={'/challenge'}>
               <h4>{response.title}</h4>
               <p>{response.description}</p>
               {checkFile(response.filename.split('.').pop(), response)}
+              </Link>
             </div>
           );
         }
@@ -405,7 +481,7 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'favorites') {
         return (
           <div>
-            Favorites:  
+            Favorites:
             {favoritedChallenges}
           </div>
         );
@@ -418,16 +494,10 @@ class ProfileContent extends React.Component {
             })}
           </div>
         );
-      } else if (this.props.profileView === 'mailbox') {
+      } else if (this.props.profileView === 'notifications') {
 
-        let notifications = [];
+        let notifications = this.props.responses.concat(this.props.comments);
 
-        this.props.responses.forEach(response => {
-          notifications.push(response);
-        });
-        this.props.comments.forEach(comment => {
-          notifications.push(comment);
-        });
         notifications.sort((a, b) => {
           return a.created_at < b.created_at;
         });
@@ -435,42 +505,114 @@ class ProfileContent extends React.Component {
         let mappedNotifications = notifications.map((notification, i) => {
           let timeDifferenceInSeconds = (new Date().getTime() - parseInt(notification.created_at)) / 1000;
           if (notification.comment) {
-            return (
-              <div>
-                <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{notification.username + ' commented to your challenge: ' + notification.title}</h4></a>
-                <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
-                <div style={{display: this.state[i] || 'none'}}>
-                  <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
-                  {notification.comment}
+            if (notification.read === 0) {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD commented to your challenge: ' + notification.title}</h4></a>
+                  <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
+                    {notification.comment}
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            } else {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' commented to your challenge: ' + notification.title}</h4></a>
+                  <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
+                    {notification.comment}
+                  </div>
+                </div>
+              );
+            }
           } else if (notification.parent_id) {
-            return (
-              <div>
-                <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i)}><h4>{notification.username + ' responded to your challenge...'}</h4></a>
-                {calculateTime(timeDifferenceInSeconds)}<br/>
-                <div style={{display: this.state[i] || 'none'}}>
-                  {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
-                  <h4>{notification.title}</h4>
-                  <h5>{notification.description}</h5>
-                  <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                  {whichFollowButton(notification.user_id, notification.username)}
-                  {whichFavoriteIcon(notification.user_id)}
-                  <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
+            if (notification.read === 0) {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD responded to your challenge...'}</h4></a>
+                  {calculateTime(timeDifferenceInSeconds)}<br/>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
+                    <h4>{notification.title}</h4>
+                    <h5>{notification.description}</h5>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
+                    {whichFollowButton(notification.user_id, notification.username)}
+                    {whichFavoriteIcon(notification.user_id)}
+                    <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            } else {
+              return (
+                <div>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' responded to your challenge...'}</h4></a>
+                  {calculateTime(timeDifferenceInSeconds)}<br/>
+                  <div style={{display: this.state[i] || 'none'}}>
+                    {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
+                    <h4>{notification.title}</h4>
+                    <h5>{notification.description}</h5>
+                    <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
+                    {whichFollowButton(notification.user_id, notification.username)}
+                    {whichFavoriteIcon(notification.user_id)}
+                    <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
+                  </div>
+                </div>
+              );
+            }
           }
         });
+
         return mappedNotifications;
+      } else if (this.props.profileView === 'messages' && window.sessionStorage.username === this.props.user[0].username) {
+        let mappedMessages = this.props.messages.map((message, i) => {
+          if (message) {
+            if (message.read === 0) {
+              return (
+                <div>
+                  <div onClick={() => this.onMessageClick(message)}>
+                    {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
+                      <span className='messageUsername'>
+                        {message.username + ': '}
+                      </span>
+                      <span className='messageMessage'>
+                        {message.message + ' UNREAD'}
+                      </span>
+                  </div>
+                </div>
+              );
+            } else if (message.read) {
+              return (
+                <div>
+                  <div onClick={() => this.onMessageClick(message)}>
+                    {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
+                      <span className='messageUsername'>
+                        {message.username + ': '}
+                      </span>
+                      <span className='messageMessage'>
+                        {message.message}
+                      </span>
+                  </div>
+                </div>
+              );
+            }
+          } else {
+            return 'No messages';
+          }
+        });
+
+        return mappedMessages;
       }
     };
 
-    let renderMailbox = () => {
+    let renderNotifications = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
         return (
-          <li onClick={() => this.changeProfileView('mailbox')}><a data-toggle="tab" href="#menu4">Mailbox</a></li>
+          <li onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
         );
       } else {
         return (
@@ -478,6 +620,19 @@ class ProfileContent extends React.Component {
         );
       }
     };
+
+    let renderMessages = () => {
+      if (window.sessionStorage.username === this.props.user[0].username) {
+        return (
+          <li onClick={() => this.changeProfileView('messages')}><a data-toggle="tab" href="#menu5">Messages</a></li>
+        );
+      } else {
+        return (
+          <div></div>
+        );
+      }
+    };
+
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.username === user) {
         return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}><span className="glyphicon glyphicon-pencil"></span></a>}</span>;
@@ -525,6 +680,7 @@ class ProfileContent extends React.Component {
         );
       }
     };
+
     let Email = (email, id, user) => {
       if (!this.state.third) {
         return (
@@ -543,11 +699,24 @@ class ProfileContent extends React.Component {
       }
     };
 
-    // let renderRank() {
-    //   ranks.map((rank, index) => {
-
-    //   }
-    // }
+    let sendMessage = () => {
+      if (window.sessionStorage.username !== window.sessionStorage.newUsername) {
+        return (
+          <div>
+            <button style={{display: this.state.messageDisplay}} onClick={() => this.setState({
+              messageDisplay: 'none',
+              formDisplay: 'unset'
+            })}>Send a message</button>
+            <form style={{display: this.state.formDisplay}} onSubmit={this.onSendMessageClick}>
+              <input type='text' placeholder='Enter your message' required ref='message'/>
+              <input type='submit' value='Send'/>
+            </form>
+          </div>
+        );
+      } else {
+        return <div></div>;
+      }
+    };
 
     let target = this.props.user[0].username;
 
@@ -583,8 +752,9 @@ class ProfileContent extends React.Component {
             <li onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>
             <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>
             <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>
-            {renderMailbox()}
-          </ul>  
+            {renderNotifications()}
+            {renderMessages()}
+          </ul>
           {myView()}
         </div>
       </div>
