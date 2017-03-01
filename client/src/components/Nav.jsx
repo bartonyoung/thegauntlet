@@ -126,16 +126,6 @@ class NavBar extends React.Component {
     return <div></div>;
   }
 
-  renderMessagesNumber() {
-    console.log('in here')
-    if (this.props.messageNumber) {
-      console.log('this.props.messageNumber', this.props.messageNumber)
-      return <span className="messages-number">{this.props.messageNumber}</span>;
-    } else {
-      return <div></div>;
-    }
-  }
-
   handleNav() {
     if (window.sessionStorage.username) {
       return (
@@ -154,7 +144,6 @@ class NavBar extends React.Component {
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
                     <form id="challenge" style={{width: '300px', padding: '15px'}}>
-
             <div className="form-group">
               <li className="nav-label">Name it!</li>
               <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
