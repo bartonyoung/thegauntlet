@@ -348,6 +348,19 @@ class ProfileContent extends React.Component {
       }
     });
 
+    let favoritedChallenges = this.props.favorites.map((challenge, i) => {
+      if (challenge) {
+        return (
+          <div>
+            <h4>{challenge.title}</h4>
+            <p>{challenge.description}</p>
+            {checkFile(challenge.filename.split('.').pop(), challenge)}
+            <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
+          </div>
+        );
+      }
+    });
+
     let mappedResponses = this.props.responses.map(response => {
       if (response) {
         if (response.username === this.props.user[0].username) {
@@ -363,19 +376,6 @@ class ProfileContent extends React.Component {
         }
       } else {
         return ' No responses submitted yet';
-      }
-    });
-
-    let favoritedChallenges = this.props.favorites.map((challenge, i) => {
-      if (challenge) {
-        return (
-          <div>
-            <h4>{challenge.title}</h4>
-            <p>{challenge.description}</p>
-            {checkFile(challenge.filename.split('.').pop(), challenge)}
-            <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
-          </div>
-        );
       }
     });
 

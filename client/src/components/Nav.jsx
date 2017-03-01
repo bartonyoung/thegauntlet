@@ -126,11 +126,21 @@ class NavBar extends React.Component {
     return <div></div>;
   }
 
+  renderMessagesNumber() {
+    console.log('in here')
+    if (this.props.messageNumber) {
+      console.log('this.props.messageNumber', this.props.messageNumber)
+      return <span className="messages-number">{this.props.messageNumber}</span>;
+    } else {
+      return <div></div>;
+    }
+  }
+
   handleNav() {
     if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
-            <div className="container">
+            <div className="container-fluid">
               <ul className="nav navbar-nav navbar-right">
                 <li>
                   <Link className="glyphicon glyphicon-fire" onClick={() => this.handleIconClick('notification')}></Link>
@@ -143,7 +153,7 @@ class NavBar extends React.Component {
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
-                    <form id="challenxe" style={{width: '300px', padding: '15px'}}>
+                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
 
             <div className="form-group">
               <li className="nav-label">Name it!</li>

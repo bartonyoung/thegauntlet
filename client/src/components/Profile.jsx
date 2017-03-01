@@ -9,6 +9,7 @@ import NavBar from './Nav.jsx';
 class Profile extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount() {
@@ -60,6 +61,18 @@ class Profile extends React.Component {
     if (outer.props.favorites.length === 0) {
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
+      });
+    }
+  }
+
+  handleChange(icon) {
+    if (icon === 'messages') {
+      this.setState({
+        messageNumber: this.state.messageNumber += 1
+      });
+    } else {
+      this.setState({
+        notificationNumber: this.state.notificationNumber++
       });
     }
   }
