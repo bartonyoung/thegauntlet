@@ -3,15 +3,11 @@ import $ from 'jquery';
 import css from '../styles/nav.css';
 import actions from '../../redux/actions.js';
 import {connect} from 'react-redux';
-import { Link } from 'react-router';
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleIconClick = this.handleIconClick.bind(this);
-    this.renderMessagesNumber = this.renderMessagesNumber.bind(this);
-    this.renderNotificationsNumber = this.renderNotificationsNumber.bind(this);
   }
 
   handleSubmit() {
@@ -36,7 +32,8 @@ class NavBar extends React.Component {
               category: outer.refs.category.value,
               filename: resp,
               created_at: created_at,
-              username: window.sessionStorage.username
+              username: window.sessionStorage.username,
+              to: null
             },
             success: function(data) {
               outer.props.dispatch(actions.addChallenge(data));
@@ -48,8 +45,6 @@ class NavBar extends React.Component {
           });
         }
       });
-    } else {
-      alert('Please submit a file');
     }
   }
 
@@ -59,101 +54,29 @@ class NavBar extends React.Component {
     window.sessionStorage.newUser_id = window.sessionStorage.user_id;
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      this.props.dispatch(actions.setProfileView('all'));
       window.location.href = '/#/profile/' + window.sessionStorage.username;
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
-      });
+      });       
       $.get('/api/userChallenges', {
         user_id: window.sessionStorage.newUser_id
       }).done(challenges => {
         console.log('get user challenges', challenges);
         outer.props.dispatch(actions.getChallenges(challenges.reverse()));
-      });
+      });     
     });
-  }
-
-  handleIconClick(icon) {
-    if (icon === 'message') {
-      this.props.dispatch(actions.setProfileView('messages'));
-    } else if (icon === 'notification') {
-      this.props.dispatch(actions.setProfileView('notifications'));
-    }
-
-    window.location.href = '/#/profile/' + window.sessionStorage.username;
-  }
-
-  renderMessagesNumber() {
-    var unReadMessages = this.props.messages.reduce((a, c) => {
-      if (c.read === 0) {
-        a += 1;
-      }
-
-      return a;
-    }, 0);
-
-    for (var i = 0; i < this.props.messages.length; i++) {
-      var message = this.props.messages[i];
-      if (this.props.displayMessages === 'messages-number' && unReadMessages > 0) {
-        return <span className={this.props.displayMessages}>{unReadMessages}</span>;
-      } else if (unReadMessages === 0) {
-        return <span className={'messages-checked'}></span>;
-      }
-    }
-
-    return <div></div>;
-  }
-
-  renderNotificationsNumber() {
-    let notifications = this.props.comments.concat(this.props.responses);
-    let unReadNotifications = notifications.reduce((a, c) => {
-      if (c.read === 0) {
-        a += 1;
-      }
-
-      return a;
-    }, 0);
-    console.log(unReadNotifications, 'unReadNotifications number', notifications)
-    for (var n = 0; n < notifications.length; n++) {
-      var notification = notifications[n];
-      if (this.props.displayNotifications === 'notifications-number' && unReadNotifications > 0) {
-        return <span className={this.props.displayNotifications}>{unReadNotifications}</span>;
-      } else if (unReadNotifications === 0) {
-        return <span className={'notifications-checked'}></span>;
-      }
-    }
-
-    return <div></div>;
-  }
-
-  renderMessagesNumber() {
-    console.log('in here')
-    if (this.props.messageNumber) {
-      console.log('this.props.messageNumber', this.props.messageNumber)
-      return <span className="messages-number">{this.props.messageNumber}</span>;
-    } else {
-      return <div></div>;
-    }
-  }
+  } 
 
   handleNav() {
     if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
-            <div className="container-fluid">
+            <div className="container">
               <ul className="nav navbar-nav navbar-right">
-                <li>
-                  <Link className="glyphicon glyphicon-fire" onClick={() => this.handleIconClick('notification')}></Link>
-                  {this.renderNotificationsNumber()}
-                </li>
-                <li>
-                  <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleIconClick('message')}></Link>
-                  {this.renderMessagesNumber()}
-                </li>
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
                   <ul className="dropdown-menu">
-                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
+                    <form id="challenxe" style={{width: '300px', padding: '15px'}}>
 
             <div className="form-group">
               <li className="nav-label">Name it!</li>
@@ -180,6 +103,8 @@ class NavBar extends React.Component {
             <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
           </form>
           <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
+
+
                   </ul>
                 </li>
                 <li>

@@ -75,28 +75,24 @@ let actions = {
       payload: view,
     };
   },
-
   setFollowers: function(followers) {
     return {
       type: 'GET_FOLLOWERS',
       payload: followers,
     };
   },
-
   getRanks: function(ranks) {
     return {
       type: 'GET_RANKS',
       payload: ranks,
     };
   },
-
   updatePost: function(post) {
     return {
       type: 'UPDATE_POST',
       payload: post
     };
   },
-
   getUpvoted: function(upvote) {
     return {
       type: 'GET_UPVOTED',
@@ -113,48 +109,6 @@ let actions = {
     return {
       type: 'UPDATE_COVERVIDEO',
       payload: video
-    };
-  },
-
-  addMessage: function(message) {
-    return {
-      type: 'ADD_MESSAGE',
-      payload: message
-    };
-  },
-
-  getMessages: function(messages) {
-    return {
-      type: 'GET_MESSAGES',
-      payload: messages
-    };
-  },
-
-  readMessage: function(message) {
-    return {
-      type: 'READ_MESSAGE',
-      payload: message
-    };
-  },
-
-  setDisplayMessages: function(display) {
-    return {
-      type: 'SET_DISPLAY_MESSAGES',
-      payload: display
-    };
-  },
-
-  setDisplayNotifications: function(display) {
-    return {
-      type: 'SET_DISPLAY_NOTIFICATIONS',
-      payload: display
-    };
-  },
-
-  readNotification: function(notification) {
-    return {
-      type: 'READ_NOTIFICATION',
-      payload: notification
     };
   }
 };

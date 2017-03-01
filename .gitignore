@@ -6,4 +6,3 @@ bower_components/
 build/
 dist/
 client/public/bundle.js
-**/.DS_Store
