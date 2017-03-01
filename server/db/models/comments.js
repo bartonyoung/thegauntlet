@@ -8,6 +8,7 @@ module.exports = knex.schema.createTableIfNotExists('comments', (comment) => {
   comment.string('created_at');
   comment.string('username');
   comment.string('title');
+  comment.boolean('read');
 }).then(() => {
   console.log('comments table created');
 });

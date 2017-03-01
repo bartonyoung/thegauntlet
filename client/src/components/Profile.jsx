@@ -7,26 +7,44 @@ import ProfileContent from './ProfileContent.jsx';
 import NavBar from './Nav.jsx';
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   componentWillMount() {
     let outer = this;
-    $.get('/api/response', {
-      parent_id: window.sessionStorage.newUser_id
-    }).done(data => {
-      let responseArr = [];
-      data.forEach(response => {
-        if (response.parent_id) {
-          responseArr.push(response);
+    if (window.sessionStorage.username === window.sessionStorage.newUsername) {
+      $.get('/api/response', {
+        user_id: window.sessionStorage.newUser_id
+      }).done(data => {
+        let responseArr = [];
+        data.forEach(response => {
+          if (response.parent_id) {
+            responseArr.push(response);
+            if (response.read === 0 && this.props.displayNotifications !== 'notifications-number') {
+              outer.props.dispatch(actions.setDisplayNotifications('notifications-number'));
+            }
+          }
+        });
+        outer.props.dispatch(actions.getResponses(responseArr));
+      });
+      $.get('/api/comments', {
+        user_id: window.sessionStorage.newUser_id
+      }).done(data => {
+        outer.props.dispatch(actions.getComments(data.reverse()));
+      });
+    }
+
+    $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
+      messages.forEach(message => {
+        outer.props.dispatch(actions.getMessages(messages));
+        if (message.read === 0 && this.props.displayMessages !== 'messagess-number') {
+          outer.props.dispatch(actions.setDisplayMessages('messages-number'));
         }
       });
-      outer.props.dispatch(actions.getResponses(responseArr));
     });
-    $.get('/api/comments', {
-      user_id: window.sessionStorage.newUser_id
-    }).done(data => {
-      console.log('comment data', data);
-      outer.props.dispatch(actions.getComments(data.reverse()));
-    });
+
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
     });
@@ -43,7 +61,19 @@ class Profile extends React.Component {
     if (outer.props.favorites.length === 0) {
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
-      });    
+      });
+    }
+  }
+
+  handleChange(icon) {
+    if (icon === 'messages') {
+      this.setState({
+        messageNumber: this.state.messageNumber += 1
+      });
+    } else {
+      this.setState({
+        notificationNumber: this.state.notificationNumber++
+      });
     }
   }
 
@@ -52,7 +82,7 @@ class Profile extends React.Component {
       return (
         <div className='container-fluid profile'>
           <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
-          <ProfileContent />
+          <ProfileContent handleChange={this.handleChange}/>
         </div>
       );
     } else {

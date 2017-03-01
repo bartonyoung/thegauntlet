@@ -25,8 +25,41 @@ class Dash extends React.Component {
       $.get('/api/favorite').done(data => {
         outer.props.dispatch(actions.setFavorites(data));
       });
+      $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
+        messages.forEach(message => {
+          outer.props.dispatch(actions.getMessages(messages));
+          if (message.read === 0) {
+            outer.props.dispatch(actions.setDisplayMessages('messages-number'));
+          }
+        });
+      });
+      $.get('/api/response', {
+        user_id: window.sessionStorage.user_id
+      }).done(data => {
+        let responseArr = [];
+        data.forEach(response => {
+          if (response.parent_id) {
+            responseArr.push(response);
+            if (response.read === 0 && this.props.displayNotifications !== 'notifications-number') {
+              outer.props.dispatch(actions.setDisplayNotifications('notifications-number'));
+            }
+          }
+        });
+        outer.props.dispatch(actions.getResponses(responseArr));
+      });
+      $.get('/api/comments', {
+        user_id: window.sessionStorage.user_id
+      }).done(data => {
+        data.forEach(comment => {
+          if (comment.read === 0) {
+            outer.props.dispatch(actions.setDisplayNotifications('notifications-number'));
+            return;
+          }
+        });
+        outer.props.dispatch(actions.getComments(data.reverse()));
+      });
     }
-    $.get('/api/ranks').done((rankData)=>{
+    $.get('/api/ranks').done((rankData) => {
       outer.props.dispatch(actions.getRanks(rankData));
     });
     $.get('/api/allChallenges').done(challenges => {
@@ -38,7 +71,7 @@ class Dash extends React.Component {
     return (
       <div>
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <div className="container main-content">
+        <div className="container-fluid main-content">
           <div className="row">
             <div className="col col-md-2">
               <SideNav />
