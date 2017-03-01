@@ -270,9 +270,9 @@ class ChallengeComponent extends React.Component {
 
   backToOriginalChallenge(challengeId) {
     $.get('/api/singleChallenge', {id: challengeId})
-      .then( data => {
-        this.setState({currentVideo: data[0]});
-      });
+    .then( data => {
+      this.setState({currentVideo: data[0]});
+    });
   }
 
   render() {

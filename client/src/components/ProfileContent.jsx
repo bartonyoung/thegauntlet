@@ -20,6 +20,7 @@ class ProfileContent extends React.Component {
     this.editFirstName = this.editFirstName.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.onSendMessageClick = this.onSendMessageClick.bind(this);
+    this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
   }
 
   componentDidMount () {
@@ -298,6 +299,22 @@ class ProfileContent extends React.Component {
     }
   }
 
+  onChallengeTitleClick(challenge) {
+    if (challenge.parent_id === null) {
+      window.sessionStorage.setItem('challengeId', challenge.id);
+      window.sessionStorage.setItem('currentId', challenge.id);
+      window.sessionStorage.setItem('challengeName', challenge.title);
+    } else if (window.sessionStorage.challengeId === undefined) {
+      window.sessionStorage.setItem('challengeId', challenge.parent_id);
+      window.sessionStorage.setItem('currentId', challenge.id);
+      window.sessionStorage.setItem('challengeName', challenge.title);
+    } else {
+      window.sessionStorage.challengeId = challenge.parent_id;
+      window.sessionStorage.currentId = challenge.id;
+      window.sessionStorage.challengeName = challenge.title;
+    }
+  }
+
   render() {
     let checkFile = (type, challenge) => {
       const fileType = {
@@ -317,15 +334,35 @@ class ProfileContent extends React.Component {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div>
-              <h4>{challenge.title}</h4>
-              <p>{challenge.description}</p>
-              {checkFile(challenge.filename.split('.').pop(), challenge)}
+            <div onClick={() => this.onChallengeTitleClick(challenge)}>
+              <Link to={'/challenge'}>
+                <h4>{challenge.title}</h4>
+                <p>{challenge.description}</p>
+                {checkFile(challenge.filename.split('.').pop(), challenge)}
+              </Link>
             </div>
           );
         }
       } else {
         return ' No challenges submitted yet';
+      }
+    });
+
+    let mappedResponses = this.props.responses.map(response => {
+      if (response) {
+        if (response.username === this.props.user[0].username) {
+          return (
+            <div onClick={() => this.onChallengeTitleClick(response)}>
+              <Link to={'/challenge'}>
+              <h4>{response.title}</h4>
+              <p>{response.description}</p>
+              {checkFile(response.filename.split('.').pop(), response)}
+              </Link>
+            </div>
+          );
+        }
+      } else {
+        return ' No responses submitted yet';
       }
     });
 
@@ -339,22 +376,6 @@ class ProfileContent extends React.Component {
             <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
           </div>
         );
-      }
-    });
-
-    let mappedResponses = this.props.responses.map(response => {
-      if (response) {
-        if (response.username === this.props.user[0].username) {
-          return (
-            <div>
-              <h4>{response.title}</h4>
-              <p>{response.description}</p>
-              {checkFile(response.filename.split('.').pop(), response)}
-            </div>
-          );
-        }
-      } else {
-        return ' No responses submitted yet';
       }
     });
 
