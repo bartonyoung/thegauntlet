@@ -27,6 +27,7 @@ module.exports = {
 
   addOneResponse: (req, res) => {
     const challenge = req.body;
+    const challengeId = req.params.id;
     db.select('scott')
     .from('users')
     .where({username: req.session.displayName})
@@ -62,10 +63,24 @@ module.exports = {
   },
 
   getAllResponses: (req, res) => {
-    let id = req.query.parent_id;
-    db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id', 'challenges.read').where('challenges.parent_id', '=', id).then(data => {
-      res.json(data);
-    });
+    let parent_id = req.query.parent_id;
+
+    if (req.query.parent_id) {
+      db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id', 'challenges.read').where('challenges.parent_id', '=', parent_id).then(data => {
+        res.json(data);
+      });
+    } else {
+      let user_id = req.query.user_id;
+      db.select().from('challenges').where({user_id: user_id}).andWhere({parent_id: null}).then(challenges => {
+        var yourChallengeIds = challenges.map(challenge => {
+          return challenge.id;
+        });
+
+        db.select().from('challenges').whereIn('parent_id', yourChallengeIds).then(data => {
+          res.json(data);
+        });
+      });
+    }
   },
 
   getSingleChallengeById: (req, res) => {
@@ -147,9 +162,9 @@ module.exports = {
               db.select().from('users').where({scott: vote.user_id}).decrement('upvotes', 1).then(() => {
                 res.sendStatus(201);
               });
-            });     
+            });
           });
-        } else {  
+        } else {
           db.select().from('downvotes').where({user_id: userData[0].scott}).andWhere({challenge_id: req.body.challenge_id}).then(downVoted => {
             if (downVoted.length) {
               db.select().from('downvotes').where({id: downVoted[0].id}).del().then(()=>{
@@ -157,20 +172,20 @@ module.exports = {
                   db.from('challenges').where({id: req.body.challenge_id}).increment('upvotes', 2).then(() => {
                     db.select().from('users').where({scott: vote.user_id}).increment('upvotes', 2).then(() => {
                       res.sendStatus(201);
-                    });     
-                  });     
-                });     
+                    });
+                  });
+                });
               });
             } else {
               db('votes').insert(vote).then( () => {
                 db.from('challenges').where({id: req.body.challenge_id}).increment('upvotes', 1).then(() => {
                   db.select().from('users').where({scott: vote.user_id}).increment('upvotes', 1).then(() => {
                     res.sendStatus(201);
-                  });     
-                });     
-              });     
+                  });
+                });
+              });
             }
-          });      
+          });
         }
       });
     });
@@ -201,7 +216,7 @@ module.exports = {
                       res.sendStatus(201);
                     });
                   });
-                });      
+                });
               });
             } else {
               db('downvotes').insert(vote).then(() => {
@@ -210,7 +225,7 @@ module.exports = {
                     res.sendStatus(201);
                   });
                 });
-              });       
+              });
             }
           });
         }
@@ -290,5 +305,5 @@ module.exports = {
         res.json(data);
       });
     });
-  }       
+  }
 };

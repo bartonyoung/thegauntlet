@@ -11,7 +11,6 @@ module.exports = knex.schema.createTableIfNotExists('challenges', (challenge) =>
   challenge.string('created_at');
   challenge.integer('parent_id');
   challenge.string('username');
-  challenge.string('to');
   challenge.boolean('read');
   challenge.integer('user_id').unsigned();//.references('id').inTable('users').onUpdate().onDelete();
 }).then(function() {

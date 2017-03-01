@@ -34,7 +34,7 @@ class Dash extends React.Component {
         });
       });
       $.get('/api/response', {
-        parent_id: window.sessionStorage.user_id
+        user_id: window.sessionStorage.user_id
       }).done(data => {
         let responseArr = [];
         data.forEach(response => {

@@ -34,7 +34,7 @@ class ChallengeList extends React.Component {
       window.sessionStorage.setItem('challengeId', challenge.id);
       window.sessionStorage.setItem('currentId', challenge.id);
       window.sessionStorage.setItem('challengeName', challenge.title);
-    } else if ( window.sessionStorage.challengeId === undefined) {
+    } else if (window.sessionStorage.challengeId === undefined) {
       window.sessionStorage.setItem('challengeId', challenge.parent_id);
       window.sessionStorage.setItem('currentId', challenge.id);
       window.sessionStorage.setItem('challengeName', challenge.title);

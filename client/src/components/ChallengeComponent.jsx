@@ -96,7 +96,6 @@ class ChallengeComponent extends React.Component {
               parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
               username: window.sessionStorage.username,
-              to: window.sessionStorage.newUsername,
               read: 0
             },
             success: function(data) {

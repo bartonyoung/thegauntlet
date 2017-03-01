@@ -15,7 +15,7 @@ class Profile extends React.Component {
     let outer = this;
     if (window.sessionStorage.username === window.sessionStorage.newUsername) {
       $.get('/api/response', {
-        parent_id: window.sessionStorage.newUser_id
+        user_id: window.sessionStorage.newUser_id
       }).done(data => {
         let responseArr = [];
         data.forEach(response => {
