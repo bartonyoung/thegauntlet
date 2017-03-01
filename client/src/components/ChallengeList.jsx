@@ -226,10 +226,10 @@ class ChallengeList extends React.Component {
       if (this.props.upvoted.includes(challengeId)) {  
         return (   
           <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg" style={{color: 'green', background: 'transparent'}}>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg" style={{background: 'transparent'}}>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
@@ -237,7 +237,7 @@ class ChallengeList extends React.Component {
       } else if (this.props.downvoted.includes(challengeId)) {
         return (     
           <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{background: 'transparent'}}>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red', background: 'transparent'}}>
@@ -248,10 +248,10 @@ class ChallengeList extends React.Component {
       } else {
         return (
           <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{background: 'transparent'}}>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{background: 'transparent'}}>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
@@ -304,13 +304,18 @@ class ChallengeList extends React.Component {
       if (challenge) {
         let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
         return (
-          <div className="col-md-3 text-center one-challenge" key={i}>
+          <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={i}>
+            <div className="row challenge-title-row">
               <h4 onClick={() => this.onChallengeTitleClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+            </div>  
+            <div className="row challenge-media-row">
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
-            
-              <Link className="pull-left" onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
-              {calculateTime(timeDifferenceInSeconds)}
-              
+            </div>
+            <p className="category-tab">{challenge.category}</p>
+            <div className="username-time">
+              <Link className="pull-left" onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
+              <span className="pull-right">{calculateTime(timeDifferenceInSeconds)}</span>
+            </div>
             <div className="row challenge-buttons pagination-centered">
               {whichFavoriteIcon(challenge.id)}
               {voteButtons(challenge.id, challenge.upvotes)}

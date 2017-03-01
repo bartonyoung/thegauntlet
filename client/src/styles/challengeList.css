@@ -3,20 +3,40 @@
   width: 100px;
   border: 1px solid black;
 }*/
+.challenge-title-row {
+  height: 20%;
+}
+.challenge-title-row> h4 {
+  padding: 5px;
+}
 
-
+challenge-media-row {
+  border: 2px solid white;
+  height: 40%;
+}
 
 .one-challenge {
-  height: 40vh;
+  height: 50vh;
   border: lightgrey solid 1px;
   border-radius: 10px;
-  margin: 20px;
+  margin: 15px;
   position: relative;
 }
 
 .challenge-list-media {
   max-width: 100%;
-  max-height: 100%
+  max-height: 100%;
+  padding: 5px;
+}
+
+.username-time {
+  margin-left: 20%;
+}
+
+.username-time span {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 20px;
 }
 
 .social-button {
@@ -32,12 +52,12 @@ social-button.active {
   box-shadow:  none;
   border-radius: 0px;
   border: none;
-  margin: 0.5px  
 }
 
-.challenge-buttons {
-  position: absolute;
-  bottom: 0;
-  margin-left: 25%;
-  margin-right: auto
+.category-tab {
+  font-size: .9em;
+  margin-top: -10px;
+  border: lightgray solid;
+  border-radius: 10px;
 }
+
