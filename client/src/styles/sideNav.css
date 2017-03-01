@@ -1,9 +1,50 @@
-.side-nav {
+
+
+.main-row {
+  margin-top: 70px;
+}
+
+.left-fixed {
   position: fixed;
-  border: red dashed;
+  height: 100vh;
+  background: transparent
+}
+
+.side-nav {
+  margin-top: 70px;
+  width: 100%
 }
 
 /*.list-group-item {
-  border: 
+  margin-top: 4px;
+  margin-bottom: 4px;
   width: 100%;
+  color: white;
 }*/
+
+.list-item {
+  margin-top: 7px;
+  height: 40px;
+  width: 100%;
+  color: white;
+  background-color:#3E3E3E; 
+  border: none;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 5px 0 #2CADAD;
+  -moz-box-shadow: 0 5px 0 #2CADAD;
+  box-shadow: 2px 3px 0 #2CADAD;
+}
+
+.list-item:hover {
+  top: 2px;
+  -webkit-box-shadow: 0 0 0 #2CADAD;
+  -moz-box-shadow: 0 0 0 #2CADAD;
+  box-shadow: 0 3px 0 orange;
+}
+.list-item:active {
+  margin-top: 5px;
+  box-shadow: none;
+}
+.list-item:focus {
+  outline: none;
+}

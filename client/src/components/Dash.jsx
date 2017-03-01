@@ -69,24 +69,25 @@ class Dash extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container-fluid">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
-        <div className="container-fluid main-content">
-          <div className="row">
-            <div className="col-md-2 left-bar">
-              <div className="">
+          <div className="row first-row">
+            
+               <div className="col-md-2 left-fixed">
                 <SideNav />
               </div>
-            </div>
-              <div className="col col-md-8 col-lg-8">
-                <div className="container-fluid">
-                  <div className="row">
-                    <ChallengeList dispatch={this.props.dispatch} />
-                  </div>
+            
+          </div>
+          <div className="row main-row">  
+            <div className="col-md-9 col-md-offset-3">
+              
+                <div className="row">
+                  <ChallengeList dispatch={this.props.dispatch} />
                 </div>
-              </div>
+              
             </div>
-        </div>
+
+          </div>
       </div>
     );
   }
@@ -98,4 +99,3 @@ const mapStateToProps = (state) => {
 
 
 export default connect(mapStateToProps)(Dash);
-

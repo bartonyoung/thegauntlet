@@ -1,50 +1,43 @@
-img {
+/*img {
   height: 100px;
   width: 100px;
   border: 1px solid black;
+}*/
+
+
+
+.one-challenge {
+  height: 40vh;
+  border: lightgrey solid 1px;
+  border-radius: 10px;
+  margin: 20px;
+  position: relative;
 }
 
-a:hover{
-    text-decoration: none;
-    cursor:pointer;
+.challenge-list-media {
+  max-width: 100%;
+  max-height: 100%
 }
 
-.media {
-  width: 100%;
-  margin-bottom: 20px;
-}
-.edit {
-  float: right;
-  display: inline;
-}
-
-.delete {
-  float: right;
-}
-
-.editor {
-  float: right;
-  margin-top: 20px;
-}
-
-#leader-img{
-  width:150px;
-  height: 150px;
-  margin-top:;
-  margin-left: 280px;
-  margin-bottom: 10px;
+.social-button {
+  background:white;
+  box-shadow:  none;
+  border-radius: 0px;
   border: none;
+  margin: 0.5px  
 }
 
-.leader-td{
-  margin-left:10px;
+social-button.active {
+  background:white;
+  box-shadow:  none;
+  border-radius: 0px;
+  border: none;
+  margin: 0.5px  
 }
 
-td{ 
-  color: grey;
-  margin-bottom: 30px;
-  /*border: 1px solid red;*/
-}
-table{
-  border: 1px solid #efefef;
+.challenge-buttons {
+  position: absolute;
+  bottom: 0;
+  margin-left: 25%;
+  margin-right: auto
 }

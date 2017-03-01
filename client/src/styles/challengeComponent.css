@@ -6,28 +6,23 @@
   height: 100%;
 }
 
-.mainRow {
-  
-  border: red solid;
-}
-
 .current-viewing-row {
   margin-top: 70px;
-  border: blue solid;
+  /*border: blue solid;*/
 }
 
 .current-viewing-box {
   height: 100%;
-  border: orange dashed;
+  /*border: orange dashed;*/
 }
 
 .current-media-row {
-  border: green solid 2px;
+  border:gray solid 2px;
   height: 75%;
 }
 
 .current-challenge-info-row {
-  border: purple solid 2px;
+  /*border: purple solid 2px;*/
   height: 25%;
 }
 
@@ -39,6 +34,14 @@
 .current-info {
   padding: 15px;
   font-size: 1em;
+  border-left: gray solid 2px;
+  border-right: gray solid 2px;
+}
+
+.current-video-buttons {
+  border-left: gray solid 2px;
+  border-right: gray solid 2px;
+  border-bottom: gray solid 2px;
 }
 
 .current-info-timestamp {
@@ -49,13 +52,7 @@
   position: fixed;
   height: 100vh;
   background: white;
-  border: tomato solid;
-}
-
-.left-fixed {
-  position: fixed;
-  height: 100vh;
-  background: lightgray;
+  /*border: tomato solid;*/
 }
 
 .outerBar {
@@ -106,8 +103,9 @@ textarea {
 }  
 
 .one-comment {
-  background: lightgray;
+  border: lightgray solid 1px;
   margin: 5px 0 5px 0;
+  border-radius: 2px;
 }
 
 .comment-data {

@@ -162,6 +162,7 @@ class NavBar extends React.Component {
                 <option>Funny</option>
                 <option>Music</option>
                 <option>Sports</option>
+                <option>Other</option>
               </select>
             </div>
           </form>

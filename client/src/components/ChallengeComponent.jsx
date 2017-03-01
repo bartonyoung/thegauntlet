@@ -108,7 +108,7 @@ class ChallengeComponent extends React.Component {
         }
       });
     } else {
-      alert('Please submit a file')
+      alert('Please submit a file');
     }
   }
 
@@ -485,8 +485,8 @@ class ChallengeComponent extends React.Component {
                   <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
                   <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
                   <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                </div>
-                  <div>
+                </div> 
+                  <div className="current-video-buttons">
                     {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
                     {whichFavoriteIcon(this.state.currentVideo.id)}
                     {voteButtons(this.state.currentVideo.id, this.state.currentVideo.upvotes)}
