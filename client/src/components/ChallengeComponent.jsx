@@ -107,6 +107,8 @@ class ChallengeComponent extends React.Component {
           });
         }
       });
+    } else {
+      alert('Please submit a file')
     }
   }
 
