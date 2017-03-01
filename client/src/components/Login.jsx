@@ -8,7 +8,6 @@ class Login extends React.Component {
   }
 
   handleLogin(e) {
-    let outer = this;
     e.preventDefault();
     let login = {
       username: this.refs.username.value,
@@ -20,8 +19,6 @@ class Login extends React.Component {
         console.log('data on login', data);
         window.sessionStorage.setItem('user_id', data.scott);
         window.sessionStorage.setItem('username', data.username);
-        $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
-        });
         this.props.handleAuth(() => {
           window.location.href = '#/dash';
         });
