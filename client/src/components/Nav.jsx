@@ -36,8 +36,7 @@ class NavBar extends React.Component {
               category: outer.refs.category.value,
               filename: resp,
               created_at: created_at,
-              username: window.sessionStorage.username,
-              to: null
+              username: window.sessionStorage.username
             },
             success: function(data) {
               outer.props.dispatch(actions.addChallenge(data));
@@ -112,7 +111,7 @@ class NavBar extends React.Component {
 
       return a;
     }, 0);
-    console.log(unReadNotifications, 'unReadNotifications number')
+    console.log(unReadNotifications, 'unReadNotifications number', notifications)
     for (var n = 0; n < notifications.length; n++) {
       var notification = notifications[n];
       if (this.props.displayNotifications === 'notifications-number' && unReadNotifications > 0) {

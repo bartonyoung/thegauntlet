@@ -22,10 +22,14 @@ module.exports = {
         res.json(data);
       });
     } else {
-      db.select('comments.comment', 'comments.username', 'comments.created_at', 'comments.user_id', 'comments.challenge_id', 'comments.title', 'comments.read', 'comments.id')
-      .from('comments').innerJoin('challenges', 'challenges.id', 'comments.challenge_id').innerJoin('users', 'users.scott', 'challenges.user_id').where('users.scott', '=', req.query.user_id)
-      .then((data) => {
-        res.json(data);
+      db.select().from('challenges').where({user_id: req.query.user_id}).andWhere({parent_id: null}).then(challenges => {
+        var yourChallengeIds = challenges.map(challenge => {
+          return challenge.id;
+        });
+
+        db.select().from('comments').whereIn('challenge_id', yourChallengeIds).then(data => {
+          res.json(data);
+        });
       });
     }
   },
