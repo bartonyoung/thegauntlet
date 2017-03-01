@@ -114,89 +114,12 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, updateObj);
-  } else if (action.type === 'ADD_MESSAGE') {
-    let messageObj = {};
-
-    for (var keys in state) {
-      if (keys === 'messages') {
-        messageObj[keys] = [];
-        messageObj[keys].push(action.payload[0]);
-        state[keys].forEach(key => {
-          messageObj[keys].push(key);
-        });
-      } else {
-        messageObj[keys] = state[keys];
-      }
-    }
-
-    return Object.assign({}, messageObj);
-  } else if (action.type === 'GET_MESSAGES') {
-    return Object.assign({}, state, {
-      messages: action.payload
-    });
-  } else if (action.type === 'READ_MESSAGE') {
-    let readMessage = {};
-
-    for (var keys in state) {
-      if (keys === 'messages') {
-        readMessage[keys] = [];
-        state[keys].forEach(key => {
-          readMessage[keys].push(key);
-        });
-        readMessage[keys].forEach(message => {
-          if (message.message_id === action.payload[0].message_id) {
-            message.read = 1;
-          }
-        });
-      } else {
-        readMessage[keys] = state[keys];
-      }
-    }
-
-    return Object.assign({}, readMessage);
-  } else if (action.type === 'READ_NOTIFICATION') {
-    let readNotification = {};
-
-    for (var keys in state) {
-      if (keys === 'comments' && action.payload[0].comment) {
-        readNotification[keys] = [];
-        state[keys].forEach(key => {
-          readNotification[keys].push(key);
-        });
-        readNotification[keys].forEach(comment => {
-          if (comment.id === action.payload[0].id) {
-            comment.read = 1;
-          }
-        });
-      } else if (keys === 'responses' && action.payload[0].parent_id) {
-        readNotification[keys] = [];
-        state[keys].forEach(key => {
-          readNotification[keys].push(key);
-        });
-        readNotification[keys].forEach((response, i) => {
-          if (response.id === action.payload[0].id) {
-            readNotification[keys][i] = action.payload[0];
-          }
-        });
-      } else {
-        readNotification[keys] = state[keys];
-      }
-    }
-
-    return Object.assign({}, readNotification);
-  } else if (action.type === 'SET_DISPLAY_MESSAGES') {
-    return Object.assign({}, state, {
-      displayMessages: action.payload
-    });
-  } else if (action.type === 'SET_DISPLAY_NOTIFICATIONS') {
-    return Object.assign({}, state, {
-      displayNotifications: action.payload
-    });
-  } else if (action.type === "UPDATE_COVERVIDEO"){
+  
+}else if(action.type === "UPDATE_COVERVIDEO"){
     return Object.assign({}, state, {
       coverVideo: action.payload
     });
-  } else {
+  }else {
     return state;
   }
 };

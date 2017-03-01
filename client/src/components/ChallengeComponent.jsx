@@ -30,17 +30,8 @@ class ChallengeComponent extends React.Component {
       parent_id: window.sessionStorage.challengeId
     }).done(data => {
       outer.props.dispatch(actions.getResponses(data.reverse()));
-    });
-    if (window.sessionStorage.user_id) {
-      $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
-        messages.forEach(message => {
-          outer.props.dispatch(actions.getMessages(messages));
-          if (message.read === 0) {
-            outer.props.dispatch(actions.setDisplayMessages('messages-number'));
-          }
-        });
-      });
-    }
+    }); 
+
     $.get('/api/comments', {
       challenge_id: window.sessionStorage.challengeId
     }).done(data => {
@@ -50,14 +41,14 @@ class ChallengeComponent extends React.Component {
     $.get('/api/favorite').done(data => {
       outer.props.dispatch(actions.setFavorites(data));
     });
-
+    
     $.get('/api/everyChallenge').done(data => {
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === parseInt(window.sessionStorage.challengeId)) {
           outer.props.dispatch( actions.getChallenges( [data[i]] ));
         }
         if (data[i].id === parseInt(window.sessionStorage.currentId)) {
-          this.setState({currentVideo: data[i]});
+          this.setState({currentVideo: data[i]});   
         }
       }
     });
@@ -96,7 +87,7 @@ class ChallengeComponent extends React.Component {
               parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
               username: window.sessionStorage.username,
-              read: 0
+              to: window.sessionStorage.newUsername
             },
             success: function(data) {
               outer.props.dispatch(actions.addResponse(data));
@@ -107,8 +98,6 @@ class ChallengeComponent extends React.Component {
           });
         }
       });
-    } else {
-      alert('Please submit a file')
     }
   }
 
@@ -161,10 +150,10 @@ class ChallengeComponent extends React.Component {
   }
 
   upVoteClick(id) {
-    const outer = this;
+    const outer = this;   
     $.post('/api/upvote', {
       vote: 1,
-      challenge_id: id
+      challenge_id: id    
     }).then(() => {
       $.get('/api/upvote').then(data => {
         outer.props.dispatch(actions.getUpvoted(data));
@@ -173,17 +162,17 @@ class ChallengeComponent extends React.Component {
         outer.props.dispatch(actions.getDownvoted(data));
       });
       $.get('/api/singleChallenge', {id: id})
-        .then(data => {
+        .then(data => { 
           this.setState({currentVideo: data[0]});
         });
-    });
+    });  
   }
 
   downVoteClick(id) {
-    const outer = this;
+    const outer = this;   
     $.post('/api/downvote', {
       vote: 1,
-      challenge_id: id
+      challenge_id: id    
     }).then(() => {
       $.get('/api/upvote').then(data => {
         outer.props.dispatch(actions.getUpvoted(data));
@@ -192,11 +181,11 @@ class ChallengeComponent extends React.Component {
         outer.props.dispatch(actions.getDownvoted(data));
       });
       $.get('/api/singleChallenge', {id: id})
-        .then(data => {
+        .then(data => { 
           this.setState({currentVideo: data[0]});
         });
-    });
-  }
+    });  
+  }       
 
   followTheLeader(leaderId) {
     const outer = this;
@@ -270,11 +259,14 @@ class ChallengeComponent extends React.Component {
 
   backToOriginalChallenge(challengeId) {
     $.get('/api/singleChallenge', {id: challengeId})
-    .then( data => {
-      this.setState({currentVideo: data[0]});
-    });
+      .then( data => {
+        this.setState({currentVideo: data[0]});
+      });
   }
 
+    // <button className="btn  btn-default btn-sm">
+    //         <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
+    //       </button>
   render() {
     let voteButtons = (challengeId, upvotes) => {
       if (this.props.upvoted.includes(challengeId)) {
@@ -300,7 +292,7 @@ class ChallengeComponent extends React.Component {
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
-        );
+        );        
       } else {
         return (
           <span>
@@ -312,24 +304,24 @@ class ChallengeComponent extends React.Component {
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
-        );
+        );   
       }
     };
-
+    
     let whichFollowButton = (leaderId, user) => {
       if (window.sessionStorage.username !== user) {
-        if (this.props.leaders.includes(leaderId)) {
-          return (
+        if (this.props.leaders.includes(leaderId)) {   
+          return ( 
             <button className="btn btn-default btn-sm follower" style={{color: 'green'}} onClick={() => this.unFollow(leaderId, user)}>
               <span className="glyphicon glyphicon-user"></span>
             </button>
           );
-        } else {
+        } else {  
           return (
             <button className="btn btn-default btn-sm follower" onClick={() => this.followTheLeader(leaderId, user)}>
               <span className="glyphicon glyphicon-user"></span>
             </button>
-          );
+          ); 
         }
       }
     };
@@ -485,17 +477,17 @@ class ChallengeComponent extends React.Component {
                   <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
                   <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
                   <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                </div>
+                </div> 
                   <div>
                     {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
                     {whichFavoriteIcon(this.state.currentVideo.id)}
                     {voteButtons(this.state.currentVideo.id, this.state.currentVideo.upvotes)}
                   </div>
-
+                
               </div>
-            </div>
+            </div>            
           </div>
-
+            
           <CommentList />
       </div>
       );
@@ -510,3 +502,4 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(ChallengeComponent);
 
+            
