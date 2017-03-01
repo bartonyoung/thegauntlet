@@ -20,9 +20,9 @@ const configureStore = (initialState = {
   upvoted: [],
   downvoted: [],
   messages: [],
-  messages: [],
   displayMessages: '',
-  displayNotifications: ''
+  displayNotifications: '',
+  coverVideo: ''
 }) => {
   return finalCreateStore(reducer, initialState);
 };

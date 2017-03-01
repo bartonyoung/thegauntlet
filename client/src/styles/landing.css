@@ -11,28 +11,38 @@ p{
 }
 
 h2{
+  color: black;
+  font-size: 2em;
+  margin:30px 0 30px 0;
 }
 
 h4{
-  color: black;
+  color: grey;
+  font-size: 1.5em;
+  margin:20px 0 20px 0;
 }
 
 .landing-cover {
-  margin-top: 50px;
-  min-height: 100vh;
-  height: 300px;
-  background-image: url('http://pre04.deviantart.net/f80e/th/pre/i/2012/163/6/e/clean_background_with_light_by_mariogembell-d53aspz.jpg');
+  margin-top: -15px;
+  /*min-height: 88vh;*/
+  height:100%;
+  /*background-image: url('http://pre04.deviantart.net/f80e/th/pre/i/2012/163/6/e/clean_background_with_light_by_mariogembell-d53aspz.jpg');*/
+  /*background-image: url('http://3.bp.blogspot.com/-CrEL4x_0KN0/VexfT-caT5I/AAAAAAAABgQ/vva8O-XmJMs/s1600/watchv=VWf8CXwPoqI.jpg');
+  background-repeat: no-repeat;
+  background-position: center;*/
+  /*background-position:0px -70px;*/
+  /*background-attachment: fixed;*/
+  background-size:100% 100%;
+  /*border:1px dashed yellow;*/
+}
+
+.header{
+  font-family: 'Ubuntu', sans-serif;
+  background-image: url('http://3.bp.blogspot.com/-CrEL4x_0KN0/VexfT-caT5I/AAAAAAAABgQ/vva8O-XmJMs/s1600/watchv=VWf8CXwPoqI.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size:100% 100%;
-}
-
-.landing-header{
-  font-family: 'Ubuntu', sans-serif;
-  /*background-image: url('https://openclipart.org/image/2400px/svg_to_png/265161/Jumping-Man-Silhouette-3.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size:100% 100%;*/
+  height: 900px;
 }
 /*.landing-intro {
   position: relative;
@@ -40,21 +50,45 @@ h4{
   margin: 0 auto;
 }*/
 
+/*#today-cover {
+  margin-top: 0px;
+  border: 1px dashed blue;
+}*/
+
+
+.header {
+  padding-top: 0px;
+  height: 500px;
+  /*position:absolute;
+  left:350px;
+  top:50px;*/
+}
 #landing-title{
   color: white;
   position: relative;
-  top:100px;
   margin: 0 auto;
+  margin-top:55px;
+  margin-left:500px;
   margin-bottom: 30px;
-  font-size:5em;
+  font-size:3.5em;
   font-weight:bolder;
   text-shadow: 4px 2px 3px #000000;
+  /*border: 1px dashed red;*/
 } 
+
+/*.desc {
+  width:400px;
+  margin-left:570px;
+  margin-top:30px;
+  border: 1px dashed red;
+}*/
+
 
 .landing-cover-video{
   position: relative;
-  top:120px;
+  margin-top:0px;
 }
+
 .video-landing {
     height: 200px;
     width: 100%;
@@ -65,11 +99,6 @@ h4{
     width: 600px;
     margin: 0 auto;
     margin-top: 30px;
-    border: 1px solid black;
-}
-.img-landing {
-    height: 200px;
-    width: 100%;
     border: 1px solid black;
 }
 
@@ -84,55 +113,35 @@ h4{
   /*border: 1px dashed green;*/
 }
 
-.header {
-  padding-top: 0px;
-  /*position:absolute;
-  left:350px;
-  top:50px;*/
-}
-.description {
-  margin-top:200px;
-  text-shadow: 1px 1px 1px #ededed;
-}
- 
-.gallery {
-  margin-bottom:20px;
-}
-
 #auth {
   border: 1px solid #ededed;
 }
 
 .landing-register {
+  width: 300px;
+  height: 300px;
   position: relative;
-  top:200px;
-  left:-15px;
+  top:100px;
+  left:0px;
   /*border: 1px dashed red;*/
 }
 
 .landing-header-left{
   /*background-image: url('https://img.clipartfox.com/f12ee2b00765abf3a86ccc537a501264_mac-mac-clipart-desktop_1254-1000.png'); */
-  background-size:70% 50%;
   background-repeat: no-repeat;
-  /*background-position: center;*/
   background-position-x: 280px;
   background-position-y: 120px;
-  /*border: 1px dashed blue;*/
-}
-
-.landing-header-right{
-  height: 800px;
+  height: 500px;
   /*border: 1px dashed blue;*/
 }
 
 .landing-header-left{
-  height: 800px;
-  /*border: 1px dashed blue;*/
+  height: 500px;
 }
 
 .landing-input {
   color:black;
-  width: 55%;
+  width: 100%;
   height: 35px;
   display: block;
   margin:0 0 10px 0;
@@ -144,16 +153,16 @@ h4{
 
 .landing-inputButton {
   position: relative;
-  width: 55%;
+  width: 100%;
   height: 35px;
   display: block;
   color: white;
   background-color:#3E3E3E; 
   border: none;
   border-radius: 5px;
-  -webkit-box-shadow: 0 5px 0 #2CADAD;
-  -moz-box-shadow: 0 5px 0 #2CADAD;
-  box-shadow: 2px 3px 0 #2CADAD;
+  -webkit-box-shadow: 0 5px 0 orange;
+  -moz-box-shadow: 0 5px 0 orange;
+  box-shadow: 2px 3px 0 orange;
 }
 
 .landing-inputButton:hover {
@@ -169,6 +178,26 @@ h4{
 .landing-inputButton:focus {
   outline: none;
 }
+
+.contents{
+  margin-top: 100px;
+}
+
+#icon1,#icon2,#icon3{
+  margin-bottom: 20px;
+  border: none;
+}
+
+.col-wrapper {
+  padding: 0 150px 0 150px;
+  /*border: 1px dashed red;*/
+} 
+
+/*.test-wrapper {
+  width:1500px;
+  border: 1px dashed green;
+  margin: 0 auto;
+}*/
 
 
 

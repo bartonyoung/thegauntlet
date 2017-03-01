@@ -1,42 +1,24 @@
-.profilePicture.container{
-  height:226px;
-  width:100%;
-  margin-top: 65px;
-  /*background-color:gray;
-  text-align:center;
-  float: left;
-  border: 2px solid black;
-  border-radius:5px;
-  -webkit-border-radius:5px;
-  -moz-border-radius:5px;
-  margin-bottom:10px;
-  padding:5px;*/
+.profileContainer {
+  height: 90vh;
+  border-right: dashed #3E3E3E 0.1px;
 }
 
-.messageUsername {
-  padding-left: 25px;
+#picContainer {
+  width: 100%;
+  border-bottom: dashed #3E3E3E 0.1px;
 }
 
-.glyphicon-envelope {
-  color: white;
+.profileInfo {
+  font-size: 20px;
+  margin-top: 34px;
 }
 
-.glyphicon-fire {
-  color: white;
-}
-
-.profilePicture .text{
-  height: 200px;
-  width: 200px;
-  background-color: gray;
-  font-family: "Helvetica";
-  text-align:center;
-  float: left;
-  border: 2px solid black;
-  border-radius:5px;
-  -webkit-border-radius:100px;
-  -moz-border-radius:100px;
-  padding:5px;
+.profilePic{
+  height: 40vh;
+  width: 40vh;
+  margin: 15px;
+  border-radius: 50%;
+  display: block;
 }
 
 .challenge.title {
@@ -47,25 +29,29 @@
   display: block;
 }
 
-
-li {
-  list-style: none;
-  display: inline-block;
+.overallContent {
+  margin-top: 65px;
 }
 
-input {
-  width: 180px;
-}
-
-#picContainer {
-  display: block;
-}
 .editPic {
-  position: absolute;
-  margin: 0px;
-  margin-top: 200px;
+  margin: 5px;
+  position: relative;
   float: left;
-  margin-left: 0;
-  padding-left: 0;
   left: 0;
+}
+
+.nav-tabs {
+  font-size: 20px;
+  background-color: #3E3E3E;
+  -webkit-box-shadow: 0 3px 0 #2CADAD;
+  border-radius: 5px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  background-color: #3E3E3E;
+  color: orange;
+}
+
+li>a {
+  color:white;
 }

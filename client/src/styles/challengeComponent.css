@@ -196,3 +196,7 @@ border: black solid
   bottom:0;
 }*/
 
+#fileInput {
+  width: 100%;
+  padding-left: 15px;
+}

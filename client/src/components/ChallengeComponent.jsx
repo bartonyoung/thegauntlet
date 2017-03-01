@@ -276,13 +276,14 @@ class ChallengeComponent extends React.Component {
   }
 
   render() {
-    let voteButtons = (challengeId) => {
+    let voteButtons = (challengeId, upvotes) => {
       if (this.props.upvoted.includes(challengeId)) {
         return (
           <span>
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm" style={{color: 'green'}}>
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
+            <button className="btn btn-default btn-sm">{upvotes}</button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
@@ -294,6 +295,7 @@ class ChallengeComponent extends React.Component {
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
+            <button className="btn btn-default btn-sm">{upvotes}</button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm" style={{color: 'red'}}>
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
@@ -305,6 +307,7 @@ class ChallengeComponent extends React.Component {
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
+            <button className="btn btn-default btn-sm">{upvotes}</button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
@@ -441,23 +444,23 @@ class ChallengeComponent extends React.Component {
                   <div className="response-buttons-top">
                     <span className="dropdown">
                       <button href="javascript: void(0)" className="dropdown-toggle response-button" data-toggle="dropdown" role="button" aria-haspopup="true">RESPOND<span className="caret"></span></button>
-                      <ul className="dropdown-menu">
+                      <div className="dropdown-menu">
                         <form id="challenge" style={{width: '300px', padding: '15px'}}>
                           <div className="form-group">
-                            <li className="nav-label">Name it!</li>
+                            <div className="nav-label">Name it!</div>
                             <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
                           </div>
                           <div className="form-group">
-                            <li className="nav-label">Describe it!</li>
+                            <div className="nav-label">Describe it!</div>
                             <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
                           </div>
                         </form>
                         <form ref="file" id="upload">
-                          <li className="nav-label-file">Upload your video or image...</li>
-                          <input type="file" placeholder="video or image" required ref="video" name="video"/>
+                          <div className="nav-label-file">Upload your video or image...</div>
+                          <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
                         </form>
-                        <li onClick={this.handleSubmit} className="btn btn-default pull-right">Submit</li>
-                      </ul>
+                        <center><div onClick={this.handleSubmit} className="btn btn-default">Submit</div></center>
+                      </div>
                     </span>
                     <button className="button response-button" onClick={() => { this.sortResponses('recent'); }}>RECENT</button>
                     <button className="button response-button" onClick={() => { this.sortResponses('top'); }}>TOP</button>
@@ -486,7 +489,7 @@ class ChallengeComponent extends React.Component {
                   <div>
                     {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
                     {whichFavoriteIcon(this.state.currentVideo.id)}
-                    {voteButtons(this.state.currentVideo.id)} {this.state.currentVideo.upvotes}
+                    {voteButtons(this.state.currentVideo.id, this.state.currentVideo.upvotes)}
                   </div>
 
               </div>

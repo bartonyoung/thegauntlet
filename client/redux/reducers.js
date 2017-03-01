@@ -136,8 +136,6 @@ const reducer = (state, action) => {
     });
   } else if (action.type === 'READ_MESSAGE') {
     let readMessage = {};
-    console.log(state.messages)
-    console.log(action.payload[0])
 
     for (var keys in state) {
       if (keys === 'messages') {
@@ -155,12 +153,10 @@ const reducer = (state, action) => {
       }
     }
 
-    console.log(readMessage)
     return Object.assign({}, readMessage);
   } else if (action.type === 'READ_NOTIFICATION') {
     let readNotification = {};
-    console.log(action.payload[0].id)
-    console.log(state.responses)
+
     for (var keys in state) {
       if (keys === 'comments' && action.payload[0].comment) {
         readNotification[keys] = [];
@@ -186,7 +182,7 @@ const reducer = (state, action) => {
         readNotification[keys] = state[keys];
       }
     }
-    console.log(readNotification, 'after updating readNotification')
+
     return Object.assign({}, readNotification);
   } else if (action.type === 'SET_DISPLAY_MESSAGES') {
     return Object.assign({}, state, {
@@ -195,6 +191,10 @@ const reducer = (state, action) => {
   } else if (action.type === 'SET_DISPLAY_NOTIFICATIONS') {
     return Object.assign({}, state, {
       displayNotifications: action.payload
+    });
+  } else if (action.type === "UPDATE_COVERVIDEO"){
+    return Object.assign({}, state, {
+      coverVideo: action.payload
     });
   } else {
     return state;
