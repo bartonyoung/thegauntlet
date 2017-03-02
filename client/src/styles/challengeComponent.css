@@ -6,39 +6,39 @@
   height: 100%;
 }
 
-.mainRow {
-  
-  border: red solid;
-}
-
 .current-viewing-row {
   margin-top: 70px;
-  border: blue solid;
+  /*border: blue solid;*/
 }
 
 .current-viewing-box {
   height: 100%;
-  border: orange dashed;
+  /*border: orange dashed;*/
 }
 
 .current-media-row {
-  border: green solid 2px;
+  border:gray solid 2px;
   height: 75%;
 }
 
 .current-challenge-info-row {
-  border: purple solid 2px;
+  /*border: purple solid 2px;*/
   height: 25%;
 }
 
 .timestamp {
-  font-size: 0.9em;
-  float: right;
+  font-size: 1em;
+  margin-left: 20px;
 }
 
 .current-info {
   padding: 15px;
   font-size: 1em;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-left: gray solid 2px;
+  border-right: gray solid 2px;
+  border-bottom: gray solid 2px;
 }
 
 .current-info-timestamp {
@@ -49,13 +49,7 @@
   position: fixed;
   height: 100vh;
   background: white;
-  border: tomato solid;
-}
-
-.left-fixed {
-  position: fixed;
-  height: 100vh;
-  background: lightgray;
+  /*border: tomato solid;*/
 }
 
 .outerBar {
@@ -70,6 +64,20 @@
   font-size: 1em;
 }
 
+.social-button {
+  background:white;
+  box-shadow:  none;
+  border-radius: 0px;
+  border: none;
+  margin: 0.5px  
+}
+
+social-button.active {
+  background:white;
+  box-shadow:  none;
+  border-radius: 0px;
+  border: none;
+}
 .comments-row {
   margin-top: 20px;
 }
@@ -106,8 +114,9 @@ textarea {
 }  
 
 .one-comment {
-  background: lightgray;
+  border: lightgray solid 1px;
   margin: 5px 0 5px 0;
+  border-radius: 2px;
 }
 
 .comment-data {
@@ -161,7 +170,7 @@ textarea {
 .one-response {
   margin: 0 10px 10px 10px;
   height: 20vh;
-border: black solid
+  border: black solid
 }
 
 .response-data > li {
@@ -169,12 +178,15 @@ border: black solid
   padding: 10px;
 }
 
+.return-button-row {
+  min-height: 5vh;
+}
+
 .original-back-button {
-  background-color: mediumseagreen;
+  background-color:#e41a6a;
    height: 30px;
    width: 100%;
-   cursor:pointer;
-   border: orange;
+   cursor: pointer;
    border-radius: 0px;
    color:white;
    margin-top: 4px;
@@ -184,7 +196,7 @@ border: black solid
 }
 
 .original-back-button:hover {
-   background-color:lawngreen;
+   background-color: red;
    color: white;
 }
 

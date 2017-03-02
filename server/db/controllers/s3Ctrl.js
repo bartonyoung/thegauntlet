@@ -3,7 +3,9 @@ var fs = require('fs');
 var S3FS = require('s3fs');
 var s3fsImpl = new S3FS('thegauntletbucket421', {
   accessKeyId: process.env.accessKeyID,
+  // accessKeyId: 'AKIAIGULU7EQBZUDS6WA',
   secretAccessKey: process.env.secretAccessKey
+  // secretAccessKey: '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'
 });
 
 module.exports = function(file, res) {

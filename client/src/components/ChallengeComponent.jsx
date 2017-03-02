@@ -53,7 +53,7 @@ class ChallengeComponent extends React.Component {
 
     $.get('/api/everyChallenge').done(data => {
       for (let i = 0; i < data.length; i++) {
-        if (data[i].id === parseInt(window.sessionStorage.challengeId)) {
+        if (data[i].id === parseInt(window.sessionStorage.currentId)) {
           outer.props.dispatch( actions.getChallenges( [data[i]] ));
         }
         if (data[i].id === parseInt(window.sessionStorage.currentId)) {
@@ -108,7 +108,7 @@ class ChallengeComponent extends React.Component {
         }
       });
     } else {
-      alert('Please submit a file')
+      alert('Please submit a file');
     }
   }
 
@@ -255,7 +255,7 @@ class ChallengeComponent extends React.Component {
     }).then( data => {
       if (sortBy === 'top') {
         data = data.sort( (a, b) => {
-          b.upvotes - a.upvotes;
+          return b.upvotes - a.upvotes;
         });
       } else {
         data = data.reverse();
@@ -265,6 +265,7 @@ class ChallengeComponent extends React.Component {
   }
 
   onResponseTitleClick(response) {
+    window.sessionStorage.currentId = response.id;
     this.setState({currentVideo: response});
   }
 
@@ -280,11 +281,11 @@ class ChallengeComponent extends React.Component {
       if (this.props.upvoted.includes(challengeId)) {
         return (
           <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm" style={{color: 'green'}}>
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button className="btn btn-default btn-sm">{upvotes}</button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+            <button className="btn btn-lg social-button">{upvotes}</button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
@@ -292,11 +293,11 @@ class ChallengeComponent extends React.Component {
       } else if (this.props.downvoted.includes(challengeId)) {
         return (
           <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button className="btn btn-default btn-sm">{upvotes}</button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm" style={{color: 'red'}}>
+            <button className="btn btn-lg social-button">{upvotes}</button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red'}}>
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
@@ -304,11 +305,11 @@ class ChallengeComponent extends React.Component {
       } else {
         return (
           <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button className="btn btn-default btn-sm">{upvotes}</button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-default btn-sm">
+            <button className="btn btn-lg">{upvotes}</button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
@@ -337,46 +338,15 @@ class ChallengeComponent extends React.Component {
     let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
         return (
-          <button className="btn  btn-default btn-sm">
+          <button className="btn btn-lg social-button">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
           </button>
         );
       } else {
         return (
-          <button className="btn btn-default btn-sm" onClick={() => { this.addToFavorites(challengeId); }}>
+          <button className="btn btn-lg social-button" onClick={() => { this.addToFavorites(challengeId); }}>
             <span className="glyphicon glyphicon-heart"></span>
           </button>
-        );
-      }
-    };
-
-
-    let taskButtons = (challenge) => {
-      if (challenge.username === window.sessionStorage.username) {
-        if (!this.state.isEditing) {
-          return (
-            <span>
-              <button className="btn btn-sm btn-default task-button">
-                <span className="glyphicon glyphicon-edit" onClick={() => this.editChallenge()}></span>
-              </button>
-              <button className="btn btn-sm btn-default task-button" onClick={() => this.deleteChallenge(challenge)}>
-                <span className="glyphicon glyphicon-remove" onClick={() => this.deleteChallenge()}></span>
-              </button>
-            </span>
-          );
-        }
-
-        return (
-          <span>
-            <div className="editor">
-              <form id="editform" onSubmit={() => this.saveChallenge(challenge)}>
-                <input type="text" placeholder="Edit title" required ref="title"/><br/>
-                <input type="text" placeholder="Edit description" required ref="description"/>
-              </form>
-              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
-              <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>Cancel</button>
-            </div>
-          </span>
         );
       }
     };
@@ -431,6 +401,15 @@ class ChallengeComponent extends React.Component {
       }
     };
 
+    let checkForOriginalChallenge = (currentVideoID) => {
+      if (parseInt(window.sessionStorage.challengeId) !== currentVideoID) {
+        return (
+         <button className="button original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</button>
+        );
+        return <div></div>;
+      }
+    };
+
 
     if (this.state.currentVideo) {
       let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
@@ -474,8 +453,8 @@ class ChallengeComponent extends React.Component {
           </div>
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
-              <div className="row">
-                 <button className="button original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</button>
+              <div className="row return-button-row">
+                {checkForOriginalChallenge(this.state.currentVideo.id)}
               </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
@@ -483,15 +462,13 @@ class ChallengeComponent extends React.Component {
               <div className='row current-challenge-info-row'>
                 <div className="current-info">
                   <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
-                  <span className="timestamp">{`Submitted: ${calculateTime(timeDifferenceInSeconds)}`}</span>
-                  <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                </div>
-                  <div>
-                    {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
+                  <span className="current-video-buttons pull-right">
                     {whichFavoriteIcon(this.state.currentVideo.id)}
                     {voteButtons(this.state.currentVideo.id, this.state.currentVideo.upvotes)}
-                  </div>
-
+                  </span>
+                  <span className="timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</span>
+                  <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
+                </div> 
               </div>
             </div>
           </div>
@@ -503,6 +480,7 @@ class ChallengeComponent extends React.Component {
     return <div>HI!</div>;
   }
 }
+                  
 
 const mapStateToProps = (state) => {
   return state;

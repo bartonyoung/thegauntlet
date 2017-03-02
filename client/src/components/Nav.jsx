@@ -12,12 +12,16 @@ class NavBar extends React.Component {
     this.handleIconClick = this.handleIconClick.bind(this);
     this.renderMessagesNumber = this.renderMessagesNumber.bind(this);
     this.renderNotificationsNumber = this.renderNotificationsNumber.bind(this);
+    this.state = {
+      display: 'none'
+    };
   }
 
   handleSubmit() {
     let outer = this;
     var fd = new FormData(document.querySelector('#file'));
     if (this.refs.video.value) {
+      this.setState({display: 'block'});
       $.ajax({
         url: '/api/s3',
         type: 'POST',
@@ -39,6 +43,7 @@ class NavBar extends React.Component {
               username: window.sessionStorage.username
             },
             success: function(data) {
+              outer.setState({display: 'none'});
               outer.props.dispatch(actions.addChallenge(data));
               outer.refs.title.value = '';
               outer.refs.description.value = '';
@@ -113,7 +118,7 @@ class NavBar extends React.Component {
 
       return a;
     }, 0);
-    console.log(unReadNotifications, 'unReadNotifications number', notifications)
+    console.log(unReadNotifications, 'unReadNotifications number', notifications);
     for (var n = 0; n < notifications.length; n++) {
       var notification = notifications[n];
       if (this.props.displayNotifications === 'notifications-number' && unReadNotifications > 0) {
@@ -162,6 +167,7 @@ class NavBar extends React.Component {
                 <option>Funny</option>
                 <option>Music</option>
                 <option>Sports</option>
+                <option>Other</option>
               </select>
             </div>
           </form>
@@ -185,7 +191,10 @@ class NavBar extends React.Component {
                 </li>
               </ul>
             </div>
+          <div className="loader" style={{display: this.state.display}}></div>
           </nav>
+          
+          
       );
     } else {
       return (

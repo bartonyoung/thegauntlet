@@ -2,7 +2,8 @@
 
 body{
   font-family: 'Ubuntu', sans-serif;
-  background-color: white;
+  /*background-color: white;*/
+  background-color: #E76767;
 }
 
 p{ 
@@ -167,6 +168,8 @@ h4{
 #icon1,#icon2,#icon3{
   margin-bottom: 20px;
   border: none;
+  width: 100px;
+  height: 100px;
 }
 
 .col-wrapper {
