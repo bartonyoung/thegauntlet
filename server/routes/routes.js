@@ -28,6 +28,8 @@ routes.put('/response/:id', challengeController.read);
 routes.post('/comments', commentController.addOne);
 routes.get('/comments', commentController.getAll);
 routes.put('/comments/:id', commentController.read);
+routes.put('/updateComment/:id', commentController.updateOne);
+routes.delete('/comment/:id', commentController.deleteOne);
 routes.get('/ranks', userControllers.getAllUsers);
 routes.post('/upvote', challengeController.upvote);
 routes.get('/upvote', challengeController.getUpvoted);

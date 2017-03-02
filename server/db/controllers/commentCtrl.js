@@ -43,5 +43,31 @@ module.exports = {
         res.json(data);
       });
     });
+  },
+
+  updateOne: (req, res) => {
+    let comment = req.body.comment;
+    let id = req.params.id
+    console.log('comment', comment);
+    console.log('id', id)
+    db.from('comments').where({id: id}).update({comment: comment}).then(() => {
+      db.select().from('comments').where({id: id}).then((data) => {
+        console.log('comment update data', data)
+        res.json(data);
+      });
+    });
+  },
+
+  deleteOne: (req, res) => {
+    let id = req.body.id;
+    let challenge_id = req.params.id;
+
+    db.from('comments').where({id: id}).del().then(() => {
+       db.select('comments.comment', 'comments.username', 'comments.created_at', 'comments.challenge_id', 'comments.read', 'comments.id')
+      .from('comments')
+      .innerJoin('challenges', 'challenges.id', 'comments.challenge_id').where('comments.challenge_id', '=', challenge_id).then(data => {
+        res.json(data);
+      });
+    });
   }
 };

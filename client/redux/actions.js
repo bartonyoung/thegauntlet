@@ -107,7 +107,7 @@ let actions = {
     return {
       type: 'GET_DOWNVOTED',
       payload: downvote
-    }
+    };
   },
   setCoverVideo: function(video) {
     return {
@@ -155,6 +155,13 @@ let actions = {
     return {
       type: 'READ_NOTIFICATION',
       payload: notification
+    };
+  },
+
+  updateComment: function(comment) {
+    return {
+      type: 'UPDATE_COMMENT',
+      payload: comment
     };
   }
 };

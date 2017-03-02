@@ -192,10 +192,29 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       displayNotifications: action.payload
     });
-  } else if (action.type === "UPDATE_COVERVIDEO"){
+  } else if (action.type === 'UPDATE_COVERVIDEO') {
     return Object.assign({}, state, {
       coverVideo: action.payload
     });
+  } else if (action.type === 'UPDATE_COMMENT') {
+    let updateCommentObj = {};
+
+    for (var keys in state) {
+      if (keys === 'comments') {
+        updateCommentObj[keys] = [];
+        state[keys].forEach((key, i) => {
+          if (key.id === action.payload[0].id) {
+            updateCommentObj[keys][i] = action.payload[0];
+          } else {
+            updateCommentObj[keys][i] = key;
+          }
+        });
+      } else {
+        updateCommentObj[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, updateCommentObj);
   } else {
     return state;
   }

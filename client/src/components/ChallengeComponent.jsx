@@ -126,9 +126,10 @@ class ChallengeComponent extends React.Component {
         description: this.refs.description.value
       },
       success: function(data) {
+        console.log('editing data', data)
         outer.props.dispatch(actions.updatePost(data));
-        this.setState({
-          currentVideo: data
+        outer.setState({
+          currentVideo: data[0]
         });
       }
     });
