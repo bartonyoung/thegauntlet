@@ -86,7 +86,7 @@ module.exports = {
 
   getAllUsers: function(req, res) {
     let username = req.params.username || req.session.displayName;
-    db.select( 'users.username', 'users.upvotes').from('users').then(data => {
+    db.select( 'users.username', 'users.upvotes', 'users.scott').from('users').then(data => {
       data = data.sort((a, b)=> b.upvotes - a.upvotes);
       res.json(data);
     });

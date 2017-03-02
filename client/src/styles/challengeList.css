@@ -4,8 +4,6 @@ img {
   border: 1px solid black;
 }
 
-
-
 a:hover{
     text-decoration: none;
     cursor:pointer;
@@ -27,4 +25,26 @@ a:hover{
 .editor {
   float: right;
   margin-top: 20px;
+}
+
+#leader-img{
+  width:150px;
+  height: 150px;
+  margin-top:;
+  margin-left: 280px;
+  margin-bottom: 10px;
+  border: none;
+}
+
+.leader-td{
+  margin-left:10px;
+}
+
+td{ 
+  color: grey;
+  margin-bottom: 30px;
+  /*border: 1px solid red;*/
+}
+table{
+  border: 1px solid #efefef;
 }
