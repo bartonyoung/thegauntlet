@@ -206,7 +206,6 @@ class ChallengeList extends React.Component {
   }
 
   render() {
-
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if ((challenge && challenge.category === this.props.currentCategory) || (challenge && this.props.currentCategory === 'all')) {
         let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;

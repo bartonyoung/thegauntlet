@@ -528,20 +528,6 @@ class ProfileContent extends React.Component {
   }
 
   render() {
-    let checkFile = (type, challenge) => {
-      const fileType = {
-        'mp4': 'THIS IS A VIDEO!'
-      };
-      if (fileType[type]) {
-        return (<video className='parent-media' controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
-        </video>);
-      } else {
-        return <img className='parent-media' src='http://coolwildlife.com/wp-content/uploads/galleries/post-3004/Fox%20Picture%20003.jpg'/>;
-      }
-    };
-
-
     let mappedChallenges = this.props.challenges.map((challenge, j) => {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {

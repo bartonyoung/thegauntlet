@@ -62,12 +62,12 @@ class ResponseComponent extends React.Component {
       };
       if (fileType[type]) {
         return (<video className="response-media" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} type="video/mp4"/>*/}
+          <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} type="video/mp4"/>
         </video>);
       } else {
-        return <img className="response-media" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
+        // return <img className="response-media" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
 
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} width="320" height="240" />;
+        return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} width="320" height="240" />;
       }
     };
 
