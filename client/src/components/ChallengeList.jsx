@@ -20,6 +20,18 @@ class ChallengeList extends React.Component {
     this.handleLeaderBoard = this.handleLeaderBoard.bind(this);
   }
 
+  componentWillMount() {
+    const outer = this;
+    if (window.sessionStorage.username) {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));  
+      });   
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+    }
+  }
+
   onUsernameClick(challenge) {
     let outer = this;
     window.sessionStorage.newUsername = challenge.username;
@@ -55,7 +67,7 @@ class ChallengeList extends React.Component {
       window.sessionStorage.challengeName = challenge.title;
     }
   }
-
+  
   upVoteClick(id) {
     const outer = this;   
     $.post('/api/upvote', {
@@ -68,9 +80,18 @@ class ChallengeList extends React.Component {
       $.get('/api/downvote').then(data => {
         outer.props.dispatch(actions.getDownvoted(data));
       });
-      $.get('/api/singleChallenge', {id: id})
+      $.get('/api/allChallenges')
         .then(data => { 
-          this.setState({currentVideo: data[0]});
+          if (outer.props.currentCategory === 'all') {
+            data = data.reverse();
+          } else if (outer.props.currentCategory === 'recent') {  
+            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse();  
+          } else if (outer.props.currentCategory === 'popular') {
+            data = data.sort((a, b) => b.upvotes - a.upvotes);
+          } else {
+            data = data.filter(challenge => challenge.category === outer.props.currentCategory);
+          }
+          outer.props.dispatch(actions.getChallenges(data));    
         });
     });  
   }
@@ -87,12 +108,21 @@ class ChallengeList extends React.Component {
       $.get('/api/downvote').then(data => {
         outer.props.dispatch(actions.getDownvoted(data));
       });
-      $.get('/api/singleChallenge', {id: id})
+      $.get('/api/allChallenges')
         .then(data => { 
-          this.setState({currentVideo: data[0]});
+          if (outer.props.currentCategory === 'all') {
+            data = data.reverse();
+          } else if (outer.props.currentCategory === 'recent') {
+            data.length < 6 ? data = data.reverse() : data = data.slice(-5).reverse(); 
+          } else if (outer.props.currentCategory === 'popular') {
+            data = data.sort((a, b) => b.upvotes - a.upvotes);  
+          } else { 
+            data = data.filter(challenge => challenge.category === outer.props.currentCategory);
+          }
+          outer.props.dispatch(actions.getChallenges(data));
         });
     });  
-  }  
+  }   
 
   followTheLeader(leaderId) {
     const outer = this;
@@ -180,7 +210,7 @@ class ChallengeList extends React.Component {
             // <img clasName="center-block" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} />
         return (
           <div>
-            <img className="center-block challenge-list-media" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />
+            {<img className="center-block challenge-list-media" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />}
           </div>
         );
       }
@@ -190,17 +220,12 @@ class ChallengeList extends React.Component {
       if (window.sessionStorage.username !== user) {
         if (this.props.leaders.includes(leaderId)) {
           return (
-            <button className="btn btn-default btn-lg social-button follower" style={{color: 'orange'}} onClick={() => this.unFollow(leaderId, user)}>
-              <span className="glyphicon glyphicon-user"></span>
-            </button>
+            <span className="btn btn-default social-button follower" style={{color: 'orange'}} onClick={() => this.unFollow(leaderId, user)}>follow</span>
            
           );
         } else {
           return (
-            <button className="btn btn-default btn-lg social-button follower" onClick={() => this.followTheLeader(leaderId, user)}>
-              <span className="glyphicon glyphicon-user"></span>
-            </button>
-            // <i href="##"className="fa fa-user fa-2x" aria-hidden="true" onClick={() => this.followTheLeader(leaderId, user)}></i>
+            <span className="btn btn-default social-button follower" onClick={() => this.followTheLeader(leaderId, user)}>following</span>
           );
         }
       }
@@ -221,26 +246,28 @@ class ChallengeList extends React.Component {
         );
       }
     };
-
-    let voteButtons = (challengeId) => {  
-      if (this.props.upvoted.includes(challengeId)) {  
-        return (   
+  
+    let voteButtons = (challengeId, upvotes) => {
+      if (this.props.upvoted.includes(challengeId)) {
+        return (
           <span>
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
+            <button className="btn btn-lg social-button">{upvotes}</button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
         );
       } else if (this.props.downvoted.includes(challengeId)) {
-        return (     
+        return (
           <span>
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red', background: 'transparent'}}>
+            <button className="btn btn-lg social-button">{upvotes}</button>
+            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red'}}>
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
           </span>
@@ -251,6 +278,7 @@ class ChallengeList extends React.Component {
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
+            <button className="btn btn-lg social-button">{upvotes}</button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
@@ -294,31 +322,28 @@ class ChallengeList extends React.Component {
         }
       }
     };
-                // {calculateTime(timeDifferenceInSeconds)}
-                // {whichFollowButton(challenge.user_id, challenge.username)}
-
-    // <button onClick={() => this.upVoteClick(challenge)} type="button" className="btn btn-sm ">
-    //               <span className="glyphicon glyphicon-arrow-up"></span>{` Upvote  ${challenge.upvotes}`}
-    //             </button><br/>
+    
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
       if (challenge) {
         let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
         return (
           <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={i}>
             <div className="row challenge-title-row">
-              <h4 onClick={() => this.onChallengeTitleClick(challenge)} className="text-center"><Link to={'/challenge'}>{challenge.title}</Link></h4>
+              <h5 onClick={() => this.onChallengeTitleClick(challenge)} className="category-title"><Link to={'/challenge'}>{challenge.title}</Link></h5>
             </div>  
             <div className="row challenge-media-row">
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
             </div>
-            <p className="category-tab">{challenge.category}</p>
-            <div className="username-time">
-              <Link className="pull-left" onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
-              <span className="pull-right">{calculateTime(timeDifferenceInSeconds)}</span>
-            </div>
+            <div className="row category-row">
+              <span className="category-tab">{challenge.category}</span>
+            </div>  
             <div className="row challenge-buttons pagination-centered">
               {whichFavoriteIcon(challenge.id)}
               {voteButtons(challenge.id, challenge.upvotes)}
+            </div>
+            <div className="row username-time">
+              <Link onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
+              <span className="">{calculateTime(timeDifferenceInSeconds)}</span>
             </div>
           </div>
         );

@@ -1,9 +1,9 @@
 .navbar {
   margin-bottom: 0px;
   min-height: 0px;
-  background-color: #3E3E3E;
+  background-color: #16a79d;
   color: white;
-  border-bottom: black solid 3px;
+  border-bottom: orange solid 3px;
 }
 
 .messages-number {
