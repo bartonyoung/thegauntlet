@@ -23,9 +23,6 @@ class Landing extends React.Component {
     .then((data) => {
       data.reverse();
       outer.props.dispatch(actions.getChallenges(data));
-      //console.log('======================================================>',data)
-      outer.handleCoverVideo(data);
-      
     });
   }
 
@@ -62,22 +59,6 @@ class Landing extends React.Component {
       window.location.href = '#/';
       alert('Password does not match...');
     }
-  }
-
-  handleCoverVideo(array) {
-    let outer = this,
-      video;
-    let gallery = array.filter((item, index) => {
-      let ext = item.filename.split('.').pop();
-      if (index < 20 && (ext === 'mp4' || ext === 'mov' )) {
-        return item;
-      }
-    });
-    
-    video = gallery[Math.floor(Math.random() * gallery.length)];
-    console.log(video);
-    window.sessionStorage.setItem('coverVideoUsername', video.username);
-    outer.props.dispatch(actions.setCoverVideo(video.filename));
   }
 
   handleGallery(type) {
@@ -125,22 +106,6 @@ class Landing extends React.Component {
               </div>;
       });
     }
-     /*else if (type === 'cover') {
-      // return <img id="gauntlet" src="" alt=""/>
-      return (
-        <div className="landing-cover-video" >
-          <ReactPlayer
-            volume={0}
-            controls={true}
-            className="video-cover"
-            url='https://www.youtube.com/watch?v=ic869w93roI/https://www.youtube.com/watch?v=ic869w93roI/IMG_0054.mov'
-            playing
-            width='640'
-            height='360'
-            />
-        </div>
-        );
-      }*/
   }
 
   render() {
@@ -152,28 +117,14 @@ class Landing extends React.Component {
               <div className="col-md-12 text-center landing-header">
                 <div className="row">
                   <div className="col-md-9 text-center landing-header-left">
-                    <h1 className="landing-intro" id="landing-title">Welcome to The Gauntlet!</h1>
+                    <h1 id="landing-title">Welcome to The Gauntlet!</h1>
                       {/*<div className="col-md-3 desc text-center">
                       <p id="landing-desc"></p>
                         </div>*/}
                         {/*{this.handleGallery('cover')}*/}
-                        <div className="landing-cover-video">
-                          {/*<h4 id="today-cover">Today's User's' Video</h4>  */}
-                            {/*<ReactPlayer
-                              volume={0}
-                              controls={true}
-                              className="video-cover"
-                              url={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/'+this.props.coverVideo}
-                              playing
-                              width='640'
-                              height='<360></360>'
-                              />*/}
-                          {/*<span>by {window.sessionStorage.getItem('coverVideoUsername')}</span>*/}
-                        </div>
                   </div>
                      <div className="col-md-3 landing-header-right">
                         <form className="landing-register" type="submit" onSubmit={this.handleSignup.bind(this)}>
-                          {/*<p id="sign-up">SIGN UP</p>*/}
                           <input type="text" placeholder="What's your Firstname?" required ref="firstname" className=" landing-input pass" />
                           <input type="text" placeholder="What's your Lasttname?" required ref="lastname"className=" landing-input pass" />
                           <input type="text" placeholder="Create a Username" required ref="username" className="landing-input pass" />
@@ -221,12 +172,6 @@ class Landing extends React.Component {
                 </div>
               </div> 
           </div>                  
-            {/*<div className="text-center container gallery">
-              <h3>Most Recent Photos</h3>}
-                <div className='row'>
-                  {{this.handleGallery()}}
-                </div>
-            </div>*/}
       </div>
     );
   }
