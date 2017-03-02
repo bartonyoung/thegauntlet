@@ -170,7 +170,7 @@ class ChallengeComponent extends React.Component {
     $.post('/api/upvote', {
       vote: 1,
       challenge_id: id
-    }).then(() => {
+    }).then(() => { 
       $.get('/api/upvote').then(data => {
         outer.props.dispatch(actions.getUpvoted(data));
       });
@@ -325,9 +325,7 @@ class ChallengeComponent extends React.Component {
                     <button className="button response-button" onClick={() => { this.sortResponses('top'); }}>TOP</button>
                   </div>
                 </div>
-
                 <ResponseList onResponseTitleClick={this.onResponseTitleClick}/>
-
               </div>
             </div>
           </div>
@@ -339,51 +337,41 @@ class ChallengeComponent extends React.Component {
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
               <div className="row current-viewing-title-row text-center">
-                          <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
+                <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
               </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
               </div>
-              
-              
                 <div className="row current-info">
                   <div className="col-md-12">
-                    
-                      
-                        <div className="row">
-                          <ul>
-                            <li className="username username-and-timestamp"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
-                            <li className="username-and-timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
-                            <li className="current-video-buttons pull-right">
-                              {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
-                              {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="row">
-                          <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                        </div>
-                      
-                  
-                      
-                
-              </div>
+                    <div className="row">
+                      <ul>
+                        <li className="username username-and-timestamp"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
+                        <li className="username-and-timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
+                        <li className="current-video-buttons pull-right">
+                          {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
+                          {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="row">
+                      <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
-
           <CommentList />
       </div>
       );
     }
     return <div></div>;
   }
-}
+      }
 
 
 const mapStateToProps = (state) => {
-  return state;
+  return state;    
 };
 
 export default connect(mapStateToProps)(ChallengeComponent);
-
