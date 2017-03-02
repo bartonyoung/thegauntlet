@@ -126,16 +126,6 @@ class NavBar extends React.Component {
     return <div></div>;
   }
 
-  renderMessagesNumber() {
-    console.log('in here')
-    if (this.props.messageNumber) {
-      console.log('this.props.messageNumber', this.props.messageNumber)
-      return <span className="messages-number">{this.props.messageNumber}</span>;
-    } else {
-      return <div></div>;
-    }
-  }
-
   handleNav() {
     if (window.sessionStorage.username) {
       return (
