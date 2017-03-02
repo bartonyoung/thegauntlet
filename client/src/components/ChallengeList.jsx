@@ -16,6 +16,7 @@ class ChallengeList extends React.Component {
     this.followTheLeader = this.followTheLeader.bind(this);
     this.unFollow = this.unFollow.bind(this);
     this.addToFavorites = this.addToFavorites.bind(this);
+    this.handleLeaderBoard = this.handleLeaderBoard.bind(this);
   }
 
   onUsernameClick(challenge) {
@@ -28,6 +29,15 @@ class ChallengeList extends React.Component {
     });
   }
 
+  onRankerClick(rank) {
+    let outer = this;
+    window.sessionStorage.newUsername = rank.username;
+    window.sessionStorage.newUser_id = rank.scott || window.sessionStorage.user_id;
+    $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
+      outer.props.dispatch(actions.addUser(user));
+      window.location.href = '/#/profile/' + rank.username;
+    });
+  }    
 
   onChallengeTitleClick(challenge) {
     if (challenge.parent_id === null) {
@@ -102,7 +112,6 @@ class ChallengeList extends React.Component {
   }
 
   removeFromFavorites(challengeId) {
-    console.log('Client remove', challengeId);
     const outer = this;
     $.post('/api/unFavorite', {
       challenge_id: challengeId
@@ -110,6 +119,30 @@ class ChallengeList extends React.Component {
       $.get('/api/favorite').then(favorites => {
         outer.props.dispatch(actions.setFavorites(favorites));
       });
+    });
+  }
+
+  handleLeaderBoard() {
+    let bgColor;
+    return this.props.ranks.filter(user => {
+      return user.upvotes > 0;
+    }).map((rank, index) => {  
+      if (index < 10) {
+        if (index % 2 === 0 ) {
+          bgColor = 'info';
+        } else {
+          bgColor = 'warning';
+        }
+        return (
+                <tr className={bgColor} key={index}>
+                  <td>
+                    <span className="leader-td"> #{index + 1}</span>
+                  </td>
+                  <td><Link onClick={() => this.onRankerClick(rank)}><span className="leader-td">{rank.username}</span></Link></td>
+                  <td><span className="leader-td">{rank.upvotes}</span></td>
+                </tr>
+        );
+      }
     });
   }
 
@@ -242,7 +275,8 @@ class ChallengeList extends React.Component {
     if (this.props.currentCategory === 'LeaderBoard') {
       return (
         <div className="col-md-12">
-          <h1 className="text-center">Rank Top 10</h1>
+          {/*<h1 className="text-center leaderBoard-title"></h1>*/}
+          <img id="leader-img" src="https://badgeos.org/wp-content/uploads/edd/2013/11/leaderboard-300x300.png" alt=""/>
           <table className="table">
             <thead>
               <tr>
@@ -252,17 +286,7 @@ class ChallengeList extends React.Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.ranks.map((rank, index) => {
-                if (index < 10) {
-                  return (
-                    <tr className="success" key={index}>
-                      <td> #{index + 1}</td>
-                      <td><Link onClick={() => this.onUsernameClick(rank)}>{rank.username}</Link></td>
-                      <td>{rank.upvotes}</td>
-                   </tr>
-                  );
-                }
-              })}
+              {this.handleLeaderBoard()}
             </tbody>
           </table>
         </div>
