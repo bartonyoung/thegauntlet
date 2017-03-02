@@ -316,7 +316,6 @@ class ChallengeComponent extends React.Component {
         );
       }
     };
-<<<<<<< HEAD
 
     let whichFollowButton = (leaderId, user) => {
       if (window.sessionStorage.username !== user) {
@@ -335,26 +334,6 @@ class ChallengeComponent extends React.Component {
         }
       }
     };
-=======
-    
-    // let whichFollowButton = (leaderId, user) => {
-    //   if (window.sessionStorage.username !== user) {
-    //     if (this.props.leaders.includes(leaderId)) {   
-    //       return ( 
-    //         <button className="btn btn-default btn-sm follower" style={{color: 'green'}} onClick={() => this.unFollow(leaderId, user)}>
-    //           <span className="glyphicon glyphicon-user"></span>
-    //         </button>
-    //       );
-    //     } else {  
-    //       return (
-    //         <button className="btn btn-default btn-sm follower" onClick={() => this.followTheLeader(leaderId, user)}>
-    //           <span className="glyphicon glyphicon-user"></span>
-    //         </button>
-    //       ); 
-    //     }
-    //   }
-    // };
->>>>>>> Revise styling and reducer.
 
     let whichFavoriteIcon = (challengeId) => {
       if (this.props.favorites.includes(challengeId)) {
