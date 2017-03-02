@@ -61,8 +61,12 @@ class Signup extends React.Component {
             </p>
             <div className="text-center">
             <a href="/">Back to main page</a>
+             <span id="agreement">
+              By clicking "Sign up for the Gauntlet", you agree to our terms of service and privacy policy. We’ll occasionally send you account related emails.
+            </span>
             </div>
           </form>
+          
       </div>
     );
   }

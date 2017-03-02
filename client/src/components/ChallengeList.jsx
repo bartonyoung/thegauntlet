@@ -6,6 +6,7 @@ import ProfileContent from './ProfileContent.jsx';
 import $ from 'jquery';
 import { Link } from 'react-router';
 import css from '../styles/challengeList.css';
+import {emojify} from 'react-emojione2';
 
 class ChallengeList extends React.Component {
   constructor(props) {
@@ -170,10 +171,14 @@ class ChallengeList extends React.Component {
 
   handleLeaderBoard() {
     let bgColor;
+    let medal;
     return this.props.ranks.filter(user => {
       return user.upvotes > 0;
     }).map((rank, index) => {  
       if (index < 10) {
+        if (index === 0) {
+          medal = emojify(' :medal:', {output: 'unicode'});
+        } else { medal = ''; }  
         if (index % 2 === 0 ) {
           bgColor = 'info';
         } else {
@@ -182,7 +187,8 @@ class ChallengeList extends React.Component {
         return (
                 <tr className={bgColor} key={index}>
                   <td>
-                    <span className="leader-td"> #{index + 1}</span>
+                    <span className="leader-td"> #{index + 1 }</span>
+                    {<span id="medal" >{medal}</span>}
                   </td>
                   <td><Link onClick={() => this.onRankerClick(rank)}><span className="leader-td">{rank.username}</span></Link></td>
                   <td><span className="leader-td">{rank.upvotes}</span></td>
@@ -364,20 +370,20 @@ class ChallengeList extends React.Component {
       return (
         <div className="col-md-12">
           {/*<h1 className="text-center leaderBoard-title"></h1>*/}
-          <img id="leader-img" src="https://badgeos.org/wp-content/uploads/edd/2013/11/leaderboard-300x300.png" alt=""/>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>#RANK</th>
-                <th>USERNAME</th>
-                <th>UPVOTES</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.handleLeaderBoard()}
-            </tbody>
-          </table>
-        </div>
+          <img className="animated bounce infinite" id="leader-img" src="https://badgeos.org/wp-content/uploads/edd/2013/11/leaderboard-300x300.png" alt=""/>
+            <table className="table table-nonfluid">
+              <thead>
+                <tr>
+                  <th>#RANK</th>
+                  <th>USERNAME</th>
+                  <th>UPVOTES</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.handleLeaderBoard()}
+              </tbody>
+            </table>
+          </div>
       );
     }
 

@@ -44,6 +44,7 @@
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
+    "react-emojione2": "^2.2.18",
     "react-logger": "^1.1.0",
     "react-player": "^0.14.3",
     "react-redux": "^5.0.2",

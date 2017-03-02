@@ -136,7 +136,7 @@ class Landing extends React.Component {
               <div className="col-md-12 text-center landing-header">
                 <div className="row">
                   <div className="col-md-9 text-center landing-header-left">
-                    <h1 id="landing-title">Welcome to The Gauntlet!</h1>
+                    <h1 id="landing-title">Welcome to The<br/> Gauntlet!</h1>
                       {/*<div className="col-md-3 desc text-center">
                       <p id="landing-desc"></p>
                         </div>*/}
@@ -151,14 +151,17 @@ class Landing extends React.Component {
                           <input type="password" placeholder="Create a Password"required ref="password" className="landing-input pass" />
                           <input type="password" placeholder="Confirm Password" ref="confirmPassword" className=" landing-input pass" />
                           <input type="submit" value="Join Gauntlet!" className=" landing-inputButton" />
+                          <span id="agreement">
+                            By clicking "Sign up for the Gauntlet", you agree to our terms of service and privacy policy. We’ll occasionally send you account related emails.
+                          </span>
                         </form>
                       </div>
                 </div>
               </div>
                 <div className="row">
-                  <div className="col-md-12 text-center">
-                     <h2>The Gauntlet is a place to test yourself against others !<br/>
-                     Add your own challenge and watch others respond, or one-up another challenger</h2>
+                  <div className="col-md-12 text-center contents-title">
+                     <h2><span id="gauntlet">The Gauntlet</span>  is a place to test yourself against others !<br/>
+                     Add your own challenge and watch others respond<br/> or one-up another challenger</h2>
                   </div>
                     <div className="row col-wrapper">
                       <div className="col-md-4 col">
