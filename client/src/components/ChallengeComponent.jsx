@@ -255,7 +255,7 @@ class ChallengeComponent extends React.Component {
     }).then( data => {
       if (sortBy === 'top') {
         data = data.sort( (a, b) => {
-          b.upvotes - a.upvotes;
+          return b.upvotes - a.upvotes;
         });
       } else {
         data = data.reverse();
