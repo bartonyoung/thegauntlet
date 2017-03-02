@@ -616,7 +616,7 @@ class ProfileContent extends React.Component {
         if (this.props.profileView === 'notifications') {
           return (
             <li className="active" onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
-          );    
+          );
         } else {
           return (
             <li onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
@@ -730,7 +730,7 @@ class ProfileContent extends React.Component {
               formDisplay: 'unset'
             })}>Send a message</button>
             <form style={{display: this.state.formDisplay}} onSubmit={this.onSendMessageClick}>
-              <input type='text' placeholder='Enter your message' required ref='message'/>
+              <textarea type='text' cols='40' rows='5' placeholder='Enter your message' required ref='message'/>
               <input type='submit' value='Send'/>
             </form>
           </div>
@@ -744,6 +744,7 @@ class ProfileContent extends React.Component {
     if (this.props.user.length > 0) {
       target = this.props.user[0].username;
     }
+
     if (target) {
       return (
         <div className="row overallContent">
@@ -768,6 +769,7 @@ class ProfileContent extends React.Component {
               }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
                 {this.props.user[0].upvotes}) <br />
               Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
+              {sendMessage()}
               </div>
             </div>
           </div><br/>
@@ -778,12 +780,12 @@ class ProfileContent extends React.Component {
               <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>
               <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>
               {renderNotifications()}
-              {renderMessages()} 
+              {renderMessages()}
             </ul>
             {myView()}
           </div>
         </div>
-      ); 
+      );
     } else {
       return <div></div>;
     }
