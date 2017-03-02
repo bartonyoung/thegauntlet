@@ -23,6 +23,7 @@ class Landing extends React.Component {
     .then((data) => {
       data.reverse();
       outer.props.dispatch(actions.getChallenges(data));
+      outer.handleCoverVideo(data);
     });
   }
 
@@ -58,6 +59,24 @@ class Landing extends React.Component {
       this.refs.confirmPassword.value = '';
       window.location.href = '#/';
       alert('Password does not match...');
+    }
+  }
+
+  handleCoverVideo(array) {
+    let outer = this,
+      video;
+    let gallery = array.filter((item, index) => {
+      let ext = item.filename.split('.').pop();
+      if (index < 20 && (ext === 'mp4' || ext === 'mov' )) {
+        return item;
+      }
+    });
+    
+    video = gallery[Math.floor(Math.random() * gallery.length)];
+    console.log(video);
+    if (video) {
+      window.sessionStorage.setItem('coverVideoUsername', video.username);
+      outer.props.dispatch(actions.setCoverVideo(video.filename));
     }
   }
 

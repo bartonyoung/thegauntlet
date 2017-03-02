@@ -44,10 +44,12 @@ class ProfileContent extends React.Component {
   }
 
   followers() {
-    const outer = this;
-    $.get('/api/listFollowers', {username: this.props.user[0].username}).then(data => {
-      outer.props.dispatch(actions.setFollowers(data));
-    });
+    if (this.props.user.length > 0) {
+      const outer = this;
+      $.get('/api/listFollowers', {username: this.props.user[0].username}).then(data => {
+        outer.props.dispatch(actions.setFollowers(data));
+      });
+    }
   }
 
   onNotificationClick(i, notification) {
@@ -64,7 +66,7 @@ class ProfileContent extends React.Component {
 
     if (notification.read === 0) {
       if (notification.comment) {
-        console.log('inside notification.comment', notification)
+        console.log('inside notification.comment', notification);
         $.ajax({
           url: '/api/comments/' + notification.id,
           type: 'PUT',
@@ -292,7 +294,7 @@ class ProfileContent extends React.Component {
         url: '/api/messages/' + message.message_id,
         type: 'PUT',
         success: function(data) {
-          console.log('put message data', data)
+          console.log('put message data', data);
           outer.props.dispatch(actions.readMessage(data));
         }
       });
@@ -611,9 +613,15 @@ class ProfileContent extends React.Component {
 
     let renderNotifications = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
-        return (
-          <li onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
-        );
+        if (this.props.profileView === 'notifications') {
+          return (
+            <li className="active" onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
+          );    
+        } else {
+          return (
+            <li onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
+          );
+        }
       } else {
         return (
           <div></div>
@@ -623,13 +631,27 @@ class ProfileContent extends React.Component {
 
     let renderMessages = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
-        return (
-          <li onClick={() => this.changeProfileView('messages')}><a data-toggle="tab" href="#menu5">Messages</a></li>
-        );
+        if (this.props.profileView === 'messages') {
+          return (
+            <li className="active" onClick={() => this.changeProfileView('messages')}><a data-toggle="tab" href="#menu5">Messages</a></li>
+          );
+        } else {
+          return (
+            <li onClick={() => this.changeProfileView('messages')}><a data-toggle="tab" href="#menu5">Messages</a></li>
+          );
+        }
       } else {
         return (
           <div></div>
         );
+      }
+    };
+
+    let renderChallenges = () => {
+      if (this.props.profileView === 'all') {
+        return <li className="active" onClick={() => this.changeProfileView('all')}><a data-toggle="tab" href="#home">Challenges</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView('all')}><a data-toggle="tab" href="#home">Challenges</a></li>;
       }
     };
 
@@ -718,47 +740,53 @@ class ProfileContent extends React.Component {
       }
     };
 
-    let target = this.props.user[0].username;
-
-    return (
-      <div className="row overallContent">
-        <div className='col-lg-3 profileContainer'>
-          <div id='picContainer' className="row">
-            {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-            <img className='col-lg- 12 profilePic' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
-          </div>
-          <span className='editPic' style={{display: this.state.display}}>
-            <form id='pic'>
-              <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].scott); }} />
-            </form>
-          </span>
-          <div className="row profileInfo">
-            <div className="col-lg-12">
-            Username: {target} <br />
-            {Firstname(this.props.user[0].firstname, this.props.user[0].scott, target)}
-            {Lastname(this.props.user[0].lastname, this.props.user[0].scott, target)}
-            {Email(this.props.user[0].email, this.props.user[0].scott, target)}
-            Rank# {this.props.ranks.map((rank, index) => {
-              return {username: rank.username, rank: index + 1};
-            }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
-              {this.props.user[0].upvotes}) <br />
-            Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
+    let target;
+    if (this.props.user.length > 0) {
+      target = this.props.user[0].username;
+    }
+    if (target) {
+      return (
+        <div className="row overallContent">
+          <div className='col-lg-3 profileContainer'>
+            <div id='picContainer' className="row">
+              {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+              <img className='col-lg- 12 profilePic' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
             </div>
+            <span className='editPic' style={{display: this.state.display}}>
+              <form id='pic'>
+                <input type="file" placeholder="image" ref="video" name="video" onChange={()=> { this.editProfileImage(this.props.user[0].scott); }} />
+              </form>
+            </span>
+            <div className="row profileInfo">
+              <div className="col-lg-12">
+              Username: {target} <br />
+              {Firstname(this.props.user[0].firstname, this.props.user[0].scott, target)}
+              {Lastname(this.props.user[0].lastname, this.props.user[0].scott, target)}
+              {Email(this.props.user[0].email, this.props.user[0].scott, target)}
+              Rank# {this.props.ranks.map((rank, index) => {
+                return {username: rank.username, rank: index + 1};
+              }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
+                {this.props.user[0].upvotes}) <br />
+              Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
+              </div>
+            </div>
+          </div><br/>
+          <div className="col-lg-8">
+            <ul className="nav nav-tabs">
+              {renderChallenges()}
+              <li onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>
+              <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>
+              <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>
+              {renderNotifications()}
+              {renderMessages()} 
+            </ul>
+            {myView()}
           </div>
-        </div><br/>
-        <div className="col-lg-8">
-          <ul className="nav nav-tabs">
-            <li className="active" onClick={() => this.changeProfileView('all')}><a data-toggle="tab" href="#home">Challenges</a></li>
-            <li onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>
-            <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>
-            <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>
-            {renderNotifications()}
-            {renderMessages()}
-          </ul>
-          {myView()}
         </div>
-      </div>
-    );
+      ); 
+    } else {
+      return <div></div>;
+    }
   }
 }
 
