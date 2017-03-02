@@ -80,15 +80,15 @@ class ResponseComponent extends React.Component {
           return (
             <div>
               <button className="btn btn-default btn-sm edit" onClick={() => this.editResponse()}>
-                <span className="glyphicon glyphicon-edit"></span>  
+                <span className="glyphicon glyphicon-edit"></span>
               </button>
               <button className="btn btn-default btn-sm delete" onClick={() => this.deleteResponse(response)}>
-                <span className="glyphicon glyphicon-remove"></span>  
+                <span className="glyphicon glyphicon-remove"></span>
               </button>
             </div>
           );
         }
-    
+
         return (
           <div>
             <div className="editor">
@@ -168,7 +168,7 @@ class ResponseComponent extends React.Component {
             <div><a href="javasript:void(0)" onClick={() => { this.props.onResponseTitleClick(this.props.response); }}>{this.props.response.title}</a></div>
             <div><Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link></div>
             <div>{`Upvotes: ${this.props.response.upvotes}`}</div>
-          </div>  
+          </div>
         </div>
       );
     } else {
@@ -194,5 +194,5 @@ export default connect(mapStateToProps)(ResponseComponent);
             // {taskButtons(this.props.response)}
             // <span>{this.props.response.description}</span>
             // </div>
-      ///**** NOT SURE IF WE SHOULD INLCLUDE IN RESPONSES OR ONLY CURRENTLY VIEWING *******//      
+      ///**** NOT SURE IF WE SHOULD INLCLUDE IN RESPONSES OR ONLY CURRENTLY VIEWING *******//
             // {calculateTime(timeDifferenceInSeconds)}<br/>

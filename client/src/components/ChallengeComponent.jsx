@@ -127,6 +127,9 @@ class ChallengeComponent extends React.Component {
       },
       success: function(data) {
         outer.props.dispatch(actions.updatePost(data));
+        this.setState({
+          currentVideo: data
+        });
       }
     });
   }
@@ -490,8 +493,8 @@ class ChallengeComponent extends React.Component {
                     {whichFollowButton(this.state.currentVideo.user_id, this.state.currentVideo.username)}
                     {whichFavoriteIcon(this.state.currentVideo.id)}
                     {voteButtons(this.state.currentVideo.id, this.state.currentVideo.upvotes)}
+                    {taskButtons(this.state.currentVideo)}
                   </div>
-
               </div>
             </div>
           </div>
@@ -500,7 +503,7 @@ class ChallengeComponent extends React.Component {
       </div>
       );
     }
-    return <div>HI!</div>;
+    return <div></div>;
   }
 }
 
