@@ -21,6 +21,7 @@ class ProfileContent extends React.Component {
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.onSendMessageClick = this.onSendMessageClick.bind(this);
     this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
+    this.onSendReplyClick = this.onSendReplyClick.bind(this);
   }
 
   componentDidMount () {
@@ -273,9 +274,20 @@ class ProfileContent extends React.Component {
       messageDisplay: 'unset',
       formDisplay: 'none'
     });
+    console.log(this.refs.message.value)
+    if (!this.props.chat) {
+      let chat = {
+        fromUsername: window.sessionStorage.username,
+        toUsername: window.sessionStorage.newUsername
+      };
+      $.post('/api/chats', chat).done(data => {
+        console.log('chatroom', data)
+        outer.props.dispatch(actions.createChat(data));
+      })
+    }
     let created_at = new Date().getTime();
     let message = {
-      message: this.refs.message.value,
+      message: outer.refs.message.value,
       fromUser_id: window.sessionStorage.user_id,
       toUser_id: window.sessionStorage.newUser_id,
       created_at: created_at,
@@ -288,7 +300,11 @@ class ProfileContent extends React.Component {
 
   onMessageClick(message) {
     let outer = this;
-
+    console.log("on message click", message)
+    window.sessionStorage.setItem('messageParentId', message.message_id)
+    window.sessionStorage.setItem('messageToUserId', message.fromUser_id);
+    console.log('message to Id', window.sessionStorage.messageToUserId)
+    console.log('message parent_id', window.sessionStorage.messageParentId)
     if (!message.read) {
       $.ajax({
         url: '/api/messages/' + message.message_id,
@@ -315,6 +331,24 @@ class ProfileContent extends React.Component {
       window.sessionStorage.currentId = challenge.id;
       window.sessionStorage.challengeName = challenge.title;
     }
+  }
+
+  onSendReplyClick() {
+    let outer = this;
+    let created_at = new Date().getTime();
+    console.log('replying', this.refs.reply.value)
+    let reply = {
+      message: this.refs.reply.value,
+      fromUser_id: window.sessionStorage.user_id,
+      toUser_id: window.sessionStorage.messageToUserId,
+      created_at: created_at,
+      read: 0,
+      parent_id: window.sessionStorage.messageParentId
+    };
+    console.log('reply', reply)
+    $.post('/api/message/' + window.sessionStorage.messageParentId, reply).done(data => {
+      outer.refs.reply.value = '';
+    });
   }
 
   render() {
@@ -570,6 +604,7 @@ class ProfileContent extends React.Component {
         return mappedNotifications;
       } else if (this.props.profileView === 'messages' && window.sessionStorage.username === this.props.user[0].username) {
         let mappedMessages = this.props.messages.map((message, i) => {
+          let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
           if (message) {
             if (message.read === 0) {
               return (
@@ -580,9 +615,17 @@ class ProfileContent extends React.Component {
                       <span className='messageUsername'>
                         {message.username + ': '}
                       </span>
-                      <span className='messageMessage'>
-                        {message.message + ' UNREAD'}
+                         <span>
+                        {calculateTime(timeDifferenceInSeconds)}
                       </span>
+                      <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+                        Reply
+                      </a>
+
+                          <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
+                            <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
+                            <input type="submit" value="Send"/>
+                          </form>
                   </div>
                 </div>
               );
@@ -598,6 +641,18 @@ class ProfileContent extends React.Component {
                       <span className='messageMessage'>
                         {message.message}
                       </span>
+                      <span>
+                        {calculateTime(timeDifferenceInSeconds)}
+                      </span>
+                      <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+                        Reply
+                      </a>
+
+                          <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
+                            <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
+                            <input type="submit" value="Send"/>
+                          </form>
+
                   </div>
                 </div>
               );

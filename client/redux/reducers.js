@@ -215,6 +215,10 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, updateCommentObj);
+  } else if (action.type === 'CREATE_CHAT') {
+    return Object.assign({}, state, {
+      chat: action.payload
+    });
   } else {
     return state;
   }

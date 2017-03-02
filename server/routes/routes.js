@@ -4,7 +4,7 @@ const s3Controller = require('../db/controllers/s3Ctrl.js');
 const challengeController = require('../db/controllers/challengeCtrl.js');
 const commentController = require('../db/controllers/commentCtrl.js');
 const followerController = require('../db/controllers/followerCtrl.js');
-const messageController = require('../db/controllers/messageCtrl.js');
+const chatController = require('../db/controllers/chatCtrl.js');
 
 routes.post('/signup', userControllers.signup);
 routes.post('/login', userControllers.login);
@@ -47,7 +47,11 @@ routes.get('/isUser', userControllers.isUser);
 routes.get('/challengeSearch', challengeController.challengeSearch);
 routes.post('/userUpload', s3Controller);
 routes.post('/s3', challengeController.s3);
-routes.post('/messages/:toUser_id', messageController.sendOne);
-routes.get('/messages/:toUser_id', messageController.getAll);
-routes.put('/messages/:id', messageController.read);
+routes.post('/messages/:toUser_id', chatController.sendOne);
+routes.post('/message/:id', chatController.replyOne);
+routes.get('/messages/:toUser_id', chatController.getAll);
+routes.put('/messages/:id', chatController.read);
+routes.post('/chats', chatController.createChat);
+routes.get('/chats', chatController.getChats);
+
 module.exports = routes;

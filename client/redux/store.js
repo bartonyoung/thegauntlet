@@ -22,7 +22,8 @@ const configureStore = (initialState = {
   messages: [],
   displayMessages: '',
   displayNotifications: '',
-  coverVideo: ''
+  coverVideo: '',
+  chat: []
 }) => {
   return finalCreateStore(reducer, initialState);
 };

@@ -7,7 +7,7 @@ module.exports = knex.schema.createTableIfNotExists('messages', (message) => {
   message.string('toUser_id');
   message.string('created_at');
   message.boolean('read');
+  message.integer('parent_id');
 }).then(() => {
   console.log('messages table created');
 });
-

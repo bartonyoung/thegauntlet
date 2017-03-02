@@ -163,6 +163,13 @@ let actions = {
       type: 'UPDATE_COMMENT',
       payload: comment
     };
+  },
+
+  createChat: function(chat) {
+    return {
+      type: 'CREATE_CHAT',
+      payload: chat
+    };
   }
 };
 

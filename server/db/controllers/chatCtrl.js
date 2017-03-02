@@ -1,7 +1,27 @@
-const comments = require('../models/messages.js');
+const chat = require('../models/chats.js');
 const db = require('../index.js');
 
 module.exports = {
+  createChat: (req, res) => {
+    console.log('chat req.body', req.body)
+    let chat = req.body;
+    let fromUsername = req.body.username;
+    db('chats').insert(chat).then(() => {
+      db.select().from('chats').then(chatRoom => {
+        console.log('chat', chatRoom)
+        res.json(chatRoom);
+      });
+    });
+  },
+
+  getChats: (req, res) => {
+    let fromUsername = req.query.fromUsername;
+    console.log('fromUsername', fromUsername)
+    db.select().from('chats').where({fromUsername: fromUsername}).then(data => {
+      console.log('chatrooms', data);
+    });
+  },
+
   sendOne: (req, res) => {
     let message = req.body;
     let toUser_id = req.params.toUser_id;
@@ -9,6 +29,17 @@ module.exports = {
     db('messages').where({toUser_id: toUser_id}).insert(message).then(() => {
       db.select().from('messages').where({toUser_id: toUser_id}).then(message => {
         res.json(message);
+      });
+    });
+  },
+
+  replyOne: (req, res) => {
+    let parent_id = req.body.parent_id;
+    let message = req.body;
+    console.log("reply one", message, parent_id)
+    db('messages').where({parent_id: parent_id}).insert(message).then(() => {
+      db.select().from('messages').where({parent_id: parent_id}).then(message => {
+        console.log('reply message', message)
       });
     });
   },

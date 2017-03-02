@@ -44,7 +44,13 @@ class Profile extends React.Component {
         }
       });
     });
-
+    if (window.sessionStorage.username !== window.sessionStorage.newUsername) {
+      $.get('/api/chats', {
+        fromUsername: window.sessionStorage.username
+      }).done(data => {
+        outer.props.dispatch(getChats(data));
+      });
+    }
     $.get('/api/ranks').done((rankData)=>{
       outer.props.dispatch(actions.getRanks(rankData));
     });

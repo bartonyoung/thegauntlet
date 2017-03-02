@@ -33,6 +33,11 @@ class Dash extends React.Component {
           }
         });
       });
+      $.get('/api/chats', {
+        fromUsername: window.sessionStorage.username
+      }).done(data => {
+        outer.props.dispatch(getChats(data));
+      });
       $.get('/api/response', {
         user_id: window.sessionStorage.user_id
       }).done(data => {
