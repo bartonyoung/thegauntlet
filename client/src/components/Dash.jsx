@@ -25,18 +25,19 @@ class Dash extends React.Component {
       $.get('/api/favorite').done(data => {
         outer.props.dispatch(actions.setFavorites(data));
       });
-      $.get('/api/messages/' + window.sessionStorage.user_id).done(messages => {
-        messages.forEach(message => {
-          outer.props.dispatch(actions.getMessages(messages));
-          if (message.read === 0) {
-            outer.props.dispatch(actions.setDisplayMessages('messages-number'));
-          }
-        });
-      });
+      // $.get('/api/messages/' + window.sessionStorage.username).done(messages => {
+      //   messages.forEach(message => {
+      //     outer.props.dispatch(actions.getMessages(messages));
+      //     if (message.read === 0) {
+      //       outer.props.dispatch(actions.setDisplayMessages('messages-number'));
+      //     }
+      //   });
+      // });
       $.get('/api/chats', {
-        fromUsername: window.sessionStorage.username
+        username: window.sessionStorage.username
       }).done(data => {
-        outer.props.dispatch(getChats(data));
+        console.log("get chats", data)
+        outer.props.dispatch(actions.getChats(data));
       });
       $.get('/api/response', {
         user_id: window.sessionStorage.user_id

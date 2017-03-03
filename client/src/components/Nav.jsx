@@ -75,7 +75,7 @@ class NavBar extends React.Component {
 
   handleIconClick(icon) {
     if (icon === 'message') {
-      this.props.dispatch(actions.setProfileView('messages'));
+      this.props.dispatch(actions.setProfileView('chats'));
     } else if (icon === 'notification') {
       this.props.dispatch(actions.setProfileView('notifications'));
     }
@@ -85,13 +85,13 @@ class NavBar extends React.Component {
 
   renderMessagesNumber() {
     var unReadMessages = this.props.messages.reduce((a, c) => {
-      if (c.read === 0) {
+      if (c.read === 0 && c.from_Username !== window.sessionStorage.username) {
         a += 1;
       }
 
       return a;
     }, 0);
-
+    console.log('render messages number', unReadMessages)
     for (var i = 0; i < this.props.messages.length; i++) {
       var message = this.props.messages[i];
       if (this.props.displayMessages === 'messages-number' && unReadMessages > 0) {

@@ -216,8 +216,24 @@ const reducer = (state, action) => {
 
     return Object.assign({}, updateCommentObj);
   } else if (action.type === 'CREATE_CHAT') {
+    let chatsObj = {};
+
+    for (var keys in state) {
+      if (keys === 'chats') {
+        chatsObj[keys] = [];
+        chatsObj[keys].push(action.payload[0]);
+        state[keys].forEach((key, i) => {
+          chatsObj[keys].push(key);
+        });
+      } else {
+        chatsObj[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, chatsObj);
+  } else if (action.type === 'GET_CHATS') {
     return Object.assign({}, state, {
-      chat: action.payload
+      chats: action.payload
     });
   } else {
     return state;

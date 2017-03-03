@@ -14,14 +14,17 @@ class ProfileContent extends React.Component {
       second: false,
       third: false,
       messageDisplay: 'unset',
-      formDisplay: 'none'
+      formDisplay: 'none',
+      currentChat: [],
+      timeDisplay: 'none'
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.editFirstName = this.editFirstName.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.onSendMessageClick = this.onSendMessageClick.bind(this);
     this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
-    this.onSendReplyClick = this.onSendReplyClick.bind(this);
+    this.onSendReply = this.onSendReply.bind(this);
+    this.onChatClick = this.onChatClick.bind(this);
   }
 
   componentDidMount () {
@@ -269,13 +272,39 @@ class ProfileContent extends React.Component {
 
   onSendMessageClick(e) {
     e.preventDefault();
+    let created_at = new Date().getTime();
     let outer = this;
     this.setState({
       messageDisplay: 'unset',
       formDisplay: 'none'
     });
-    console.log(this.refs.message.value)
-    if (!this.props.chat) {
+
+    let createChatRoom = true;
+
+    for (let i = 0; i < this.props.chats.length; i++) {
+      let chat = this.props.chats[i];
+
+      if (chat.toUsername === window.sessionStorage.newUsername) {
+        createChatRoom = false;
+        let message = {
+        message: outer.refs.message.value,
+        to_Username: window.sessionStorage.newUsername,
+        from_Username: window.sessionStorage.username,
+        created_at: created_at,
+        read: 0,
+        chat_id: chat.id
+      };
+
+      $.post('/api/messages/' + window.sessionStorage.newUsername, message).done(data => {
+
+        outer.refs.message.value = '';
+      });
+      }
+    }
+
+
+    if (createChatRoom) {
+      console.log('chatroom created')
       let chat = {
         fromUsername: window.sessionStorage.username,
         toUsername: window.sessionStorage.newUsername
@@ -283,19 +312,21 @@ class ProfileContent extends React.Component {
       $.post('/api/chats', chat).done(data => {
         console.log('chatroom', data)
         outer.props.dispatch(actions.createChat(data));
-      })
+        let message = {
+          message: outer.refs.message.value,
+          to_Username: window.sessionStorage.newUsername,
+          from_Username: window.sessionStorage.username,
+          created_at: created_at,
+          read: 0,
+          chat_id: data[0].id
+        };
+
+        $.post('/api/messages/' + window.sessionStorage.newUsername, message).done(data => {
+
+          outer.refs.message.value = '';
+        });
+      });
     }
-    let created_at = new Date().getTime();
-    let message = {
-      message: outer.refs.message.value,
-      fromUser_id: window.sessionStorage.user_id,
-      toUser_id: window.sessionStorage.newUser_id,
-      created_at: created_at,
-      read: 0
-    };
-    $.post('/api/messages/' + window.sessionStorage.newUser_id, message).done(data => {
-      outer.refs.message.value = '';
-    });
   }
 
   onMessageClick(message) {
@@ -307,12 +338,21 @@ class ProfileContent extends React.Component {
     console.log('message parent_id', window.sessionStorage.messageParentId)
     if (!message.read) {
       $.ajax({
-        url: '/api/messages/' + message.message_id,
+        url: '/api/message/' + message.message_id,
         type: 'PUT',
         success: function(data) {
           console.log('put message data', data);
           outer.props.dispatch(actions.readMessage(data));
         }
+      });
+    }
+    if (this.state.timeDisplay === 'none') {
+      this.setState({
+        timeDisplay: 'unset'
+      });
+    } else {
+      this.setState({
+        timeDisplay: 'none'
       });
     }
   }
@@ -333,21 +373,37 @@ class ProfileContent extends React.Component {
     }
   }
 
-  onSendReplyClick() {
+  onSendReply(e) {
+    e.preventDefault();
     let outer = this;
     let created_at = new Date().getTime();
-    console.log('replying', this.refs.reply.value)
+    console.log('replying', this.state.currentChat[0].id)
     let reply = {
       message: this.refs.reply.value,
-      fromUser_id: window.sessionStorage.user_id,
-      toUser_id: window.sessionStorage.messageToUserId,
+      from_Username: window.sessionStorage.username,
+      to_Username: window.sessionStorage.toUsername,
       created_at: created_at,
       read: 0,
-      parent_id: window.sessionStorage.messageParentId
+      chat_id: this.state.currentChat[0].id
     };
-    console.log('reply', reply)
-    $.post('/api/message/' + window.sessionStorage.messageParentId, reply).done(data => {
+    $.post('/api/message/' + this.state.currentChat[0].id, reply).done(data => {
+      console.log('message data', data)
+      outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
+    });
+  }
+
+  onChatClick(chat) {
+    let outer = this;
+    let currentChatArray = this.state.currentChat;
+    currentChatArray.push(chat);
+
+    this.setState({
+      currentChat: currentChatArray
+    });
+    console.log('chat', chat)
+    $.get('/api/chatMessages/' + chat.id).done(data => {
+      outer.props.dispatch(actions.getMessages(data.reverse()));
     });
   }
 
@@ -602,67 +658,66 @@ class ProfileContent extends React.Component {
         });
 
         return mappedNotifications;
-      } else if (this.props.profileView === 'messages' && window.sessionStorage.username === this.props.user[0].username) {
-        let mappedMessages = this.props.messages.map((message, i) => {
-          let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
-          if (message) {
-            if (message.read === 0) {
-              return (
-                <div>
-                  <div onClick={() => this.onMessageClick(message)}>
-                    {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
-                      <span className='messageUsername'>
-                        {message.username + ': '}
-                      </span>
-                         <span>
-                        {calculateTime(timeDifferenceInSeconds)}
-                      </span>
-                      <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
-                        Reply
-                      </a>
-
-                          <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
-                            <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
-                            <input type="submit" value="Send"/>
-                          </form>
-                  </div>
-                </div>
-              );
-            } else if (message.read) {
-              return (
-                <div>
-                  <div onClick={() => this.onMessageClick(message)}>
-                    {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
-                      <span className='messageUsername'>
-                        {message.username + ': '}
-                      </span>
-                      <span className='messageMessage'>
-                        {message.message}
-                      </span>
-                      <span>
-                        {calculateTime(timeDifferenceInSeconds)}
-                      </span>
-                      <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
-                        Reply
-                      </a>
-
-                          <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
-                            <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
-                            <input type="submit" value="Send"/>
-                          </form>
-
-                  </div>
-                </div>
-              );
+      } else if (this.props.profileView === 'chats' && window.sessionStorage.username === this.props.user[0].username) {
+        let chatName = '';
+        if (this.state.currentChat.length === 0) {
+          let mappedChats = this.props.chats.map((chat, i) => {
+            if (chat.fromUsername === window.sessionStorage.username) {
+              chatName = chat.toUsername;
+            } else {
+              chatName = chat.fromUsername;
             }
-          } else {
-            return 'No messages';
-          }
-        });
 
-        return mappedMessages;
+            if (chat) {
+              return (
+                <div>
+                  <div onClick={() => this.onChatClick(chat)}>
+                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
+                    <div>{chatName}</div>
+                  </div>
+                </div>
+              );
+            } else {
+              return 'No chats';
+            }
+          });
+
+          return mappedChats;
+        } else {
+          console.log(this.state.currentChat[0])
+          if (this.state.currentChat[0].fromUsername === window.sessionStorage.username) {
+            window.sessionStorage.toUsername = this.state.currentChat[0].fromUsername;
+          } else {
+            window.sessionStorage.toUsername = this.state.currentChat[0].toUsername;
+          }
+
+          let mappedMessages = this.props.messages.map((message, i) => {
+            let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
+            console.log(message)
+            return (
+              <div className='container-fluid'>
+                <div onClick={() => this.onMessageClick(message)}>
+                  <span className='messageUsername'>
+                    {message.from_Username + ': ' + message.message}
+                  </span>
+                  <span style={{display: this.state.timeDisplay}}>
+                    {calculateTime(timeDifferenceInSeconds)}
+                  </span>
+                </div>
+              </div>
+            );
+          });
+
+          return (
+            <div>
+              {mappedMessages.reverse()}
+              <form onSubmit={this.onSendReply} style={{padding: '10px'}} >
+                <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
+                <input type="submit" value="Send"/>
+              </form>
+            </div>
+          );
+        }
       }
     };
 
@@ -684,15 +739,15 @@ class ProfileContent extends React.Component {
       }
     };
 
-    let renderMessages = () => {
+    let renderChats = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
-        if (this.props.profileView === 'messages') {
+        if (this.props.profileView === 'chats') {
           return (
-            <li className="active" onClick={() => this.changeProfileView('messages')}><a data-toggle="tab" href="#menu5">Messages</a></li>
+            <li className="active" onClick={() => this.changeProfileView('chats')}><a data-toggle="tab" href="#menu5">Chats</a></li>
           );
         } else {
           return (
-            <li onClick={() => this.changeProfileView('messages')}><a data-toggle="tab" href="#menu5">Messages</a></li>
+            <li onClick={() => this.changeProfileView('chats')}><a data-toggle="tab" href="#menu5">Chats</a></li>
           );
         }
       } else {
@@ -835,7 +890,7 @@ class ProfileContent extends React.Component {
               <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>
               <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>
               {renderNotifications()}
-              {renderMessages()}
+              {renderChats()}
             </ul>
             {myView()}
           </div>
@@ -852,3 +907,44 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ProfileContent);
+
+       // let mappedMessages = this.props.messages.map((message, i) => {
+        //   let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
+        //   if (message) {
+        //     if (message.read === 0) {
+              // return (
+              //
+        //     } else if (message.read) {
+        //       return (
+        //         <div>
+        //           <div onClick={() => this.onMessageClick(message)}>
+        //             {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
+        //             <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
+        //               <span className='messageUsername'>
+        //                 {message.username + ': '}
+        //               </span>
+        //               <span className='messageMessage'>
+        //                 {message.message}
+        //               </span>
+        //               <span>
+        //                 {calculateTime(timeDifferenceInSeconds)}
+        //               </span>
+        //               <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+        //                 Reply
+        //               </a>
+
+        //                   <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
+        //                     <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
+        //                     <input type="submit" value="Send"/>
+        //                   </form>
+
+        //           </div>
+        //         </div>
+        //       );
+        //     }
+        //   } else {
+        //     return 'No messages';
+        //   }
+        // });
+
+        // return mappedMessages;

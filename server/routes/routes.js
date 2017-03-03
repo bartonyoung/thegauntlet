@@ -47,10 +47,11 @@ routes.get('/isUser', userControllers.isUser);
 routes.get('/challengeSearch', challengeController.challengeSearch);
 routes.post('/userUpload', s3Controller);
 routes.post('/s3', challengeController.s3);
-routes.post('/messages/:toUser_id', chatController.sendOne);
+routes.post('/messages/:to_Username', chatController.sendOne);
 routes.post('/message/:id', chatController.replyOne);
-routes.get('/messages/:toUser_id', chatController.getAll);
-routes.put('/messages/:id', chatController.read);
+routes.get('/messages/:to_Username', chatController.getAll);
+routes.get('/chatMessages/:id', chatController.getChatMessages);
+routes.put('/message/:id', chatController.read);
 routes.post('/chats', chatController.createChat);
 routes.get('/chats', chatController.getChats);
 

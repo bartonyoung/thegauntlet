@@ -170,6 +170,13 @@ let actions = {
       type: 'CREATE_CHAT',
       payload: chat
     };
+  },
+
+  getChats: function(chats) {
+    return {
+      type: 'GET_CHATS',
+      payload: chats
+    };
   }
 };
 

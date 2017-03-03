@@ -1,5 +1,6 @@
 const comments = require('../models/comments.js');
 const db = require('../index.js');
+const messages = require('../models/messages.js');
 
 module.exports = {
   addOne: (req, res) => {
