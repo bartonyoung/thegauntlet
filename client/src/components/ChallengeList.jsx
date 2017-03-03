@@ -219,8 +219,8 @@ class ChallengeList extends React.Component {
               <span className="category-tab">{challenge.category}</span>
             </div>  
             <div className="row challenge-buttons pagination-centered">
-              {whichFavoriteIcon(this.props, challenge.id)}
-              {voteButtons(this.props, challenge.id, challenge.upvotes)}
+              {whichFavoriteIcon(this.props, challenge.id, this)}
+              {voteButtons(this.props, challenge.id, challenge.upvotes, this)}
             </div>
             <div className="row username-time">
               <Link onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>

@@ -1,30 +1,30 @@
 import React from 'react';
 
-let whichFavoriteIcon = (store, challengeId) => {
+let whichFavoriteIcon = (store, challengeId, context) => {
   if (store.favorites.some(challenge => challenge.id === challengeId)) {
     return (
           <button className="btn btn-lg social-button">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
+            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { context.removeFromFavorites(challengeId); }}></span>
           </button>
     );
   } else {
     return (
-          <button className="btn btn-lg social-button" onClick={() => { this.addToFavorites(challengeId); }}>
+          <button className="btn btn-lg social-button" onClick={() => { context.addToFavorites(challengeId); }}>
             <span className="glyphicon glyphicon-heart"></span>
           </button>
     );
   }
 };
 
-let voteButtons = (store, challengeId, upvotes) => {
+let voteButtons = (store, challengeId, upvotes, context) => {
   if (store.upvoted.includes(challengeId)) {
     return (
       <span>
-        <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
+        <button onClick={() => context.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
           <span className="glyphicon glyphicon-arrow-up"></span>
         </button>
         <button className="btn btn-lg social-button">{upvotes}</button>
-        <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button onClick={() => context.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
           <span className="glyphicon glyphicon-arrow-down"></span>
         </button>
       </span>
@@ -32,11 +32,11 @@ let voteButtons = (store, challengeId, upvotes) => {
   } else if (store.downvoted.includes(challengeId)) {
     return (
       <span>
-        <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button onClick={() => context.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
           <span className="glyphicon glyphicon-arrow-up"></span>
         </button>
         <button className="btn btn-lg social-button">{upvotes}</button>
-        <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red'}}>
+        <button onClick={() => context.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red'}}>
           <span className="glyphicon glyphicon-arrow-down"></span>
         </button>
       </span>
@@ -44,11 +44,11 @@ let voteButtons = (store, challengeId, upvotes) => {
   } else {
     return (
       <span>
-        <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button onClick={() => context.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
           <span className="glyphicon glyphicon-arrow-up"></span>
         </button>
         <button className="btn btn-lg social-button">{upvotes}</button>
-        <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button onClick={() => context.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
           <span className="glyphicon glyphicon-arrow-down"></span>
         </button>
       </span>

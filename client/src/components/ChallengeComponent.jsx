@@ -19,6 +19,7 @@ class ChallengeComponent extends React.Component {
     this.sortResponses = this.sortResponses.bind(this);
     this.onResponseTitleClick = this.onResponseTitleClick.bind(this);
     this.backToOriginalChallenge = this.backToOriginalChallenge.bind(this);
+    this.removeFromFavorites = this.removeFromFavorites.bind(this);
     this.state = {
       isEditing: false,
       currentVideo: null
@@ -343,8 +344,8 @@ class ChallengeComponent extends React.Component {
                 <div className="current-info">
                   <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
                   <span className="current-video-buttons pull-right">
-                    {whichFavoriteIcon(this.props, this.state.currentVideo.id)}
-                    {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes)}
+                    {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
+                    {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}
                   </span>
                   <span className="timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</span>
                   <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
