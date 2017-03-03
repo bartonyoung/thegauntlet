@@ -126,7 +126,11 @@ class ChallengeComponent extends React.Component {
         description: this.refs.description.value
       },
       success: function(data) {
+        console.log('editing data', data)
         outer.props.dispatch(actions.updatePost(data));
+        outer.setState({
+          currentVideo: data[0]
+        });
       }
     });
   }
@@ -468,7 +472,7 @@ class ChallengeComponent extends React.Component {
                   </span>
                   <span className="timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</span>
                   <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                </div> 
+                </div>
               </div>
             </div>
           </div>
@@ -477,10 +481,10 @@ class ChallengeComponent extends React.Component {
       </div>
       );
     }
-    return <div>HI!</div>;
+    return <div></div>;
   }
 }
-                  
+
 
 const mapStateToProps = (state) => {
   return state;

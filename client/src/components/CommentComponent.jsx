@@ -8,6 +8,9 @@ class CommentComponent extends React.Component {
   constructor(props) {
     super(props);
     this.onUsernameClick = this.onUsernameClick.bind(this);
+    this.state = {
+      isEditing: false
+    };
   }
 
   onUsernameClick(comment) {
@@ -22,7 +25,75 @@ class CommentComponent extends React.Component {
     });
   }
 
+  saveComment(comment) {
+    let outer = this;
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+
+    $.ajax({
+      url: '/api/updateComment/' + comment.id,
+      type: 'PUT',
+      data: {
+        comment: this.refs.comment.value
+      },
+      success: function(data) {
+        outer.props.dispatch(actions.updateComment(data));
+      }
+    });
+  }
+
+  deleteComment(comment) {
+    let outer = this;
+    console.log(comment)
+    $.ajax({
+      url: '/api/comment/' + comment.challenge_id,
+      type: 'DELETE',
+      data: {
+        id: comment.id
+      },
+      success: function(data) {
+        outer.props.dispatch(actions.getComments(data));
+      }
+    });
+  }
+
+  editComment() {
+    this.setState({
+      isEditing: true
+    });
+  }
+
   render() {
+    let taskButtons = (comment) => {
+      if (comment.username === window.sessionStorage.username) {
+        if (!this.state.isEditing) {
+          return (
+            <span>
+              <button className="btn btn-sm btn-default task-button">
+                <span className="glyphicon glyphicon-edit" onClick={() => this.editComment()}></span>
+              </button>
+              <button className="btn btn-sm btn-default task-button" onClick={() => this.deleteComment(comment)}>
+                <span className="glyphicon glyphicon-remove" onClick={() => this.deleteComment(comment)}></span>
+              </button>
+            </span>
+          );
+        }
+
+        return (
+          <span>
+            <div className="editor">
+              <form id="editform" onSubmit={() => this.saveComment(comment)}>
+                <input type="text" placeholder="Edit comment" required ref="comment"/>
+              </form>
+              <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
+              <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>Cancel</button>
+            </div>
+          </span>
+        );
+      }
+    };
+
     let calculateTime = (seconds) => {
       if (seconds < 60) {
         return Math.floor(seconds) + ' seconds ago';
@@ -61,21 +132,21 @@ class CommentComponent extends React.Component {
 
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.comment.created_at)) / 1000;
 
-    let tag = (string) => {  
+    let tag = (string) => {
       let comment = string.split(' ').map((word, i) => {
         if (word.includes('@')) {
           return <a href={'/#/profile/' + word.slice(1)} key={i}>{word}</a>;
         } else {
-          return ' ' + word;    
+          return ' ' + word;
         }
-      });        
+      });
       return comment;
-    };     
+    };
 
     return (
       <div className="one-comment">
         <div className="comment-data">
-          <p className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></p><span className='timestamp'>{calculateTime(timeDifferenceInSeconds)}</span><br/>{tag(this.props.comment.comment)}
+          <p className="username"><Link onClick={() => this.onUsernameClick(this.props.comment)}className="userLink">{this.props.comment.username + ' '}</Link></p><span className='timestamp'>{taskButtons(this.props.comment)}{calculateTime(timeDifferenceInSeconds)}</span><br/>{tag(this.props.comment.comment)}
         </div>
       </div>
     );

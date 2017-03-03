@@ -107,7 +107,7 @@ let actions = {
     return {
       type: 'GET_DOWNVOTED',
       payload: downvote
-    }
+    };
   },
   setCoverVideo: function(video) {
     return {
@@ -156,7 +156,42 @@ let actions = {
       type: 'READ_NOTIFICATION',
       payload: notification
     };
-  }
+  },
+
+  updateComment: function(comment) {
+    return {
+      type: 'UPDATE_COMMENT',
+      payload: comment
+    };
+  },
+
+  createChat: function(chat) {
+    return {
+      type: 'CREATE_CHAT',
+      payload: chat
+    };
+  },
+
+  getChats: function(chats) {
+    return {
+      type: 'GET_CHATS',
+      payload: chats
+    };
+  },
+
+  seenChat: function(chat) {
+    return {
+      type: 'SEEN_CHAT',
+      payload: chat
+    };
+  },
+
+  setDisplayChats: function(display) {
+    return {
+      type: 'SET_DISPLAY_CHATS',
+      payload: display
+    };
+  },
 };
 
 export default actions;

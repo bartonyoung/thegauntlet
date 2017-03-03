@@ -189,6 +189,73 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       coverVideo: action.payload
     });
+  } else if (action.type === 'UPDATE_COMMENT') {
+    let updateCommentObj = {};
+
+    for (var keys in state) {
+      if (keys === 'comments') {
+        updateCommentObj[keys] = [];
+        state[keys].forEach((key, i) => {
+          if (key.id === action.payload[0].id) {
+            updateCommentObj[keys][i] = action.payload[0];
+          } else {
+            updateCommentObj[keys][i] = key;
+          }
+        });
+      } else {
+        updateCommentObj[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, updateCommentObj);
+  } else if (action.type === 'CREATE_CHAT') {
+    let chatsObj = {};
+
+    for (var keys in state) {
+      if (keys === 'chats') {
+        chatsObj[keys] = [];
+        chatsObj[keys].push(action.payload[0]);
+        state[keys].forEach((key, i) => {
+          chatsObj[keys].push(key);
+        });
+      } else {
+        chatsObj[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, chatsObj);
+  } else if (action.type === 'GET_CHATS') {
+    return Object.assign({}, state, {
+      chats: action.payload
+    });
+  } else if (action.type === 'SEEN_CHAT') {
+    let readChat = {};
+
+    for (var keys in state) {
+      if (keys === 'chats') {
+        readChat[keys] = [];
+        state[keys].forEach(key => {
+          readChat[keys].push(key);
+        });
+        readChat[keys].forEach(chat => {
+          if (chat.id === action.payload[0].id) {
+            if (chat.new === 1) {
+              chat.new = 0;
+            } else {
+              chat.new = 1;
+            }
+          }
+        });
+      } else {
+        readChat[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, readChat);
+  } else if (action.type === 'SET_DISPLAY_CHATS') {
+    return Object.assign({}, state, {
+      displayChats: action.payload
+    });
   } else {
     return state;
   }
