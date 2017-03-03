@@ -28,21 +28,34 @@ module.exports = {
   addOneResponse: (req, res) => {
     const challenge = req.body;
     const challengeId = req.params.id;
-    db.select('scott')
-    .from('users')
-    .where({username: req.session.displayName})
-    .then(userData => {
-      challenge.user_id = userData[0].scott;
-      challenge.upvotes = 0;
-      challenge.views = 0;
-      db('challenges').insert(challenge).then(data => {
-        db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').then(data => {
-          res.json(data.slice(data.length - 1));
-        });
-      }).catch(err => {
-        if (err) { console.error(err); }
-      });
-    });
+    db.select('category')
+      .from('challenges')
+      .where('id', '=', challenge.parent_id)
+      .then( category => {
+        challenge.category = category;
+        return challenge;
+      })
+      .then(
+        db.select('scott')
+        .from('users')
+        .where({username: req.session.displayName})
+        .then(userData => {
+          challenge.user_id = userData[0].scott;
+          challenge.upvotes = 0;
+          challenge.views = 0;
+          db('challenges').insert(challenge).then(data => {
+            db.select()
+            .from('challenges')
+            .innerJoin('users', 'challenges.user_id', 'users.scott')
+            .select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id')
+            .then(data => {
+              res.json(data.slice(data.length - 1));
+            });
+          }).catch(err => {
+            if (err) { console.error(err); }
+          });
+        }) 
+      );
   },
 
   s3: (req, res) => {

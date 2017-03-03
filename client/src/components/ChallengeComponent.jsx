@@ -93,7 +93,6 @@ class ChallengeComponent extends React.Component {
             data: {
               title: outer.refs.title.value,
               description: outer.refs.description.value,
-              category: '',
               filename: resp,
               parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
