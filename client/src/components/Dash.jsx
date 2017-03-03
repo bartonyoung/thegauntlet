@@ -25,14 +25,6 @@ class Dash extends React.Component {
       $.get('/api/favorite').done(data => {
         outer.props.dispatch(actions.setFavorites(data));
       });
-      // $.get('/api/messages/' + window.sessionStorage.username).done(messages => {
-      //   messages.forEach(message => {
-      //     outer.props.dispatch(actions.getMessages(messages));
-      //     if (message.read === 0) {
-      //       outer.props.dispatch(actions.setDisplayMessages('messages-number'));
-      //     }
-      //   });
-      // });
       $.get('/api/chats', {
         username: window.sessionStorage.username
       }).done(data => {
@@ -89,7 +81,7 @@ class Dash extends React.Component {
         <h4 className="category-title">{`Viewing ${this.props.currentCategory} challenges`}</h4>
       );
     };
-    
+
 
     return (
       <div className="container-fluid">
@@ -99,16 +91,16 @@ class Dash extends React.Component {
               <SideNav />
             </div>
           </div>
-          <div className="row main-row">  
+          <div className="row main-row">
           <div className="category-title-row text-center">
             {whichCategory()}
           </div>
             <div className="col-md-9 col-md-offset-3">
-              
+
                 <div className="row">
                   <ChallengeList dispatch={this.props.dispatch} />
                 </div>
-              
+
             </div>
 
           </div>

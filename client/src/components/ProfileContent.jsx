@@ -4,7 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { Link } from 'react-router';
-import { calculateTime} from '../utils/helpers'; 
+import { calculateTime} from '../utils/helpers';
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -662,6 +662,9 @@ class ProfileContent extends React.Component {
 
           return (
             <div>
+              <div>
+                <button onClick={() => this.setState({currentChat: []})}>Back to chats</button>
+              </div>
               {mappedMessages.reverse()}
               <form onSubmit={this.onSendReply} style={{padding: '10px'}} >
                 <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
@@ -691,7 +694,15 @@ class ProfileContent extends React.Component {
       if (window.sessionStorage.username === this.props.user[0].username) {
         return renderTab('chats', '#menu5', 'Chats');
       }
-    };  
+    };
+
+    let renderFollowers = () => {
+      if (this.props.profileView === 'followers') {
+        return <li className="active" onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
+      }
+    };
 
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.username === user) {
