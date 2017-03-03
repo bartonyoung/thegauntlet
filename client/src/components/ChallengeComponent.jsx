@@ -126,7 +126,7 @@ class ChallengeComponent extends React.Component {
         description: this.refs.description.value
       },
       success: function(data) {
-        console.log('editing data', data)
+        console.log('editing data', data);
         outer.props.dispatch(actions.updatePost(data));
         outer.setState({
           currentVideo: data[0]
@@ -312,7 +312,7 @@ class ChallengeComponent extends React.Component {
             <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-up"></span>
             </button>
-            <button className="btn btn-lg">{upvotes}</button>
+            <button className="btn btn-lg social-button">{upvotes}</button>
             <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
               <span className="glyphicon glyphicon-arrow-down"></span>
             </button>
@@ -340,7 +340,7 @@ class ChallengeComponent extends React.Component {
     };
 
     let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.includes(challengeId)) {
+      if (this.props.favorites.some(challenge => challenge.id === challengeId)) {
         return (
           <button className="btn btn-lg social-button">
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>

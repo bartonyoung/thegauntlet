@@ -62,9 +62,9 @@ class NavBar extends React.Component {
     let outer = this;
     window.sessionStorage.newUsername = window.sessionStorage.username;
     window.sessionStorage.newUser_id = window.sessionStorage.user_id;
+    outer.props.dispatch(actions.setProfileView('all'));
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
-      this.props.dispatch(actions.setProfileView('all'));
       window.location.href = '/#/profile/' + window.sessionStorage.username;
       $.get('/api/favorite', {username: window.sessionStorage.newUsername}).done(data => {
         outer.props.dispatch(actions.setFavorites(data));
@@ -96,7 +96,7 @@ class NavBar extends React.Component {
 
       return a;
     }, 0);
-    console.log('render chat number', unseenChat)
+    console.log('render chat number', unseenChat);
     for (var i = 0; i < this.props.chats.length; i++) {
       var chat = this.props.chats[i];
       if (this.props.displayChats === 'chats-number' && unseenChat > 0) {
