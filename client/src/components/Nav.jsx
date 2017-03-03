@@ -79,13 +79,17 @@ class NavBar extends React.Component {
   }
 
   handleIconClick(icon) {
+    let outer = this;
     if (icon === 'message') {
       this.props.dispatch(actions.setProfileView('chats'));
     } else if (icon === 'notification') {
       this.props.dispatch(actions.setProfileView('notifications'));
     }
 
-    window.location.href = '/#/profile/' + window.sessionStorage.username;
+    $.get('/api/profile/' + window.sessionStorage.username).done(data => {
+      outer.props.dispatch(actions.addUser(data));
+      window.location.href = '/#/profile/' + window.sessionStorage.username;
+    });
   }
 
   renderUnseenChatsNumber() {
