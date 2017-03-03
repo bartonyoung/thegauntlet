@@ -139,7 +139,7 @@ class NavBar extends React.Component {
     if (window.sessionStorage.username) {
       return (
         <nav className="nav navbar navbar-fixed-top">
-            <div className="container-fluid">
+            <div className="container">
               <ul className="nav navbar-nav navbar-right">
                 <li>
                   <Link className="glyphicon glyphicon-fire" onClick={() => this.handleIconClick('notification')}></Link>
