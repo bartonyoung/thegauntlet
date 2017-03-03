@@ -32,8 +32,7 @@ module.exports = {
       .from('challenges')
       .where('id', '=', challenge.parent_id)
       .then( category => {
-        challenge.category = category;
-        return challenge;
+        challenge.category = category[0].category;
       })
       .then(
         db.select('scott')
