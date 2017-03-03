@@ -71,7 +71,7 @@ class Landing extends React.Component {
         return item;
       }
     });
-    
+
     video = gallery[Math.floor(Math.random() * gallery.length)];
     console.log(video);
     if (video) {
@@ -133,7 +133,7 @@ class Landing extends React.Component {
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
 
           <div className="container-fluid text-center main-content landing-cover">
-            
+
               <div className="col-md-12 text-center landing-header">
 
                 <div className="row">
@@ -146,13 +146,13 @@ class Landing extends React.Component {
                   </div>
                      <div className="col-md-3 landing-header-right">
                         <form className="landing-register" type="submit" onSubmit={this.handleSignup.bind(this)}>
-                          <input type="text" placeholder="What's your Firstname?" required ref="firstname" className=" landing-input pass" />
-                          <input type="text" placeholder="What's your Lasttname?" required ref="lastname"className=" landing-input pass" />
-                          <input type="text" placeholder="Create a Username" required ref="username" className="landing-input pass" />
-                          <input type="email" placeholder="Enter your Email" required ref="email" className="landing-input pass" />
-                          <input type="password" placeholder="Create a Password"required ref="password" className="landing-input pass" />
-                          <input type="password" placeholder="Confirm Password" ref="confirmPassword" className=" landing-input pass" />
-                          <input type="submit" value="Join Gauntlet!" className=" landing-inputButton" />
+                          <input type="text" placeholder="What's your first name?" required ref="firstname" className=" landing-input pass" />
+                          <input type="text" placeholder="What's your last name?" required ref="lastname"className=" landing-input pass" />
+                          <input type="text" placeholder="Create a username" required ref="username" className="landing-input pass" />
+                          <input type="email" placeholder="Enter your e-mail" required ref="email" className="landing-input pass" />
+                          <input type="password" placeholder="Create a password"required ref="password" className="landing-input pass" />
+                          <input type="password" placeholder="Confirm password" ref="confirmPassword" className=" landing-input pass" />
+                          <input type="submit" value="Join the Gauntlet!" className=" landing-inputButton" />
                           <span id="agreement">
                             By clicking "Sign up for the Gauntlet", you agree to our terms of service and privacy policy. We’ll occasionally send you account related emails.
                           </span>
@@ -164,8 +164,8 @@ class Landing extends React.Component {
                   <div className="col-lg-12">
                      <h2>The Gauntlet is a place to test yourself against others !<br/>
                      Add your own challenge and watch others respond, or one-up another challenger</h2>
-                   </div>  
-                 </div> 
+                   </div>
+                 </div>
                     <div className="row">
                       <div className="col-md-4 col">
                         <h4>Create a Challenge</h4>
@@ -173,7 +173,7 @@ class Landing extends React.Component {
                           src="http://www.neurologyintranslation.com/wp-content/uploads/2011/07/video_icon.png" alt=""/>
                           <p>
                             Upload video of your challenge <br/>
-                            to throw down the gauntlet 
+                            to throw down the gauntlet
                           </p>
                       </div>
                       <div className="col-md-4 col">
@@ -193,13 +193,14 @@ class Landing extends React.Component {
                               to become the champion.
                             </p>
 
-                            
- 
+
+
+
                     </div>
                 </div>
-              </div> 
-          </div>                  
-      
+              </div>
+          </div>
+
     );
   }
 }
