@@ -52,7 +52,9 @@ routes.post('/message/:id', chatController.replyOne);
 routes.get('/messages/:to_Username', chatController.getAll);
 routes.get('/chatMessages/:id', chatController.getChatMessages);
 routes.put('/message/:id', chatController.read);
+routes.put('/chat/:id', chatController.seenChat);
 routes.post('/chats', chatController.createChat);
 routes.get('/chats', chatController.getChats);
+routes.put('/unseenChat/:id', chatController.unseenChat);
 
 module.exports = routes;

@@ -284,21 +284,28 @@ class ProfileContent extends React.Component {
     for (let i = 0; i < this.props.chats.length; i++) {
       let chat = this.props.chats[i];
 
-      if (chat.toUsername === window.sessionStorage.newUsername) {
+      if (chat.toUsername === window.sessionStorage.newUsername && chat.fromUsername === window.sessionStorage.username) {
         createChatRoom = false;
         let message = {
-        message: outer.refs.message.value,
-        to_Username: window.sessionStorage.newUsername,
-        from_Username: window.sessionStorage.username,
-        created_at: created_at,
-        read: 0,
-        chat_id: chat.id
-      };
+          message: outer.refs.message.value,
+          to_Username: window.sessionStorage.newUsername,
+          from_Username: window.sessionStorage.username,
+          created_at: created_at,
+          read: 0,
+          chat_id: chat.id
+        };
 
-      $.post('/api/messages/' + window.sessionStorage.newUsername, message).done(data => {
-
-        outer.refs.message.value = '';
-      });
+        $.post('/api/messages/' + window.sessionStorage.newUsername, message).done(data => {
+          $.ajax({
+            url: '/api/unseenChat/' + chat.id,
+            type: 'PUT',
+            success: function(data) {
+              console.log('new messages in chat', data)
+              outer.props.dispatch(actions.seenChat(data));
+            }
+          });
+          outer.refs.message.value = '';
+        });
       }
     }
 
@@ -307,7 +314,8 @@ class ProfileContent extends React.Component {
       console.log('chatroom created')
       let chat = {
         fromUsername: window.sessionStorage.username,
-        toUsername: window.sessionStorage.newUsername
+        toUsername: window.sessionStorage.newUsername,
+        new: 1
       };
       $.post('/api/chats', chat).done(data => {
         console.log('chatroom', data)
@@ -322,7 +330,6 @@ class ProfileContent extends React.Component {
         };
 
         $.post('/api/messages/' + window.sessionStorage.newUsername, message).done(data => {
-
           outer.refs.message.value = '';
         });
       });
@@ -401,7 +408,19 @@ class ProfileContent extends React.Component {
     this.setState({
       currentChat: currentChatArray
     });
-    console.log('chat', chat)
+    console.log('current chat', this.state.currentChat[0])
+    if (this.state.currentChat[0].new) {
+
+      $.ajax({
+        url: '/api/chat/' + this.state.currentChat[0].id,
+        type: 'PUT',
+        success: function(data) {
+          console.log('seen chat data', data)
+          outer.props.dispatch(actions.seenChat(data));
+        }
+      });
+    }
+
     $.get('/api/chatMessages/' + chat.id).done(data => {
       outer.props.dispatch(actions.getMessages(data.reverse()));
     });

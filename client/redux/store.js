@@ -20,6 +20,7 @@ const configureStore = (initialState = {
   upvoted: [],
   downvoted: [],
   messages: [],
+  displayChats: '',
   displayMessages: '',
   displayNotifications: '',
   coverVideo: '',

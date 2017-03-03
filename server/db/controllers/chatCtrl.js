@@ -9,9 +9,10 @@ module.exports = {
     let toUsername = req.body.toUsername;
     db.select('users.profilepic').from('users').where('users.username', '=', toUsername).then(data => {
       chat.profilepic = data[0].profilepic || '';
-
+      console.log(chat)
       db('chats').insert(chat).then(() => {
         db.select().from('chats').then(chatRoom => {
+          console.log(chatRoom, 'chatRoom')
           res.json(chatRoom.slice(chatRoom.length - 1));
         });
       });
@@ -75,6 +76,28 @@ module.exports = {
       db.select('messages.message_id', 'messages.message', 'messages.fromUser_id', 'messages.toUser_id', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
         console.log('messages updated', messages);
         res.json(messages);
+      });
+    });
+  },
+
+  seenChat: (req, res) => {
+    let chat_id = req.params.id;
+
+    db.from('chats').where({id: chat_id}).update({new: 0}).then(() => {
+      db.select('chats.fromUsername', 'chats.toUsername', 'chats.profilepic', 'chats.new', 'chats.id').from('chats').then(chat => {
+        console.log('seen chat', chat)
+        res.json(chat);
+      });
+    });
+  },
+
+  unseenChat: (req, res) => {
+    let chat_id = req.params.id;
+
+    db.from('chats').where({id: chat_id}).update({new: 1}).then(() => {
+      db.select('chats.fromUsername', 'chats.toUsername', 'chats.profilepic', 'chats.new', 'chats.id').from('chats').then(chat => {
+        console.log('new messages chat', chat)
+        res.json(chat);
       });
     });
   }

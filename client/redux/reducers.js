@@ -235,6 +235,34 @@ const reducer = (state, action) => {
     return Object.assign({}, state, {
       chats: action.payload
     });
+  } else if (action.type === 'SEEN_CHAT') {
+    let readChat = {};
+
+    for (var keys in state) {
+      if (keys === 'chats') {
+        readChat[keys] = [];
+        state[keys].forEach(key => {
+          readChat[keys].push(key);
+        });
+        readChat[keys].forEach(chat => {
+          if (chat.id === action.payload[0].id) {
+            if (chat.new === 1) {
+              chat.new = 0;
+            } else {
+              chat.new = 1;
+            }
+          }
+        });
+      } else {
+        readChat[keys] = state[keys];
+      }
+    }
+
+    return Object.assign({}, readChat);
+  } else if (action.type === 'SET_DISPLAY_CHATS') {
+    return Object.assign({}, state, {
+      displayChats: action.payload
+    });
   } else {
     return state;
   }

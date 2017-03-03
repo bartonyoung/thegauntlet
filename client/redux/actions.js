@@ -177,7 +177,21 @@ let actions = {
       type: 'GET_CHATS',
       payload: chats
     };
-  }
+  },
+
+  seenChat: function(chat) {
+    return {
+      type: 'SEEN_CHAT',
+      payload: chat
+    };
+  },
+
+  setDisplayChats: function(display) {
+    return {
+      type: 'SET_DISPLAY_CHATS',
+      payload: display
+    };
+  },
 };
 
 export default actions;

@@ -10,7 +10,7 @@ class NavBar extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleIconClick = this.handleIconClick.bind(this);
-    this.renderMessagesNumber = this.renderMessagesNumber.bind(this);
+    this.renderUnseenChatsNumber = this.renderUnseenChatsNumber.bind(this);
     this.renderNotificationsNumber = this.renderNotificationsNumber.bind(this);
   }
 
@@ -83,21 +83,21 @@ class NavBar extends React.Component {
     window.location.href = '/#/profile/' + window.sessionStorage.username;
   }
 
-  renderMessagesNumber() {
-    var unReadMessages = this.props.messages.reduce((a, c) => {
-      if (c.read === 0 && c.from_Username !== window.sessionStorage.username) {
+  renderUnseenChatsNumber() {
+    var unseenChat = this.props.chats.reduce((a, c) => {
+      if (c.new === 1) {
         a += 1;
       }
 
       return a;
     }, 0);
-    console.log('render messages number', unReadMessages)
-    for (var i = 0; i < this.props.messages.length; i++) {
-      var message = this.props.messages[i];
-      if (this.props.displayMessages === 'messages-number' && unReadMessages > 0) {
-        return <span className={this.props.displayMessages}>{unReadMessages}</span>;
-      } else if (unReadMessages === 0) {
-        return <span className={'messages-checked'}></span>;
+    console.log('render chat number', unseenChat)
+    for (var i = 0; i < this.props.chats.length; i++) {
+      var chat = this.props.chats[i];
+      if (this.props.displayChats === 'chats-number' && unseenChat > 0) {
+        return <span className={this.props.displayChats}>{unseenChat}</span>;
+      } else if (unseenChat === 0) {
+        return <span className={'chats-checked'}></span>;
       }
     }
 
@@ -138,7 +138,7 @@ class NavBar extends React.Component {
                 </li>
                 <li>
                   <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleIconClick('message')}></Link>
-                  {this.renderMessagesNumber()}
+                  {this.renderUnseenChatsNumber()}
                 </li>
                 <li className="dropdown">
                   <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>

@@ -37,7 +37,12 @@ class Dash extends React.Component {
         username: window.sessionStorage.username
       }).done(data => {
         console.log("get chats", data)
-        outer.props.dispatch(actions.getChats(data));
+        data.forEach(chat => {
+          outer.props.dispatch(actions.getChats(data));
+          if (chat.new === 1) {
+            outer.props.dispatch(actions.setDisplayChats('chats-number'));
+          }
+        });
       });
       $.get('/api/response', {
         user_id: window.sessionStorage.user_id

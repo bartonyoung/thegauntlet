@@ -5,7 +5,7 @@ module.exports = knex.schema.createTableIfNotExists('chats', (chat) => {
   chat.string('fromUsername');
   chat.string('toUsername');
   chat.string('profilepic');
-  chat.boolean('newMesages');
+  chat.boolean('new');
 }).then(function() {
   console.log('chat table created');
 });
