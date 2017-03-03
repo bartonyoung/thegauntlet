@@ -59,6 +59,7 @@ class SideNav extends React.Component {
           <button onClick={()=>{ this.onSideBarClick('popular'); }} className="list-item">Most Popular</button>
           <button onClick={()=>{ this.onSideBarClick('recent'); }} className="list-item">Recent</button>
           <button onClick={()=>{ this.onSideBarClick('Sports'); }} className="list-item">Sports</button>
+          <button onClick={()=>{ this.onSideBarClick('Funny'); }} className="list-item">Funny</button>
           <button onClick={()=>{ this.onSideBarClick('Charity'); }} className="list-item">Charity</button>
           <button onClick={()=>{ this.onSideBarClick('Fitness'); }} className="list-item">Fitness</button>
           <button onClick={()=>{ this.onSideBarClick('Music'); }} className="list-item">Music</button>

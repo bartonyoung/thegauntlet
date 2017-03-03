@@ -6,7 +6,7 @@ import ProfileContent from './ProfileContent.jsx';
 import $ from 'jquery';
 import { Link } from 'react-router';
 import css from '../styles/challengeList.css';
-import {emojify} from 'react-emojione2';
+// import {emojify} from 'react-emojione2';
 import { whichFavoriteIcon, voteButtons, checkFile, calculateTime } from '../utils/helpers';
 
 
@@ -62,14 +62,17 @@ class ChallengeList extends React.Component {
       window.sessionStorage.setItem('challengeId', challenge.id);
       window.sessionStorage.setItem('currentId', challenge.id);
       window.sessionStorage.setItem('challengeName', challenge.title);
+      window.sessionStorage.setItem('category', challenge.category);
     } else if (window.sessionStorage.challengeId === undefined) {
       window.sessionStorage.setItem('challengeId', challenge.parent_id);
       window.sessionStorage.setItem('currentId', challenge.id);
       window.sessionStorage.setItem('challengeName', challenge.title);
+      window.sessionStorage.setItem('category', challenge.category);
     } else {
       window.sessionStorage.challengeId = challenge.parent_id;
       window.sessionStorage.currentId = challenge.id;
       window.sessionStorage.challengeName = challenge.title;
+      window.sessionStorage.setItem('category', challenge.category);
     }
   }
   
@@ -181,7 +184,7 @@ class ChallengeList extends React.Component {
     }).map((rank, index) => {  
       if (index < 10) {
         if (index === 0) {
-          medal = emojify(' :medal:', {output: 'unicode'});
+          // medal = emojify(' :medal:', {output: 'unicode'});
         } else { medal = ''; }  
         if (index % 2 === 0 ) {
           bgColor = 'info';
@@ -205,7 +208,7 @@ class ChallengeList extends React.Component {
   render() {
 
     let mappedChallenges = this.props.challenges.map((challenge, i) => {
-      if (challenge) {
+      if ((challenge && challenge.category === this.props.currentCategory) || (challenge && this.props.currentCategory === 'all')) {
         let timeDifferenceInSeconds = (new Date().getTime() - parseInt(challenge.created_at)) / 1000;
         return (
           <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={i}>
