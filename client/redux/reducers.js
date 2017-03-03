@@ -44,19 +44,12 @@ const reducer = (state, action) => {
       comments: action.payload
     });
   } else if (action.type === 'ADD_COMMENT') {
-    let commentObj = {};
-
-    for (var keys in state) {
-      if (keys === 'comments') {
-        commentObj[keys] = [];
-        commentObj[keys].push(action.payload[0]);
-        state[keys].forEach((key, i) => {
-          commentObj[keys].push(key);
-        });
-      } else {
-        commentObj[keys] = state[keys];
-      }
-    }
+    let newComments = state.comments.slice();
+    newComments.unshift(action.payload[0]);
+    return Object.assign({}, state, {
+      comments: newComments 
+    });
+    
 
     return Object.assign({}, commentObj);
   } else if (action.type === 'GET_LEADERS') {
@@ -112,8 +105,8 @@ const reducer = (state, action) => {
         updateObj[keys] = state[keys];
       }
     }
-
     return Object.assign({}, updateObj);
+    
   } else if (action.type === 'ADD_MESSAGE') {
     let messageObj = {};
 

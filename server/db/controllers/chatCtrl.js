@@ -73,7 +73,7 @@ module.exports = {
     let message_id = req.params.id;
     console.log('message id', message_id)
     db.from('messages').where({read: 0}).update({read: 1}).then(() => {
-      db.select('messages.message_id', 'messages.message', 'messages.fromUser_id', 'messages.toUser_id', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
+      db.select('messages.message_id', 'messages.message', 'messages.from_Username', 'messages.to_Username', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
         console.log('messages updated', messages);
         res.json(messages);
       });

@@ -36,7 +36,6 @@ class SideNav extends React.Component {
 
   challengeSearch () {
     const outer = this;
-    console.log('is this working?');
     $.get('/api/challengeSearch', {search: outer.refs.search.value})
     .then(data => {
       outer.props.dispatch(actions.getChallenges(data));
@@ -46,23 +45,25 @@ class SideNav extends React.Component {
 
   render() {
     return (
-      <div>
-        <form>
-          <input type="text" required ref="search" placeholder="Search"/>
-          <button type="button" onClick={() => this.challengeSearch()}>
-            <span className="glyphicon glyphicon-search"></span>
-          </button>
+      <div className="side-nav">
+        <form className="input-group" onSubmit={ ()=> this.challengeSearch()}>
+          <span className="input-group-btn">
+            <button className="btn btn-default" onClick={() => this.challengeSearch() }><span className="glyphicon glyphicon-search"></span></button>
+          </span> 
+            <input type="text" required ref="search" className="form-control" placeholder="Search ..."/>
+        
         </form>
-        <div className="list-group side-nav">
-          <button onClick={()=>{ this.onSideBarClick('all'); }} type="button" className="list-group-item">All Challenges</button>
-          <button onClick={()=>{ this.onSideBarClick('popular'); }} type="button" className="list-group-item">Most Popular</button>
-          <button onClick={()=>{ this.onSideBarClick('recent'); }} type="button" className="list-group-item">Recent</button>
-          <button onClick={()=>{ this.onSideBarClick('Sports'); }} type="button" className="list-group-item">Sports</button>
-          <button onClick={()=>{ this.onSideBarClick('Charity'); }} type="button" className="list-group-item">Charity</button>
-          <button onClick={()=>{ this.onSideBarClick('Fitness'); }} type="button" className="list-group-item">Fitness</button>
-          <button onClick={()=>{ this.onSideBarClick('Music'); }} type="button" className="list-group-item">Music</button>
-          <button onClick={()=>{ this.onSideBarClick('Gaming'); }} type="button" className="list-group-item">Gaming</button>
-          <button onClick={()=>{ this.onSideBarClick('LeaderBoard'); }} type="button" className="list-group-item">LeaderBoard</button>
+        <div>
+          <button onClick={()=>{ this.onSideBarClick('LeaderBoard'); }} className="list-item">LeaderBoard</button>
+          <button onClick={()=>{ this.onSideBarClick('all'); }} className="list-item">All Challenges</button>
+          <button onClick={()=>{ this.onSideBarClick('popular'); }} className="list-item">Most Popular</button>
+          <button onClick={()=>{ this.onSideBarClick('recent'); }} className="list-item">Recent</button>
+          <button onClick={()=>{ this.onSideBarClick('Sports'); }} className="list-item">Sports</button>
+          <button onClick={()=>{ this.onSideBarClick('Charity'); }} className="list-item">Charity</button>
+          <button onClick={()=>{ this.onSideBarClick('Fitness'); }} className="list-item">Fitness</button>
+          <button onClick={()=>{ this.onSideBarClick('Music'); }} className="list-item">Music</button>
+          <button onClick={()=>{ this.onSideBarClick('Gaming'); }} className="list-item">Gaming</button>
+          <button onClick={()=>{ this.onSideBarClick('Other'); }} className="list-item">Other</button>
         </div>
       </div>
     );
