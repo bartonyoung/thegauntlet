@@ -93,7 +93,7 @@ module.exports = {
 
   unseenChat: (req, res) => {
     let chat_id = req.params.id;
-
+    console.log('chat_id', chat_id)
     db.from('chats').where({id: chat_id}).update({new: 1}).then(() => {
       db.select('chats.fromUsername', 'chats.toUsername', 'chats.profilepic', 'chats.new', 'chats.id').from('chats').then(chat => {
         console.log('new messages chat', chat)

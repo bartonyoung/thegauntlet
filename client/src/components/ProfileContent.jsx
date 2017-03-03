@@ -395,6 +395,14 @@ class ProfileContent extends React.Component {
     };
     $.post('/api/message/' + this.state.currentChat[0].id, reply).done(data => {
       console.log('message data', data)
+      $.ajax({
+        url: '/api/unseenChat/' + data[0].chat_id,
+        type: 'PUT',
+        success: function(data) {
+          console.log('unseen chat', data)
+          outer.props.dispatch(actions.seenChat(data));
+        }
+      });
       outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
     });
@@ -703,7 +711,7 @@ class ProfileContent extends React.Component {
 
           return mappedChats;
         } else {
-          console.log(this.state.currentChat[0])
+
           if (this.state.currentChat[0].fromUsername === window.sessionStorage.username) {
             window.sessionStorage.toUsername = this.state.currentChat[0].fromUsername;
           } else {
@@ -712,7 +720,6 @@ class ProfileContent extends React.Component {
 
           let mappedMessages = this.props.messages.map((message, i) => {
             let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
-            console.log(message)
             return (
               <div className='container-fluid'>
                 <div onClick={() => this.onMessageClick(message)}>
