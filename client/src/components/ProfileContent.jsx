@@ -299,7 +299,7 @@ class ProfileContent extends React.Component {
             url: '/api/unseenChat/' + chat.id,
             type: 'PUT',
             success: function(data) {
-              console.log('new messages in chat', data)
+              console.log('new messages in chat', data);
               outer.props.dispatch(actions.seenChat(data));
             }
           });
@@ -310,14 +310,14 @@ class ProfileContent extends React.Component {
 
 
     if (createChatRoom) {
-      console.log('chatroom created')
+      console.log('chatroom created');
       let chat = {
         fromUsername: window.sessionStorage.username,
         toUsername: window.sessionStorage.newUsername,
         new: 1
       };
       $.post('/api/chats', chat).done(data => {
-        console.log('chatroom', data)
+        console.log('chatroom', data);
         outer.props.dispatch(actions.createChat(data));
         let message = {
           message: outer.refs.message.value,
@@ -337,11 +337,11 @@ class ProfileContent extends React.Component {
 
   onMessageClick(message) {
     let outer = this;
-    console.log("on message click", message)
-    window.sessionStorage.setItem('messageParentId', message.message_id)
+    console.log('on message click', message);
+    window.sessionStorage.setItem('messageParentId', message.message_id);
     window.sessionStorage.setItem('messageToUserId', message.fromUser_id);
-    console.log('message to Id', window.sessionStorage.messageToUserId)
-    console.log('message parent_id', window.sessionStorage.messageParentId)
+    console.log('message to Id', window.sessionStorage.messageToUserId);
+    console.log('message parent_id', window.sessionStorage.messageParentId);
     if (!message.read) {
       $.ajax({
         url: '/api/message/' + message.message_id,
@@ -383,7 +383,7 @@ class ProfileContent extends React.Component {
     e.preventDefault();
     let outer = this;
     let created_at = new Date().getTime();
-    console.log('replying', this.state.currentChat[0].id)
+    console.log('replying', this.state.currentChat[0].id);
     let reply = {
       message: this.refs.reply.value,
       from_Username: window.sessionStorage.username,
@@ -393,12 +393,12 @@ class ProfileContent extends React.Component {
       chat_id: this.state.currentChat[0].id
     };
     $.post('/api/message/' + this.state.currentChat[0].id, reply).done(data => {
-      console.log('message data', data)
+      console.log('message data', data);
       $.ajax({
         url: '/api/unseenChat/' + data[0].chat_id,
         type: 'PUT',
         success: function(data) {
-          console.log('unseen chat', data)
+          console.log('unseen chat', data);
           outer.props.dispatch(actions.seenChat(data));
         }
       });
@@ -415,14 +415,14 @@ class ProfileContent extends React.Component {
     this.setState({
       currentChat: currentChatArray
     });
-    console.log('current chat', this.state.currentChat[0])
+    console.log('current chat', this.state.currentChat[0]);
     if (this.state.currentChat[0].new) {
 
       $.ajax({
         url: '/api/chat/' + this.state.currentChat[0].id,
         type: 'PUT',
         success: function(data) {
-          console.log('seen chat data', data)
+          console.log('seen chat data', data);
           outer.props.dispatch(actions.seenChat(data));
         }
       });
@@ -790,6 +790,30 @@ class ProfileContent extends React.Component {
       }
     };
 
+    let renderResponses = () => {
+      if (this.props.profileView === 'responses') {
+        return <li className="active" onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>;
+      }
+    };   
+
+    let renderFavorites = () => {
+      if (this.props.profileView === 'favorites') {
+        return <li className="active" onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>;
+      }
+    };  
+
+    let renderFollowers = () => {
+      if (this.props.profileView === 'followers') {
+        return <li className="active" onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
+      }
+    };    
+
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.username === user) {
         return <span>{<a href='javascript: void(0)' onClick={() => this.setState({[placement]: !this.state[placement]})}><span className="glyphicon glyphicon-pencil"></span></a>}</span>;
@@ -911,9 +935,9 @@ class ProfileContent extends React.Component {
           <div className="col-lg-8">
             <ul className="nav nav-tabs">
               {renderChallenges()}
-              <li onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>
-              <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>
-              <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>
+              {renderResponses()}
+              {renderFavorites()}
+              {renderFollowers()}
               {renderNotifications()}
               {renderChats()}
             </ul>

@@ -37,6 +37,7 @@ class ChallengeList extends React.Component {
     let outer = this;
     window.sessionStorage.newUsername = challenge.username;
     window.sessionStorage.newUser_id = challenge.user_id || window.sessionStorage.user_id;
+    outer.props.dispatch(actions.setProfileView('all'));
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.location.href = '/#/profile/' + challenge.username;
@@ -47,6 +48,7 @@ class ChallengeList extends React.Component {
     let outer = this;
     window.sessionStorage.newUsername = rank.username;
     window.sessionStorage.newUser_id = rank.scott || window.sessionStorage.user_id;
+    outer.props.dispatch(actions.setProfileView('all'));
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.location.href = '/#/profile/' + rank.username;
