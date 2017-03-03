@@ -183,7 +183,7 @@ class NavBar extends React.Component {
                   </ul>
                 </li>
                 <li>
-                  <a href="/#/dash" className="navButton">Dashboard</a>
+                  <a href="/#/dash" className="navButton" id="gauntlet-title">THE GAUNTLET</a>
                 </li>
                 <li>
                   <a href="javascript: void(0)" className="navButton" onClick={this.props.handleLogout}>Logout</a>
