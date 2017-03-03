@@ -3,7 +3,7 @@
   min-height: 0px;
   background-color: #16a79d;
   color: white;
-  border-bottom: orange solid 3px;
+  border-bottom:#323232 solid 3px;
 }
 
 .messages-number {
