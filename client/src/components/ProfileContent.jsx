@@ -759,42 +759,6 @@ class ProfileContent extends React.Component {
       }
     };
 
-    let Lastname = (name, id, user) => {
-      if (!this.state.second) {
-        return (
-          <div>
-            Lastname: {name} {isUserProfile('second', user)}
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <form>
-              <input ref='lastname' type='text' placeholder={name}/> <button onClick={() => this.editLastName(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({second: !this.state.second})}><span className="glyphicon glyphicon-pencil"></span></a>
-            </form>
-          </div>
-        );
-      }
-    };
-
-    let Email = (email, id, user) => {
-      if (!this.state.third) {
-        return (
-          <div>
-            Email: {email} {isUserProfile('third', user)}
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <form>
-              <input ref='email' type='text' placeholder={email}/> <button onClick={() => this.editEmail(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({third: !this.state.third})}><span className="glyphicon glyphicon-pencil"></span></a>
-            </form>
-          </div>
-        );
-      }
-    };
-
     let sendMessage = () => {
       if (window.sessionStorage.username !== window.sessionStorage.newUsername) {
         return (
@@ -871,44 +835,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ProfileContent);
-
-       // let mappedMessages = this.props.messages.map((message, i) => {
-        //   let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
-        //   if (message) {
-        //     if (message.read === 0) {
-              // return (
-              //
-        //     } else if (message.read) {
-        //       return (
-        //         <div>
-        //           <div onClick={() => this.onMessageClick(message)}>
-        //             {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-        //             <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
-        //               <span className='messageUsername'>
-        //                 {message.username + ': '}
-        //               </span>
-        //               <span className='messageMessage'>
-        //                 {message.message}
-        //               </span>
-        //               <span>
-        //                 {calculateTime(timeDifferenceInSeconds)}
-        //               </span>
-        //               <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
-        //                 Reply
-        //               </a>
-
-        //                   <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
-        //                     <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
-        //                     <input type="submit" value="Send"/>
-        //                   </form>
-
-        //           </div>
-        //         </div>
-        //       );
-        //     }
-        //   } else {
-        //     return 'No messages';
-        //   }
-        // });
-
-        // return mappedMessages;
