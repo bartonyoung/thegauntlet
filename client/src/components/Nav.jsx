@@ -122,7 +122,6 @@ class NavBar extends React.Component {
 
       return a;
     }, 0);
-
     for (var n = 0; n < notifications.length; n++) {
       var notification = notifications[n];
       if (this.props.displayNotifications === 'notifications-number' && unReadNotifications > 0) {
