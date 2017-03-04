@@ -1,30 +1,30 @@
 import React from 'react';
 
-let whichFavoriteIcon = (store, challengeId, context) => {
+let whichFavoriteIcon = (store, challengeId, context, size) => {
   if (store.favorites.some(challenge => challenge.id === challengeId)) {
     return (
-          <button className="btn btn-lg social-button">
+          <button className={`btn ${size || 'btn-lg'} social-button`}>
             <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { context.removeFromFavorites(challengeId); }}></span>
           </button>
     );
   } else {
     return (
-          <button className="btn btn-lg social-button" onClick={() => { context.addToFavorites(challengeId); }}>
+          <button className={`btn ${size || 'btn-lg'} social-button`} onClick={() => { context.addToFavorites(challengeId); }}>
             <span className="glyphicon glyphicon-heart"></span>
           </button>
     );
   }
 };
 
-let voteButtons = (store, challengeId, upvotes, context) => {
+let voteButtons = (store, challengeId, upvotes, context, size) => {
   if (store.upvoted.includes(challengeId)) {
     return (
       <span>
-        <button onClick={() => context.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
+        <button onClick={() => context.upVoteClick(challengeId)} type="button" className={`btn ${size || 'btn-lg'} social-button`} style={{color: 'green'}}>
           <span className="glyphicon glyphicon-arrow-up"></span>
         </button>
-        <button className="btn btn-lg social-button">{upvotes}</button>
-        <button onClick={() => context.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button className={`btn ${size || 'btn-lg'} social-button`}>{upvotes}</button>
+        <button onClick={() => context.downVoteClick(challengeId)} type="button" className={`btn ${size || 'btn-lg'} social-button`}>
           <span className="glyphicon glyphicon-arrow-down"></span>
         </button>
       </span>
@@ -32,11 +32,11 @@ let voteButtons = (store, challengeId, upvotes, context) => {
   } else if (store.downvoted.includes(challengeId)) {
     return (
       <span>
-        <button onClick={() => context.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button onClick={() => context.upVoteClick(challengeId)} type="button" className={`btn ${size || 'btn-lg'} social-button`}>
           <span className="glyphicon glyphicon-arrow-up"></span>
         </button>
-        <button className="btn btn-lg social-button">{upvotes}</button>
-        <button onClick={() => context.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red'}}>
+        <button className={`btn ${size || 'btn-lg'} social-button`}>{upvotes}</button>
+        <button onClick={() => context.downVoteClick(challengeId)} type="button" className={`btn ${size || 'btn-lg'} social-button`} style={{color: 'red'}}>
           <span className="glyphicon glyphicon-arrow-down"></span>
         </button>
       </span>
@@ -44,11 +44,11 @@ let voteButtons = (store, challengeId, upvotes, context) => {
   } else {
     return (
       <span>
-        <button onClick={() => context.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button onClick={() => context.upVoteClick(challengeId)} type="button" className={`btn ${size || 'btn-lg'} social-button`}>
           <span className="glyphicon glyphicon-arrow-up"></span>
         </button>
-        <button className="btn btn-lg social-button">{upvotes}</button>
-        <button onClick={() => context.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
+        <button className={`btn ${size || 'btn-lg'} social-button`}>{upvotes}</button>
+        <button onClick={() => context.downVoteClick(challengeId)} type="button" className={`btn ${size || 'btn-lg'} social-button`}>
           <span className="glyphicon glyphicon-arrow-down"></span>
         </button>
       </span>
@@ -70,6 +70,36 @@ let checkFile = (type, challenge) => {
   }
 };
 
+
+  
+let taskButtons = (comment, state, context) => {
+  if (comment.username === window.sessionStorage.username) {
+    if (!state.isEditing) {
+      return (
+        <span>
+          <button className="btn btn-sm btn-default task-button social-button">
+            <span className="glyphicon glyphicon-edit" onClick={() => context.editComment()}></span>
+          </button>
+          <button className="btn btn-sm btn-default task-button social-button" onClick={() => context.deleteComment(comment)}>
+            <span className="glyphicon glyphicon-remove" onClick={() => context.deleteComment(comment)}></span>
+          </button>
+        </span>
+      );
+    }
+
+    return (
+      <span>
+        <div className="editor">
+          <form id="editform" onSubmit={() => this.saveComment(comment)}>
+            <input type="text" placeholder="Edit comment" required ref="comment"/>
+          </form>
+          <button type="submit" form="editform" value="submit" className="btn btn-large btn-default edit">Save</button>
+          <button className="btn btn-large btn-default cancel" onClick={() => this.cancelEdit()}>Cancel</button>
+        </div>
+      </span>
+    );
+  }
+};  
 
 let checkForOriginalChallenge = (currentVideoID) => {
   if (parseInt(window.sessionStorage.challengeId) !== currentVideoID) {
@@ -118,4 +148,4 @@ let calculateTime = (seconds) => {
 
 
 
-export { whichFavoriteIcon, voteButtons, calculateTime, checkFile };
+export { whichFavoriteIcon, voteButtons, calculateTime, checkFile, taskButtons };

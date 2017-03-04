@@ -272,7 +272,6 @@ class ChallengeComponent extends React.Component {
   onResponseTitleClick(response) {
     window.sessionStorage.currentId = response.id;
     this.setState({currentVideo: response});
-    
   }
 
   backToOriginalChallenge(challengeId) {
@@ -339,7 +338,7 @@ class ChallengeComponent extends React.Component {
           </div>
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
-              <div className="row return-button-row text-center">
+              <div className="row current-viewing-title-row text-center">
                           <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
               </div>
               <div className='row current-media-row'>
@@ -353,8 +352,8 @@ class ChallengeComponent extends React.Component {
                       
                         <div className="row">
                           <ul>
-                            <li className="username username-and-timestamp pull-left"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
-                            <li className="username-and-timestamp pull-left">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
+                            <li className="username username-and-timestamp"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
+                            <li className="username-and-timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
                             <li className="current-video-buttons pull-right">
                               {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
                               {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}

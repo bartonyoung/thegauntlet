@@ -4,6 +4,7 @@ import actions from '../../redux/actions.js';
 import $ from 'jquery';
 import css from '../styles/response.css';
 import { Link } from 'react-router';
+import { voteButtons } from '../utils/helpers';
 
 class ResponseComponent extends React.Component {
   constructor(props) {
@@ -72,6 +73,43 @@ class ResponseComponent extends React.Component {
       isEditing: !this.state.isEditing
     });
   }
+  upVoteClick(id) {
+    const outer = this;
+    $.post('/api/upvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(() => {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));
+      });
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+      $.get('/api/singleChallenge', {id: id})
+        .then(data => {
+          this.setState({currentVideo: data[0]});
+        });
+    });
+  }
+
+  downVoteClick(id) {
+    const outer = this;
+    $.post('/api/downvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(() => {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));
+      });
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+      $.get('/api/singleChallenge', {id: id})
+        .then(data => {
+          this.setState({currentVideo: data[0]});
+        });
+    });
+  }
 
   render() {
     let taskButtons = (response) => {
@@ -121,42 +159,6 @@ class ResponseComponent extends React.Component {
       }
     };
 
-    let calculateTime = (seconds) => {
-      if (seconds < 60) {
-        return Math.floor(seconds) + ' seconds ago';
-      } else if (seconds >= 60 && seconds < 3600) {
-        if (seconds < 120) {
-          return ' 1 minute ago';
-        } else {
-          return Math.floor(seconds / 60) + ' minutes ago';
-        }
-      } else if (seconds >= 3600 && seconds < 86400) {
-        if (seconds < 7200) {
-          return ' 1 hour ago';
-        } else {
-          return Math.floor(seconds / 3600) + ' hours ago';
-        }
-      } else if (seconds >= 86400 && seconds < 604800) {
-        if (seconds < 172800) {
-          return ' 1 day ago';
-        } else {
-          return Math.floor(seconds / 86400) + ' days ago';
-        }
-      } else if (seconds >= 2592000 && seconds < 31104000) {
-        if (seconds < 5184000) {
-          return ' 1 month ago';
-        } else {
-          return Math.floor(seconds / 2592000) + ' months ago';
-        }
-      } else {
-        if (seconds < 62208000) {
-          return ' 1 year ago';
-        } else {
-          return Math.floor(seconds / 31104000) + ' years ago';
-        }
-      }
-    };
-
     if (this.props.response) {
       let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
       return (
@@ -164,10 +166,16 @@ class ResponseComponent extends React.Component {
           <div className="col-lg-6 response-info">
             {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
           </div>
-          <div className="col-lg-6 response-info">
-            <div><a href="javasript:void(0)" onClick={() => { this.props.onResponseTitleClick(this.props.response); }}>{this.props.response.title}</a></div>
-            <div><Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link></div>
-            <div>{`Upvotes: ${this.props.response.upvotes}`}</div>
+          <div className="col-lg-6 response-info text-center">
+            <div className="row all-response-data response-title-row">
+              <a href="javasript:void(0)" onClick={() => { this.props.onResponseTitleClick(this.props.response); }}>{this.props.response.title}</a>
+            </div>
+            <div className="row all-response-data response-votebuttons-row">
+              {voteButtons(this.props, this.props.response.id, this.props.response.upvotes, this, 'btn-md')}
+            </div>  
+            <div className="row all-response-data response-username-row">
+              <Link onClick={() => this.onUsernameClick(this.props.response)} className="response-username">{this.props.response.username + ' '}</Link>
+            </div>
           </div>
         </div>
       );
@@ -182,3 +190,4 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ResponseComponent);
+            
