@@ -140,7 +140,50 @@ class NavBar extends React.Component {
       return (
         <nav className="nav navbar navbar-fixed-top">
             <div className="container">
+              <ul className="nav navbar-nav navbar-left">
+                <li>
+                  <span><a href="/#/dash" className="navButton" id="gauntlet-title">THE GAUNTLET</a></span>
+                </li>
+              <ul className="nav navbar-nav add-challenge">
+                <li className="dropdown">
+                  <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true"><span className="glyphicon glyphicon-plus"></span>Add Your Challenge!</a>
+                  <ul className="dropdown-menu">
+                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
+
+                      <div className="form-group">
+                        <li className="nav-label">Name it!</li>
+                        <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
+                      </div>
+                      <div className="form-group">
+                        <li className="nav-label">Describe it!</li>
+                        <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
+                      </div>
+                      <div className="form-group" >
+                        <li className="nav-label">Pick a category!</li>
+                        <select className="form-control" required ref="category">
+                          <option>Charity</option>
+                          <option>Gaming</option>
+                          <option>Fitness</option>
+                          <option>Funny</option>
+                          <option>Music</option>
+                          <option>Sports</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+                    </form>
+                    <form ref="file" id="file">
+                      <li className="nav-label-file">Upload your video or image...</li>
+                      <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
+                    </form>
+                    <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
+                  </ul>
+                </li>
+              </ul>  
+              </ul>  
               <ul className="nav navbar-nav navbar-right">
+                <li>
+                  <span className="navbar-text">Logged in as <a href="javascript: void(0)" onClick={()=> this.goToProfilePage()} className="navbar-link username-nav">{window.sessionStorage.username}</a></span>
+                </li>
                 <li>
                   <Link className="glyphicon glyphicon-fire" onClick={() => this.handleIconClick('notification')}></Link>
                   {this.renderNotificationsNumber()}
@@ -149,56 +192,13 @@ class NavBar extends React.Component {
                   <Link className="glyphicon glyphicon-envelope" onClick={() => this.handleIconClick('message')}></Link>
                   {this.renderUnseenChatsNumber()}
                 </li>
-                <li className="dropdown">
-                  <a href="javascript: void(0)" className="dropdown-toggle navButton" data-toggle="dropdown" role="button" aria-haspopup="true">Add a Challenge</a>
-                  <ul className="dropdown-menu">
-                    <form id="challenge" style={{width: '300px', padding: '15px'}}>
-
-            <div className="form-group">
-              <li className="nav-label">Name it!</li>
-              <input className="form-control" type="text" placeholder="Name your challenge" required ref="title" name="title"/>
-            </div>
-            <div className="form-group">
-              <li className="nav-label">Describe it!</li>
-              <input className="form-control" type="text" placeholder="Description" required ref="description" name="description"/>
-            </div>
-            <div className="form-group" >
-              <li className="nav-label">Pick a category!</li>
-              <select className="form-control" required ref="category">
-                <option>Charity</option>
-                <option>Gaming</option>
-                <option>Fitness</option>
-                <option>Funny</option>
-                <option>Music</option>
-                <option>Sports</option>
-                <option>Other</option>
-              </select>
-            </div>
-          </form>
-          <form ref="file" id="file">
-          <li className="nav-label-file">Upload your video or image...</li>
-            <input id="fileInput" type="file" placeholder="video or image" required ref="video" name="video"/>
-          </form>
-          <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
-                  </ul>
-                </li>
-                <li>
-                  <a href="/#/dash" className="navButton" id="gauntlet-title">THE GAUNTLET</a>
-                </li>
                 <li>
                   <a href="javascript: void(0)" className="navButton" onClick={this.props.handleLogout}>Logout</a>
                 </li>
               </ul>
-              <ul className="nav navbar-nav navbar-left">
-                <li>
-                  <h5 className="navbar-text">You are logged in as <a href="javascript: void(0)" onClick={()=> this.goToProfilePage()} className="navbar-link username-nav">{window.sessionStorage.username}</a></h5>
-                </li>
-              </ul>
             </div>
           <div className="loader" style={{display: this.state.display}}></div>
-          </nav>
-
-
+        </nav>
       );
     } else {
       return (
@@ -236,3 +236,8 @@ const mapStateToProps = (state) => {
 
 
 export default connect(mapStateToProps)(NavBar);
+
+
+
+
+
