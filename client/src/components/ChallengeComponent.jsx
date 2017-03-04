@@ -294,7 +294,7 @@ class ChallengeComponent extends React.Component {
     if (this.state.currentVideo) {
       let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
       return (
-        <div className="container-fluid">
+        <div className="container-fluid challenge-component">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
             <div className="col-lg-4 col-lg-offset-8 mainRowColumn outerBar">

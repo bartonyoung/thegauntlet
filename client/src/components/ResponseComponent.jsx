@@ -161,10 +161,10 @@ class ResponseComponent extends React.Component {
       let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
       return (
         <div className="one-response row">
-          <div className="col-lg-5 response-info">
+          <div className="col-lg-6 response-info">
             {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
           </div>
-          <div className="col-lg-7 response-info">
+          <div className="col-lg-6 response-info">
             <div><a href="javasript:void(0)" onClick={() => { this.props.onResponseTitleClick(this.props.response); }}>{this.props.response.title}</a></div>
             <div><Link onClick={() => this.onUsernameClick(this.props.response)}>{this.props.response.username + ' '}</Link></div>
             <div>{`Upvotes: ${this.props.response.upvotes}`}</div>
@@ -182,17 +182,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ResponseComponent);
-
-
-      ////************ROW FOR ALL RESPONSE BUTTONS --- PROBABLY REMOVING ***************/
-            // <div className="response-interaction">
-            //   {whichButton(this.props.response.user_id)}
-            //   {whichFavoriteIcon(this.props.response.id)}
-            //   <button onClick={()=> this.upVoteClick(this.props.response.id) } type="button" className="btn btn-default btn-sm">
-            //     <span className="glyphicon glyphicon-arrow-up"></span>{` ${this.props.response.upvotes}`}
-            //   </button>
-            // {taskButtons(this.props.response)}
-            // <span>{this.props.response.description}</span>
-            // </div>
-      ///**** NOT SURE IF WE SHOULD INLCLUDE IN RESPONSES OR ONLY CURRENTLY VIEWING *******//
-            // {calculateTime(timeDifferenceInSeconds)}<br/>

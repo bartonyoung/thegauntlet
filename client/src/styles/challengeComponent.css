@@ -1,5 +1,6 @@
-body {
-  background: #6d6d6d
+
+.challenge-component {
+  background:lightgray;
 }
 
 li {
@@ -9,23 +10,21 @@ li {
 .parentMedia {
   width: 100%;
   height: 100%;
-  /*border-right: gray 1px solid;
-  border-left: gray 1px solid;
-  border-bottom: none;*/
+  border-top: white;
+  border-bottom: white;
 }
 
 .current-viewing-row {
   margin-top: 70px;
-  /*border: blue solid;*/
 }
 
 .current-viewing-box {
   height: 100%;
-  /*border: orange dashed;*/
 }
 
 .current-media-row {
-  border:gray solid 2px;
+  border-left:gray solid 2px;
+  border-right:gray solid 2px;
   height: 75%;
 }
 
@@ -38,11 +37,9 @@ li {
   padding: 15px;
   font-size: 1em;
   background: white;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  border-left: gray solid 2px;
-  border-right: gray solid 2px;
-  border-bottom: gray solid 2px;
+  border-right:gray solid 2px;
+  border-left:gray solid 2px;
+  border-bottom:gray solid 2px;
 }
 
 .current-info-timestamp {
@@ -52,7 +49,7 @@ li {
 .fixed {
   position: fixed;
   height: 100vh;
-  background: white;
+  background: #8d8d8d;
   /*background: #4d4d4d;*/
   /*border: tomato solid;*/
 }
@@ -152,7 +149,7 @@ textarea {
 }
 
 .response-button-row {
-  background: #717171;
+  background: #4d4d4d;
 }
 
 .response-buttons-top {
@@ -190,23 +187,25 @@ textarea {
 }
 
 .one-response {
-  margin: 0 10px 10px 10px;
+  margin: 10px;
   height: 20vh;
-  border: black solid
+  border: gray  1px solid;
+  border-radius: 5px;
+  background: white;
+  margin: 15px;
 }
 
 .response-data > li {
   display: block;
-  padding: 10px;
+  padding: 15px 10px 15px 10px;
 }
 
 .return-button-row {
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  border-right:gray solid 2px;
+  border-left:gray solid 2px;
+  border-top:gray solid 2px;
   min-height: 5vh;
-  border-top: gray 2px solid;
-  border-right: gray 2px solid;
-  border-left: gray 2px solid;
+  background: white;
 }
 
 .original-back-button {
