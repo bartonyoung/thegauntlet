@@ -1,9 +1,17 @@
+body {
+  background: #6d6d6d
+}
 
-
+li {
+  list-style: none;
+}
 
 .parentMedia {
   width: 100%;
   height: 100%;
+  /*border-right: gray 1px solid;
+  border-left: gray 1px solid;
+  border-bottom: none;*/
 }
 
 .current-viewing-row {
@@ -21,11 +29,6 @@
   height: 75%;
 }
 
-.current-challenge-info-row {
-  /*border: purple solid 2px;*/
-  height: 25%;
-}
-
 .timestamp {
   font-size: 1em;
   margin-left: 20px;
@@ -34,8 +37,9 @@
 .current-info {
   padding: 15px;
   font-size: 1em;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  background: white;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   border-left: gray solid 2px;
   border-right: gray solid 2px;
   border-bottom: gray solid 2px;
@@ -49,6 +53,7 @@
   position: fixed;
   height: 100vh;
   background: white;
+  /*background: #4d4d4d;*/
   /*border: tomato solid;*/
 }
 
@@ -124,13 +129,30 @@ textarea {
 }
 
 .username {
-  font-size: 1.2em
+  padding-left: 0px;
+  margin-right: 40px;
+}
+
+.username>a {
+  color: orange;
+}
+
+.username-and-timestamp {
+  font-size: 1.2em;
+  display: inline-block;
+  list-style: none;
+  margin-top: 10px;
+  margin-left: 0px;
 }
 
 
 .response-media {
   width: 100%;
   height: 100%;
+}
+
+.response-button-row {
+  background: #717171;
 }
 
 .response-buttons-top {
@@ -179,13 +201,18 @@ textarea {
 }
 
 .return-button-row {
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
   min-height: 5vh;
+  border-top: gray 2px solid;
+  border-right: gray 2px solid;
+  border-left: gray 2px solid;
 }
 
 .original-back-button {
   background-color:#e41a6a;
    height: 30px;
-   width: 100%;
+   width: 50%;
    cursor: pointer;
    border-radius: 0px;
    color:white;

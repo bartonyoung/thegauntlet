@@ -2,10 +2,11 @@
 .one-challenge {
   height: 50vh;
   border: lightgrey solid 1px;
-  border-radius: 5px;
+  
   margin: 20px;
   position: relative;
   background: white;
+  /*box-shadow: 4px 4px #616161;*/
 }
 
 .challenge-title-row {
@@ -28,9 +29,7 @@ challenge-media-row {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.category-title{
-  color: #16a79d !important; 
-}
+
 
 #leader-img{
   width:17%;
@@ -45,6 +44,7 @@ challenge-media-row {
 .leader-td{
   margin-left:30px;
 }
+
 .leader-container{
   margin-left:-8%;
 }

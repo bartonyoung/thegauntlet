@@ -7,7 +7,7 @@
 .left-fixed {
   position: fixed;
   height: 100vh;
-  background: white
+  background: #414141;
 }
 
 .side-nav {

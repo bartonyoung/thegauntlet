@@ -213,7 +213,7 @@ class ChallengeList extends React.Component {
         return (
           <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={i}>
             <div className="row challenge-title-row">
-              <h5 onClick={() => this.onChallengeTitleClick(challenge)} className="category-title"><Link to={'/challenge'}>{challenge.title}</Link></h5>
+              <h5 onClick={() => this.onChallengeTitleClick(challenge)} className="challenge-title"><Link to={'/challenge'}>{challenge.title}</Link></h5>
             </div>  
             <div className="row challenge-media-row">
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>

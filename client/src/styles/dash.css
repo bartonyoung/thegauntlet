@@ -5,13 +5,17 @@ body {
 .category-title-row {
   width: 100%;
   margin-top: 50px;
-  background: white;
   height: 60px;
-  /*background: #F5F773;*/
+  color: rgb(255, 101, 69);
+  background: #616161;
 } 
 
-.category-title-row > h4 {
+.category-title {
+  /*color: #16a79d !important; */
+  color: orange;
   padding-top: 20px;
   padding-left: 200px;
-  color: orange;
 }
+
+/*.category-title-row > h4 {
+}*/

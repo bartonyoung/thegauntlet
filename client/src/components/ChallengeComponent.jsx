@@ -299,7 +299,7 @@ class ChallengeComponent extends React.Component {
           <div className='row mainRow'>
             <div className="col-lg-4 col-lg-offset-8 mainRowColumn outerBar">
               <div className="col-lg-4 fixed">
-                <div className="row text-center">
+                <div className="row text-center response-button-row">
                   <div className="response-buttons-top">
                     <span className="dropdown">
                       <button href="javascript: void(0)" className="dropdown-toggle response-button" data-toggle="dropdown" role="button" aria-haspopup="true">RESPOND<span className="caret"></span></button>
@@ -333,22 +333,37 @@ class ChallengeComponent extends React.Component {
           </div>
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
-              <div className="row return-button-row">
+              <div className="row return-button-row text-center">
                 {checkForOriginalChallenge(this.state.currentVideo.id)}
               </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
               </div>
-              <div className='row current-challenge-info-row'>
-                <div className="current-info">
-                  <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
-                  <span className="current-video-buttons pull-right">
-                    {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
-                    {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}
-                  </span>
-                  <span className="timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</span>
-                  <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                </div>
+              
+              
+                <div className="row current-info">
+                  <div className="col-md-12">
+                    
+                      
+                        <div className="row">
+                          <ul>
+                            <li className="username username-and-timestamp pull-left"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
+                            <li className="username-and-timestamp pull-left">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
+                            <li className="current-video-buttons pull-right">
+                              {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
+                              {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="row">
+                          <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
+                          <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
+                        </div>
+                      
+                  
+                      
+                
+              </div>
               </div>
             </div>
           </div>
