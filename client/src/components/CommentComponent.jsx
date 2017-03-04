@@ -54,7 +54,7 @@ class CommentComponent extends React.Component {
         id: comment.id
       },
       success: function(data) {
-        outer.props.dispatch(actions.getComments(data));
+        outer.props.dispatch(actions.getComments(data.reverse()));
       }
     });
   }
@@ -70,7 +70,6 @@ class CommentComponent extends React.Component {
       isEditing: !this.state.isEditing
     });
   }
-
 
   render() {
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.comment.created_at)) / 1000;

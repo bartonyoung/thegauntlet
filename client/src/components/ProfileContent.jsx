@@ -492,7 +492,7 @@ class ProfileContent extends React.Component {
 
   taskButtons(post, index) {
     return (
-      <div>
+      <div className="task-buttons">
         <div >
           <button className="btn btn-default btn-sm edit" onClick={() => this.editPost(index)}>
             <span className="glyphicon glyphicon-edit"></span>
@@ -506,7 +506,7 @@ class ProfileContent extends React.Component {
           <form id="editform">
             <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
             <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
-            <button type="button" form="editform" value="submit" className="btn btn-large btn-default edit" onClick={(e) => this.savePost(e, post, index)}>Save</button>
+            <button type="button" className="btn btn-large btn-default edit" onClick={(e) => this.savePost(e, post, index)}>Save</button>
             <button className="btn btn-large btn-default delete" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
           </form>
           </div>
@@ -516,7 +516,6 @@ class ProfileContent extends React.Component {
   }
 
   render() {
-
     let checkFile = (type, challenge) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
@@ -535,14 +534,33 @@ class ProfileContent extends React.Component {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div onClick={() => this.onChallengeTitleClick(challenge, j)}>
-              {this.taskButtons(challenge, j)}
-              <Link to={'/challenge'}>
-                <h4>{challenge.title}</h4>
-                <p>{challenge.description}</p>
-                {checkFile(challenge.filename.split('.').pop(), challenge)}
-              </Link>
+            // {<div onClick={() => this.onChallengeTitleClick(challenge, j)}>
+            //   {this.taskButtons(challenge, j)}
+            //   <Link to={'/challenge'}>
+            //     <h4>{challenge.title}</h4>
+            //
+            //     {checkFile(challenge.filename.split('.').pop(), challenge)}
+            //   </Link>
+            // </div>}
+
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
+            {this.taskButtons(challenge, j)}
+            <div className="row challenge-title-row">
+              <p onClick={() => this.onChallengeTitleClick(challenge, j)} className="category-title"><Link to={'/challenge'}>{challenge.title}</Link></p>
             </div>
+            <div className="row challenge-media-row">
+              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+            </div>
+            <div className="row category-row">
+              <span className="category-tab">{challenge.category}</span>
+            </div>
+            <div className="row challenge-buttons pagination-centered">
+            </div>
+            <div className="row username-time">
+              <Link onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
+              <h5>{challenge.description}</h5>
+            </div>
+          </div>
           );
         }
       } else {
@@ -620,14 +638,12 @@ class ProfileContent extends React.Component {
       if (this.props.profileView === 'all' && window.sessionStorage.username === this.props.user[0].username) {
         return (
             <div>
-              Your challenges:
               {mappedChallenges}
             </div>
         );
       } else if (this.props.profileView === 'responses' && window.sessionStorage.username === this.props.user[0].username) {
         return (
           <div>
-            Your responses:
             {mappedResponses}
           </div>
         );

@@ -13,6 +13,33 @@
   margin-top: 34px;
 }
 
+.task-buttons {
+  float: right;
+  position: relative;
+  margin-left: 50px;
+}
+
+p {
+  float: center;
+  margin-left: 150px;
+}
+
+.challenge-title-row {
+  height: 20%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+challenge-media-row {
+  border: 2px solid white;
+}
+
+.challenge-list-media {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .profilePic{
   height: 40vh;
   width: 40vh;
