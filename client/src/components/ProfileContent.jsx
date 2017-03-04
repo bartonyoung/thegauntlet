@@ -196,7 +196,6 @@ class ProfileContent extends React.Component {
 
   edit (id, field, place) {
     let outer = this;
-    console.log('------------------', outer.refs[field].value);
     $.ajax({
       url: '/api/profile',
       type: 'PUT',
