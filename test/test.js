@@ -1,64 +1,68 @@
 var mysql = require('mysql');
 var request = require('request');
 var expect = require('chai').expect;
+var db = require('../server/db/index.js');
 
-describe('Persistent Node Chat Server', function() {
-  var dbConnection;
+describe('Challenge server', function() {
 
-  beforeEach(function(done) {
-    dbConnection = mysql.createConnection({
-      user: 'root',
-      password: '',
-      database: 'chat'
-    });
-    dbConnection.connect();
-
-
-    var tablename = 'messages';
-    
-    /* Empty the db table before each test so that multiple tests
-     * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
-  });
-
-  afterEach(function() {
-    dbConnection.end();
-  });
-
-  it('Should insert posted messages to the DB', function(done) {
-    // Post the user to the chat server.
-    request({
-      method: 'POST',
-      uri: 'http://127.0.0.1:3000/classes/users',
-      json: { username: 'Valjean' }
-    }, function () {
-      // Post a message to the node chat server:
+  it('Should sign a user up to DB', function (done) {
+    db.select().from('users').where({username: 'test'}).del().then(() => {
       request({
         method: 'POST',
-        uri: 'http://127.0.0.1:3000/classes/messages',
+        uri: 'http://127.0.0.1:8000/api/signup',
         json: {
-          username: 'Valjean',
-          message: 'In mercy\'s name, three days is all I need.',
-          roomname: 'Hello'
+          firstname: 'test',
+          lastname: 'test',
+          username: 'test',
+          email: 'test@test',
+          password: 'test' 
         }
       }, function () {
-        // Now if we look in the database, we should find the
-        // posted message there.
-
-        // TODO: You might have to change this test to get all the data from
-        // your message table, since this is schema-dependent.
-        var queryString = 'SELECT * FROM messages';
-        var queryArgs = [];
-
-        dbConnection.query(queryString, queryArgs, function(err, results) {
-          // Should have one result:
-          expect(results.length).to.equal(1);
-
-          // TODO: If you don't have a column named text, change this test.
-          expect(results[0].text).to.equal('In mercy\'s name, three days is all I need.');
-
+        db.select().from('users').where({username: 'test'}).then(userData => {
+          expect(userData.length).to.equal(1);
+          expect(userData[0].username).to.equal('test');
           done();
         });
       });
     });
   });
+
+
+  it('Should insert challenge to the DB', function(done) {
+    request({
+      method: 'POST',
+      uri: 'http://127.0.0.1:8000/api/login',
+      json: {
+        username: 'test',
+        password: 'test' 
+      }
+    }, function () {
+      db.select().from('challenges').where({username: 'test'}).del().then(() => {
+        request({
+          method: 'POST',
+          uri: 'http://127.0.0.1:8000/api/challenge',
+          json: {
+            title: 'This is a challenge',
+            description: 'Try and best me',
+            category: 'Charity',
+            filename: 'someFilename.jpg',
+            created_at: new Date().getTime(),
+            username: 'test'  
+          }
+        }, function () {
+          db.select().from('challenges').where({username: 'test'}).then(challenge => {
+            expect(challenge.length).to.equal(1);
+            expect(challenge[0].title).to.equal('This is a challenge');
+            db.select().from('sessions').del().then(() => {
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+
+
+
+});
