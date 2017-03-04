@@ -8,6 +8,7 @@ import NavBar from './Nav.jsx';
 import css from '../styles/nav.css';
 import moreCSS from '../styles/challengeComponent.css';
 import { Link } from 'react-router';
+import { whichFavoriteIcon, voteButtons, calculateTime, checkFile } from '../utils/helpers';
 
 class ChallengeComponent extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class ChallengeComponent extends React.Component {
     this.sortResponses = this.sortResponses.bind(this);
     this.onResponseTitleClick = this.onResponseTitleClick.bind(this);
     this.backToOriginalChallenge = this.backToOriginalChallenge.bind(this);
+    this.removeFromFavorites = this.removeFromFavorites.bind(this);
     this.state = {
       isEditing: false,
       currentVideo: null
@@ -91,7 +93,6 @@ class ChallengeComponent extends React.Component {
             data: {
               title: outer.refs.title.value,
               description: outer.refs.description.value,
-              category: '',
               filename: resp,
               parent_id: window.sessionStorage.getItem('challengeId'),
               created_at: created_at,
@@ -281,149 +282,24 @@ class ChallengeComponent extends React.Component {
   }
 
   render() {
-    let voteButtons = (challengeId, upvotes) => {
-      if (this.props.upvoted.includes(challengeId)) {
-        return (
-          <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'green'}}>
-              <span className="glyphicon glyphicon-arrow-up"></span>
-            </button>
-            <button className="btn btn-lg social-button">{upvotes}</button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
-              <span className="glyphicon glyphicon-arrow-down"></span>
-            </button>
-          </span>
-        );
-      } else if (this.props.downvoted.includes(challengeId)) {
-        return (
-          <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
-              <span className="glyphicon glyphicon-arrow-up"></span>
-            </button>
-            <button className="btn btn-lg social-button">{upvotes}</button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button" style={{color: 'red'}}>
-              <span className="glyphicon glyphicon-arrow-down"></span>
-            </button>
-          </span>
-        );
-      } else {
-        return (
-          <span>
-            <button onClick={() => this.upVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
-              <span className="glyphicon glyphicon-arrow-up"></span>
-            </button>
-            <button className="btn btn-lg social-button">{upvotes}</button>
-            <button onClick={() => this.downVoteClick(challengeId)} type="button" className="btn btn-lg social-button">
-              <span className="glyphicon glyphicon-arrow-down"></span>
-            </button>
-          </span>
-        );
-      }
-    };
-
-    let whichFollowButton = (leaderId, user) => {
-      if (window.sessionStorage.username !== user) {
-        if (this.props.leaders.includes(leaderId)) {
-          return (
-            <button className="btn btn-default btn-sm follower" style={{color: 'green'}} onClick={() => this.unFollow(leaderId, user)}>
-              <span className="glyphicon glyphicon-user"></span>
-            </button>
-          );
-        } else {
-          return (
-            <button className="btn btn-default btn-sm follower" onClick={() => this.followTheLeader(leaderId, user)}>
-              <span className="glyphicon glyphicon-user"></span>
-            </button>
-          );
-        }
-      }
-    };
-
-    let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.some(challenge => challenge.id === challengeId)) {
-        return (
-          <button className="btn btn-lg social-button">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() =>{ this.removeFromFavorites(challengeId); }}></span>
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-lg social-button" onClick={() => { this.addToFavorites(challengeId); }}>
-            <span className="glyphicon glyphicon-heart"></span>
-          </button>
-        );
-      }
-    };
-
-    let checkFile = (type, challenge) => {
-      const fileType = {
-        'mp4': 'THIS IS A VIDEO!'
-      };
-      if (fileType[type]) {
-        return (<video className="parentMedia" controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
-        </video>);
-      } else {
-        // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
-        return <img className="parentMedia" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
-      }
-    };
-
-    let calculateTime = (seconds) => {
-      if (seconds < 60) {
-        return Math.floor(seconds) + ' seconds ago';
-      } else if (seconds >= 60 && seconds < 3600) {
-        if (seconds < 120) {
-          return ' 1 minute ago';
-        } else {
-          return Math.floor(seconds / 60) + ' minutes ago';
-        }
-      } else if (seconds >= 3600 && seconds < 86400) {
-        if (seconds < 7200) {
-          return ' 1 hour ago';
-        } else {
-          return Math.floor(seconds / 3600) + ' hours ago';
-        }
-      } else if (seconds >= 86400 && seconds < 604800) {
-        if (seconds < 172800) {
-          return ' 1 day ago';
-        } else {
-          return Math.floor(seconds / 86400) + ' days ago';
-        }
-      } else if (seconds >= 2592000 && seconds < 31104000) {
-        if (seconds < 5184000) {
-          return ' 1 month ago';
-        } else {
-          return Math.floor(seconds / 2592000) + ' months ago';
-        }
-      } else {
-        if (seconds < 62208000) {
-          return ' 1 year ago';
-        } else {
-          return Math.floor(seconds / 31104000) + ' years ago';
-        }
-      }
-    };
-
     let checkForOriginalChallenge = (currentVideoID) => {
       if (parseInt(window.sessionStorage.challengeId) !== currentVideoID) {
-        return (
-         <button className="button original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</button>
-        );
+        return (    
+      <h4 className="original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</h4>
+        );    
         return <div></div>;
       }
     };
 
-
     if (this.state.currentVideo) {
       let timeDifferenceInSeconds = (new Date().getTime() - this.state.currentVideo.created_at) / 1000;
       return (
-        <div className="container-fluid">
+        <div className="container-fluid challenge-component">
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout} editProfile={this.props.editProfile}/>
           <div className='row mainRow'>
             <div className="col-lg-4 col-lg-offset-8 mainRowColumn outerBar">
               <div className="col-lg-4 fixed">
-                <div className="row text-center">
+                <div className="row text-center response-button-row">
                   <div className="response-buttons-top">
                     <span className="dropdown">
                       <button href="javascript: void(0)" className="dropdown-toggle response-button" data-toggle="dropdown" role="button" aria-haspopup="true">RESPOND<span className="caret"></span></button>
@@ -455,24 +331,43 @@ class ChallengeComponent extends React.Component {
               </div>
             </div>
           </div>
+          <div className="row parent-challenge-reminder-row">
+            <div className="col-md-8 text-center">
+              {checkForOriginalChallenge(this.state.currentVideo.id)}
+            </div>
+          </div>
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
-              <div className="row return-button-row">
-                {checkForOriginalChallenge(this.state.currentVideo.id)}
+              <div className="row current-viewing-title-row text-center">
+                          <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
               </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
               </div>
-              <div className='row current-challenge-info-row'>
-                <div className="current-info">
-                  <span className='main-challenge-title'>{this.state.currentVideo.title} by <Link onClick={() => this.onUsernameClick(this.state.currentVideo)} className="userLink">{this.state.currentVideo.username}</Link></span>
-                  <span className="current-video-buttons pull-right">
-                    {whichFavoriteIcon(this.state.currentVideo.id)}
-                    {voteButtons(this.state.currentVideo.id, this.state.currentVideo.upvotes)}
-                  </span>
-                  <span className="timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</span>
-                  <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
-                </div>
+              
+              
+                <div className="row current-info">
+                  <div className="col-md-12">
+                    
+                      
+                        <div className="row">
+                          <ul>
+                            <li className="username username-and-timestamp"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
+                            <li className="username-and-timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
+                            <li className="current-video-buttons pull-right">
+                              {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
+                              {voteButtons(this.props, this.state.currentVideo.id, this.state.currentVideo.upvotes, this)}
+                            </li>
+                          </ul>
+                        </div>
+                        <div className="row">
+                          <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
+                        </div>
+                      
+                  
+                      
+                
+              </div>
               </div>
             </div>
           </div>

@@ -131,9 +131,11 @@ class Landing extends React.Component {
     return (
       <div>
         <NavBar auth={this.props.auth} handleLogout={this.props.handleLogout}/>
-          {/*<div className="container-fluid text-center">*/}
-            <div className='row header'>
-              <div className="col-md-12 text-center">
+
+          <div className="container-fluid text-center main-content landing-cover">
+            
+              <div className="col-md-12 text-center landing-header">
+
                 <div className="row">
                   <div className="col-md-9 text-center landing-header-left">
                     <h1 id="landing-title">Welcome to The<br/> Gauntlet!</h1>
@@ -158,10 +160,13 @@ class Landing extends React.Component {
                       </div>
                 </div>
               </div>
-                <div className="row">
-                  <div className="col-md-12 text-center contents-title">
-                     <h2><span id="gauntlet">The Gauntlet</span>  is a place to test yourself against others !<br/>
-                     Add your own challenge and watch others respond<br/> or one-up another challenger</h2>
+                <div className="row header">
+                  <div className="col-lg-12">
+                     <h2>The Gauntlet is a place to test yourself against others !<br/>
+                     Add your own challenge and watch others respond, or one-up another challenger</h2>
+                   </div>  
+                 </div> 
+                    <div className="row">
                       <div className="col-md-4 col">
                         <h4>Create a Challenge</h4>
                           <img id="icon1"
@@ -187,15 +192,18 @@ class Landing extends React.Component {
                               Earn the most votes<br/>
                               to become the champion.
                             </p>
-                      </div>
-                  </div>
-                  </div>
+
+                            
+ 
+                    </div>
+                </div>
               </div> 
           </div>                  
-      // </div>
+      
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return state;
 };

@@ -34,7 +34,8 @@ class SideNav extends React.Component {
     }
   }
 
-  challengeSearch () {
+  challengeSearch (e) {
+    e.preventDefault();
     const outer = this;
     $.get('/api/challengeSearch', {search: outer.refs.search.value})
     .then(data => {
@@ -46,9 +47,9 @@ class SideNav extends React.Component {
   render() {
     return (
       <div className="side-nav">
-        <form className="input-group" onSubmit={ ()=> this.challengeSearch()}>
+        <form className="input-group" onSubmit={ (e)=> this.challengeSearch(e)}>
           <span className="input-group-btn">
-            <button className="btn btn-default" onClick={() => this.challengeSearch() }><span className="glyphicon glyphicon-search"></span></button>
+            <button className="btn btn-default" onClick={(e) => this.challengeSearch(e) }><span className="glyphicon glyphicon-search"></span></button>
           </span> 
             <input type="text" required ref="search" className="form-control" placeholder="Search ..."/>
         
@@ -59,6 +60,7 @@ class SideNav extends React.Component {
           <button onClick={()=>{ this.onSideBarClick('popular'); }} className="list-item">Most Popular</button>
           <button onClick={()=>{ this.onSideBarClick('recent'); }} className="list-item">Recent</button>
           <button onClick={()=>{ this.onSideBarClick('Sports'); }} className="list-item">Sports</button>
+          <button onClick={()=>{ this.onSideBarClick('Funny'); }} className="list-item">Funny</button>
           <button onClick={()=>{ this.onSideBarClick('Charity'); }} className="list-item">Charity</button>
           <button onClick={()=>{ this.onSideBarClick('Fitness'); }} className="list-item">Fitness</button>
           <button onClick={()=>{ this.onSideBarClick('Music'); }} className="list-item">Music</button>

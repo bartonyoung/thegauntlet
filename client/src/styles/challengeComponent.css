@@ -1,29 +1,31 @@
 
+.challenge-component {
+  background:lightgray;
+}
 
+li {
+  list-style: none;
+}
 
 .parentMedia {
   width: 100%;
   height: 100%;
+  border-top: white;
+  border-bottom: white;
 }
 
 .current-viewing-row {
-  margin-top: 70px;
-  /*border: blue solid;*/
+  margin-top: 20px;
 }
 
 .current-viewing-box {
   height: 100%;
-  /*border: orange dashed;*/
 }
 
 .current-media-row {
-  border:gray solid 2px;
+  border-left:gray solid 2px;
+  border-right:gray solid 2px;
   height: 75%;
-}
-
-.current-challenge-info-row {
-  /*border: purple solid 2px;*/
-  height: 25%;
 }
 
 .timestamp {
@@ -34,11 +36,10 @@
 .current-info {
   padding: 15px;
   font-size: 1em;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-left: gray solid 2px;
-  border-right: gray solid 2px;
-  border-bottom: gray solid 2px;
+  background: white;
+  border-right:gray solid 2px;
+  border-left:gray solid 2px;
+  border-bottom:gray solid 2px;
 }
 
 .current-info-timestamp {
@@ -48,7 +49,8 @@
 .fixed {
   position: fixed;
   height: 100vh;
-  background: white;
+  background: #8d8d8d;
+  /*background: #4d4d4d;*/
   /*border: tomato solid;*/
 }
 
@@ -58,6 +60,7 @@
 
 .main-challenge-title {
   font-size: 1.8rem;
+  line-height: 10vh;
 }
 
 .main-challenge-description {
@@ -80,6 +83,7 @@ social-button.active {
 }
 .comments-row {
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 textarea {
@@ -114,23 +118,49 @@ textarea {
 }  
 
 .one-comment {
-  border: lightgray solid 1px;
-  margin: 5px 0 5px 0;
+  border: gray solid 1px;
+  border-radius: 5px;
+  background: white;
   border-radius: 2px;
+  padding: 0 25px;
+  margin-bottom: 10px;
 }
 
-.comment-data {
-  padding: 10px;
+.username-time-button-row {
+  margin-top: 10px;
+}
+.comment-message {
+  padding: 15px 0;
 }
 
-.username {
-  font-size: 1.2em
+/*.username {
+  padding-left: 0px;
+  margin-right: 40px;
+}*/
+
+.username>a {
+  color: orange;
+  margin-left: -40px
+}
+
+.username-and-timestamp {
+  font-size: 1.2em;
+  display: inline-block;
+  list-style: none;
+  margin-top: 10px;
+  margin-left: 0px;
 }
 
 
 .response-media {
   width: 100%;
   height: 100%;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.response-button-row {
+  background: #4d4d4d;
 }
 
 .response-buttons-top {
@@ -165,48 +195,71 @@ textarea {
   /*background:#3E3E3E;*/
   height: 100%;
   padding: 0;
+  position: relative;
+}
+
+.response-media-column {
+  height: 100%;
+  padding: 0;
+}
+
+.all-response-data {
+   margin-left: 0px;
+  margin-right: 0px;
+}
+
+.response-title-row {
+  font-size: 1em;
+  height: 60%
+}
+
+.response-username-row {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 15px;
+  font-size: 0.8em;
+}
+
+.parent-challenge-reminder-row {
+  height: 90px;
+  background: #FF6545;
+  color: white;
+}
+
+.original-back-button {
+  height: 30px;
+   cursor: pointer;
+   margin-top: 55px;
+   color:white;
+   padding: 5px;
+}
+
+.original-back-button:hover {
+   color: orange;
 }
 
 .one-response {
-  margin: 0 10px 10px 10px;
+  margin: 10px;
   height: 20vh;
-  border: black solid
+  border: gray  1px solid;
+  border-radius: 5px;
+  background: white;
+  margin: 15px;
 }
 
 .response-data > li {
   display: block;
-  padding: 10px;
+  padding: 15px 10px 15px 10px;
 }
 
-.return-button-row {
-  min-height: 5vh;
+.current-viewing-title-row {
+  border-right:gray solid 2px;
+  border-left:gray solid 2px;
+  border-top:gray solid 2px;
+  min-height: 10vh;
+  background: white;
+  color: orange
 }
-
-.original-back-button {
-  background-color:#e41a6a;
-   height: 30px;
-   width: 100%;
-   cursor: pointer;
-   border-radius: 0px;
-   color:white;
-   margin-top: 4px;
-   margin-bottom: 4px;
-   padding: 5px;
-   border-radius: 3px;
-}
-
-.original-back-button:hover {
-   background-color: red;
-   color: white;
-}
-
-/*.response-interaction {
-  position: absolute;
-  right: 0;
-  margin-right: 2px;
-  margin-bottom: 2px;
-  bottom:0;
-}*/
 
 #fileInput {
   width: 100%;
