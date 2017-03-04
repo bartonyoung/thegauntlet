@@ -19,7 +19,7 @@ class ProfileContent extends React.Component {
       timeDisplay: 'none'
     };
     this.editProfileImage = this.editProfileImage.bind(this);
-    this.editFirstName = this.editFirstName.bind(this);
+    this.edit = this.edit.bind(this);
     this.onUsernameClick = this.onUsernameClick.bind(this);
     this.onSendMessageClick = this.onSendMessageClick.bind(this);
     this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
@@ -194,58 +194,20 @@ class ProfileContent extends React.Component {
     });
   }
 
-  editFirstName (id) {
+  edit (id, field, place) {
     let outer = this;
     $.ajax({
       url: '/api/profile',
       type: 'PUT',
       data: {
-        id: id,
-        firstname: outer.refs.firstname.value,
+        scott: id,
+        [field]: outer.refs[field].value,
       },
       success: function() {
         $.get('/api/profile').then(userData => {
           outer.props.dispatch(actions.addUser(userData));
-          outer.refs.firstname.value = '';
-          outer.setState({first: !outer.state.first});
-        });
-      }
-    });
-  }
-
-  editLastName (id) {
-    let outer = this;
-    $.ajax({
-      url: '/api/profile',
-      type: 'PUT',
-      data: {
-        id: id,
-        lastname: outer.refs.lastname.value,
-      },
-      success: function() {
-        $.get('/api/profile').then(userData => {
-          outer.props.dispatch(actions.addUser(userData));
-          outer.refs.lastname.value = '';
-          outer.setState({second: !outer.state.second});
-        });
-      }
-    });
-  }
-
-  editEmail (id) {
-    let outer = this;
-    $.ajax({
-      url: '/api/profile',
-      type: 'PUT',
-      data: {
-        id: id,
-        email: outer.refs.email.value,
-      },
-      success: function() {
-        $.get('/api/profile').then(userData => {
-          outer.props.dispatch(actions.addUser(userData));
-          outer.refs.email.value = '';
-          outer.setState({third: !outer.state.third});
+          outer.refs[field].value = '';
+          outer.setState({[place]: !outer.state[place]});
         });
       }
     });
@@ -746,73 +708,25 @@ class ProfileContent extends React.Component {
       }
     };
 
+    let renderTab = (type, tag, label) => {
+      if (this.props.profileView === type) {
+        return <li className="active" onClick={() => this.changeProfileView(type)}><a data-toggle="tab" href={tag}>{label}</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView(type)}><a data-toggle="tab" href={tag}>{label}</a></li>;
+      }
+    };
+
     let renderNotifications = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
-        if (this.props.profileView === 'notifications') {
-          return (
-            <li className="active" onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
-          );
-        } else {
-          return (
-            <li onClick={() => this.changeProfileView('notifications')}><a data-toggle="tab" href="#menu4">Notifications</a></li>
-          );
-        }
-      } else {
-        return (
-          <div></div>
-        );
+        return renderTab('notifications', '#menu4', 'Notifications');
       }
     };
 
     let renderChats = () => {
       if (window.sessionStorage.username === this.props.user[0].username) {
-        if (this.props.profileView === 'chats') {
-          return (
-            <li className="active" onClick={() => this.changeProfileView('chats')}><a data-toggle="tab" href="#menu5">Chats</a></li>
-          );
-        } else {
-          return (
-            <li onClick={() => this.changeProfileView('chats')}><a data-toggle="tab" href="#menu5">Chats</a></li>
-          );
-        }
-      } else {
-        return (
-          <div></div>
-        );
-      }
-    };
-
-    let renderChallenges = () => {
-      if (this.props.profileView === 'all') {
-        return <li className="active" onClick={() => this.changeProfileView('all')}><a data-toggle="tab" href="#home">Challenges</a></li>;
-      } else {
-        return <li onClick={() => this.changeProfileView('all')}><a data-toggle="tab" href="#home">Challenges</a></li>;
-      }
-    };
-
-    let renderResponses = () => {
-      if (this.props.profileView === 'responses') {
-        return <li className="active" onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>;
-      } else {
-        return <li onClick={() => this.changeProfileView('responses')}><a data-toggle="tab" href="#menu1">Responses</a></li>;
-      }
-    };   
-
-    let renderFavorites = () => {
-      if (this.props.profileView === 'favorites') {
-        return <li className="active" onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>;
-      } else {
-        return <li onClick={() => this.changeProfileView('favorites')}><a data-toggle="tab" href="#menu2">Favorites</a></li>;
+        return renderTab('chats', '#menu5', 'Chats');
       }
     };  
-
-    let renderFollowers = () => {
-      if (this.props.profileView === 'followers') {
-        return <li className="active" onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
-      } else {
-        return <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
-      }
-    };    
 
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.username === user) {
@@ -826,54 +740,18 @@ class ProfileContent extends React.Component {
       return window.sessionStorage.username === user;
     };
 
-    let Firstname = (name, id, user) => {
-      if (!this.state.first) {
+    let editField = (name, id, user, field, place, label) => {
+      if (!this.state[place]) {
         return (
           <div>
-            Firstname: {name} {isUserProfile('first', user)}
+            {label}: {name} {isUserProfile(place, user)}
           </div>
         );
       } else {
         return (
           <div>
             <form>
-              <input ref='firstname' type='text' placeholder={name}/> <button onClick={() => this.editFirstName(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({first: !this.state.first})}><span className="glyphicon glyphicon-pencil"></span></a>
-            </form>
-          </div>
-        );
-      }
-    };
-
-    let Lastname = (name, id, user) => {
-      if (!this.state.second) {
-        return (
-          <div>
-            Lastname: {name} {isUserProfile('second', user)}
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <form>
-              <input ref='lastname' type='text' placeholder={name}/> <button onClick={() => this.editLastName(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({second: !this.state.second})}><span className="glyphicon glyphicon-pencil"></span></a>
-            </form>
-          </div>
-        );
-      }
-    };
-
-    let Email = (email, id, user) => {
-      if (!this.state.third) {
-        return (
-          <div>
-            Email: {email} {isUserProfile('third', user)}
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <form>
-              <input ref='email' type='text' placeholder={email}/> <button onClick={() => this.editEmail(id)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({third: !this.state.third})}><span className="glyphicon glyphicon-pencil"></span></a>
+              <input ref={field} type='text' placeholder={name}/> <button onClick={() => this.edit(id, field, place)}><span className="glyphicon glyphicon-ok"></span></button> <a href='javascript: void(0)' onClick={() => this.setState({[place]: !this.state[place]})}><span className="glyphicon glyphicon-pencil"></span></a>
             </form>
           </div>
         );
@@ -920,9 +798,9 @@ class ProfileContent extends React.Component {
             <div className="row profileInfo">
               <div className="col-lg-12">
               Username: {target} <br />
-              {Firstname(this.props.user[0].firstname, this.props.user[0].scott, target)}
-              {Lastname(this.props.user[0].lastname, this.props.user[0].scott, target)}
-              {Email(this.props.user[0].email, this.props.user[0].scott, target)}
+              {editField(this.props.user[0].firstname, this.props.user[0].scott, target, 'firstname', 'first', 'Firstname')}
+              {editField(this.props.user[0].lastname, this.props.user[0].scott, target, 'lastname', 'second', 'Lastname')}
+              {editField(this.props.user[0].email, this.props.user[0].scott, target, 'email', 'third', 'Email')}
               Rank# {this.props.ranks.map((rank, index) => {
                 return {username: rank.username, rank: index + 1};
               }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
@@ -934,10 +812,10 @@ class ProfileContent extends React.Component {
           </div><br/>
           <div className="col-lg-8">
             <ul className="nav nav-tabs">
-              {renderChallenges()}
-              {renderResponses()}
-              {renderFavorites()}
-              {renderFollowers()}
+              {renderTab('all', '#home', 'Challenges')}
+              {renderTab('responses', '#menu1', 'Responses')}
+              {renderTab('favorites', '#menu2', 'Favorites')}
+              {renderTab('followers', '#menu3', 'Followers')}
               {renderNotifications()}
               {renderChats()}
             </ul>
@@ -956,44 +834,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ProfileContent);
-
-       // let mappedMessages = this.props.messages.map((message, i) => {
-        //   let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
-        //   if (message) {
-        //     if (message.read === 0) {
-              // return (
-              //
-        //     } else if (message.read) {
-        //       return (
-        //         <div>
-        //           <div onClick={() => this.onMessageClick(message)}>
-        //             {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-        //             <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + message.profilepic}/>
-        //               <span className='messageUsername'>
-        //                 {message.username + ': '}
-        //               </span>
-        //               <span className='messageMessage'>
-        //                 {message.message}
-        //               </span>
-        //               <span>
-        //                 {calculateTime(timeDifferenceInSeconds)}
-        //               </span>
-        //               <a href="javascript: void(0)" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">
-        //                 Reply
-        //               </a>
-
-        //                   <form onSubmit={this.onSendReplyClick} style={{padding: '10px'}} className="dropdown-menu">
-        //                     <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
-        //                     <input type="submit" value="Send"/>
-        //                   </form>
-
-        //           </div>
-        //         </div>
-        //       );
-        //     }
-        //   } else {
-        //     return 'No messages';
-        //   }
-        // });
-
-        // return mappedMessages;
