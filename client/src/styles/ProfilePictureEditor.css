@@ -55,3 +55,8 @@
 li>a {
   color:white;
 }
+
+.back-chat {
+  float: right;
+  height: 50%;
+}

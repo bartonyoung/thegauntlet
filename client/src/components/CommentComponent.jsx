@@ -65,6 +65,13 @@ class CommentComponent extends React.Component {
     });
   }
 
+  cancelEdit() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+  }
+
+
   render() {
     let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.comment.created_at)) / 1000;
 

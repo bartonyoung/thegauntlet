@@ -323,6 +323,7 @@ module.exports = {
       });
     });
   },
+
   getDownvoted: (req, res) => {
     db.select().from('users').where({username: req.session.displayName}).then(userData => {
       db.select('downvotes.challenge_id').from('downvotes').where({user_id: userData[0].scott}).then(data => {
@@ -332,3 +333,4 @@ module.exports = {
     });
   }
 };
+

@@ -17,7 +17,9 @@ class ProfileContent extends React.Component {
       messageDisplay: 'unset',
       formDisplay: 'none',
       currentChat: [],
-      timeDisplay: 'none'
+      timeDisplay: 'none',
+      title: '',
+      description: ''
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.edit = this.edit.bind(this);
@@ -26,6 +28,13 @@ class ProfileContent extends React.Component {
     this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
     this.onSendReply = this.onSendReply.bind(this);
     this.onChatClick = this.onChatClick.bind(this);
+    this.editPost = this.editPost.bind(this);
+    this.savePost = this.savePost.bind(this);
+    this.deletePost = this.deletePost.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
+    this.taskButtons = this.taskButtons.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
   }
 
   componentDidMount () {
@@ -58,6 +67,7 @@ class ProfileContent extends React.Component {
   }
 
   onNotificationClick(i, notification) {
+    console.log(this.state[i])
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -71,7 +81,6 @@ class ProfileContent extends React.Component {
 
     if (notification.read === 0) {
       if (notification.comment) {
-        console.log('inside notification.comment', notification);
         $.ajax({
           url: '/api/comments/' + notification.id,
           type: 'PUT',
@@ -326,7 +335,7 @@ class ProfileContent extends React.Component {
     }
   }
 
-  onChallengeTitleClick(challenge) {
+  onChallengeTitleClick(challenge, index) {
     if (challenge.parent_id === null) {
       window.sessionStorage.setItem('challengeId', challenge.id);
       window.sessionStorage.setItem('currentId', challenge.id);
@@ -396,7 +405,118 @@ class ProfileContent extends React.Component {
     });
   }
 
+  savePost(e, post, index) {
+
+    let outer = this;
+    let url = '/api/challenge/';
+
+    if (post.parent_id) {
+      url = '/api/response/';
+    }
+
+    console.log('post', this.state.title, this.state.description )
+    $.ajax({
+      url: url + post.id,
+      type: 'PUT',
+      data: {
+        title: this.state.title,
+        description: this.state.description
+      },
+      success: function(data) {
+        console.log("save edit data", data)
+        outer.props.dispatch(actions.updatePost(data));
+        outer.setState({
+          title: '',
+          description: '',
+          [index]: 'none'
+        });
+      }
+    });
+  }
+
+  deletePost(post) {
+    let outer = this;
+    let url = '/api/challenge/';
+
+    if (post.parent_id) {
+      url = '/api/response/';
+    }
+
+    $.ajax({
+      url: url + post.id,
+      type: 'DELETE',
+      success: function(data) {
+        outer.props.dispatch(actions.getChallenges(data));
+      }
+    });
+  }
+
+  editPost(index) {
+    console.log("edit post", index)
+    if (this.state[index] === 'none' || !this.state[index]) {
+      this.setState({
+        [index]: 'unset'
+      });
+    } else {
+      this.setState({
+        [index]: 'none'
+      });
+    }
+  }
+
+  cancelEdit(e, index) {
+    e.preventDefault();
+    if (this.state[index] === 'none' || !this.state[index]) {
+      this.setState({
+        [index]: 'unset'
+      });
+    } else {
+      this.setState({
+        [index]: 'none'
+      });
+    }
+  }
+
+  handleTitleChange(e) {
+    console.log(e.target.value)
+    this.setState({
+      title: e.target.value
+    });
+  }
+
+  handleDescriptionChange(e) {
+    this.setState({
+      description: e.target.value
+    });
+  }
+
+  taskButtons(post, index) {
+    return (
+      <div>
+        <div >
+          <button className="btn btn-default btn-sm edit" onClick={() => this.editPost(index)}>
+            <span className="glyphicon glyphicon-edit"></span>
+          </button>
+          <button className="btn btn-default btn-sm delete" onClick={() => this.deletePost(post)}>
+            <span className="glyphicon glyphicon-remove"></span>
+          </button>
+        </div>
+        <div style={{display: this.state[index] || 'none'}}>
+        <div className="editor">
+          <form id="editform">
+            <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
+            <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
+            <button type="button" form="editform" value="submit" className="btn btn-large btn-default edit" onClick={(e) => this.savePost(e, post, index)}>Save</button>
+            <button className="btn btn-large btn-default delete" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
+
     let checkFile = (type, challenge) => {
       const fileType = {
         'mp4': 'THIS IS A VIDEO!'
@@ -411,11 +531,12 @@ class ProfileContent extends React.Component {
     };
 
 
-    let mappedChallenges = this.props.challenges.map(challenge => {
+    let mappedChallenges = this.props.challenges.map((challenge, j) => {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div onClick={() => this.onChallengeTitleClick(challenge)}>
+            <div onClick={() => this.onChallengeTitleClick(challenge, j)}>
+              {this.taskButtons(challenge, j)}
               <Link to={'/challenge'}>
                 <h4>{challenge.title}</h4>
                 <p>{challenge.description}</p>
@@ -429,24 +550,12 @@ class ProfileContent extends React.Component {
       }
     });
 
-    let favoritedChallenges = this.props.favorites.map((challenge, i) => {
-      if (challenge) {
-        return (
-          <div>
-            <h4>{challenge.title}</h4>
-            <p>{challenge.description}</p>
-            {checkFile(challenge.filename.split('.').pop(), challenge)}
-            <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
-          </div>
-        );
-      }
-    });
-
-    let mappedResponses = this.props.responses.map(response => {
+    let mappedResponses = this.props.responses.map((response, r) => {
       if (response) {
         if (response.username === this.props.user[0].username) {
           return (
-            <div onClick={() => this.onChallengeTitleClick(response)}>
+            <div onClick={() => this.onChallengeTitleClick(response, r)}>
+              {this.taskButtons(response, r)}
               <Link to={'/challenge'}>
               <h4>{response.title}</h4>
               <p>{response.description}</p>
@@ -457,6 +566,19 @@ class ProfileContent extends React.Component {
         }
       } else {
         return ' No responses submitted yet';
+      }
+    });
+
+    let favoritedChallenges = this.props.favorites.map((challenge, i) => {
+      if (challenge) {
+        return (
+          <div>
+            <h4>{challenge.title}</h4>
+            <p>{challenge.description}</p>
+            {checkFile(challenge.filename.split('.').pop(), challenge)}
+            <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
+          </div>
+        );
       }
     });
 
@@ -647,7 +769,7 @@ class ProfileContent extends React.Component {
           let mappedMessages = this.props.messages.map((message, i) => {
             let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
             return (
-              <div className='container-fluid'>
+              <div>
                 <div onClick={() => this.onMessageClick(message)}>
                   <span className='messageUsername'>
                     {message.from_Username + ': ' + message.message}
@@ -662,7 +784,7 @@ class ProfileContent extends React.Component {
 
           return (
             <div>
-              <div>
+              <div className='back-chat'>
                 <button onClick={() => this.setState({currentChat: []})}>Back to chats</button>
               </div>
               {mappedMessages.reverse()}
