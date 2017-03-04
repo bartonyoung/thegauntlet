@@ -15,7 +15,7 @@ li {
 }
 
 .current-viewing-row {
-  margin-top: 70px;
+  margin-top: 20px;
 }
 
 .current-viewing-box {
@@ -186,6 +186,24 @@ textarea {
   padding: 0;
 }
 
+.parent-challenge-reminder-row {
+  height: 90px;
+  background: #FF6545;
+  color: white;
+}
+
+.original-back-button {
+  height: 30px;
+   cursor: pointer;
+   margin-top: 55px;
+   color:white;
+   padding: 5px;
+}
+
+.original-back-button:hover {
+   color: orange;
+}
+
 .one-response {
   margin: 10px;
   height: 20vh;
@@ -208,23 +226,6 @@ textarea {
   background: white;
 }
 
-.original-back-button {
-  background-color:#e41a6a;
-   height: 30px;
-   width: 50%;
-   cursor: pointer;
-   border-radius: 0px;
-   color:white;
-   margin-top: 4px;
-   margin-bottom: 4px;
-   padding: 5px;
-   border-radius: 3px;
-}
-
-.original-back-button:hover {
-   background-color: red;
-   color: white;
-}
 
 /*.response-interaction {
   position: absolute;

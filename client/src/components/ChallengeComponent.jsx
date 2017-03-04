@@ -272,6 +272,7 @@ class ChallengeComponent extends React.Component {
   onResponseTitleClick(response) {
     window.sessionStorage.currentId = response.id;
     this.setState({currentVideo: response});
+    
   }
 
   backToOriginalChallenge(challengeId) {
@@ -285,7 +286,7 @@ class ChallengeComponent extends React.Component {
     let checkForOriginalChallenge = (currentVideoID) => {
       if (parseInt(window.sessionStorage.challengeId) !== currentVideoID) {
         return (    
-      <button className="button original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</button>
+      <h4 className="original-back-button" onClick={() => { this.backToOriginalChallenge(window.sessionStorage.challengeId); }}>BACK TO ORIGINAL CHALLENGE</h4>
         );    
         return <div></div>;
       }
@@ -331,10 +332,15 @@ class ChallengeComponent extends React.Component {
               </div>
             </div>
           </div>
+          <div className="row parent-challenge-reminder-row">
+            <div className="col-md-8 text-center">
+              {checkForOriginalChallenge(this.state.currentVideo.id)}
+            </div>
+          </div>
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
               <div className="row return-button-row text-center">
-                {checkForOriginalChallenge(this.state.currentVideo.id)}
+                          <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
               </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}
@@ -356,7 +362,6 @@ class ChallengeComponent extends React.Component {
                           </ul>
                         </div>
                         <div className="row">
-                          <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
                           <p className='main-challenge-description'>{this.state.currentVideo.description}</p>
                         </div>
                       
