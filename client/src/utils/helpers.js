@@ -61,12 +61,13 @@ let checkFile = (type, challenge) => {
     'mp4': 'THIS IS A VIDEO!'
   };
   if (fileType[type]) {
-    return (<video className="parentMedia" controls>
-      {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>*/}
-    </video>);
+    return (
+      <video className="parentMedia" controls>
+        {<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>}
+      </video>);
   } else {
-    // return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} width="320" height="240" />;
-    return <img className="parentMedia" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
+    return <img className="parentMedia" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} />;
+    // return <img className="parentMedia" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
   }
 };
 
