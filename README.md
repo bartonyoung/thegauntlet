@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Edmund
+  - __Scrum Master__: Brendan
+  - __Development Team Members__: Terry, Barton
 
 ## Table of Contents
 
@@ -24,11 +24,13 @@ Cool
 
 ## Requirements
 
-- Node 0.10.x
+<!--- Node 0.10.x
 - Redis 2.6.x
 - Postgresql 9.1.x
 - etc
-- etc
+- etc-->
+
+
 
 ## Development
 
