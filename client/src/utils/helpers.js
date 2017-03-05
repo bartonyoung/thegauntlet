@@ -58,9 +58,10 @@ let voteButtons = (store, challengeId, upvotes, context, size) => {
 
 let checkFile = (type, challenge) => {
   const fileType = {
-    'mp4': 'THIS IS A VIDEO!'
+    'mp4': 'THIS IS A VIDEO!',
+    'mov': 'THIS WORKS TOO'
   };
-  if (fileType[type]) {
+  if (fileType[type.toLowerCase()]) {
     return (
       <video className="parentMedia" controls>
         {<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + challenge.filename} type="video/mp4"/>}

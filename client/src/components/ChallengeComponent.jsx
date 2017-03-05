@@ -337,7 +337,7 @@ class ChallengeComponent extends React.Component {
           <div className="row current-viewing-row">
            <div className="col-lg-6 col-lg-offset-1 current-viewing-box">
               <div className="row current-viewing-title-row text-center">
-                <span className='main-challenge-title'>{this.state.currentVideo.title}</span>
+                <p className='main-challenge-title'>{this.state.currentVideo.title}</p>
               </div>
               <div className='row current-media-row'>
                 {checkFile(this.state.currentVideo.filename.split('.').pop(), this.state.currentVideo)}

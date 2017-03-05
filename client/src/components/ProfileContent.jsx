@@ -4,7 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { Link } from 'react-router';
-import { calculateTime} from '../utils/helpers';
+import { calculateTime, checkFile } from '../utils/helpers'; 
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -427,7 +427,6 @@ class ProfileContent extends React.Component {
       url = '/api/response/';
     }
 
-    console.log('post', this.state.title, this.state.description );
     $.ajax({
       url: url + post.id,
       type: 'PUT',
@@ -733,7 +732,7 @@ class ProfileContent extends React.Component {
                   <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' responded to your challenge...'}</h4></a>
                   {calculateTime(timeDifferenceInSeconds)}<br/>
                   <div style={{display: this.state[i] || 'none'}}>
-                    {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
+                    {checkFile(notification.filename.split('.').pop(), notification)}<br/>
                     <h4>{notification.title}</h4>
                     <h5>{notification.description}</h5>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>

@@ -24,7 +24,7 @@ li {
 .current-media-row {
   border-left:gray solid 2px;
   border-right:gray solid 2px;
-  height: 75%;
+  height: 50vh;
 }
 
 .timestamp {
@@ -59,7 +59,8 @@ li {
 
 .main-challenge-title {
   font-size: 1.8rem;
-  line-height: 10vh;
+  margin: 10px;
+  color: orange
 }
 
 .main-challenge-description {

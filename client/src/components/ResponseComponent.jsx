@@ -4,7 +4,7 @@ import actions from '../../redux/actions.js';
 import $ from 'jquery';
 import css from '../styles/response.css';
 import { Link } from 'react-router';
-import { voteButtons } from '../utils/helpers';
+import { voteButtons, checkFile } from '../utils/helpers';
 
 class ResponseComponent extends React.Component {
   constructor(props) {
@@ -55,28 +55,12 @@ class ResponseComponent extends React.Component {
       }
     };
 
-    let checkFile = (type, responseFilename) => {
-      const fileType = {
-        'mp4': 'THIS IS A VIDEO!',
-        'mov': 'ANOTHER FORMAT'
-      };
-      if (fileType[type]) {
-        return (<video className="response-media" controls>
-          <source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} type="video/mp4"/>
-        </video>);
-      } else {
-        // return <img className="response-media" src="http://www.jacksonhole.com/blog/wp-content/uploads/whiteford.jpg" />;
-
-        return <img src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + responseFilename} width="320" height="240" />;
-      }
-    };
-
     if (this.props.response) {
       let timeDifferenceInSeconds = (new Date().getTime() - parseInt(this.props.response.created_at)) / 1000;
       return (
         <div className="one-response row">
           <div className="col-lg-6 response-info">
-            {checkFile(this.props.response.filename.split('.').pop(), this.props.response.filename)}<br/>
+            {checkFile(this.props.response.filename.split('.').pop(), this.props.response)}<br/>
           </div>
           <div className="col-lg-6 response-info text-center">
             <div className="row all-response-data response-title-row">
