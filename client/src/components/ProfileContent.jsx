@@ -521,11 +521,11 @@ class ProfileContent extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video width="320" height="240" controls>
+        return (<video className='parent-media' controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        return <img width="320" height="240" />;
+        return <img className='parent-media' src='http://coolwildlife.com/wp-content/uploads/galleries/post-3004/Fox%20Picture%20003.jpg'/>;
       }
     };
 
@@ -534,19 +534,12 @@ class ProfileContent extends React.Component {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            // {<div onClick={() => this.onChallengeTitleClick(challenge, j)}>
-            //   {this.taskButtons(challenge, j)}
-            //   <Link to={'/challenge'}>
-            //     <h4>{challenge.title}</h4>
-            //
-            //     {checkFile(challenge.filename.split('.').pop(), challenge)}
-            //   </Link>
-            // </div>}
-
             <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
-            {this.taskButtons(challenge, j)}
-            <div className="row challenge-title-row">
-              <p onClick={() => this.onChallengeTitleClick(challenge, j)} className="category-title"><Link to={'/challenge'}>{challenge.title}</Link></p>
+            <div className="row profile-edit-buttons">
+              <span className='pull-right'>{this.taskButtons(challenge, j)}</span>
+            </div>
+            <div className="row challenge-title-row text-center">
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(challenge, j)} className="category-title"><Link to={'/challenge'}>{challenge.title}</Link></p>
             </div>
             <div className="row challenge-media-row">
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
@@ -572,14 +565,26 @@ class ProfileContent extends React.Component {
       if (response) {
         if (response.username === this.props.user[0].username) {
           return (
-            <div onClick={() => this.onChallengeTitleClick(response, r)}>
-              {this.taskButtons(response, r)}
-              <Link to={'/challenge'}>
-              <h4>{response.title}</h4>
-              <p>{response.description}</p>
-              {checkFile(response.filename.split('.').pop(), response)}
-              </Link>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
+             <div className="row profile-edit-buttons">
+              <span className='pull-right'>{this.taskButtons(response, j)}</span>
             </div>
+            <div className="row challenge-title-row">
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, j)} className="category-title"><Link to={'/challenge'}>{response.title}</Link></p>
+            </div>
+            <div className="row challenge-media-row">
+              {checkFile(response.filename.split('.').pop(), response)}<br/>
+            </div>
+            <div className="row category-row">
+              <span className="category-tab">{response.category}</span>
+            </div>
+            <div className="row challenge-buttons pagination-centered">
+            </div>
+            <div className="row username-time">
+              <Link onClick={() => this.onUsernameClick(response)}><span>{response.username + ' '}</span></Link>
+              <h5>{response.description}</h5>
+            </div>
+          </div>
           );
         }
       } else {
@@ -761,12 +766,25 @@ class ProfileContent extends React.Component {
 
             if (chat) {
               return (
-                <div>
-                  <div onClick={() => this.onChatClick(chat)}>
-                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
-                    <div>{chatName}</div>
+         // {       <div className="col-lg-4" style={{'margin-top': '50px'}}>
+         //                   <div className="chat-picContainer" onClick={() => this.onChatClick(chat)}>
+         // //                     <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
+         // //                     <div className='chat-username'>{chatName}</div>
+         //                   </div>
+         //                 </div>}
+
+            <div className="col-lg-6">
+                  <div className="profile-header-container" onClick={() => this.onChatClick(chat)}>
+                  <div className="profile-header-img">
+                          <img className="img-circle" src='http://www.thewrap.com/wp-content/uploads/2015/11/Donald-Trump.jpg'/>
+
+                          <div className="rank-label-container">
+                              <span className="label label-default rank-label">{chatName}</span>
+                          </div>
+                      </div>
                   </div>
-                </div>
+            </div>
+
               );
             } else {
               return 'No chats';
