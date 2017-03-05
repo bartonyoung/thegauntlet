@@ -19,18 +19,16 @@
 1. [Contributing](#contributing)
 
 ## Usage
-Cool
-> Some usage instructions
+
+1. npm install
+2. start mysql server
+3. create thegauntlet database
+4. npm start
 
 ## Requirements
 
-<!--- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc-->
-
-
+-Node 7.2.1
+-MySQL 2.13.0
 
 ## Development
 
