@@ -37,8 +37,6 @@ class Profile extends React.Component {
     }
 
     $.get('/api/messages/' + window.sessionStorage.username).done(messages => {
-      console.log("GETTING MESSAGES ON PROFILE")
-      console.log('messages', messages);
       messages.forEach(message => {
         outer.props.dispatch(actions.getMessages(messages));
         if (message.read === 0 && this.props.displayMessages !== 'newmessages-chat') {
@@ -49,7 +47,6 @@ class Profile extends React.Component {
     $.get('/api/chats', {
       username: window.sessionStorage.username
     }).done(data => {
-      console.log('get chats', data)
       outer.props.dispatch(actions.getChats(data));
     });
     $.get('/api/ranks').done((rankData)=>{
