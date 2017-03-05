@@ -32,18 +32,18 @@
 .label.label-default.rank-label {
   background-color: #16a79d;
   padding: 5px 10px 5px 10px;
+  margin-right: 5px;
   border-radius: 27px;
   color: white;
+  position: relative;
 }
 
 .profileContainer {
   height: 90vh;
-  border-right: dashed #3E3E3E 0.1px;
 }
 
 #picContainer {
   width: 100%;
-  border-bottom: dashed #3E3E3E 0.1px;
 }
 
 .profileInfo {
@@ -136,4 +136,24 @@ li>a {
 .parent-media {
   width: 100%;
   height: auto;
+}
+
+.unread-notifications {
+  color: black;
+}
+
+.newmessages-chat {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  padding: 3px 3px 2px 3px;
+  background-color: red;
+  color: white;
+  font-family: arial;
+  font-weight: bold;
+  font-size: 10px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px silver;
+  height: 50px;
+  width: 50px;
 }

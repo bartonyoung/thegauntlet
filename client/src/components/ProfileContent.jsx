@@ -280,13 +280,12 @@ class ProfileContent extends React.Component {
       }
     }
 
-
     if (createChatRoom) {
       console.log('chatroom created');
       let chat = {
         fromUsername: window.sessionStorage.username,
         toUsername: window.sessionStorage.newUsername,
-        new: 1
+        new: 0
       };
       $.post('/api/chats', chat).done(data => {
         console.log('chatroom', data);
@@ -309,17 +308,13 @@ class ProfileContent extends React.Component {
 
   onMessageClick(message) {
     let outer = this;
-    console.log('on message click', message);
     window.sessionStorage.setItem('messageParentId', message.message_id);
     window.sessionStorage.setItem('messageToUserId', message.fromUser_id);
-    console.log('message to Id', window.sessionStorage.messageToUserId);
-    console.log('message parent_id', window.sessionStorage.messageParentId);
     if (!message.read) {
       $.ajax({
         url: '/api/message/' + message.message_id,
         type: 'PUT',
         success: function(data) {
-          console.log('put message data', data);
           outer.props.dispatch(actions.readMessage(data));
         }
       });
@@ -374,6 +369,7 @@ class ProfileContent extends React.Component {
           outer.props.dispatch(actions.seenChat(data));
         }
       });
+      console.log("reply message", data)
       outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
     });
@@ -402,11 +398,21 @@ class ProfileContent extends React.Component {
 
     $.get('/api/chatMessages/' + chat.id).done(data => {
       outer.props.dispatch(actions.getMessages(data.reverse()));
+      data.forEach(message => {
+        if (message.read === 0) {
+          $.ajax({
+            url: '/api/message/' + message.message_id,
+            type: 'PUT',
+            success: function(data) {
+              outer.props.dispatch(actions.readMessage(data));
+            }
+          });
+        }
+      });
     });
   }
 
   savePost(e, post, index) {
-
     let outer = this;
     let url = '/api/challenge/';
 
@@ -452,7 +458,6 @@ class ProfileContent extends React.Component {
   }
 
   editPost(index) {
-    console.log("edit post", index)
     if (this.state[index] === 'none' || !this.state[index]) {
       this.setState({
         [index]: 'unset'
@@ -539,7 +544,7 @@ class ProfileContent extends React.Component {
               <span className='pull-right'>{this.taskButtons(challenge, j)}</span>
             </div>
             <div className="row challenge-title-row text-center">
-              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(challenge, j)} className="category-title"><Link to={'/challenge'}>{challenge.title}</Link></p>
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(challenge, j)}><Link to={'/challenge'}>{challenge.title}</Link></p>
             </div>
             <div className="row challenge-media-row">
               {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
@@ -565,12 +570,12 @@ class ProfileContent extends React.Component {
       if (response) {
         if (response.username === this.props.user[0].username) {
           return (
-            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={r}>
              <div className="row profile-edit-buttons">
-              <span className='pull-right'>{this.taskButtons(response, j)}</span>
+              <span className='pull-right'>{this.taskButtons(response, r)}</span>
             </div>
             <div className="row challenge-title-row">
-              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, j)} className="category-title"><Link to={'/challenge'}>{response.title}</Link></p>
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, r)} className="category-title"><Link to={'/challenge'}>{response.title}</Link></p>
             </div>
             <div className="row challenge-media-row">
               {checkFile(response.filename.split('.').pop(), response)}<br/>
@@ -655,28 +660,24 @@ class ProfileContent extends React.Component {
       } else if (this.props.profileView === 'all') {
         return (
           <div>
-            {this.props.user[0].username + '\'s challenges:'}
             {mappedChallenges}
           </div>
         );
       } else if (this.props.profileView === 'responses') {
         return (
           <div>
-            {this.props.user[0].username + '\'s responses:'}
             {mappedResponses}
           </div>
         );
       } else if (this.props.profileView === 'favorites') {
         return (
           <div>
-            Favorites:
             {favoritedChallenges}
           </div>
         );
       } else if (this.props.profileView === 'followers') {
         return (
           <div>
-            Followers:
             {this.props.followers.map((follower, i) => {
               return <div key={i}>{i + 1}.{follower.username}</div>;
             })}
@@ -696,7 +697,7 @@ class ProfileContent extends React.Component {
             if (notification.read === 0) {
               return (
                 <div>
-                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD commented to your challenge: ' + notification.title}</h4></a>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4 className='unread-notifications'>{notification.username + ' commented to your challenge: ' + notification.title}</h4></a>
                   <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
                   <div style={{display: this.state[i] || 'none'}}>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
@@ -719,8 +720,8 @@ class ProfileContent extends React.Component {
           } else if (notification.parent_id) {
             if (notification.read === 0) {
               return (
-                <div>
-                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD responded to your challenge...'}</h4></a>
+                <div className='unread-notifications'>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4 className='unread-notifications'>{notification.username + ' responded to your challenge...'}</h4></a>
                   {calculateTime(timeDifferenceInSeconds)}<br/>
                   <div style={{display: this.state[i] || 'none'}}>
                     {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
@@ -764,27 +765,46 @@ class ProfileContent extends React.Component {
               chatName = chat.fromUsername;
             }
 
+            let renderUnreadMessagesNumber = () => {
+              let messagesOfChat = [];
+
+              this.props.messages.forEach(message => {
+                if (message.chat_id === chat.id) {
+                  messagesOfChat.push(message);
+                }
+              });
+
+              let unReadMessagesNumber = messagesOfChat.reduce((a, c) => {
+                if (c.read === 0) {
+                  a += 1;
+                }
+
+                return a;
+              }, 0);
+
+              console.log(unReadMessagesNumber, 'unReadMessagesNumber')
+              if (this.props.displayMessages === 'newmessages-chat' && unReadMessagesNumber > 0) {
+                return <span className="newmessages-chat">{unReadMessagesNumber}</span>;
+              } else if (unReadMessagesNumber === 0) {
+                return <span className="newmessages-checked"></span>;
+              }
+
+              return <div></div>;
+            };
+
             if (chat) {
               return (
-         // {       <div className="col-lg-4" style={{'margin-top': '50px'}}>
-         //                   <div className="chat-picContainer" onClick={() => this.onChatClick(chat)}>
-         // //                     <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
-         // //                     <div className='chat-username'>{chatName}</div>
-         //                   </div>
-         //                 </div>}
-
-            <div className="col-lg-6">
+                <div className="col-lg-6">
                   <div className="profile-header-container" onClick={() => this.onChatClick(chat)}>
-                  <div className="profile-header-img">
-                          <img className="img-circle" src='http://www.thewrap.com/wp-content/uploads/2015/11/Donald-Trump.jpg'/>
-
-                          <div className="rank-label-container">
-                              <span className="label label-default rank-label">{chatName}</span>
-                          </div>
+                    <div className="profile-header-img">
+                      <img className="img-circle" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
+                      {renderUnreadMessagesNumber()}
+                      <div className="rank-label-container">
+                          <span className="label label-default rank-label">{chatName}</span>
                       </div>
+                    </div>
                   </div>
-            </div>
-
+                </div>
               );
             } else {
               return 'No chats';

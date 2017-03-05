@@ -54,7 +54,7 @@ module.exports = {
   getAll: (req, res) => {
     let to_Username = req.params.to_Username;
 
-    db.select('messages.message_id', 'messages.message', 'messages.chat_id', 'messages.created_at', 'chats.profilepic', 'messages.read', 'chats.fromUsername', 'chats.toUsername').from('messages').where({to_Username: to_Username}).innerJoin('chats', 'chats.id', 'messages.chat_id').then(messages => {
+    db.select('messages.message_id', 'messages.message', 'messages.chat_id', 'messages.created_at', 'chats.profilepic', 'messages.read', 'chats.fromUsername', 'chats.toUsername').from('messages').where({to_Username: to_Username}).orWhere({from_Username: to_Username}).innerJoin('chats', 'chats.id', 'messages.chat_id').then(messages => {
 
       res.json(messages);
     });
@@ -73,7 +73,7 @@ module.exports = {
     let message_id = req.params.id;
     console.log('message id', message_id)
     db.from('messages').where({read: 0}).update({read: 1}).then(() => {
-      db.select('messages.message_id', 'messages.message', 'messages.from_Username', 'messages.to_Username', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
+      db.select('messages.message_id', 'messages.message', 'messages.from_Username', 'messages.to_Username', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.username', 'messages.from_Username').then(messages => {
         console.log('messages updated', messages);
         res.json(messages);
       });

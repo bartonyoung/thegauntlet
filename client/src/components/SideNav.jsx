@@ -29,6 +29,7 @@ class SideNav extends React.Component {
         } else {
           data = data.filter(challenge => challenge.category === category);
         }
+        console.log("sidebar get challenges recent", data)
         outer.props.dispatch(actions.getChallenges(data));
       });
     }
@@ -50,11 +51,7 @@ class SideNav extends React.Component {
         <form className="input-group" onSubmit={ (e)=> this.challengeSearch(e)}>
           <span className="input-group-btn">
             <button className="btn btn-default" onClick={(e) => this.challengeSearch(e) }><span className="glyphicon glyphicon-search"></span></button>
-<<<<<<< HEAD
-          </span> 
-=======
           </span>
->>>>>>> Add button that takes you back to all chats
             <input type="text" required ref="search" className="form-control" placeholder="Search ..."/>
 
         </form>

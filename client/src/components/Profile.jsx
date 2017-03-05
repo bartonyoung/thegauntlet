@@ -37,11 +37,12 @@ class Profile extends React.Component {
     }
 
     $.get('/api/messages/' + window.sessionStorage.username).done(messages => {
-
+      console.log("GETTING MESSAGES ON PROFILE")
+      console.log('messages', messages);
       messages.forEach(message => {
         outer.props.dispatch(actions.getMessages(messages));
-        if (message.read === 0 && this.props.displayMessages !== 'messagess-number') {
-          outer.props.dispatch(actions.setDisplayMessages('messages-number'));
+        if (message.read === 0 && this.props.displayMessages !== 'newmessages-chat') {
+          outer.props.dispatch(actions.setDisplayMessages('newmessages-chat'));
         }
       });
     });
