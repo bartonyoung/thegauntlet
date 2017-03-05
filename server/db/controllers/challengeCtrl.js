@@ -8,9 +8,10 @@ const s3 = require('./s3Ctrl.js');
 module.exports = {
   addOne: (req, res) => {
     const challenge = req.body;
+    console.log(req.session);
     db.select('scott')
     .from('users')
-    .where({username: req.session.displayName})
+    .where({username: req.session.displayName || req.body.username})
     .then(userData => {
       challenge.user_id = userData[0].scott;
       challenge.upvotes = 0;
