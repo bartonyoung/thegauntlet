@@ -16,8 +16,9 @@
   display: flex;
 }
 
-challenge-media-row {
+.challenge-media-row {
   border: 2px solid white;
+  height: 50%;
 }
 
 .challenge-list-media {
