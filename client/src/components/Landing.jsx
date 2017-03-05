@@ -73,7 +73,6 @@ class Landing extends React.Component {
     });
 
     video = gallery[Math.floor(Math.random() * gallery.length)];
-    console.log(video);
     if (video) {
       window.sessionStorage.setItem('coverVideoUsername', video.username);
       outer.props.dispatch(actions.setCoverVideo(video.filename));
@@ -192,12 +191,8 @@ class Landing extends React.Component {
                               Earn the most votes<br/>
                               to become the champion.
                             </p>
-
-
-
-
-                    </div>
-                </div>
+                      </div>
+                  </div>
               </div>
           </div>
 
