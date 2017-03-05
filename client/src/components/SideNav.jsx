@@ -50,9 +50,9 @@ class SideNav extends React.Component {
         <form className="input-group" onSubmit={ (e)=> this.challengeSearch(e)}>
           <span className="input-group-btn">
             <button className="btn btn-default" onClick={(e) => this.challengeSearch(e) }><span className="glyphicon glyphicon-search"></span></button>
-          </span> 
+          </span>
             <input type="text" required ref="search" className="form-control" placeholder="Search ..."/>
-        
+
         </form>
         <div>
           <button onClick={()=>{ this.onSideBarClick('LeaderBoard'); }} className="list-item">LeaderBoard</button>

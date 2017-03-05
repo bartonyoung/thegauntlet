@@ -11,10 +11,6 @@ class ResponseComponent extends React.Component {
     super(props);
 
     this.onUsernameClick = this.onUsernameClick.bind(this);
-
-    this.state = {
-      isEditing: false
-    };
   }
 
   onUsernameClick(response) {
@@ -24,90 +20,6 @@ class ResponseComponent extends React.Component {
     $.get('/api/profile/' + window.sessionStorage.newUsername).done(user => {
       outer.props.dispatch(actions.addUser(user));
       window.location.href = '/#/profile/' + response.username;
-    });
-  }
-
-  saveChallenge(response) {
-    let outer = this;
-    this.setState({
-      isEditing: !this.state.isEditing
-    });
-
-    $.ajax({
-      url: '/api/challenge/' + response.id,
-      type: 'PUT',
-      data: {
-        title: this.refs.title.value,
-        description: this.refs.description.value
-      },
-      success: function(data) {
-        console.log('put request', data);
-        outer.props.dispatch(actions.updatePost(data));
-      }
-    });
-  }
-
-  deleteResponse(response) {
-    let outer = this;
-
-    $.ajax({
-      url: '/api/response/' + response.id,
-      type: 'DELETE',
-      data: {
-        parent_id: window.sessionStorage.getItem('id')
-      },
-      success: function(data) {
-        outer.props.dispatch(actions.getResponses(data));
-      }
-    });
-  }
-
-  editResponse() {
-    this.setState({
-      isEditing: !this.state.isEditing
-    });
-  }
-
-  cancelEdit() {
-    this.setState({
-      isEditing: !this.state.isEditing
-    });
-  }
-  upVoteClick(id) {
-    const outer = this;
-    $.post('/api/upvote', {
-      vote: 1,
-      challenge_id: id
-    }).then(() => {
-      $.get('/api/upvote').then(data => {
-        outer.props.dispatch(actions.getUpvoted(data));
-      });
-      $.get('/api/downvote').then(data => {
-        outer.props.dispatch(actions.getDownvoted(data));
-      });
-      $.get('/api/singleChallenge', {id: id})
-        .then(data => {
-          this.setState({currentVideo: data[0]});
-        });
-    });
-  }
-
-  downVoteClick(id) {
-    const outer = this;
-    $.post('/api/downvote', {
-      vote: 1,
-      challenge_id: id
-    }).then(() => {
-      $.get('/api/upvote').then(data => {
-        outer.props.dispatch(actions.getUpvoted(data));
-      });
-      $.get('/api/downvote').then(data => {
-        outer.props.dispatch(actions.getDownvoted(data));
-      });
-      $.get('/api/singleChallenge', {id: id})
-        .then(data => {
-          this.setState({currentVideo: data[0]});
-        });
     });
   }
 
@@ -172,7 +84,7 @@ class ResponseComponent extends React.Component {
             </div>
             <div className="row all-response-data response-votebuttons-row">
               {voteButtons(this.props, this.props.response.id, this.props.response.upvotes, this, 'btn-md')}
-            </div>  
+            </div>
             <div className="row all-response-data response-username-row">
               <Link onClick={() => this.onUsernameClick(this.props.response)} className="response-username">{this.props.response.username + ' '}</Link>
             </div>
@@ -190,4 +102,4 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(ResponseComponent);
-            
+

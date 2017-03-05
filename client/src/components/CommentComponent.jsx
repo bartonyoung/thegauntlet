@@ -54,7 +54,7 @@ class CommentComponent extends React.Component {
         id: comment.id
       },
       success: function(data) {
-        outer.props.dispatch(actions.getComments(data));
+        outer.props.dispatch(actions.getComments(data.reverse()));
       }
     });
   }
@@ -62,6 +62,12 @@ class CommentComponent extends React.Component {
   editComment() {
     this.setState({
       isEditing: true
+    });
+  }
+
+  cancelEdit() {
+    this.setState({
+      isEditing: !this.state.isEditing
     });
   }
 

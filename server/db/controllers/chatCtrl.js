@@ -9,7 +9,6 @@ module.exports = {
     let toUsername = req.body.toUsername;
     db.select('users.profilepic').from('users').where('users.username', '=', toUsername).then(data => {
       chat.profilepic = data[0].profilepic || '';
-      console.log(chat)
       db('chats').insert(chat).then(() => {
         db.select().from('chats').then(chatRoom => {
           console.log(chatRoom, 'chatRoom')
@@ -30,7 +29,6 @@ module.exports = {
   sendOne: (req, res) => {
     let message = req.body;
     let to_Username = req.params.to_Username;
-    console.log('message body', message)
     db('messages').where({to_Username: to_Username}).insert(message).then(() => {
       db.select().from('messages').where({to_Username: to_Username}).then(message => {
         console.log('message', message)
@@ -53,18 +51,14 @@ module.exports = {
 
   getAll: (req, res) => {
     let to_Username = req.params.to_Username;
-
-    db.select('messages.message_id', 'messages.message', 'messages.chat_id', 'messages.created_at', 'chats.profilepic', 'messages.read', 'chats.fromUsername', 'chats.toUsername').from('messages').where({to_Username: to_Username}).innerJoin('chats', 'chats.id', 'messages.chat_id').then(messages => {
-
-      res.json(messages);
+    db.select('messages.message_id', 'messages.message', 'messages.chat_id', 'messages.created_at', 'chats.profilepic', 'messages.read', 'chats.fromUsername', 'chats.toUsername').from('messages').where({to_Username: to_Username}).orWhere({from_Username: to_Username}).innerJoin('chats', 'chats.id', 'messages.chat_id').then(messages => {
+       res.json(messages);
     });
   },
 
   getChatMessages: (req, res) => {
     let chat_id = req.params.id;
-    console.log('chat_id', chat_id)
     db.select().from('messages').where({chat_id: chat_id}).then(messages => {
-      console.log("messages from getChat", messages)
       res.json(messages);
     });
   },
@@ -73,7 +67,7 @@ module.exports = {
     let message_id = req.params.id;
     console.log('message id', message_id)
     db.from('messages').where({read: 0}).update({read: 1}).then(() => {
-      db.select('messages.message_id', 'messages.message', 'messages.from_Username', 'messages.to_Username', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.scott', 'messages.fromUser_id').then(messages => {
+      db.select('messages.message_id', 'messages.message', 'messages.from_Username', 'messages.to_Username', 'users.username', 'messages.created_at', 'users.profilepic', 'messages.read').from('messages').where({message_id: message_id}).innerJoin('users', 'users.username', 'messages.from_Username').then(messages => {
         console.log('messages updated', messages);
         res.json(messages);
       });
@@ -82,10 +76,8 @@ module.exports = {
 
   seenChat: (req, res) => {
     let chat_id = req.params.id;
-
-    db.from('chats').where({id: chat_id}).update({new: 0}).then(() => {
+     db.from('chats').where({id: chat_id}).update({new: 0}).then(() => {
       db.select('chats.fromUsername', 'chats.toUsername', 'chats.profilepic', 'chats.new', 'chats.id').from('chats').then(chat => {
-        console.log('seen chat', chat)
         res.json(chat);
       });
     });
@@ -93,10 +85,8 @@ module.exports = {
 
   unseenChat: (req, res) => {
     let chat_id = req.params.id;
-    console.log('chat_id', chat_id)
     db.from('chats').where({id: chat_id}).update({new: 1}).then(() => {
       db.select('chats.fromUsername', 'chats.toUsername', 'chats.profilepic', 'chats.new', 'chats.id').from('chats').then(chat => {
-        console.log('new messages chat', chat)
         res.json(chat);
       });
     });

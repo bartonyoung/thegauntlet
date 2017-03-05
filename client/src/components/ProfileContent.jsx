@@ -4,7 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { Link } from 'react-router';
-import { calculateTime} from '../utils/helpers'; 
+import { calculateTime} from '../utils/helpers';
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -17,7 +17,9 @@ class ProfileContent extends React.Component {
       messageDisplay: 'unset',
       formDisplay: 'none',
       currentChat: [],
-      timeDisplay: 'none'
+      timeDisplay: 'none',
+      title: '',
+      description: ''
     };
     this.editProfileImage = this.editProfileImage.bind(this);
     this.edit = this.edit.bind(this);
@@ -26,6 +28,13 @@ class ProfileContent extends React.Component {
     this.onChallengeTitleClick = this.onChallengeTitleClick.bind(this);
     this.onSendReply = this.onSendReply.bind(this);
     this.onChatClick = this.onChatClick.bind(this);
+    this.editPost = this.editPost.bind(this);
+    this.savePost = this.savePost.bind(this);
+    this.deletePost = this.deletePost.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
+    this.taskButtons = this.taskButtons.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
   }
 
   componentDidMount () {
@@ -58,6 +67,7 @@ class ProfileContent extends React.Component {
   }
 
   onNotificationClick(i, notification) {
+    console.log(this.state[i])
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -71,7 +81,6 @@ class ProfileContent extends React.Component {
 
     if (notification.read === 0) {
       if (notification.comment) {
-        console.log('inside notification.comment', notification);
         $.ajax({
           url: '/api/comments/' + notification.id,
           type: 'PUT',
@@ -271,13 +280,12 @@ class ProfileContent extends React.Component {
       }
     }
 
-
     if (createChatRoom) {
       console.log('chatroom created');
       let chat = {
         fromUsername: window.sessionStorage.username,
         toUsername: window.sessionStorage.newUsername,
-        new: 1
+        new: 0
       };
       $.post('/api/chats', chat).done(data => {
         console.log('chatroom', data);
@@ -300,17 +308,13 @@ class ProfileContent extends React.Component {
 
   onMessageClick(message) {
     let outer = this;
-    console.log('on message click', message);
     window.sessionStorage.setItem('messageParentId', message.message_id);
     window.sessionStorage.setItem('messageToUserId', message.fromUser_id);
-    console.log('message to Id', window.sessionStorage.messageToUserId);
-    console.log('message parent_id', window.sessionStorage.messageParentId);
     if (!message.read) {
       $.ajax({
         url: '/api/message/' + message.message_id,
         type: 'PUT',
         success: function(data) {
-          console.log('put message data', data);
           outer.props.dispatch(actions.readMessage(data));
         }
       });
@@ -326,7 +330,7 @@ class ProfileContent extends React.Component {
     }
   }
 
-  onChallengeTitleClick(challenge) {
+  onChallengeTitleClick(challenge, index) {
     if (challenge.parent_id === null) {
       window.sessionStorage.setItem('challengeId', challenge.id);
       window.sessionStorage.setItem('currentId', challenge.id);
@@ -365,6 +369,7 @@ class ProfileContent extends React.Component {
           outer.props.dispatch(actions.seenChat(data));
         }
       });
+      console.log("reply message", data)
       outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
     });
@@ -393,7 +398,126 @@ class ProfileContent extends React.Component {
 
     $.get('/api/chatMessages/' + chat.id).done(data => {
       outer.props.dispatch(actions.getMessages(data.reverse()));
+      data.forEach(message => {
+        if (message.read === 0) {
+          $.ajax({
+            url: '/api/message/' + message.message_id,
+            type: 'PUT',
+            success: function(data) {
+              outer.props.dispatch(actions.readMessage(data));
+            }
+          });
+        }
+      });
     });
+  }
+
+  savePost(e, post, index) {
+    let outer = this;
+    let url = '/api/challenge/';
+
+    if (post.parent_id) {
+      url = '/api/response/';
+    }
+
+    console.log('post', this.state.title, this.state.description )
+    $.ajax({
+      url: url + post.id,
+      type: 'PUT',
+      data: {
+        title: this.state.title,
+        description: this.state.description
+      },
+      success: function(data) {
+        console.log("save edit data", data)
+        outer.props.dispatch(actions.updatePost(data));
+        outer.setState({
+          title: '',
+          description: '',
+          [index]: 'none'
+        });
+      }
+    });
+  }
+
+  deletePost(post) {
+    let outer = this;
+    let url = '/api/challenge/';
+
+    if (post.parent_id) {
+      url = '/api/response/';
+    }
+
+    $.ajax({
+      url: url + post.id,
+      type: 'DELETE',
+      success: function(data) {
+        outer.props.dispatch(actions.getChallenges(data));
+      }
+    });
+  }
+
+  editPost(index) {
+    if (this.state[index] === 'none' || !this.state[index]) {
+      this.setState({
+        [index]: 'unset'
+      });
+    } else {
+      this.setState({
+        [index]: 'none'
+      });
+    }
+  }
+
+  cancelEdit(e, index) {
+    e.preventDefault();
+    if (this.state[index] === 'none' || !this.state[index]) {
+      this.setState({
+        [index]: 'unset'
+      });
+    } else {
+      this.setState({
+        [index]: 'none'
+      });
+    }
+  }
+
+  handleTitleChange(e) {
+    console.log(e.target.value)
+    this.setState({
+      title: e.target.value
+    });
+  }
+
+  handleDescriptionChange(e) {
+    this.setState({
+      description: e.target.value
+    });
+  }
+
+  taskButtons(post, index) {
+    return (
+      <div className="task-buttons">
+        <div >
+          <button className="btn btn-default btn-sm edit" onClick={() => this.editPost(index)}>
+            <span className="glyphicon glyphicon-edit"></span>
+          </button>
+          <button className="btn btn-default btn-sm delete" onClick={() => this.deletePost(post)}>
+            <span className="glyphicon glyphicon-remove"></span>
+          </button>
+        </div>
+        <div style={{display: this.state[index] || 'none'}}>
+        <div className="editor">
+          <form id="editform">
+            <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
+            <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
+            <button type="button" className="btn btn-large btn-default edit" onClick={(e) => this.savePost(e, post, index)}>Save</button>
+            <button className="btn btn-large btn-default delete" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -402,30 +526,74 @@ class ProfileContent extends React.Component {
         'mp4': 'THIS IS A VIDEO!'
       };
       if (fileType[type]) {
-        return (<video width="320" height="240" controls>
+        return (<video className='parent-media' controls>
           {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
         </video>);
       } else {
-        return <img width="320" height="240" />;
+        return <img className='parent-media' src='http://coolwildlife.com/wp-content/uploads/galleries/post-3004/Fox%20Picture%20003.jpg'/>;
       }
     };
 
 
-    let mappedChallenges = this.props.challenges.map(challenge => {
+    let mappedChallenges = this.props.challenges.map((challenge, j) => {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div onClick={() => this.onChallengeTitleClick(challenge)}>
-              <Link to={'/challenge'}>
-                <h4>{challenge.title}</h4>
-                <p>{challenge.description}</p>
-                {checkFile(challenge.filename.split('.').pop(), challenge)}
-              </Link>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
+            <div className="row profile-edit-buttons">
+              <span className='pull-right'>{this.taskButtons(challenge, j)}</span>
             </div>
+            <div className="row challenge-title-row text-center">
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(challenge, j)}><Link to={'/challenge'}>{challenge.title}</Link></p>
+            </div>
+            <div className="row challenge-media-row">
+              {checkFile(challenge.filename.split('.').pop(), challenge)}<br/>
+            </div>
+            <div className="row category-row">
+              <span className="category-tab">{challenge.category}</span>
+            </div>
+            <div className="row challenge-buttons pagination-centered">
+            </div>
+            <div className="row username-time">
+              <Link onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
+              <h5>{challenge.description}</h5>
+            </div>
+          </div>
           );
         }
       } else {
         return ' No challenges submitted yet';
+      }
+    });
+
+    let mappedResponses = this.props.responses.map((response, r) => {
+      if (response) {
+        if (response.username === this.props.user[0].username) {
+          return (
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={r}>
+             <div className="row profile-edit-buttons">
+              <span className='pull-right'>{this.taskButtons(response, r)}</span>
+            </div>
+            <div className="row challenge-title-row">
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, r)} className="category-title"><Link to={'/challenge'}>{response.title}</Link></p>
+            </div>
+            <div className="row challenge-media-row">
+              {checkFile(response.filename.split('.').pop(), response)}<br/>
+            </div>
+            <div className="row category-row">
+              <span className="category-tab">{response.category}</span>
+            </div>
+            <div className="row challenge-buttons pagination-centered">
+            </div>
+            <div className="row username-time">
+              <Link onClick={() => this.onUsernameClick(response)}><span>{response.username + ' '}</span></Link>
+              <h5>{response.description}</h5>
+            </div>
+          </div>
+          );
+        }
+      } else {
+        return ' No responses submitted yet';
       }
     });
 
@@ -439,24 +607,6 @@ class ProfileContent extends React.Component {
             <Link onClick={() => this.onUsernameClick(challenge)}>{challenge.username + ' '}</Link>
           </div>
         );
-      }
-    });
-
-    let mappedResponses = this.props.responses.map(response => {
-      if (response) {
-        if (response.username === this.props.user[0].username) {
-          return (
-            <div onClick={() => this.onChallengeTitleClick(response)}>
-              <Link to={'/challenge'}>
-              <h4>{response.title}</h4>
-              <p>{response.description}</p>
-              {checkFile(response.filename.split('.').pop(), response)}
-              </Link>
-            </div>
-          );
-        }
-      } else {
-        return ' No responses submitted yet';
       }
     });
 
@@ -498,42 +648,36 @@ class ProfileContent extends React.Component {
       if (this.props.profileView === 'all' && window.sessionStorage.username === this.props.user[0].username) {
         return (
             <div>
-              Your challenges:
               {mappedChallenges}
             </div>
         );
       } else if (this.props.profileView === 'responses' && window.sessionStorage.username === this.props.user[0].username) {
         return (
           <div>
-            Your responses:
             {mappedResponses}
           </div>
         );
       } else if (this.props.profileView === 'all') {
         return (
           <div>
-            {this.props.user[0].username + '\'s challenges:'}
             {mappedChallenges}
           </div>
         );
       } else if (this.props.profileView === 'responses') {
         return (
           <div>
-            {this.props.user[0].username + '\'s responses:'}
             {mappedResponses}
           </div>
         );
       } else if (this.props.profileView === 'favorites') {
         return (
           <div>
-            Favorites:
             {favoritedChallenges}
           </div>
         );
       } else if (this.props.profileView === 'followers') {
         return (
           <div>
-            Followers:
             {this.props.followers.map((follower, i) => {
               return <div key={i}>{i + 1}.{follower.username}</div>;
             })}
@@ -553,7 +697,7 @@ class ProfileContent extends React.Component {
             if (notification.read === 0) {
               return (
                 <div>
-                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD commented to your challenge: ' + notification.title}</h4></a>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4 className='unread-notifications'>{notification.username + ' commented to your challenge: ' + notification.title}</h4></a>
                   <h6>{calculateTime(timeDifferenceInSeconds)}</h6>
                   <div style={{display: this.state[i] || 'none'}}>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link><br/>
@@ -576,8 +720,8 @@ class ProfileContent extends React.Component {
           } else if (notification.parent_id) {
             if (notification.read === 0) {
               return (
-                <div>
-                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' UNREAD responded to your challenge...'}</h4></a>
+                <div className='unread-notifications'>
+                  <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4 className='unread-notifications'>{notification.username + ' responded to your challenge...'}</h4></a>
                   {calculateTime(timeDifferenceInSeconds)}<br/>
                   <div style={{display: this.state[i] || 'none'}}>
                     {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
@@ -621,12 +765,44 @@ class ProfileContent extends React.Component {
               chatName = chat.fromUsername;
             }
 
+            let renderUnreadMessagesNumber = () => {
+              let messagesOfChat = [];
+
+              this.props.messages.forEach(message => {
+                if (message.chat_id === chat.id) {
+                  messagesOfChat.push(message);
+                }
+              });
+
+              let unReadMessagesNumber = messagesOfChat.reduce((a, c) => {
+                if (c.read === 0) {
+                  a += 1;
+                }
+
+                return a;
+              }, 0);
+
+              console.log(unReadMessagesNumber, 'unReadMessagesNumber')
+              if (this.props.displayMessages === 'newmessages-chat' && unReadMessagesNumber > 0) {
+                return <span className="newmessages-chat">{unReadMessagesNumber}</span>;
+              } else if (unReadMessagesNumber === 0) {
+                return <span className="newmessages-checked"></span>;
+              }
+
+              return <div></div>;
+            };
+
             if (chat) {
               return (
-                <div>
-                  <div onClick={() => this.onChatClick(chat)}>
-                    <img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
-                    <div>{chatName}</div>
+                <div className="col-lg-6">
+                  <div className="profile-header-container" onClick={() => this.onChatClick(chat)}>
+                    <div className="profile-header-img">
+                      <img className="img-circle" src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + chat.profilepic}/>
+                      {renderUnreadMessagesNumber()}
+                      <div className="rank-label-container">
+                          <span className="label label-default rank-label">{chatName}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
@@ -647,7 +823,7 @@ class ProfileContent extends React.Component {
           let mappedMessages = this.props.messages.map((message, i) => {
             let timeDifferenceInSeconds = (new Date().getTime() - parseInt(message.created_at)) / 1000;
             return (
-              <div className='container-fluid'>
+              <div>
                 <div onClick={() => this.onMessageClick(message)}>
                   <span className='messageUsername'>
                     {message.from_Username + ': ' + message.message}
@@ -662,6 +838,9 @@ class ProfileContent extends React.Component {
 
           return (
             <div>
+              <div className='back-chat'>
+                <button onClick={() => this.setState({currentChat: []})}>Back to chats</button>
+              </div>
               {mappedMessages.reverse()}
               <form onSubmit={this.onSendReply} style={{padding: '10px'}} >
                 <textarea cols='40' rows='5' type="text" placeholder='Reply here' required ref='reply'/>
@@ -691,7 +870,15 @@ class ProfileContent extends React.Component {
       if (window.sessionStorage.username === this.props.user[0].username) {
         return renderTab('chats', '#menu5', 'Chats');
       }
-    };  
+    };
+
+    let renderFollowers = () => {
+      if (this.props.profileView === 'followers') {
+        return <li className="active" onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
+      } else {
+        return <li onClick={() => this.changeProfileView('followers')}><a data-toggle="tab" href="#menu3">Followers</a></li>;
+      }
+    };
 
     let isUserProfile = (placement, user) => {
       if (window.sessionStorage.username === user) {
