@@ -35,6 +35,7 @@ class ProfileContent extends React.Component {
     this.taskButtons = this.taskButtons.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleRanks = this.handleRanks.bind(this);
   }
 
   componentDidMount () {
@@ -43,6 +44,12 @@ class ProfileContent extends React.Component {
       outer.props.dispatch(actions.getLeaders(leaders.map(leader => parseInt(leader))));
       outer.followers();
     });
+  }
+
+  handleRanks(target) {
+    return this.props.ranks.map((rank, index) => {
+      return {username: rank.username, rank: index + 1};
+    }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank;
   }
 
   numFollowers () {
@@ -67,7 +74,7 @@ class ProfileContent extends React.Component {
   }
 
   onNotificationClick(i, notification) {
-    console.log(this.state[i])
+    console.log(this.state[i]);
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -369,7 +376,7 @@ class ProfileContent extends React.Component {
           outer.props.dispatch(actions.seenChat(data));
         }
       });
-      console.log("reply message", data)
+      console.log('reply message', data);
       outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
     });
@@ -420,7 +427,7 @@ class ProfileContent extends React.Component {
       url = '/api/response/';
     }
 
-    console.log('post', this.state.title, this.state.description )
+    console.log('post', this.state.title, this.state.description );
     $.ajax({
       url: url + post.id,
       type: 'PUT',
@@ -429,7 +436,7 @@ class ProfileContent extends React.Component {
         description: this.state.description
       },
       success: function(data) {
-        console.log("save edit data", data)
+        console.log('save edit data', data);
         outer.props.dispatch(actions.updatePost(data));
         outer.setState({
           title: '',
@@ -483,7 +490,7 @@ class ProfileContent extends React.Component {
   }
 
   handleTitleChange(e) {
-    console.log(e.target.value)
+    console.log(e.target.value);
     this.setState({
       title: e.target.value
     });
@@ -782,7 +789,7 @@ class ProfileContent extends React.Component {
                 return a;
               }, 0);
 
-              console.log(unReadMessagesNumber, 'unReadMessagesNumber')
+              console.log(unReadMessagesNumber, 'unReadMessagesNumber');
               if (this.props.displayMessages === 'newmessages-chat' && unReadMessagesNumber > 0) {
                 return <span className="newmessages-chat">{unReadMessagesNumber}</span>;
               } else if (unReadMessagesNumber === 0) {
@@ -953,10 +960,8 @@ class ProfileContent extends React.Component {
               {editField(this.props.user[0].firstname, this.props.user[0].scott, target, 'firstname', 'first', 'Firstname')}
               {editField(this.props.user[0].lastname, this.props.user[0].scott, target, 'lastname', 'second', 'Lastname')}
               {editField(this.props.user[0].email, this.props.user[0].scott, target, 'email', 'third', 'Email')}
-              Rank# {this.props.ranks.map((rank, index) => {
-                return {username: rank.username, rank: index + 1};
-              }).filter((user)=>{ if (user.username === target) { return user; } })[0].rank} (
-                {this.props.user[0].upvotes}) <br />
+              Rank# {this.handleRanks(target)}
+               ({this.props.user[0].upvotes}) <br />
               Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
               {sendMessage()}
               </div>
