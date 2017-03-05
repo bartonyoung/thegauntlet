@@ -29,7 +29,6 @@ class SideNav extends React.Component {
         } else {
           data = data.filter(challenge => challenge.category === category);
         }
-        console.log("sidebar get challenges recent", data)
         outer.props.dispatch(actions.getChallenges(data));
       });
     }
