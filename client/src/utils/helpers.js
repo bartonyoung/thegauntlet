@@ -16,6 +16,25 @@ let whichFavoriteIcon = (store, challengeId, context, size) => {
   }
 };
 
+
+let whichFollowButton = (state, leaderId, user, context) => {
+  if (window.sessionStorage.username !== user) {
+    if (state.leaders.includes(leaderId)) {
+      return (
+        <button className="btn btn-default btn-sm pull-right follower"onClick={() => context.unFollow(leaderId)}>
+          <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
+        </button>
+      );
+    } else {
+      return (
+        <button className="btn btn-default btn-sm pull-right follower" onClick={() => context.followTheLeader(leaderId)}>
+          <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
+        </button>
+      );
+    }
+  }
+};
+
 let voteButtons = (store, challengeId, upvotes, context, size) => {
   if (store.upvoted.includes(challengeId)) {
     return (
@@ -150,4 +169,11 @@ let calculateTime = (seconds) => {
 
 
 
-export { whichFavoriteIcon, voteButtons, calculateTime, checkFile, taskButtons };
+export { 
+  whichFavoriteIcon, 
+  voteButtons, 
+  calculateTime, 
+  checkFile, 
+  taskButtons,
+  whichFollowButton 
+};

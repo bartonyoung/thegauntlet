@@ -4,7 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { Link } from 'react-router';
-import { calculateTime, checkFile } from '../utils/helpers'; 
+import { calculateTime, checkFile, whichFavoriteIcon, whichFollowButton} from '../utils/helpers'; 
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -74,7 +74,6 @@ class ProfileContent extends React.Component {
   }
 
   onNotificationClick(i, notification) {
-    console.log(this.state[i]);
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -197,7 +196,6 @@ class ProfileContent extends React.Component {
             profilepic: resp
           },
           success: function(data) {
-            console.log('successfully updated');
             outer.refs.video.value = '';
             outer.setState({
               display: 'none',
@@ -278,7 +276,6 @@ class ProfileContent extends React.Component {
             url: '/api/unseenChat/' + chat.id,
             type: 'PUT',
             success: function(data) {
-              console.log('new messages in chat', data);
               outer.props.dispatch(actions.seenChat(data));
             }
           });
@@ -288,14 +285,12 @@ class ProfileContent extends React.Component {
     }
 
     if (createChatRoom) {
-      console.log('chatroom created');
       let chat = {
         fromUsername: window.sessionStorage.username,
         toUsername: window.sessionStorage.newUsername,
         new: 0
       };
       $.post('/api/chats', chat).done(data => {
-        console.log('chatroom', data);
         outer.props.dispatch(actions.createChat(data));
         let message = {
           message: outer.refs.message.value,
@@ -357,7 +352,6 @@ class ProfileContent extends React.Component {
     e.preventDefault();
     let outer = this;
     let created_at = new Date().getTime();
-    console.log('replying', this.state.currentChat[0].id);
     let reply = {
       message: this.refs.reply.value,
       from_Username: window.sessionStorage.username,
@@ -367,16 +361,13 @@ class ProfileContent extends React.Component {
       chat_id: this.state.currentChat[0].id
     };
     $.post('/api/message/' + this.state.currentChat[0].id, reply).done(data => {
-      console.log('message data', data);
       $.ajax({
         url: '/api/unseenChat/' + data[0].chat_id,
         type: 'PUT',
         success: function(data) {
-          console.log('unseen chat', data);
           outer.props.dispatch(actions.seenChat(data));
         }
       });
-      console.log('reply message', data);
       outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
     });
@@ -390,14 +381,12 @@ class ProfileContent extends React.Component {
     this.setState({
       currentChat: currentChatArray
     });
-    console.log('current chat', this.state.currentChat[0]);
     if (this.state.currentChat[0].new) {
 
       $.ajax({
         url: '/api/chat/' + this.state.currentChat[0].id,
         type: 'PUT',
         success: function(data) {
-          console.log('seen chat data', data);
           outer.props.dispatch(actions.seenChat(data));
         }
       });
@@ -435,7 +424,6 @@ class ProfileContent extends React.Component {
         description: this.state.description
       },
       success: function(data) {
-        console.log('save edit data', data);
         outer.props.dispatch(actions.updatePost(data));
         outer.setState({
           title: '',
@@ -489,7 +477,6 @@ class ProfileContent extends React.Component {
   }
 
   handleTitleChange(e) {
-    console.log(e.target.value);
     this.setState({
       title: e.target.value
     });
@@ -527,6 +514,7 @@ class ProfileContent extends React.Component {
   }
 
   render() {
+
     let mappedChallenges = this.props.challenges.map((challenge, j) => {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
@@ -601,40 +589,6 @@ class ProfileContent extends React.Component {
         );
       }
     });
-
-    let whichFollowButton = (leaderId, user) => {
-      if (window.sessionStorage.username !== user) {
-        if (this.props.leaders.includes(leaderId)) {
-          return (
-            <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
-              <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
-            </button>
-          );
-        } else {
-          return (
-            <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
-              <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
-            </button>
-          );
-        }
-      }
-    };
-
-    let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.some(challenge => challenge.id === challengeId)) {
-        return (
-          <button className="btn btn-default btn-sm pull-right">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
-            <span className="glyphicon glyphicon-heart"></span>
-          </button>
-        );
-      }
-    };
 
     let myView = () => {
       if (this.props.profileView === 'all' && window.sessionStorage.username === this.props.user[0].username) {
@@ -720,8 +674,8 @@ class ProfileContent extends React.Component {
                     <h4>{notification.title}</h4>
                     <h5>{notification.description}</h5>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                    {whichFollowButton(notification.user_id, notification.username)}
-                    {whichFavoriteIcon(notification.user_id)}
+                    {whichFollowButton(this.props, notification.user_id, notification.username, this)}
+                    {whichFavoriteIcon(this.props, notification.user_id, this)}
                     <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
                   </div>
                 </div>
@@ -736,8 +690,8 @@ class ProfileContent extends React.Component {
                     <h4>{notification.title}</h4>
                     <h5>{notification.description}</h5>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                    {whichFollowButton(notification.user_id, notification.username)}
-                    {whichFavoriteIcon(notification.user_id)}
+                    {whichFollowButton(this.props, notification.user_id, notification.username, this)}
+                    {whichFavoriteIcon(this.props, notification.user_id, this)}
                     <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
                   </div>
                 </div>
@@ -774,7 +728,6 @@ class ProfileContent extends React.Component {
                 return a;
               }, 0);
 
-              console.log(unReadMessagesNumber, 'unReadMessagesNumber');
               if (this.props.displayMessages === 'newmessages-chat' && unReadMessagesNumber > 0) {
                 return <span className="newmessages-chat">{unReadMessagesNumber}</span>;
               } else if (unReadMessagesNumber === 0) {
