@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Edmund
+  - __Scrum Master__: Brendan
+  - __Development Team Members__: Terry, Barton
 
 ## Table of Contents
 
@@ -20,15 +20,15 @@
 
 ## Usage
 
-> Some usage instructions
+1. npm install
+2. start mysql server
+3. create thegauntlet database
+4. npm start
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+-Node 7.2.1
+-MySQL 2.13.0
 
 ## Development
 
