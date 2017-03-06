@@ -1,94 +1,88 @@
 const reducer = (state, action) => {
-  if (action.type === 'GET_CHALLENGES') {
+  switch (action.type) {
+  
+  case 'GET_CHALLENGES': 
     return Object.assign({}, state, {
       challenges: action.payload
     });
-  } else if (action.type === 'ADD_CHALLENGE') {
-    let challengeObj = {};
-
-    for (var keys in state) {
-      if (keys === 'challenges') {
-        challengeObj[keys] = [];
-        challengeObj[keys].push(action.payload[0]);
-        state[keys].forEach((key, i) => {
-          challengeObj[keys].push(key);
-        });
-      } else {
-        challengeObj[keys] = state[keys];
-      }
-    }
-
-    return challengeObj;
-  } else if (action.type === 'GET_RESPONSES') {
+  
+  case 'ADD_CHALLENGE':
+    let newChallenges = state.challenges.slice();
+    newChallenges.unshift(action.payload[0]);
+    return Object.assign({}, state, {
+      challenges: newChallenges
+    });
+  
+  case 'GET_RESPONSES': 
     return Object.assign({}, state, {
       responses: action.payload
     });
-  } else if (action.type === 'ADD_RESPONSE') {
-    let responseObj = {};
-
-    for (var keys in state) {
-      if (keys === 'responses') {
-        responseObj[keys] = [];
-        responseObj[keys].push(action.payload[0]);
-        state[keys].forEach((key, i) => {
-          responseObj[keys].push(key);
-        });
-      } else {
-        responseObj[keys] = state[keys];
-      }
-    }
-
-    return responseObj;
-  } else if (action.type === 'GET_COMMENTS') {
+  
+  case 'ADD_RESPONSE':
+    let newResponses = state.responses.slice();
+    newResponses.unshift(action.payload[0]);
+    return Object.assign({}, state, {
+      responses: newResponses
+    });
+  
+  case 'GET_COMMENTS':   
     return Object.assign({}, state, {
       comments: action.payload
     });
-  } else if (action.type === 'ADD_COMMENT') {
+  
+  case 'ADD_COMMENT': 
     let newComments = state.comments.slice();
     newComments.unshift(action.payload[0]);
     return Object.assign({}, state, {
       comments: newComments 
     });
     
-
-    return Object.assign({}, commentObj);
-  } else if (action.type === 'GET_LEADERS') {
+  case 'GET_LEADERS': 
     return Object.assign({}, state, {
       leaders: action.payload
     });
-  } else if (action.type === 'ADD_USER') {
+  
+  case 'ADD_USER':
     return Object.assign({}, state, {
       user: action.payload
     });
-  } else if (action.type === 'SET_CATEGORY') {
+  
+  case 'SET_CATEGORY':
     return Object.assign({}, state, {
       currentCategory: action.payload
     });
-  } else if (action.type === 'SET_VIEW') {
+  
+  case 'SET_VIEW':
     return Object.assign({}, state, {
       profileView: action.payload
     });
-  } else if (action.type === 'GET_FOLLOWERS') {
+  
+  case 'GET_FOLLOWERS':
     return Object.assign({}, state, {
       followers: action.payload
     });
-  } else if (action.type === 'GET_RANKS') {
+  
+  case 'GET_RANKS':
     return Object.assign({}, state, {
       ranks: action.payload
     });
-  } else if (action.type === 'SET_FAVORITES') {
+  
+  case 'SET_FAVORITES':
     return Object.assign({}, state, {
       favorites: action.payload
     });
-  } else if (action.type === 'GET_UPVOTED') {
+  
+  case 'GET_UPVOTED':
     return Object.assign({}, state, {
       upvoted: action.payload
     });
-  } else if (action.type === 'GET_DOWNVOTED') {
+  
+  case 'GET_DOWNVOTED': 
     return Object.assign({}, state, {
       downvoted: action.payload
     });
-  } else if (action.type === 'UPDATE_POST') {
+  
+  case 'UPDATE_POST':
     let updateObj = {};
 
     for (var keys in state) {
@@ -107,27 +101,19 @@ const reducer = (state, action) => {
     }
     return Object.assign({}, updateObj);
     
-  } else if (action.type === 'ADD_MESSAGE') {
-    let messageObj = {};
-
-    for (var keys in state) {
-      if (keys === 'messages') {
-        messageObj[keys] = [];
-        messageObj[keys].push(action.payload[0]);
-        state[keys].forEach(key => {
-          messageObj[keys].push(key);
-        });
-      } else {
-        messageObj[keys] = state[keys];
-      }
-    }
-
-    return Object.assign({}, messageObj);
-  } else if (action.type === 'GET_MESSAGES') {
+  case 'ADD_MESSAGE':
+    let newMessages = state.messages.slice();
+    newMessages.unshift(action.payload[0]);
+    return Object.assign({}, state, {
+      messages: newMessages
+    });
+  
+  case 'GET_MESSAGES':
     return Object.assign({}, state, {
       messages: action.payload
     });
-  } else if (action.type === 'READ_MESSAGE') {
+  
+  case 'READ_MESSAGE':
     let readMessage = {};
 
     for (var keys in state) {
@@ -147,7 +133,8 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, readMessage);
-  } else if (action.type === 'READ_NOTIFICATION') {
+  
+  case 'READ_NOTIFICATION':
     let readNotification = {};
 
     for (var keys in state) {
@@ -177,19 +164,18 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, readNotification);
-  } else if (action.type === 'SET_DISPLAY_MESSAGES') {
+ 
+  case 'SET_DISPLAY_MESSAGES':
     return Object.assign({}, state, {
       displayMessages: action.payload
     });
-  } else if (action.type === 'SET_DISPLAY_NOTIFICATIONS') {
+  
+  case 'SET_DISPLAY_NOTIFICATIONS':
     return Object.assign({}, state, {
       displayNotifications: action.payload
     });
-  } else if (action.type === 'UPDATE_COVERVIDEO') {
-    return Object.assign({}, state, {
-      coverVideo: action.payload
-    });
-  } else if (action.type === 'UPDATE_COMMENT') {
+ 
+  case 'UPDATE_COMMENT':
     let updateCommentObj = {};
 
     for (var keys in state) {
@@ -208,7 +194,8 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, updateCommentObj);
-  } else if (action.type === 'CREATE_CHAT') {
+  
+  case 'CREATE_CHAT':
     let chatsObj = {};
 
     for (var keys in state) {
@@ -224,11 +211,13 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, chatsObj);
-  } else if (action.type === 'GET_CHATS') {
+  
+  case 'GET_CHATS':
     return Object.assign({}, state, {
       chats: action.payload
     });
-  } else if (action.type === 'SEEN_CHAT') {
+  
+  case 'SEEN_CHAT':
     let readChat = {};
 
     for (var keys in state) {
@@ -252,13 +241,16 @@ const reducer = (state, action) => {
     }
 
     return Object.assign({}, readChat);
-  } else if (action.type === 'SET_DISPLAY_CHATS') {
+  
+  case 'SET_DISPLAY_CHATS':
     return Object.assign({}, state, {
       displayChats: action.payload
     });
-  } else {
-    return state;
+  
+  default: return state;
   }
+  
 };
 
 export default reducer;
+

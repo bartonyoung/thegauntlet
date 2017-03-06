@@ -4,7 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { Link } from 'react-router';
-import { calculateTime} from '../utils/helpers';
+import { calculateTime, checkFile, whichFavoriteIcon, whichFollowButton} from '../utils/helpers'; 
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -74,7 +74,6 @@ class ProfileContent extends React.Component {
   }
 
   onNotificationClick(i, notification) {
-    console.log(this.state[i]);
     if (this.state[i] === 'none' || !this.state[i]) {
       this.setState({
         [i]: 'unset'
@@ -197,7 +196,6 @@ class ProfileContent extends React.Component {
             profilepic: resp
           },
           success: function(data) {
-            console.log('successfully updated');
             outer.refs.video.value = '';
             outer.setState({
               display: 'none',
@@ -278,7 +276,6 @@ class ProfileContent extends React.Component {
             url: '/api/unseenChat/' + chat.id,
             type: 'PUT',
             success: function(data) {
-              console.log('new messages in chat', data);
               outer.props.dispatch(actions.seenChat(data));
             }
           });
@@ -288,14 +285,12 @@ class ProfileContent extends React.Component {
     }
 
     if (createChatRoom) {
-      console.log('chatroom created');
       let chat = {
         fromUsername: window.sessionStorage.username,
         toUsername: window.sessionStorage.newUsername,
         new: 0
       };
       $.post('/api/chats', chat).done(data => {
-        console.log('chatroom', data);
         outer.props.dispatch(actions.createChat(data));
         let message = {
           message: outer.refs.message.value,
@@ -357,7 +352,6 @@ class ProfileContent extends React.Component {
     e.preventDefault();
     let outer = this;
     let created_at = new Date().getTime();
-    console.log('replying', this.state.currentChat[0].id);
     let reply = {
       message: this.refs.reply.value,
       from_Username: window.sessionStorage.username,
@@ -367,16 +361,13 @@ class ProfileContent extends React.Component {
       chat_id: this.state.currentChat[0].id
     };
     $.post('/api/message/' + this.state.currentChat[0].id, reply).done(data => {
-      console.log('message data', data);
       $.ajax({
         url: '/api/unseenChat/' + data[0].chat_id,
         type: 'PUT',
         success: function(data) {
-          console.log('unseen chat', data);
           outer.props.dispatch(actions.seenChat(data));
         }
       });
-      console.log('reply message', data);
       outer.props.dispatch(actions.addMessage(data));
       outer.refs.reply.value = '';
     });
@@ -390,14 +381,12 @@ class ProfileContent extends React.Component {
     this.setState({
       currentChat: currentChatArray
     });
-    console.log('current chat', this.state.currentChat[0]);
     if (this.state.currentChat[0].new) {
 
       $.ajax({
         url: '/api/chat/' + this.state.currentChat[0].id,
         type: 'PUT',
         success: function(data) {
-          console.log('seen chat data', data);
           outer.props.dispatch(actions.seenChat(data));
         }
       });
@@ -427,7 +416,6 @@ class ProfileContent extends React.Component {
       url = '/api/response/';
     }
 
-    console.log('post', this.state.title, this.state.description );
     $.ajax({
       url: url + post.id,
       type: 'PUT',
@@ -436,7 +424,6 @@ class ProfileContent extends React.Component {
         description: this.state.description
       },
       success: function(data) {
-        console.log('save edit data', data);
         outer.props.dispatch(actions.updatePost(data));
         outer.setState({
           title: '',
@@ -490,7 +477,6 @@ class ProfileContent extends React.Component {
   }
 
   handleTitleChange(e) {
-    console.log(e.target.value);
     this.setState({
       title: e.target.value
     });
@@ -506,10 +492,10 @@ class ProfileContent extends React.Component {
     return (
       <div className="task-buttons">
         <div >
-          <button className="btn btn-default btn-sm edit" onClick={() => this.editPost(index)}>
+          <button className="btn btn-default btn-sm edit social-button" onClick={() => this.editPost(index)}>
             <span className="glyphicon glyphicon-edit"></span>
           </button>
-          <button className="btn btn-default btn-sm delete" onClick={() => this.deletePost(post)}>
+          <button className="btn btn-default btn-sm delete social-button" onClick={() => this.deletePost(post)}>
             <span className="glyphicon glyphicon-remove"></span>
           </button>
         </div>
@@ -518,8 +504,8 @@ class ProfileContent extends React.Component {
           <form id="editform">
             <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
             <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
-            <button type="button" className="btn btn-large btn-default edit" onClick={(e) => this.savePost(e, post, index)}>Save</button>
-            <button className="btn btn-large btn-default delete" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
+            <button type="button" className="btn btn-large btn-default edit social-button" onClick={(e) => this.savePost(e, post, index)}>Save</button>
+            <button className="btn btn-large btn-default delete social-button" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
           </form>
           </div>
         </div>
@@ -528,25 +514,12 @@ class ProfileContent extends React.Component {
   }
 
   render() {
-    let checkFile = (type, challenge) => {
-      const fileType = {
-        'mp4': 'THIS IS A VIDEO!'
-      };
-      if (fileType[type]) {
-        return (<video className='parent-media' controls>
-          {/*<source src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket420/' + response.filename} type="video/mp4"/>*/}
-        </video>);
-      } else {
-        return <img className='parent-media' src='http://coolwildlife.com/wp-content/uploads/galleries/post-3004/Fox%20Picture%20003.jpg'/>;
-      }
-    };
-
 
     let mappedChallenges = this.props.challenges.map((challenge, j) => {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge one-challenge-in-profile" key={j}>
             <div className="row profile-edit-buttons">
               <span className='pull-right'>{this.taskButtons(challenge, j)}</span>
             </div>
@@ -563,7 +536,6 @@ class ProfileContent extends React.Component {
             </div>
             <div className="row username-time">
               <Link onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
-              <h5>{challenge.description}</h5>
             </div>
           </div>
           );
@@ -577,12 +549,12 @@ class ProfileContent extends React.Component {
       if (response) {
         if (response.username === this.props.user[0].username) {
           return (
-            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={r}>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge one-challenge-in-profile" key={r}>
              <div className="row profile-edit-buttons">
               <span className='pull-right'>{this.taskButtons(response, r)}</span>
             </div>
             <div className="row challenge-title-row">
-              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, r)} className="category-title"><Link to={'/challenge'}>{response.title}</Link></p>
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, r)}><Link to={'/challenge'}>{response.title}</Link></p>
             </div>
             <div className="row challenge-media-row">
               {checkFile(response.filename.split('.').pop(), response)}<br/>
@@ -594,7 +566,6 @@ class ProfileContent extends React.Component {
             </div>
             <div className="row username-time">
               <Link onClick={() => this.onUsernameClick(response)}><span>{response.username + ' '}</span></Link>
-              <h5>{response.description}</h5>
             </div>
           </div>
           );
@@ -616,40 +587,6 @@ class ProfileContent extends React.Component {
         );
       }
     });
-
-    let whichFollowButton = (leaderId, user) => {
-      if (window.sessionStorage.username !== user) {
-        if (this.props.leaders.includes(leaderId)) {
-          return (
-            <button className="btn btn-default btn-sm pull-right follower"onClick={() => this.unFollow(leaderId)}>
-              <span className="glyphicon glyphicon-ok"></span>{'  Unfollow'}
-            </button>
-          );
-        } else {
-          return (
-            <button className="btn btn-default btn-sm pull-right follower" onClick={() => this.followTheLeader(leaderId)}>
-              <span className="glyphicon glyphicon-ok"></span>{'  Follow'}
-            </button>
-          );
-        }
-      }
-    };
-
-    let whichFavoriteIcon = (challengeId) => {
-      if (this.props.favorites.some(challenge => challenge.id === challengeId)) {
-        return (
-          <button className="btn btn-default btn-sm pull-right">
-            <span className="glyphicon glyphicon-heart" style={{color: 'red'}} onClick={() => { this.removeFromFavorites(challengeId); }}></span>
-          </button>
-        );
-      } else {
-        return (
-          <button className="btn btn-default btn-sm pull-right" onClick={() => { this.addToFavorites(challengeId); }}>
-            <span className="glyphicon glyphicon-heart"></span>
-          </button>
-        );
-      }
-    };
 
     let myView = () => {
       if (this.props.profileView === 'all' && window.sessionStorage.username === this.props.user[0].username) {
@@ -735,8 +672,8 @@ class ProfileContent extends React.Component {
                     <h4>{notification.title}</h4>
                     <h5>{notification.description}</h5>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                    {whichFollowButton(notification.user_id, notification.username)}
-                    {whichFavoriteIcon(notification.user_id)}
+                    {whichFollowButton(this.props, notification.user_id, notification.username, this)}
+                    {whichFavoriteIcon(this.props, notification.user_id, this)}
                     <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
                   </div>
                 </div>
@@ -747,12 +684,12 @@ class ProfileContent extends React.Component {
                   <a href='javascript: void(0)' onClick={() => this.onNotificationClick(i, notification)}><h4>{notification.username + ' responded to your challenge...'}</h4></a>
                   {calculateTime(timeDifferenceInSeconds)}<br/>
                   <div style={{display: this.state[i] || 'none'}}>
-                    {checkFile(notification.filename.split('.').pop(), notification.filename)}<br/>
+                    {checkFile(notification.filename.split('.').pop(), notification)}<br/>
                     <h4>{notification.title}</h4>
                     <h5>{notification.description}</h5>
                     <Link onClick={() => this.onUsernameClick(notification)}>{notification.username + ' '}</Link>
-                    {whichFollowButton(notification.user_id, notification.username)}
-                    {whichFavoriteIcon(notification.user_id)}
+                    {whichFollowButton(this.props, notification.user_id, notification.username, this)}
+                    {whichFavoriteIcon(this.props, notification.user_id, this)}
                     <a onClick={()=> this.upVoteClick(notification.id)}>{'Upvote'}</a><p>{`${notification.upvotes}`}</p>
                   </div>
                 </div>
@@ -789,7 +726,6 @@ class ProfileContent extends React.Component {
                 return a;
               }, 0);
 
-              console.log(unReadMessagesNumber, 'unReadMessagesNumber');
               if (this.props.displayMessages === 'newmessages-chat' && unReadMessagesNumber > 0) {
                 return <span className="newmessages-chat">{unReadMessagesNumber}</span>;
               } else if (unReadMessagesNumber === 0) {
@@ -946,8 +882,7 @@ class ProfileContent extends React.Component {
         <div className="row overallContent">
           <div className='col-lg-3 profileContainer'>
             <div id='picContainer' className="row">
-              {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-              <img className='col-lg- 12 profilePic' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
+              <img className='col-lg- 12 profilePic' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
             </div>
             <span className='editPic' style={{display: this.state.display}}>
               <form id='pic'>
@@ -962,7 +897,7 @@ class ProfileContent extends React.Component {
               {editField(this.props.user[0].email, this.props.user[0].scott, target, 'email', 'third', 'Email')}
               Rank# {this.handleRanks(target)}
                ({this.props.user[0].upvotes}) <br />
-              Followers: {this.props.followers.length} {whichFollowButton(this.props.user[0].scott, target)} <br />
+              Followers: {this.props.followers.length} {whichFollowButton(this.props, this.props.user[0].scott, target)} <br />
               {sendMessage()}
               </div>
             </div>

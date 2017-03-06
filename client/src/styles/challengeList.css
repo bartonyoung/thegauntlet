@@ -14,10 +14,11 @@
   justify-content: center;
   align-items: center;
   display: flex;
+  overflow: hidden;
 }
 
-challenge-media-row {
-  border: 2px solid white;
+.challenge-media-row {
+  height: 50%;
 }
 
 .challenge-list-media {
@@ -45,9 +46,9 @@ social-button.active {
   margin-bottom: 5px;
 }
 
-.category-title{
+/*.category-title{
   color: #16a79d !important;
-}
+}*/
 
 #leader-img{
   width:17%;
