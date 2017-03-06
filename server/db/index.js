@@ -2,9 +2,9 @@ const mysql = require('mysql');
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
+    host: process.env.HOST,
+    user: process.env.USERNAME,
+    password: process.env.PASSWORD,
     database: process.env.DATABASE
   },
   useNullAsDefault: true
