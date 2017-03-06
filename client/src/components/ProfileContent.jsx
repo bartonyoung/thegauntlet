@@ -904,7 +904,7 @@ class ProfileContent extends React.Component {
               {editField(this.props.user[0].email, this.props.user[0].scott, target, 'email', 'third', 'Email')}
               Rank# {this.handleRanks(target)}
                ({this.props.user[0].upvotes}) <br />
-              Followers: {this.props.followers.length} {whichFollowButton(this.props, this.props.user[0].scott, target)} <br />
+              Followers: {this.props.followers.length} {whichFollowButton(this.props, this.props.user[0].scott, target, this)} <br />
               {sendMessage()}
               </div>
             </div>
