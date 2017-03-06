@@ -175,11 +175,6 @@ const reducer = (state, action) => {
       displayNotifications: action.payload
     });
  
-  case 'UPDATE_COVERVIDEO':
-    return Object.assign({}, state, {
-      coverVideo: action.payload
-    });
- 
   case 'UPDATE_COMMENT':
     let updateCommentObj = {};
 

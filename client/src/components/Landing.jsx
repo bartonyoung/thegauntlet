@@ -22,7 +22,6 @@ class Landing extends React.Component {
     .then((data) => {
       data.reverse();
       outer.props.dispatch(actions.getChallenges(data));
-      outer.handleCoverVideo(data);
     });
   }
 
