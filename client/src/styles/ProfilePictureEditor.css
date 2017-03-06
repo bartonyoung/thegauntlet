@@ -133,10 +133,6 @@ li>a {
   float: right;
   height: 50%;
 }
-.parent-media {
-  width: 100%;
-  height: auto;
-}
 
 .unread-notifications {
   color: black;
@@ -156,4 +152,9 @@ li>a {
   box-shadow: 1px 1px 1px silver;
   height: 50px;
   width: 50px;
+}
+
+
+.challenge-inprofile {
+  font-size: 1em;
 }

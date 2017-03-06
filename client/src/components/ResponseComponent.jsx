@@ -23,6 +23,36 @@ class ResponseComponent extends React.Component {
     });
   }
 
+  upVoteClick(id) {
+    const outer = this;
+    $.post('/api/upvote', {
+      vote: 1,      
+      challenge_id: id
+    }).then(() => { 
+      $.get('/api/upvote').then(data => {  
+        outer.props.dispatch(actions.getUpvoted(data));
+      });  
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+    });
+  }
+
+  downVoteClick(id) {
+    const outer = this;
+    $.post('/api/downvote', {
+      vote: 1,
+      challenge_id: id
+    }).then(() => {
+      $.get('/api/upvote').then(data => {
+        outer.props.dispatch(actions.getUpvoted(data));
+      });
+      $.get('/api/downvote').then(data => {
+        outer.props.dispatch(actions.getDownvoted(data));
+      });
+    });
+  }
+
   render() {
     let taskButtons = (response) => {
       if (window.sessionStorage.username === this.props.response.username) {

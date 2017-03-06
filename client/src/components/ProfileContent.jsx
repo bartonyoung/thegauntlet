@@ -492,10 +492,10 @@ class ProfileContent extends React.Component {
     return (
       <div className="task-buttons">
         <div >
-          <button className="btn btn-default btn-sm edit" onClick={() => this.editPost(index)}>
+          <button className="btn btn-default btn-sm edit social-button" onClick={() => this.editPost(index)}>
             <span className="glyphicon glyphicon-edit"></span>
           </button>
-          <button className="btn btn-default btn-sm delete" onClick={() => this.deletePost(post)}>
+          <button className="btn btn-default btn-sm delete social-button" onClick={() => this.deletePost(post)}>
             <span className="glyphicon glyphicon-remove"></span>
           </button>
         </div>
@@ -504,8 +504,8 @@ class ProfileContent extends React.Component {
           <form id="editform">
             <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
             <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
-            <button type="button" className="btn btn-large btn-default edit" onClick={(e) => this.savePost(e, post, index)}>Save</button>
-            <button className="btn btn-large btn-default delete" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
+            <button type="button" className="btn btn-large btn-default edit social-button" onClick={(e) => this.savePost(e, post, index)}>Save</button>
+            <button className="btn btn-large btn-default delete social-button" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
           </form>
           </div>
         </div>
@@ -519,7 +519,7 @@ class ProfileContent extends React.Component {
       if (challenge) {
         if (challenge.username === this.props.user[0].username) {
           return (
-            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={j}>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge one-challenge-in-profile" key={j}>
             <div className="row profile-edit-buttons">
               <span className='pull-right'>{this.taskButtons(challenge, j)}</span>
             </div>
@@ -536,7 +536,6 @@ class ProfileContent extends React.Component {
             </div>
             <div className="row username-time">
               <Link onClick={() => this.onUsernameClick(challenge)}><span>{challenge.username + ' '}</span></Link>
-              <h5>{challenge.description}</h5>
             </div>
           </div>
           );
@@ -550,12 +549,12 @@ class ProfileContent extends React.Component {
       if (response) {
         if (response.username === this.props.user[0].username) {
           return (
-            <div className="col-md-3 col-md-offset-2 text-center one-challenge" key={r}>
+            <div className="col-md-3 col-md-offset-2 text-center one-challenge one-challenge-in-profile" key={r}>
              <div className="row profile-edit-buttons">
               <span className='pull-right'>{this.taskButtons(response, r)}</span>
             </div>
             <div className="row challenge-title-row">
-              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, r)} className="category-title"><Link to={'/challenge'}>{response.title}</Link></p>
+              <p className='challenge-inprofile' onClick={() => this.onChallengeTitleClick(response, r)}><Link to={'/challenge'}>{response.title}</Link></p>
             </div>
             <div className="row challenge-media-row">
               {checkFile(response.filename.split('.').pop(), response)}<br/>
@@ -567,7 +566,6 @@ class ProfileContent extends React.Component {
             </div>
             <div className="row username-time">
               <Link onClick={() => this.onUsernameClick(response)}><span>{response.username + ' '}</span></Link>
-              <h5>{response.description}</h5>
             </div>
           </div>
           );
@@ -884,8 +882,7 @@ class ProfileContent extends React.Component {
         <div className="row overallContent">
           <div className='col-lg-3 profileContainer'>
             <div id='picContainer' className="row">
-              {/*<img className='profilePicture text' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} />*/}
-              <img className='col-lg- 12 profilePic' src="http://totorosociety.com/wp-content/uploads/2015/03/totoro_by_joao_sembe-d3f4l4x.jpg" onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
+              <img className='col-lg- 12 profilePic' src={'https://s3-us-west-1.amazonaws.com/thegauntletbucket421/' + this.props.user[0].profilepic} onClick={() =>{ if (isUserImageClickable(target)) { this.state.display === 'none' ? this.setState({display: 'unset'}) : this.setState({display: 'none'}); } }}/>
             </div>
             <span className='editPic' style={{display: this.state.display}}>
               <form id='pic'>
