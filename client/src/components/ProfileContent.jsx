@@ -445,8 +445,15 @@ class ProfileContent extends React.Component {
     $.ajax({
       url: url + post.id,
       type: 'DELETE',
+      data: {
+        parent_id: post.parent_id
+      },
       success: function(data) {
-        outer.props.dispatch(actions.getChallenges(data));
+        if (post.parent_id === null) {
+          outer.props.dispatch(actions.getChallenges(data));
+        } else {
+          outer.props.dispatch(actions.getResponses(data));
+        }
       }
     });
   }
