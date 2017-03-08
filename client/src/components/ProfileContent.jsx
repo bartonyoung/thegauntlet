@@ -446,9 +446,11 @@ class ProfileContent extends React.Component {
       url: url + post.id,
       type: 'DELETE',
       data: {
-        parent_id: post.parent_id
+        parent_id: post.parent_id,
+        user_id: window.sessionStorage.newUser_id
       },
       success: function(data) {
+        console.log('data from delete response', data)
         if (post.parent_id === null) {
           outer.props.dispatch(actions.getChallenges(data));
         } else {
@@ -638,7 +640,15 @@ class ProfileContent extends React.Component {
         );
       } else if (this.props.profileView === 'notifications') {
 
-        let notifications = this.props.responses.concat(this.props.comments);
+        let notYourResponses = [];
+
+        this.props.responses.forEach(response => {
+          if (response.username !== window.sessionStorage.username) {
+            notYourResponses.push(response);
+          }
+        });
+
+        let notifications = notYourResponses.concat(this.props.comments);
 
         notifications.sort((a, b) => {
           return a.created_at < b.created_at;
