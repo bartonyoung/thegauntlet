@@ -100,7 +100,6 @@ class NavBar extends React.Component {
 
       return a;
     }, 0);
-    console.log('render chat number', unseenChat);
     for (var i = 0; i < this.props.chats.length; i++) {
       var chat = this.props.chats[i];
       if (this.props.displayChats === 'chats-number' && unseenChat > 0) {
@@ -114,7 +113,15 @@ class NavBar extends React.Component {
   }
 
   renderNotificationsNumber() {
-    let notifications = this.props.comments.concat(this.props.responses);
+    let notYourResponses = [];
+
+    this.props.responses.forEach(response => {
+      if (response.username !== window.sessionStorage.username) {
+        notYourResponses.push(response);
+      }
+    });
+
+    let notifications = notYourResponses.concat(this.props.comments);
     let unReadNotifications = notifications.reduce((a, c) => {
       if (c.read === 0) {
         a += 1;
@@ -177,8 +184,8 @@ class NavBar extends React.Component {
                     <center><li onClick={this.handleSubmit} className="btn btn-default" id="fileSubmit">Submit</li></center>
                   </ul>
                 </li>
-              </ul>  
-              </ul>  
+              </ul>
+              </ul>
               <ul className="nav navbar-nav navbar-right">
                 <li>
                   <span className="navbar-text">Logged in as <a href="javascript: void(0)" onClick={()=> this.goToProfilePage()} className="navbar-link username-nav">{window.sessionStorage.username}</a></span>

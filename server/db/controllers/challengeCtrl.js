@@ -54,13 +54,13 @@ module.exports = {
           }).catch(err => {
             if (err) { console.error(err); }
           });
-        }) 
+        })
       );
   },
 
   s3: (req, res) => {
-    s3(req.files.video, res);
-    // res.json(req.files.video.originalFilename);
+    // s3(req.files.video, res);
+    res.json(req.files.video.originalFilename);
   },
 
   getAll: (req, res) => {
@@ -83,13 +83,14 @@ module.exports = {
         res.json(data);
       });
     } else {
-      let user_id = req.query.user_id;
-      db.select().from('challenges').where({user_id: user_id}).andWhere({parent_id: null}).then(challenges => {
-        var yourChallengeIds = challenges.map(challenge => {
-          return challenge.id;
-        });
 
-        db.select().from('challenges').whereIn('parent_id', yourChallengeIds).then(data => {
+      let user_id = req.query.user_id;
+      console.log('user_id', typeof user_id)
+      db.select().from('challenges').where({user_id: user_id}).then(challenges => {
+        console.log('challenges', challenges)
+
+        db.select().from('challenges').whereNot({parent_id: null}).then(data => {
+          console.log('data', data)
           res.json(data);
         });
       });
@@ -140,8 +141,9 @@ module.exports = {
   deleteOneResponse: (req, res) => {
     const id = req.params.id;
     const parent_id = req.body.parent_id;
+    const user_id = req.body.user_id;
     db.from('challenges').where({id: id}).del().then(() => {
-      db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('challenges.parent_id', '=', parent_id).then(data => {
+      db.select().from('challenges').innerJoin('users', 'challenges.user_id', 'users.scott').select('challenges.id', 'challenges.title', 'challenges.description', 'challenges.filename', 'challenges.category', 'challenges.views', 'challenges.upvotes', 'challenges.parent_id', 'users.firstname', 'users.lastname', 'users.email', 'users.username', 'challenges.created_at', 'challenges.user_id').where('users.scott', '=', user_id).then(data => {
         res.json(data);
       });
     });

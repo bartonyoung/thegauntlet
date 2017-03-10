@@ -4,7 +4,7 @@ import css from '../styles/ProfilePictureEditor.css';
 import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { Link } from 'react-router';
-import { calculateTime, checkFile, whichFavoriteIcon, whichFollowButton} from '../utils/helpers'; 
+import { calculateTime, checkFile, whichFavoriteIcon, whichFollowButton} from '../utils/helpers';
 
 class ProfileContent extends React.Component {
   constructor(props) {
@@ -446,9 +446,11 @@ class ProfileContent extends React.Component {
       url: url + post.id,
       type: 'DELETE',
       data: {
-        parent_id: post.parent_id
+        parent_id: post.parent_id,
+        user_id: window.sessionStorage.newUser_id
       },
       success: function(data) {
+        console.log('data from delete response', data)
         if (post.parent_id === null) {
           outer.props.dispatch(actions.getChallenges(data));
         } else {
@@ -496,28 +498,30 @@ class ProfileContent extends React.Component {
   }
 
   taskButtons(post, index) {
-    return (
-      <div className="task-buttons">
-        <div >
-          <button className="btn btn-default btn-sm edit social-button" onClick={() => this.editPost(index)}>
-            <span className="glyphicon glyphicon-edit"></span>
-          </button>
-          <button className="btn btn-default btn-sm delete social-button" onClick={() => this.deletePost(post)}>
-            <span className="glyphicon glyphicon-remove"></span>
-          </button>
-        </div>
-        <div style={{display: this.state[index] || 'none'}}>
-        <div className="editor">
-          <form id="editform">
-            <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
-            <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
-            <button type="button" className="btn btn-large btn-default edit social-button" onClick={(e) => this.savePost(e, post, index)}>Save</button>
-            <button className="btn btn-large btn-default delete social-button" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
-          </form>
+    if (window.sessionStorage.username === window.sessionStorage.newUsername) {
+      return (
+        <div className="task-buttons">
+          <div >
+            <button className="btn btn-default btn-sm edit social-button" onClick={() => this.editPost(index)}>
+              <span className="glyphicon glyphicon-edit"></span>
+            </button>
+            <button className="btn btn-default btn-sm delete social-button" onClick={() => this.deletePost(post)}>
+              <span className="glyphicon glyphicon-remove"></span>
+            </button>
+          </div>
+          <div style={{display: this.state[index] || 'none'}}>
+          <div className="editor">
+            <form id="editform">
+              <input type="text" placeholder="Edit title" name="title" value={this.state.title} onChange={this.handleTitleChange}/><br/>
+              <input type="text" placeholder="Edit description" name="description" value={this.state.description} onChange={this.handleDescriptionChange}/>
+              <button type="button" className="btn btn-large btn-default edit social-button" onClick={(e) => this.savePost(e, post, index)}>Save</button>
+              <button className="btn btn-large btn-default delete social-button" onClick={(e) => this.cancelEdit(e, index)}>Cancel</button>
+            </form>
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   render() {
@@ -636,7 +640,15 @@ class ProfileContent extends React.Component {
         );
       } else if (this.props.profileView === 'notifications') {
 
-        let notifications = this.props.responses.concat(this.props.comments);
+        let notYourResponses = [];
+
+        this.props.responses.forEach(response => {
+          if (response.username !== window.sessionStorage.username) {
+            notYourResponses.push(response);
+          }
+        });
+
+        let notifications = notYourResponses.concat(this.props.comments);
 
         notifications.sort((a, b) => {
           return a.created_at < b.created_at;
