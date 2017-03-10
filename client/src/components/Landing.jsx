@@ -80,7 +80,7 @@ class Landing extends React.Component {
                     <input type="password" placeholder="Confirm Password" ref="confirmPassword" className=" landing-input pass" />
                     <input type="submit" value="Join Gauntlet!" className=" landing-inputButton" />
                     <span id="agreement">
-                      By clicking "Sign up for the Gauntlet", you agree to our terms of service and privacy policy. We’ll occasionally send you account related emails.
+                      By clicking "Sign up", you agree to our terms of service and privacy policy. We’ll occasionally send you account related emails.
                     </span>
                   </form>
                 </div>
@@ -88,7 +88,7 @@ class Landing extends React.Component {
             </div>
             <div className="row header">
               <div className="col-lg-12">
-                <h2>The Gauntlet is a place to test yourself against others !<br/>
+                <h2>The Gauntlet is a place to test yourself against others!<br/>
                 Add your own challenge and watch others respond, or one-up another challenger</h2>
               </div>
             </div>
@@ -98,17 +98,16 @@ class Landing extends React.Component {
                   <img id="icon1"
                   src="http://www.neurologyintranslation.com/wp-content/uploads/2011/07/video_icon.png" alt=""/>
                   <p>
-                    Upload video of your challenge <br/>
-                    to throw down the gauntlet
+                    Upload a video of your challenge
                   </p>
               </div>
             <div className="col-md-4 col">
                 <h4>Respond</h4>
                 <img id="icon2" src="https://cdn4.iconfinder.com/data/icons/seo-accessibility-usability-2-2/256/Interaction_Design-512.png" alt=""/>
                 <p>
-                  Browse challenge<br/>
+                  Browse challenges<br/>
                   Think you can do better?<br/>
-                  respond with your own video
+                  Respond with your own video
                 </p>
             </div>
             <div className="col-md-4 col">
@@ -116,7 +115,7 @@ class Landing extends React.Component {
               <img id="icon3" src="https://cdn4.iconfinder.com/data/icons/sports-and-games-line-circle/614/533_-_Podium-256.png" alt=""/>
               <p>
                 Earn the most votes<br/>
-                to become the champion.
+                to become the champion
               </p>
             </div>
           </div>
