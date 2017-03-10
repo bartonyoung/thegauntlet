@@ -19,7 +19,6 @@ app.use(require('express-session')({
     user: process.env.USERNAME || 'root',
     password: process.env.PASSWORD || '',
     database: process.env.DATABASE || 'thegauntlet'
-
   })
 })
 );
