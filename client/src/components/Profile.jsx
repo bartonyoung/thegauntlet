@@ -15,27 +15,27 @@ class Profile extends React.Component {
   componentWillMount() {
     let outer = this;
     if (window.sessionStorage.username === window.sessionStorage.newUsername) {
-      $.get('/api/response', {
-        user_id: window.sessionStorage.newUser_id
-      }).done(data => {
-        let responseArr = [];
-        data.forEach(response => {
-          if (response.parent_id) {
-            responseArr.push(response);
-            if (response.read === 0 && this.props.displayNotifications !== 'notifications-number') {
-              outer.props.dispatch(actions.setDisplayNotifications('notifications-number'));
-            }
-          }
-        });
-        outer.props.dispatch(actions.getResponses(responseArr));
-      });
       $.get('/api/comments', {
         user_id: window.sessionStorage.newUser_id
       }).done(data => {
         outer.props.dispatch(actions.getComments(data.reverse()));
       });
     }
-
+    $.get('/api/response', {
+      user_id: window.sessionStorage.newUser_id
+    }).done(data => {
+      console.log('response data', data)
+      let responseArr = [];
+      data.forEach(response => {
+        if (response.parent_id) {
+          responseArr.push(response);
+          if (response.read === 0 && this.props.displayNotifications !== 'notifications-number') {
+            outer.props.dispatch(actions.setDisplayNotifications('notifications-number'));
+          }
+        }
+      });
+      outer.props.dispatch(actions.getResponses(responseArr));
+    });
     $.get('/api/messages/' + window.sessionStorage.username).done(messages => {
       messages.forEach(message => {
         outer.props.dispatch(actions.getMessages(messages));

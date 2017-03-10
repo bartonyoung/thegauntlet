@@ -15,11 +15,11 @@ app.use(require('express-session')({
   key: 'session',
   secret: 'SUPER SECRET SECRET',
   store: new MySQLStore({
-    host: process.env.DATABASE_HOST || '127.0.0.1',
-    user: process.env.DATABASE_USER || 'root',
-    password: process.env.DATABASE_PASSWORD || '',
-    database: process.env.DATABASE_URL || 'thegauntlet'
-    
+    host: process.env.HOST || 'localhost',
+    user: process.env.USERNAME || 'root',
+    password: process.env.PASSWORD || '',
+    database: process.env.DATABASE || 'thegauntlet'
+
   })
 })
 );

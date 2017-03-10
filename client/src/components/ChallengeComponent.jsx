@@ -346,7 +346,7 @@ class ChallengeComponent extends React.Component {
                   <div className="col-md-12">
                     <div className="row">
                       <ul>
-                        <li className="username username-and-timestamp"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo.username); }}>{this.state.currentVideo.username}</a></li>
+                        <li className="username username-and-timestamp"><a href="javascript:void(0)" onClick={() => { this.onUsernameClick(this.state.currentvideo); }}>{this.state.currentVideo.username}</a></li>
                         <li className="username-and-timestamp">{`${calculateTime(timeDifferenceInSeconds)}`}</li>
                         <li className="current-video-buttons pull-right">
                           {whichFavoriteIcon(this.props, this.state.currentVideo.id, this)}
