@@ -1,6 +1,6 @@
 # Project Name
 
-> Pithy project description
+> The Gauntlet is a social media site for creating and participating custom challenges! Signup or login to browse interesting challenges or throw down the guantlet and create your own!
 
 ## Team
 
